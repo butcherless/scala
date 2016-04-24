@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="Status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Full-Time"/>
+            <xs:enumeration value="Part-Time"/>
+            <xs:enumeration value="Casual"/>
+            <xs:enumeration value="Contract"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="Person" type="Person"/>
+    <xs:complexType name="Person">
+        <xs:sequence>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="surName" type="xs:string"/>
+            <xs:element name="birthDate" type="xs:string"/>
+            <xs:element name="gender" type="xs:string"/>
+            <xs:element name="contactDetails" type="ContactInfo"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="Employee" type="Employee"/>
+    <xs:complexType name="Employee">
+        <xs:complexContent>
+            <xs:extension base="Person">
+                <xs:sequence>
+                    <xs:element name="status" type="Status"/>
+                    <xs:element name="jobTitle" type="xs:string"/>
+                    <xs:element name="startDate" type="xs:date"/>
+                    <xs:element name="department" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="EmployeeRecords" type="EmployeeRecords"/>
+    <xs:complexType name="EmployeeRecords">
+        <xs:sequence>
+            <xs:element name="Employee" type="Employee" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ContactInfo" type="ContactInfo"/>
+    <xs:complexType name="ContactInfo">
+        <xs:sequence>
+            <xs:element name="homePhone" type="xs:string"/>
+            <xs:element name="mobilePhone" type="xs:string"/>
+            <xs:element name="officePhone" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="streetAddress" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
