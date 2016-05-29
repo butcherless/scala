@@ -3,15 +3,17 @@
   */
 import xml.XML.loadFile
 import scala.xml.Node
+import scala.xml.NodeSeq
 
-val fileName = "resolverOperacionesNoEjecutadasBandejaCliente"
+//val filename = "resolverOperacionesNoEjecutadasBandejaCliente"
+val filename = "ea-posicion-global-crearVista"
 
-val xmlFilePath = "resources/" + fileName + ".xml"
+val xmlFilePath = "resources/" + filename + ".xml"
 
 
 def isModel(node: Node): Boolean = {
   val name: String = (node \ "@name").text
-  name.endsWith("Model") || name.endsWith("View")
+  name.endsWith("Model") || name.endsWith("View") || name.endsWith("Vista")
 }
 
 def isType(node: Node): Boolean = {
@@ -27,10 +29,20 @@ def getNodeValue(node: Node): String = {
   (node \ "@value").text
 }
 
+def getAttributeNodes(node: Node): NodeSeq = {
+  node \\ "Attribute"
+}
+
+def getTypeNode(node: Node): Node = {
+  val typeNodes = (node \\ "TaggedValue").filter(isType(_))
+  // TODO validation
+  typeNodes.head
+}
+
 def convertType(t: String): String =
   t match {
-    case "Cadena de Caracteres" => "String"
-    case "Importe Monetario" => "BigDecimal"
+    case "Cadena de Caracteres" => "string"
+    case "Importe Monetario" => "double"
     case _ => t
 }
 
@@ -52,14 +64,15 @@ println(f"classElements has $nodeCount elements\n")
 println(makeLine(0, "definitions:"))
 for (cn <- classNodes) {
   val className = getNodeName(cn)
+
   println(makeLine(2, className + ':'))
   println(makeLine(4, "type: object"))
   println(makeLine(4, "properties:"))
-  val attributeNodes = cn \\ "Attribute"
+
+  val attributeNodes = getAttributeNodes(cn)
   for (an <- attributeNodes) {
     val attributeName = getNodeName(an)
-    val typeNodes = (an \\ "TaggedValue").filter(isType(_))
-    val typeName = convertType(getNodeValue(typeNodes.head))
+    val typeName = convertType(getNodeValue(getTypeNode(an)))
 
     println(makeLine(6, attributeName + ':'))
     println(makeLine(8, "type: " + typeName))
