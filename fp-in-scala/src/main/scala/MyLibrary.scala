@@ -19,6 +19,34 @@ object MyLibrary {
     case _ => "?"
   }
 
+  def stringToInt(s: String): Int = {
+    def go(s: String): (Int, Int) = {
+      if (s.isEmpty)
+        0 -> 0
+      else {
+        val result = go(s.tail)
+        val sum = charToDigit(s.head) * pow10(result._2) + result._1
+        val power = result._2 + 1
+
+        sum -> power
+      }
+    }
+
+    go(s)._1
+  }
+
+  def charToDigit(c: Char): Int = {
+    c - '0'.toInt
+  }
+
+  def pow10(n: Int): Int = {
+    if (n == 0)
+      1
+    else {
+      10 * pow10(n - 1)
+    }
+  }
+
   def intToString(x: Int): String = {
     def extractDigits(x: Int): String = {
       val quotient = x / 10
@@ -43,12 +71,8 @@ object MyLibrary {
   }
 
   def stringLength(s: String): Int = {
-    def go(s: String, n: Int): Int = {
-      if (s.isEmpty) n
-      else go(s.tail, n + 1)
-    }
-
-    go(s, 0)
+    if (s.isEmpty) 0
+    else stringLength(s.tail) + 1
   }
 
   def stringReverse(s: String): String = {
@@ -64,5 +88,10 @@ object MyLibrary {
     else {
       l.head + intSum(l.tail)
     }
+  }
+
+  def toUpper(s: String): String = {
+    if (s.isEmpty) ""
+    else s.head.toUpper + toUpper(s.tail)
   }
 }

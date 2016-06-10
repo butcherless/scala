@@ -67,4 +67,41 @@ class MyLibrarySpec extends org.specs2.mutable.Specification {
     result must be equalTo (0)
   }
 
+  "pow10 '0' specification" >> {
+    val result = pow10(0)
+    result must be equalTo (1)
+  }
+
+  "pow10 '1' specification" >> {
+    val result = pow10(1)
+    result must be equalTo (10)
+  }
+
+  "pow10 '6' specification" >> {
+    val result = pow10(6)
+    result must be equalTo (1000000)
+  }
+
+  "stringToInt '' specification" >> {
+    val result = stringToInt("")
+    result must be equalTo (0)
+  }
+
+  "stringToInt '0' specification" >> {
+    val result = stringToInt("0")
+    result must be equalTo (0)
+  }
+
+  "stringToInt '2048' specification" >> {
+    val result = stringToInt("2048")
+    result must be equalTo (2048)
+  }
+
+  val lowerString = "qwerty"
+  val upperString = "QWERTY"
+  s"""toUpper '$lowerString' specification""" >> {
+    val result = toUpper("qwerty")
+    result must be equalTo (upperString)
+  }
+
 }
