@@ -104,4 +104,40 @@ class MyLibrarySpec extends org.specs2.mutable.Specification {
     result must be equalTo (upperString)
   }
 
+  "sum result for Nil List is zero" >> {
+    val l = Nil
+    val result = sum(l)
+    result must be equalTo (0)
+  }
+
+  "sum result for 1..5 List is 15" >> {
+    val l = List(1, 2, 3, 4, 5)
+    val result = sum(l)
+    result must be equalTo (15)
+  }
+
+  "sumHOF result for Nil List is zero" >> {
+    val l = Nil
+    val result = sumHOF(l)
+    result must be equalTo (0)
+  }
+
+  "sumHOF result for 1..5 List is 15" >> {
+    val l = List(1, 2, 3, 4, 5)
+    val result = sumHOF(l)
+    result must be equalTo (15)
+  }
+
+  "prodHOF result for 1..5 List is 120" >> {
+    val l = List(1, 2, 3, 4, 5)
+    val result = prodHOF(l)
+    result must be equalTo (120)
+  }
+
+  "prodHOF result for 0..5 List is 0" >> {
+    val l = List(0, 1, 2, 3, 4, 5)
+    val result = prodHOF(l)
+    result must be equalTo (0)
+  }
+
 }

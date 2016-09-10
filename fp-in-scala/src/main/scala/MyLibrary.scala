@@ -94,4 +94,24 @@ object MyLibrary {
     if (s.isEmpty) ""
     else s.head.toUpper + toUpper(s.tail)
   }
+
+  def sum(l: List[Int]): Int =
+    l match {
+      case Nil => 0
+      case h :: s => h + sum(s)
+    }
+
+  def collapse[A](l: List[A])(zero: A, add: (A, A) => A): A =
+    l match {
+      case Nil => zero
+      case x :: r => add(x, collapse(r)(zero, add))
+    }
+
+  def sumHOF(l: List[Int]): Int = {
+    collapse(l)(0, (i1, i2) => i1 + i2)
+  }
+
+  def prodHOF(l: List[Int]): Int = {
+    collapse(l)(1, (a,b) => a * b)
+  }
 }
