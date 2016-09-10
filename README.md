@@ -1,6 +1,3 @@
-# scala learning
-[![Build Status](https://travis-ci.org/butcherless/scala.svg?branch=master)](https://travis-ci.org/butcherless/scala)
-
 At the beginning of a long road...
 
 Training books:
