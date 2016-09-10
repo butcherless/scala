@@ -1,0 +1,2 @@
+language: scala
+script: cd fp-in-scala && sbt test
