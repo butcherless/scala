@@ -1,2 +1,4 @@
 language: scala
+jdk:
+  - oraclejdk8
 script: cd fp-in-scala && sbt test
