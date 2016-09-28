@@ -1,7 +1,4 @@
 language: scala
 jdk:
   - oraclejdk8
-script:
- - "cd fp-in-scala && sbt test"
- - "cd -"
- - "cd typeclasses && sbt compile"
+script: cd fp-in-scala && sbt test
