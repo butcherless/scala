@@ -1,4 +1,4 @@
 language: scala
 jdk:
   - oraclejdk8
-script: apt-get update && cd fp-in-scala && sbt test
+script: sudo apt-get update && cd fp-in-scala && sbt test
