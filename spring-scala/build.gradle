@@ -18,7 +18,7 @@ mainClassName = "com.cmartin.Application"
 
 jar {
     baseName = 'gs-serving-web-content'
-    version =  '0.1.0'
+    version = '0.1.0'
 }
 
 repositories {
