@@ -1,10 +1,4 @@
-# Scala-Spring Integration Project
+# scala/spring integration learning
+[![Build Status](https://travis-ci.org/butcherless/scala.svg?branch=master)](https://travis-ci.org/butcherless/scala/spring-scala)
 
-__Many thanks__ to _Bernhard Wenzel_
-
-- http://bernhardwenzel.com/blog/2016/04/22/using-spring-with-scala/
-- https://github.com/BernhardWenzel/spring-scala-examples
-
-Project goals:
-- Scala provides business logic
-- Spring provides infrastructure
+Build with Travis CI
