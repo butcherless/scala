@@ -31,7 +31,7 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-devtools")
-    compile 'org.scala-lang:scala-library:2.12.3'
+    compile 'org.scala-lang:scala-library:2.12.4'
     //compile("org.springframework.boot:spring-boot-devtools")
     testCompile("junit:junit")
 }
