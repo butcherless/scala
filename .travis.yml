@@ -1,5 +1,9 @@
 language: scala
 jdk:
   - oraclejdk8
-script: sudo apt-get update && cd fp-in-scala && sbt test
-script: cd spring-scala && ./gradlew build
+script:
+  - sudo apt-get update
+  - cd fp-in-scala
+  - sbt test
+  - cd ../spring-scala
+  - ./gradlew build
