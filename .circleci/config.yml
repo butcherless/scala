@@ -46,7 +46,6 @@ jobs:
           command: |
                    cd fp-in-scala
                    cat /dev/null | sbt test:test
-                   cat /dev/null | sbt run
 
       # subproject spring-scala
       # Download and cache dependencies
@@ -71,3 +70,28 @@ jobs:
           command: |
                    cd spring-scala
                    ./gradlew clean build
+
+      # subproject typeclasses
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "typeclasses/build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          command: |
+                   cd fp-in-scala
+                   cat /dev/null | sbt test:compile
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies--{{ checksum "typeclasses/build.sbt" }}
+
+      # run tests!
+      - run:
+          command: |
+                   cd fp-in-scala
+                   cat /dev/null | sbt test:test
+                   cat /dev/null | sbt run
