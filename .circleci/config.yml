@@ -32,9 +32,9 @@ jobs:
           - v1-dependencies-
 
       - run:
-        command: |
-                 cd fp-in-scala
-                 cat /dev/null | sbt test:compile
+          command: |
+                   cd fp-in-scala
+                   cat /dev/null | sbt test:compile
 
       - save_cache:
           paths:
