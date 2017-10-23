@@ -46,6 +46,7 @@ jobs:
           command: |
                    cd fp-in-scala
                    cat /dev/null | sbt test:test
+                   cat /dev/null | sbt run
 
       # subproject spring-scala
       # Download and cache dependencies
