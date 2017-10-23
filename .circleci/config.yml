@@ -1,6 +1,6 @@
-# Java Gradle CircleCI 2.0 configuration file
+# Scala CircleCI 2.0 configuration file
 #
-# Check https://circleci.com/docs/2.0/language-java/ for more details
+# Check https://circleci.com/docs/2.0/sample-config/ for more details
 #
 version: 2
 jobs:
@@ -18,10 +18,27 @@ jobs:
 
     environment:
       # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx1024m
+      JVM_OPTS: -Xmx3200m
       TERM: dumb
 
     steps:
       - checkout
 
-      - run: sbt sbtVersion
+      - run: cd fp-in-scala
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: cat /dev/null | sbt test:compile
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies--{{ checksum "build.sbt" }}
+
+      # run tests!
+      - run: cat /dev/null | sbt test:test
