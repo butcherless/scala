@@ -24,8 +24,6 @@ jobs:
     steps:
       - checkout
 
-      - run: pwd && ls -l
-
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -33,7 +31,10 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: cat /dev/null | sbt test:compile
+      - run:
+        command: |
+                 cd fp-in-scala
+                 cat /dev/null | sbt test:compile
 
       - save_cache:
           paths:
