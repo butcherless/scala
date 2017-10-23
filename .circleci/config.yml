@@ -42,3 +42,5 @@ jobs:
 
       # run tests!
       - run: cat /dev/null | sbt test:test
+
+      - run: ls -lR $HOME
