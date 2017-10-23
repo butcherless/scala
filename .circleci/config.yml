@@ -39,7 +39,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies--{{ checksum "build.sbt" }}
+          key: v1-dependencies--{{ checksum "fp-in-scala/build.sbt" }}
 
       # run tests!
       - run:
