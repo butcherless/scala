@@ -24,7 +24,7 @@ jobs:
     steps:
       - checkout
 
-      - run: pwd && cd scala/fp-in-scala
+      - run: pwd && ls -l
 
       # Download and cache dependencies
       - restore_cache:
