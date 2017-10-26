@@ -15,7 +15,7 @@ object MyTypeClasses {
     implicit object JsonableInt extends Jsonable[Int] {
       override def serialize(x: Int): String = {
         //TODO improve implementation
-        "{ \"value\":" + x.toString + "}"
+        s"""Int={"value":${x.toString}}"""
       }
     }
 
