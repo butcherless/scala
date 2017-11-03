@@ -52,4 +52,28 @@ object MyTypeClasses {
     */
   }
 
+  trait Show[T] {
+    def show(t: T): String
+  }
+
+  object Show {
+    def show[T](t: T)(implicit s: Show[T]) = s.show(t)
+
+    implicit val showInt: Show[Int] =
+      new Show[Int] {
+        override def show(a: Int): String = s"integer: ${a}"
+      }
+
+    implicit val showLong: Show[Long] =
+      (a: Long) => s"long: ${a}"
+
+    implicit val showBigDecimal: Show[BigDecimal] =
+      (a: BigDecimal) => s"bigDecimal: ${a}"
+
+    implicit val showPerson: Show[Person] =
+      new Show[Person] {
+        override def show(t: Person): String = s"person: ${t.id}, ${t.name}, ${t.firstName}"
+      }
+  }
+
 }

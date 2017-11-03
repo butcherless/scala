@@ -1,5 +1,6 @@
 package com.cmartin
 
+import MyTypeClasses.Show._
 
 object App {
 
@@ -15,6 +16,10 @@ object App {
     println(message)
     println(print(person))
     println(print(1234))
+
+    println(show(5))
+    println(show(person))
+    println(show(BigDecimal.apply(1234.89)))
   }
 
 
