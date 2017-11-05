@@ -3,10 +3,6 @@ jdk:
   - oraclejdk8
 script:
   - sudo apt-get update
-  - cd fp-in-scala
   - sbt test
   - cd ../spring-scala
   - ./gradlew build
-  - cd ../typeclasses
-  - sbt test
-  - sbt run
