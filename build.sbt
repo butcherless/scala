@@ -7,8 +7,13 @@ lazy val commonSettings = Seq(
 val uTest = "com.lihaoyi" %% "utest" % "0.6.0" % "test"
 val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
 val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
+val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.16"
+val cats = "org.typelevel" %% "cats-core" % "1.0.0-MF"
+val specs2 = "org.specs2" %% "specs2-core" % "3.8.6" % "test"
 
-testFrameworks += new TestFramework("utest.runner.Framework")
+
+
+//testFrameworks += new TestFramework("utest.runner.Framework")
 
 //lazy val root = (project in file("."))  .aggregate(subprj_one)
 
@@ -17,9 +22,9 @@ lazy val fpInScala = (project in file("fp-in-scala"))
     commonSettings,
     name := "fp-in-scala",
     libraryDependencies ++= Seq(
-      "org.scalaz" %% "scalaz-core" % "7.2.16",
-      "org.typelevel" %% "cats-core" % "1.0.0-MF",
-      "org.specs2" %% "specs2-core" % "3.8.6" % "test"
+      scalaz,
+      cats,
+      specs2
     )
   )
 
@@ -28,6 +33,6 @@ lazy val typeclasses = (project in file("typeclasses"))
     commonSettings,
     name := "typeclasses",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.6.0" % "test"
+      uTest
     )
   )
