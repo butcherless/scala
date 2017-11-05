@@ -3,6 +3,6 @@ jdk:
   - oraclejdk8
 script:
   - sudo apt-get update
-  - sbt test
+  - sbt ";clean;test;project typeclasses;run"
   - cd spring-scala
   - ./gradlew build

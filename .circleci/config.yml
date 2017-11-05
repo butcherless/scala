@@ -43,7 +43,7 @@ jobs:
       # run tests!
       - run:
           command: |
-                   cat /dev/null | sbt test:test
+                   cat /dev/null | sbt ";test:testsbt;project typeclasses;run"
 
       # subproject spring-scala
       # Download and cache dependencies
