@@ -1,4 +1,4 @@
-package com.cmartin
+package com.cmartin.learn
 
 
 object MyTypeClasses {

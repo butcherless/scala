@@ -1,4 +1,4 @@
-package com.cmartin
+package com.cmartin.learn
 
 /**
   * Created by cmartin on 26/12/2016.

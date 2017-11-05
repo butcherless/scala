@@ -1,7 +1,7 @@
 package com.cmartin.learn
 
-import com.cmartin.MyTypeClasses.Show._
-import com.cmartin.Person
+import com.cmartin.learn.MyTypeClasses.Show._
+import com.cmartin.learn.Person
 import utest._
 
 object TypeClassTests extends TestSuite {
