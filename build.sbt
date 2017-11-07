@@ -33,6 +33,8 @@ lazy val typeclasses = (project in file("typeclasses"))
     commonSettings,
     name := "typeclasses",
     libraryDependencies ++= Seq(
+      scala_logging,
+      logback,
       uTest
     )
   )
