@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
@@ -15,23 +15,27 @@ apply plugin: 'application'
 
 mainClassName = "com.cmartin.Application"
 
-
 jar {
-    baseName = 'gs-serving-web-content'
-    version = '1.0.1'
+    baseName = 'spring-scala-webapp'
+    version = '1.0.2'
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+ext.libraries = [
+    scala_compiler : 'org.scala-sbt:zinc_2.12:1.0.3',
+    scala_library  : 'org.scala-lang:scala-library:2.12.+'
+]
+
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.springframework.boot:spring-boot-devtools")
-    compile 'org.scala-lang:scala-library:2.12.4'
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile libraries.scala_compiler
+    compile libraries.scala_library
     //compile("org.springframework.boot:spring-boot-devtools")
-    testCompile("junit:junit")
 }
