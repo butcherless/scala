@@ -10,7 +10,7 @@ val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
 val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.16"
 val cats = "org.typelevel" %% "cats-core" % "1.0.0-MF"
 val specs2 = "org.specs2" %% "specs2-core" % "3.8.6" % "test"
-
+val zinc = "org.scala-sbt" % "zinc_2.12" % "1.0.3"
 
 
 //testFrameworks += new TestFramework("utest.runner.Framework")
@@ -22,6 +22,7 @@ lazy val fpInScala = (project in file("fp-in-scala"))
     commonSettings,
     name := "fp-in-scala",
     libraryDependencies ++= Seq(
+      zinc,
       scalaz,
       cats,
       specs2
@@ -33,6 +34,7 @@ lazy val typeclasses = (project in file("typeclasses"))
     commonSettings,
     name := "typeclasses",
     libraryDependencies ++= Seq(
+      zinc,
       scala_logging,
       logback,
       uTest
