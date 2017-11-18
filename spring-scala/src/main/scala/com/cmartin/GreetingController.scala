@@ -4,9 +4,10 @@ import java.time.{LocalDateTime, ZonedDateTime}
 
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.{RequestMapping, RequestParam}
+import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestParam}
 
 @Controller
 class GreetingController {
@@ -16,16 +17,16 @@ class GreetingController {
   @Autowired private val service: GreetingService = null
 
 
-  @RequestMapping(Array("/random"))
-  def random(@RequestParam(value = "number", required = false, defaultValue = "0") number: Int,
+  @GetMapping(path = Array("/random/{number}"), produces = Array(MediaType.TEXT_HTML_VALUE))
+  def random(@PathVariable number: Int,
              model: Model): String = {
-    model.addAttribute("integer", service.generateRandom(5))
+    model.addAttribute("integer", service.generateRandom(number, properties.maxRandom))
     model.addAttribute("date", ZonedDateTime.now())
 
     "random"
   }
 
-  @RequestMapping(Array("/greeting"))
+  @GetMapping(path = Array("/greeting"), produces = Array(MediaType.TEXT_HTML_VALUE))
   def greeting(@RequestParam(value = "name", required = false, defaultValue = "donald") name: String,
                model: Model): String = {
     logger.debug(s"name: ${name}")
@@ -37,7 +38,7 @@ class GreetingController {
     "greeting"
   }
 
-  @RequestMapping(Array("/"))
+  @GetMapping(path = Array("/"), produces = Array(MediaType.TEXT_HTML_VALUE))
   def home(model: Model): String = {
     model.addAttribute("version", properties.version)
     model.addAttribute("date", ZonedDateTime.now())
