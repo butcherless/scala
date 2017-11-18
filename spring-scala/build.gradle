@@ -7,11 +7,11 @@ buildscript {
     }
 }
 
+apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'scala'
-apply plugin: 'application'
 
 mainClassName = "com.cmartin.Application"
 
@@ -28,14 +28,19 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext.libraries = [
-    scala_compiler : 'org.scala-sbt:zinc_2.12:1.0.3',
-    scala_library  : 'org.scala-lang:scala-library:2.12.+'
+        //scala_compiler : 'org.scala-sbt:zinc_2.12:1.0.3',
+        scala_library: 'org.scala-lang:scala-library:2.12.+'
 ]
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.springframework.boot:spring-boot-devtools'
-    compile libraries.scala_compiler
+    compile("org.springframework.boot:spring-boot-starter-undertow:1.5.8.RELEASE")
     compile libraries.scala_library
-    //compile("org.springframework.boot:spring-boot-devtools")
+
+    //compile libraries.scala_compiler
 }
