@@ -39,5 +39,3 @@ workflows:
   build_all:
     jobs:
       - build_container
-      - build_sbt
-      - build_gradle
