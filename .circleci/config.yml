@@ -4,67 +4,50 @@
 #
 version: 2
 jobs:
-  build:
+  build_sbt:
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
 
     working_directory: ~/repo
 
     environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
+      JVM_OPTS: -Xmx1024m
       TERM: dumb
 
     steps:
       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "build.sbt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
+      # test & run
       - run:
-          command: |
-                   cat /dev/null | sbt test:compile
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies--{{ checksum "build.sbt" }}
-
-      # run tests!
-      - run:
+          name: test and typeclasses run
           command: |
                    cat /dev/null | sbt ";test:test;project typeclasses;run"
 
-      # subproject spring-scala
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "spring-scala/build.gradle" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
 
+  build_gradle:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/repo
+
+    environment:
+      JVM_OPTS: -Xmx1024m
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      # test & build
       - run:
-          command: |
-                   cd spring-scala
-                   ./gradlew dependencies
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "spring-scala/build.gradle" }}
-
-      # run tests!
-      - run:
+          name: clean and build
           command: |
                    cd spring-scala
                    ./gradlew clean build
+
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_sbt
+      - build_gradle
