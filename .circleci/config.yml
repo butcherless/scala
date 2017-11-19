@@ -4,46 +4,67 @@
 #
 version: 2
 jobs:
-  build_container:
+  build:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
 
     working_directory: ~/repo
 
     environment:
       # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx1024m
+      JVM_OPTS: -Xmx3200m
       TERM: dumb
 
     steps:
       - checkout
 
-  build_sbt:    
-    steps:
-      # tests & run
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          command: |
+                   cat /dev/null | sbt test:compile
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies--{{ checksum "build.sbt" }}
+
+      # run tests!
       - run:
           command: |
                    cat /dev/null | sbt ";test:test;project typeclasses;run"
-  
-  build_gradle:
-    steps:
+
+      # subproject spring-scala
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "spring-scala/build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          command: |
+                   cd spring-scala
+                   ./gradlew dependencies
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "spring-scala/build.gradle" }}
+
       # run tests!
       - run:
           command: |
                    cd spring-scala
                    ./gradlew clean build
-
-workflows:
-  version: 2
-  build_all:
-    jobs:
-      - build_container
-      - build_sbt:
-        requires:
-          -build_container
-      - build_gradle:
-        requires:
-          -build_container
-
-# test workflows
