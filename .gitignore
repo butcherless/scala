@@ -3,5 +3,6 @@
 .gradle
 *.class
 *.iml
-build
-target
+build/
+target/
+out/

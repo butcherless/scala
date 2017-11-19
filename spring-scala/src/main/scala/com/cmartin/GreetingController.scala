@@ -2,8 +2,10 @@ package com.cmartin
 
 import java.time.{LocalDateTime, ZonedDateTime}
 
+import com.cmartin.algebra.GreetingService
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -14,8 +16,8 @@ class GreetingController {
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   @Autowired private val properties: ApplicationProperties = null
-  @Autowired private val service: GreetingService = null
-
+  //@Autowired private val service: GreetingService = null
+  @Autowired val service: GreetingService = null
 
   @GetMapping(path = Array("/random/{number}"), produces = Array(MediaType.TEXT_HTML_VALUE))
   def random(@PathVariable number: Int,

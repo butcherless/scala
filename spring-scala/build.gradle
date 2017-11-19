@@ -1,9 +1,12 @@
 buildscript {
     repositories {
-        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.18"
     }
 }
 
@@ -12,6 +15,8 @@ apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'scala'
+
+apply plugin: "com.github.maiflai.scalatest"
 
 mainClassName = "com.cmartin.Application"
 
@@ -28,7 +33,6 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext.libraries = [
-        //scala_compiler : 'org.scala-sbt:zinc_2.12:1.0.3',
         scala_library: 'org.scala-lang:scala-library:2.12.+'
 ]
 
@@ -37,10 +41,14 @@ configurations {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    compile 'org.springframework.boot:spring-boot-devtools'
-    compile("org.springframework.boot:spring-boot-starter-undertow:1.5.8.RELEASE")
-    compile libraries.scala_library
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf',
+            'org.springframework.boot:spring-boot-devtools',
+            'org.springframework.boot:spring-boot-starter-undertow:1.5.8.RELEASE',
+            libraries.scala_library
 
-    //compile libraries.scala_compiler
+    // TESTING
+    testCompile 'junit:junit:4.+',
+            'org.scalatest:scalatest_2.12:3.+'
+
+    testRuntime 'org.pegdown:pegdown:1.4.2'
 }
