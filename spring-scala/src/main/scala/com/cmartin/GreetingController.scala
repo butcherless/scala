@@ -5,7 +5,6 @@ import java.time.{LocalDateTime, ZonedDateTime}
 import com.cmartin.algebra.GreetingService
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -22,7 +21,8 @@ class GreetingController {
   @GetMapping(path = Array("/random/{number}"), produces = Array(MediaType.TEXT_HTML_VALUE))
   def random(@PathVariable number: Int,
              model: Model): String = {
-    model.addAttribute("integer", service.generateRandom(number, properties.maxRandom))
+    model.addAttribute("source", number)
+    model.addAttribute("target", service.generateRandom(number, properties.maxRandom))
     model.addAttribute("date", ZonedDateTime.now())
 
     "random"
@@ -46,5 +46,17 @@ class GreetingController {
     model.addAttribute("date", ZonedDateTime.now())
 
     "home"
+  }
+
+  @GetMapping(path = Array("/randomWord/{number}"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
+  def randomTarget(@PathVariable number: Int,
+                   model: Model): String = {
+    val stPair = service.generateRandomPair(number, properties.maxRandom)
+    model.addAttribute("source", stPair.source)
+    model.addAttribute("target", stPair.target)
+    model.addAttribute("limit", stPair.limit)
+    model.addAttribute("date", ZonedDateTime.now())
+
+    "randomWord"
   }
 }

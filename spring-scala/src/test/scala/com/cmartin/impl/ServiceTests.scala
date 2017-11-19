@@ -21,6 +21,13 @@ class ServiceTests extends FunSuite {
   }
 
   test("testInvalidNumber") {
-    assert(service.convertDecimalnumberToWord(-1).isFailure)
+    assert(service.convertDecimalnumberToWord(-11).isFailure)
+  }
+
+  test("testGenerateRandomPair") {
+    val pair = service.generateRandomPair(1, 10)
+    assert(pair.source == NumberWord.one)
+    assert(pair.target != NumberWord.one)
+    assert(pair.limit == 10)
   }
 }

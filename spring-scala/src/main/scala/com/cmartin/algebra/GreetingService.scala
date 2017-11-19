@@ -1,10 +1,13 @@
 package com.cmartin.algebra
 
+import com.cmartin.SourceTargetPair
+
 import scala.util.Try
 
 trait GreetingService {
   /**
     * Converts a number in the range [1,10] to its word
+    *
     * @param n a number between 1 and 10
     * @return word representation of the number
     */
@@ -18,4 +21,6 @@ trait GreetingService {
     * @return the random number
     */
   def generateRandom(n: Int, limit: Int): Int
+
+  def generateRandomPair(n: Int, limit: Int): SourceTargetPair
 }

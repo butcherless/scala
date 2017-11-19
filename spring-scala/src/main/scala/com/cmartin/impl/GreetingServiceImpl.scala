@@ -1,6 +1,7 @@
 package com.cmartin.impl
 
-import com.cmartin.algebra.GreetingService
+import com.cmartin.SourceTargetPair
+import com.cmartin.algebra.{GreetingService, NumberWord}
 import org.springframework.stereotype.Service
 
 import scala.util.{Failure, Random, Success, Try}
@@ -36,5 +37,12 @@ class GreetingServiceImpl extends GreetingService {
 
       case _ => Failure(new IllegalArgumentException(s"Invalid number $n"))
     }
+  }
+
+  override def generateRandomPair(n: Int, limit: Int) = {
+    SourceTargetPair(
+      convertDecimalnumberToWord(n).getOrElse(NumberWord.invalid),
+      convertDecimalnumberToWord(generateRandom(n, limit)).getOrElse(NumberWord.invalid),
+      limit)
   }
 }
