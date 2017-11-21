@@ -1,8 +1,13 @@
 language: scala
+
 jdk:
   - oraclejdk8
+
 script:
   - sudo apt-get update
-  - sbt ";clean;test;project typeclasses;run"
+  - sbt ";clean;coverage;test;coverageReport;project typeclasses;run"
   - cd spring-scala
   - ./gradlew build
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
