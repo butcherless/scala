@@ -6,58 +6,47 @@ object MyTypeClasses {
   /**
     * Created by cmartin on 26/12/2016.
     */
+
+  // Jsonable typeclass
+
   trait Jsonable[T] {
-    def serialize(x: T): String
+    def serialize(t: T): String
   }
 
   object Jsonable {
 
-    implicit object JsonableInt extends Jsonable[Int] {
+    def serialize[T](t: T)(implicit ev: Jsonable[T]): String = ev.serialize(t)
+
+    implicit val JsonableInt = new Jsonable[Int] {
       override def serialize(x: Int): String = {
-        //TODO improve implementation
         s"""Int={"value":${x.toString}}"""
       }
     }
 
-    implicit object JsonablePerson extends Jsonable[Person] {
+    implicit val JsonablePerson = new Jsonable[Person] {
       override def serialize(x: Person): String = {
-        //TODO improve implementation
         s"""Person={"name":"${x.name}", "firstname":"${x.firstName}", "id":"${x.id}"}"""
       }
     }
 
-    /*
-        implicit def intInstance[T](implicit ev: Jsonable[T]) = new Jsonable[Int] {
-          override def serialize(x: Int): String = {
-            //TODO improve implementation
-            "{ \"value\":" + x.toString + "}"
-          }
-        }
 
-        implicit def doubleInstance[T](implicit ev: Jsonable[T]) = new Jsonable[Double] {
-          override def serialize(x: Double): String = {
-            //TODO improve implementation
-            "{ \"value\":" + x.toString + "}"
-          }
-        }
+    implicit def doubleInstance = new Jsonable[Double] {
+      override def serialize(x: Double): String = {
+        "{ \"value\":" + x.toString + "}"
+      }
+    }
 
-        implicit def personInstance[T](implicit ev: Jsonable[T]) = new Jsonable[Person] {
-          override def serialize(x: Person): String = {
-            //TODO improve implementation
-            "{ \"name\":\"" + x.name + "\"" +
-              ",\"firstname\":\"" + x.firstName + "\"" +
-              ",\"id\":\"" + x.id + "\"}"
-          }
-        }
-    */
   }
+
+
+  // Show typeclass
 
   trait Show[T] {
     def show(t: T): String
   }
 
   object Show {
-    def show[T](t: T)(implicit s: Show[T]) = s.show(t)
+    def show[T](t: T)(implicit ev: Show[T]) = ev.show(t)
 
     implicit val showInt: Show[Int] =
       new Show[Int] {
