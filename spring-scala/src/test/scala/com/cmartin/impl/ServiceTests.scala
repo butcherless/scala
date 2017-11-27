@@ -1,5 +1,6 @@
 package com.cmartin.impl
 
+import com.cmartin.Person
 import com.cmartin.algebra.NumberWord
 import org.scalatest.FunSuite
 
@@ -29,5 +30,11 @@ class ServiceTests extends FunSuite {
     assert(pair.source == NumberWord.one)
     assert(pair.target != NumberWord.one)
     assert(pair.limit == 10)
+  }
+
+  test("testPersonBean") {
+    val p = new Person()
+    p.setId(1)
+
   }
 }
