@@ -1,6 +1,7 @@
 package com.cmartin
 
-import java.time.{LocalDateTime, ZonedDateTime}
+import java.time.ZonedDateTime
+import java.util.UUID
 
 import com.cmartin.algebra.GreetingService
 import org.slf4j.{Logger, LoggerFactory}
@@ -16,26 +17,26 @@ class GreetingController {
   @Autowired private val properties: ApplicationProperties = null
   @Autowired val service: GreetingService = null
 
-  @GetMapping(path = Array("/random/{number}"), produces = Array(MediaType.TEXT_HTML_VALUE))
-  def random(@PathVariable number: Int,
-             model: Model): String = {
-    model.addAttribute("source", number)
-    model.addAttribute("target", service.generateRandom(number, properties.maxRandom))
-    model.addAttribute("date", ZonedDateTime.now())
+  @GetMapping(path = Array("/random/{number}"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
+  def random(@PathVariable number: Int): ResponseEntity[SourceTargetPair] = {
+    //("date", ZonedDateTime.now())
 
-    "random"
+    val stp = SourceTargetPair(number.toString,
+      service.generateRandom(number, properties.maxRandom).toString,
+      properties.maxRandom)
+
+    logger.debug(s"entity: ${stp}")
+
+    new ResponseEntity[SourceTargetPair](stp, HttpStatus.OK)
   }
 
-  @GetMapping(path = Array("/greeting"), produces = Array(MediaType.TEXT_HTML_VALUE))
-  def greeting(@RequestParam(value = "name", required = false, defaultValue = "donald") name: String,
-               model: Model): String = {
+  @GetMapping(path = Array("/greeting"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
+  def greeting(@RequestParam(value = "name", required = false, defaultValue = "Unknown")
+               name: String): ResponseEntity[Person] = {
     logger.debug(s"name: ${name}")
-    val person = newPerson(1, name, "lastName", s"${name.toLowerCase()}@duck.com")
-//    model.addAttribute("name", person.firstName)
-//    model.addAttribute("email", person.email)
-    model.addAttribute("date", LocalDateTime.now())
+    val person = Person(1, name, name + "-lastName", s"${name.toLowerCase()}@duck.com")
 
-    "greeting"
+    new ResponseEntity[Person](person, HttpStatus.OK)
   }
 
   @GetMapping(path = Array("/"), produces = Array(MediaType.TEXT_HTML_VALUE))
@@ -58,31 +59,22 @@ class GreetingController {
     "randomWord"
   }
 
-  @DeleteMapping(path = Array("/delete/{number}"))
-  def deletePerson(@PathVariable number: Int): String = {
-    logger.debug(s"delete entity: ${number}")
+  @DeleteMapping(path = Array("/delete/{id}"))
+  def deletePerson(@PathVariable id: String): ResponseEntity[String] = {
+    logger.debug(s"delete entity: ${id}")
 
-    "delete"
+    new ResponseEntity[String](getRandomId, HttpStatus.OK)
   }
 
 
   @PostMapping(path = Array("/create"), consumes = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
   @ResponseStatus(HttpStatus.CREATED)
-  def createPerson(@RequestBody person: Person): ResponseEntity[Long] = {
+  def createPerson(@RequestBody person: Person): ResponseEntity[String] = {
     logger.debug(s"entity: {} ", person)
 
-    new ResponseEntity[Long](1, HttpStatus.CREATED)
+    new ResponseEntity[String](getRandomId, HttpStatus.CREATED)
   }
 
-  //TODO
-  private def newPerson(id: Int, firstName: String, lastName: String, email: String) = {
-    val p = new Person
-    p.id = id
-    p.firstName = firstName
-    p.lastName = lastName
-    p.email = email
-
-    p
-  }
+  private def getRandomId = UUID.randomUUID().toString
 
 }

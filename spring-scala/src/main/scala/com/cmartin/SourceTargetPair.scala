@@ -1,10 +1,7 @@
 package com.cmartin
 
-case class SourceTargetPair(source: String, target: String, limit: Int) {
+import scala.beans.BeanProperty
 
-  override def toString: String = {
-    val classname = SourceTargetPair.getClass.getSimpleName
-
-    s"$classname[source=$source, target=$target, limit=$limit]"
-  }
-}
+case class SourceTargetPair(@BeanProperty source: String,
+                            @BeanProperty target: String,
+                            @BeanProperty limit: Int)

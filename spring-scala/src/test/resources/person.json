@@ -1,6 +1,5 @@
 {
-	"id":1,
-	"firstName": "name",
-	"lastName":"last",
-	"email":"abc@domain.com"
+  "firstName": "Martin",
+  "lastName": "Odersky",
+  "email": "martin.odersky@scala.com"
 }

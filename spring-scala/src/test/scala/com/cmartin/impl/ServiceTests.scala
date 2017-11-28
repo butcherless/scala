@@ -7,6 +7,11 @@ import org.scalatest.FunSuite
 class ServiceTests extends FunSuite {
   val service = new GreetingServiceImpl
 
+  val ID = 64
+  val FIRSTNAME = "firstname"
+  val LASTNAME = "lastname"
+  val EMAIL = "email"
+
   test("testConvertDecimalnumberToWord") {
     assert(service.convertDecimalnumberToWord(0).getOrElse(NumberWord.invalid).equals(NumberWord.zero))
     assert(service.convertDecimalnumberToWord(1).getOrElse(NumberWord.invalid).equals(NumberWord.one))
@@ -33,8 +38,10 @@ class ServiceTests extends FunSuite {
   }
 
   test("testPersonBean") {
-    val p = new Person()
-    p.setId(1)
-
+    val p = new Person(ID, FIRSTNAME, LASTNAME, EMAIL)
+    assert(p.id == ID)
+    assert(p.firstName == FIRSTNAME)
+    assert(p.lastName == LASTNAME)
+    assert(p.email == EMAIL)
   }
 }

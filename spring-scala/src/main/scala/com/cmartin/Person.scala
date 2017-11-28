@@ -5,23 +5,11 @@ import scala.beans.BeanProperty
 /**
   * Created by cmartin on 02/12/2016.
   */
-class Person extends java.io.Serializable {
-
-  @BeanProperty
-  var id: Long = _
-
-  @BeanProperty
-  var firstName: String = _
-
-  @BeanProperty
-  var lastName: String = _
-
-  @BeanProperty
-  var email: String = _
-
-
-  override def toString: String = {
-    "Person[id=%s, firstName=%s, lastName=%s, email=%s]".format(id, firstName, lastName, email)
+case class Person(@BeanProperty val id: Long,
+                  @BeanProperty val firstName: String,
+                  @BeanProperty val lastName: String,
+                  @BeanProperty val email: String) extends java.io.Serializable {
+  def this() {
+    this(0, "", "", "")
   }
-
 }

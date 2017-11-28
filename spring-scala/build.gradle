@@ -41,7 +41,7 @@ configurations {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-thymeleaf',
+    compile 'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-devtools',
             'org.springframework.boot:spring-boot-starter-undertow:1.5.8.RELEASE',
             libraries.scala_library
