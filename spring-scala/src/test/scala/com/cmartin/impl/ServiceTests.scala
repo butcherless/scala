@@ -33,7 +33,7 @@ class ServiceTests extends FunSuite {
   }
 
   test("testPersonBean") {
-    val p = new Person()
+    val p = new Person(1)
     p.setId(1)
 
   }

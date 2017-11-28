@@ -1,11 +1,9 @@
 package com.cmartin
 
-import scala.beans.BeanProperty
-
 /**
   * Created by cmartin on 02/12/2016.
   */
-class Person
+class Person(var id: Long)
 /*
 (@BeanProperty id: Long,
  @BeanProperty firstName: String,
@@ -33,11 +31,15 @@ class Person
   }
 */
 
-  private var id:Long=_
+  //private var id:Long=_
 
-  def setId(id:Long) = this.id=id
+  def setId(_id: Long) = id = _id
 
   override def toString: String = {
     "Person[id=%s]".format(id) //, firstName, lastName, email)
+  }
+
+  def this() {
+    this(0)
   }
 }
