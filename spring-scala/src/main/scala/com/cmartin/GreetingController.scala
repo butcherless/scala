@@ -76,11 +76,11 @@ class GreetingController {
 
   //TODO
   private def newPerson(id: Int, firstName: String, lastName: String, email: String) = {
-    val p = new Person(1)
-//    p.id = id
-//    p.firstName = firstName
-//    p.lastName = lastName
-//    p.email = email
+    val p = new Person
+    p.id = id
+    p.firstName = firstName
+    p.lastName = lastName
+    p.email = email
 
     p
   }
