@@ -5,6 +5,11 @@ Build with Travis CI
 
 == How to run
 
-. build: ./gradlew clean build
-. run: ./gradlew bootRun
-. check: http://localhost:8080/greeting
+- build: ./gradlew clean build
+- run: ./gradlew bootRun
+- http http://localhost:8080/
+- http http://localhost:8080/greeting/
+- http http://localhost:8080/greeting/?name=Donald
+- http http://localhost:8080/randomWord/7
+- http DELETE localhost:8080/delete/b08a6e8c-9d48-419a-a14c-29d34fc1c49d
+- http POST localhost:8080/create < src/test/resources/person.json

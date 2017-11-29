@@ -32,9 +32,9 @@ class ServiceTests extends FunSuite {
 
   test("testGenerateRandomPair") {
     val pair = service.generateRandomPair(1, 10)
-    assert(pair.source == NumberWord.one)
-    assert(pair.target != NumberWord.one)
-    assert(pair.limit == 10)
+    assert(pair.getOrElse("") == NumberWord.one)
+    assert(pair.getOrElse("") != NumberWord.one)
+    assert(pair.getOrElse("") == 10)
   }
 
   test("testPersonBean") {

@@ -7,8 +7,9 @@ import com.cmartin.algebra.GreetingService
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, MediaType, ResponseEntity}
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation._
+
+import scala.util.{Failure, Success}
 
 @RestController
 class GreetingController {
@@ -21,8 +22,9 @@ class GreetingController {
   def random(@PathVariable number: Int): ResponseEntity[SourceTargetPair] = {
     //("date", ZonedDateTime.now())
 
+    // TODO resolve Try/Success/Failure
     val stp = SourceTargetPair(number.toString,
-      service.generateRandom(number, properties.maxRandom).toString,
+      service.generateRandom(number, properties.maxRandom).get.toString,
       properties.maxRandom)
 
     logger.debug(s"entity: ${stp}")
@@ -39,24 +41,23 @@ class GreetingController {
     new ResponseEntity[Person](person, HttpStatus.OK)
   }
 
-  @GetMapping(path = Array("/"), produces = Array(MediaType.TEXT_HTML_VALUE))
-  def home(model: Model): String = {
-    model.addAttribute("version", properties.version)
-    model.addAttribute("date", ZonedDateTime.now())
+  @GetMapping(path = Array("/"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
+  def home(): ResponseEntity[ApplicationVersion] = {
+    logger.debug(s"version: ${properties.version}")
 
-    "home"
+    new ResponseEntity[ApplicationVersion](
+      ApplicationVersion(properties.version, ZonedDateTime.now().toString),
+      HttpStatus.OK)
   }
 
   @GetMapping(path = Array("/randomWord/{number}"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
-  def randomTarget(@PathVariable number: Int,
-                   model: Model): String = {
+  def randomTarget(@PathVariable number: Int): ResponseEntity[_] = {
     val stPair = service.generateRandomPair(number, properties.maxRandom)
-    model.addAttribute("source", stPair.source)
-    model.addAttribute("target", stPair.target)
-    model.addAttribute("limit", stPair.limit)
-    model.addAttribute("date", ZonedDateTime.now())
 
-    "randomWord"
+    stPair match {
+      case Success(dto) => new ResponseEntity[SourceTargetPair](dto, HttpStatus.OK)
+      case Failure(ex) => new ResponseEntity[String](ex.getMessage, HttpStatus.NOT_FOUND)
+    }
   }
 
   @DeleteMapping(path = Array("/delete/{id}"))

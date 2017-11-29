@@ -1,7 +1,7 @@
 package com.cmartin.impl
 
 import com.cmartin.SourceTargetPair
-import com.cmartin.algebra.{GreetingService, NumberWord}
+import com.cmartin.algebra.GreetingService
 import org.springframework.stereotype.Service
 
 import scala.util.{Failure, Random, Success, Try}
@@ -9,15 +9,15 @@ import scala.util.{Failure, Random, Success, Try}
 @Service
 class GreetingServiceImpl extends GreetingService {
 
-  override def generateRandom(n: Int, limit: Int): Int = {
+  override def generateRandom(n: Int, limit: Int): Try[Int] = {
     if (n <= 0)
-      0
+      Success(0)
     else {
       val r = Random.nextInt(limit) + 1
       if (r == n)
-        r % limit + 1
+        Success(r % limit + 1)
       else
-        r
+        Success(r)
     }
   }
 
@@ -39,10 +39,11 @@ class GreetingServiceImpl extends GreetingService {
     }
   }
 
-  override def generateRandomPair(n: Int, limit: Int) = {
-    SourceTargetPair(
-      convertDecimalnumberToWord(n).getOrElse(NumberWord.invalid),
-      convertDecimalnumberToWord(generateRandom(n, limit)).getOrElse(NumberWord.invalid),
-      limit)
+  override def generateRandomPair(n: Int, limit: Int): Try[SourceTargetPair] = {
+    for {
+      random <- generateRandom(n, limit)
+      source <- convertDecimalnumberToWord(n)
+      target <- convertDecimalnumberToWord(random)
+    } yield SourceTargetPair(source, target, limit)
   }
 }

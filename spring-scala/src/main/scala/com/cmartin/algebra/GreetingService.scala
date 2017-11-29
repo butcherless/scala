@@ -20,7 +20,7 @@ trait GreetingService {
     * @param limit max number to be returned
     * @return the random number
     */
-  def generateRandom(n: Int, limit: Int): Int
+  def generateRandom(n: Int, limit: Int): Try[Int]
 
-  def generateRandomPair(n: Int, limit: Int): SourceTargetPair
+  def generateRandomPair(n: Int, limit: Int): Try[SourceTargetPair]
 }
