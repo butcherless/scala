@@ -5,7 +5,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
         classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.18"
     }
 }
@@ -22,7 +22,7 @@ mainClassName = "com.cmartin.Application"
 
 jar {
     baseName = 'spring-scala-webapp'
-    version = '1.0.2'
+    version = '1.0.3'
 }
 
 repositories {
@@ -43,7 +43,7 @@ configurations {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-devtools',
-            'org.springframework.boot:spring-boot-starter-undertow:1.5.8.RELEASE',
+            'org.springframework.boot:spring-boot-starter-undertow:1.5.9.RELEASE',
             libraries.scala_library
 
     // TESTING
