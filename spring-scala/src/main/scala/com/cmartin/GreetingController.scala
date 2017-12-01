@@ -21,7 +21,7 @@ class GreetingController {
   @GetMapping(path = Array("/random/{number}"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
   def random(@PathVariable number: Int): ResponseEntity[SourceTargetPair] = {
     //("date", ZonedDateTime.now())
-
+    logger.debug(s"input: ${number}")
     // TODO resolve Try/Success/Failure
     val stp = SourceTargetPair(number.toString,
       service.generateRandom(number, properties.maxRandom).get.toString,
@@ -35,25 +35,29 @@ class GreetingController {
   @GetMapping(path = Array("/greeting"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
   def greeting(@RequestParam(value = "name", required = false, defaultValue = "Unknown")
                name: String): ResponseEntity[Person] = {
-    logger.debug(s"name: ${name}")
+    logger.debug(s"input: ${name}")
     val person = Person(1, name, name + "-lastName", s"${name.toLowerCase()}@duck.com")
+    logger.debug(s"output: ${person}")
 
     new ResponseEntity[Person](person, HttpStatus.OK)
   }
 
   @GetMapping(path = Array("/"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
   def home(): ResponseEntity[ApplicationVersion] = {
-    logger.debug(s"version: ${properties.version}")
+    val appVersion = ApplicationVersion(properties.version, ZonedDateTime.now().toString)
 
-    new ResponseEntity[ApplicationVersion](
-      ApplicationVersion(properties.version, ZonedDateTime.now().toString),
-      HttpStatus.OK)
+    logger.debug(s"version: ${appVersion}")
+
+    new ResponseEntity[ApplicationVersion](appVersion, HttpStatus.OK)
   }
 
+//TODO 404 json error message
   @GetMapping(path = Array("/randomWord/{number}"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
   def randomTarget(@PathVariable number: Int): ResponseEntity[_] = {
+    logger.debug(s"input: ${number}")
     val stPair = service.generateRandomPair(number, properties.maxRandom)
 
+    logger.debug(s"output: ${stPair}")
     stPair match {
       case Success(dto) => new ResponseEntity[SourceTargetPair](dto, HttpStatus.OK)
       case Failure(ex) => new ResponseEntity[String](ex.getMessage, HttpStatus.NOT_FOUND)
