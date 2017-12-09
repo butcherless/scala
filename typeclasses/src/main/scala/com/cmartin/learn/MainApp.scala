@@ -2,10 +2,7 @@ package com.cmartin.learn
 
 import com.cmartin.learn.MyTypeClasses.Jsonable
 import com.cmartin.learn.MyTypeClasses.Show._
-import com.cmartin.learn.generator.{TryDtoGenerator, Type}
 import com.typesafe.scalalogging.Logger
-
-import scala.util.{Failure, Success}
 
 object MainApp extends App {
   val logger = Logger[App]
@@ -29,15 +26,4 @@ object MainApp extends App {
   logger.debug(show(5))
   logger.debug(show(person))
   logger.debug(show(BigDecimal(1234.89)))
-
-  // ALGEBRA
-
-  println("\nDtoGenerator algebra!")
-  val typeRep = TryDtoGenerator.create(Type("mypkg", "MyTpe"))
-  typeRep match {
-    case Success(s) => println(s"TypeRepresentation[type: ${s.t}, file: ${s.f}]")
-    case Failure(f) => println(s"function create type " + f.toString)
-
-  }
-
 }

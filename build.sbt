@@ -13,30 +13,39 @@ val specs2 = "org.specs2" %% "specs2-core" % "3.8.6" % "test"
 val zinc = "org.scala-sbt" % "zinc_2.12" % "1.0.3"
 
 
-//testFrameworks += new TestFramework("utest.runner.Framework")
-
-//lazy val root = (project in file("."))  .aggregate(subprj_one)
+lazy val root = (project in file(".")).aggregate(fpInScala, typeclasses, dtogen)
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
     commonSettings,
     name := "fp-in-scala",
-    libraryDependencies ++= Seq(
-      zinc,
-      scalaz,
-      cats,
-      specs2
-    )
+    libraryDependencies ++= fpInScalaDeps
   )
+
+val fpInScalaDeps = Seq(
+  zinc, scalaz, cats, specs2
+)
 
 lazy val typeclasses = (project in file("typeclasses"))
   .settings(
     commonSettings,
     name := "typeclasses",
-    libraryDependencies ++= Seq(
-      zinc,
-      scala_logging,
-      logback,
-      uTest
-    )
+    libraryDependencies ++= typeclassesDeps,
+    testFrameworks += new TestFramework("utest.runner.Framework")
   )
+
+val typeclassesDeps = Seq(
+  zinc, scala_logging, logback, uTest
+)
+
+lazy val dtogen = (project in file("dtogen"))
+  .settings(
+    commonSettings,
+    name := "dtogen",
+    libraryDependencies ++= dtogenDeps,
+    testFrameworks += new TestFramework("utest.runner.Framework")
+  )
+
+val dtogenDeps = Seq(
+  zinc, scala_logging, logback, uTest
+)
