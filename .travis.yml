@@ -1,4 +1,5 @@
 language: scala
+group: travis_lts
 
 jdk:
   - oraclejdk8
