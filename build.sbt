@@ -5,6 +5,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.11"
+lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.11"
 val cats = "org.typelevel" %% "cats-core" % "1.0.0-MF"
 val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
 val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
@@ -75,5 +76,5 @@ val scalazlearnDeps = Seq(
 lazy val akkahttphw = (project in file("akka-http-hw"))
   .settings(commonSettings,
     name := "akka-http-hello",
-    libraryDependencies ++= Seq(akkaHttp, scalaTest)
+    libraryDependencies ++= Seq(akkaHttp, akkaJson, scalaTest)
   )

@@ -4,12 +4,22 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.stream.ActorMaterializer
+import spray.json._
+
 import scala.io.StdIn
 
-object WebServer extends Greeting {
-  def main(args: Array[String]) {
+final case class Transfer(source: String, target: String, amount: BigDecimal, currency: String)
 
+trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+  implicit val itemFormat = jsonFormat4(Transfer)
+}
+
+object WebServer extends Greeting with JsonSupport {
+
+
+  def main(args: Array[String]) {
     implicit val system = ActorSystem("my-system")
     implicit val materializer = ActorMaterializer()
     // needed for the future flatMap/onComplete in the end
@@ -18,9 +28,21 @@ object WebServer extends Greeting {
     val route =
       path("hello") {
         get {
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Say hello to akka-http</h1>"))
+          complete(buildTextResponse(200, "hello from akka http"))
         }
-      }
+      } ~
+        path("bye") {
+          get {
+            complete(buildTextResponse(200, "good bye from akka http"))
+          }
+        } ~
+        path("transfer") {
+          get {
+            //complete(buildJsonResponse(200, "good bye from akka http"))
+            complete(Transfer("20950230...", "01822348...", BigDecimal.apply(100.0), "EUR"))
+          }
+        }
+
 
     val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
 
@@ -30,25 +52,15 @@ object WebServer extends Greeting {
       .flatMap(_.unbind()) // trigger unbinding from the port
       .onComplete(_ => system.terminate()) // and shutdown when done
   }
+
+  def buildTextResponse(code: Int, message: String) = {
+    HttpResponse(code, entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, message))
+  }
+
+  def buildJsonResponse(code: Int, message: String) = {
+    HttpResponse(code, entity = HttpEntity(ContentTypes.`application/json`, message))
+  }
 }
-
-
-/*
-object Server extends App with Directives with Greeting {
-  implicit val system = ActorSystem("actor-system")
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
-  implicit val executionContext = system.dispatcher
-
-
-  val routes: Route = path("/test") { complete("test") }
-  Http().bindAndHandle(routes, "0.0.0.0", 8002)
-}
-*/
-/*
-object Hello extends Greeting with App {
-  println(greeting)
-}
-*/
 
 trait Greeting {
   lazy val greeting: String = "akka-http-hello"
