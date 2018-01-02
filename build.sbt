@@ -1,21 +1,21 @@
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
-  version := "0.1.0-SNAPSHOT",
+  version := "0.1.1-SNAPSHOT",
   scalaVersion := "2.12.4"
 )
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.11"
 lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.11"
-val cats = "org.typelevel" %% "cats-core" % "1.0.0-MF"
+val cats = "org.typelevel" %% "cats-core" % "1.0.1"
 val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
 val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
-val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.17"
+val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.18"
 
-val specs2 = "org.specs2" %% "specs2-core" % "3.8.6" % "test"
-val uTest = "com.lihaoyi" %% "utest" % "0.6.0" % "test"
+val specs2 = "org.specs2" %% "specs2-core" % "4.0.2" % "test"
+val uTest = "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
-val zinc = "org.scala-sbt" % "zinc_2.12" % "1.0.3"
+val zinc = "org.scala-sbt" % "zinc_2.12" % "1.0.5"
 
 
 
