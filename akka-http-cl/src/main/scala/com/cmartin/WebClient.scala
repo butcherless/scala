@@ -8,7 +8,7 @@ import akka.stream.ActorMaterializer
 import scala.concurrent.Future
 import scala.util.{ Failure, Success }
 
-object WebClient {
+object WebClient extends Greeting {
   def main(args: Array[String]): Unit = {
     implicit val system = ActorSystem()
     implicit val materializer = ActorMaterializer()
@@ -23,4 +23,8 @@ object WebClient {
         case Failure(_)   => sys.error("something wrong")
       }
   }
+}
+
+trait Greeting {
+  lazy val greeting: String = "akka-http-client"
 }

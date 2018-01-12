@@ -24,7 +24,8 @@ lazy val root = (project in file(".")).aggregate(
   typeclasses,
   dtogen,
   scalazlearn,
-  akkahttphw)
+  akkahttphw,
+  akkahttpcl)
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(

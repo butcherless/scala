@@ -1,4 +1,4 @@
-package example
+package com.cmartin
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -63,5 +63,5 @@ object WebServer extends Greeting with JsonSupport {
 }
 
 trait Greeting {
-  lazy val greeting: String = "akka-http-hello"
+  lazy val greeting: String = "akka-http-server"
 }
