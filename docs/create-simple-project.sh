@@ -1,16 +1,20 @@
 #!/bin/bash
 
 PKG_DIR=com/cmartin/learn
+SBT_VER=1.1.0
+SCALA_VER="2.12.4"
+SCALATEST_VER="3.0.4"
+
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
 
 # create project properties file
-echo 'sbt.version=1.0.4' > project/build.properties
+echo "sbt.version=${SBT_VER}" > project/build.properties
 echo 'name := "project-template"
 version := "1.0"
-scalaVersion := "2.12.4"
+scalaVersion := "'${SCALA_VER}'"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"' > build.sbt
+libraryDependencies += "org.scalatest" %% "scalatest" % "'${SCALATEST_VER}'" % "test"' > build.sbt
 
 echo 'package com.cmartin.learn
 
@@ -27,10 +31,10 @@ echo 'package com.cmartin.learn
 
 import org.scalatest._
 
-class HelloSpec extends FlatSpec with Matchers {
+class SimpleAppSpec extends FlatSpec with Matchers {
   "The SimpleApp object" should "say hello" in {
     SimpleApp.greeting shouldEqual "simple-application-hello"
   }
-}' > src/test/scala/${PKG_DIR}/HelloSpec.scala
+}' > src/test/scala/${PKG_DIR}/SimpleAppSpec.scala
 
 sbt test run
