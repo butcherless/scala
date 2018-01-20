@@ -18,14 +18,14 @@ lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 val zinc = "org.scala-sbt" % "zinc_2.12" % "1.0.5"
 
 
-
 lazy val root = (project in file(".")).aggregate(
   fpInScala,
   typeclasses,
   dtogen,
   scalazlearn,
   akkahttphw,
-  akkahttpcl)
+  akkahttpcl,
+  calendar)
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
@@ -84,4 +84,10 @@ lazy val akkahttpcl = (project in file("akka-http-cl"))
   .settings(commonSettings,
     name := "akka-http-webclient",
     libraryDependencies ++= Seq(akkaHttp, akkaJson, scalaTest)
+  )
+
+lazy val calendar = (project in file("calendar"))
+  .settings(commonSettings,
+    name := "personal-calendar",
+    libraryDependencies ++= Seq(scalaz, scalaTest, specs2)
   )

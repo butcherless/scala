@@ -6,7 +6,7 @@ jdk:
 
 script:
   - sudo apt-get update
-  - sbt ";clean;coverage;test;coverageReport;project typeclasses;run"
+  - sbt ";clean;coverage;test;coverageReport ;typeclasses/run ;calendar/run"
   - cd spring-scala
   - ./gradlew build
 

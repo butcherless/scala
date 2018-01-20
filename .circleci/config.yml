@@ -21,7 +21,7 @@ jobs:
       - run:
           name: test and typeclasses run
           command: |
-                   cat /dev/null | sbt ";test:test;project typeclasses;run"
+                   cat /dev/null | sbt ";test:test ;typeclasses/run"
 
 
   build_gradle:
