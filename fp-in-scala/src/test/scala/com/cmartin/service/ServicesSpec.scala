@@ -20,28 +20,43 @@ class ServicesSpec extends Specification {
 
   "color with value 1 should exist in the repository" >> {
     val repo = new ColorRepository
-    repo.getColorByNumber(1).isDefined must beTrue
+    repo.getById(1).isDefined must beTrue
   }
 
   "color with value 100 should not exist in the repository" >> {
     val repo = new ColorRepository
-    repo.getColorByNumber(100).isDefined must beFalse
+    repo.getById(100).isDefined must beFalse
   }
 
-
-  "service compositior" >> {
-    val colorService = new ColorServiceImpl(new ColorRepository)
-    val shapeService = new ShapeServiceImpl
-    val fruitService = new FruitServiceImpl
+  "service compositior color -> 3 should be Some" >> {
+    val colorService: SimpleService[Color] = new ColorServiceImpl(new ColorRepository)
+    val shapeService: SimpleService[Shape] = new ShapeServiceImpl(new ShapeRepository)
+    val fruitService: SimpleService[Fruit] = new FruitServiceImpl
 
     //TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
 
-    val fruit = for {
+    val shape = for {
+      color <- colorService.getByHash(3)
+      shape <- shapeService.getByHash(color.next)
+      fruit <- fruitService.getByHash(shape.id) //TODO
+    } yield shape
+    println(s"result: $shape")
+    shape must beSome
+  }
+
+  "service compositior color -> 1 should be None" >> {
+    val colorService: SimpleService[Color] = new ColorServiceImpl(new ColorRepository)
+    val shapeService: SimpleService[Shape] = new ShapeServiceImpl(new ShapeRepository)
+    val fruitService: SimpleService[Fruit] = new FruitServiceImpl
+
+    //TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
+
+    val shape = for {
       color <- colorService.getByHash(1)
       shape <- shapeService.getByHash(color.next)
-      fruit <- fruitService.getByHash(shape.id)
-    } yield fruit
-
-    fruit must beNone
+      fruit <- fruitService.getByHash(shape.id) //TODO
+    } yield shape
+    println(s"result: $shape")
+    shape must beNone
   }
 }
