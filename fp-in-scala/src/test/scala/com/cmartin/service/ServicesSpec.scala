@@ -1,11 +1,14 @@
 package com.cmartin.service
 
+import com.cmartin.service.Services.nextFruitHash
 import org.specs2.mutable.Specification
 
 class ServicesSpec extends Specification {
 
   val RED = "red"
   val LIGHT_RED = "light-red"
+  val COLOR_CODE_OK = 4
+  val COLOR_CODE_KO = 2
 
   "hash function should generate an Int between 1 and 10 for Color class" >> {
     val color = Color("red", 1)
@@ -28,35 +31,35 @@ class ServicesSpec extends Specification {
     repo.getById(100).isDefined must beFalse
   }
 
-  "service compositior color -> 3 should be Some" >> {
+  s"service compositior color -> $COLOR_CODE_OK should be Some" >> {
     val colorService: SimpleService[Color] = new ColorServiceImpl(new ColorRepository)
     val shapeService: SimpleService[Shape] = new ShapeServiceImpl(new ShapeRepository)
-    val fruitService: SimpleService[Fruit] = new FruitServiceImpl
+    val fruitService: SimpleService[Fruit] = new FruitServiceImpl(new FruitRepository)
 
     //TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
 
-    val shape = for {
-      color <- colorService.getByHash(3)
+    val fruit = for {
+      color <- colorService.getByHash(COLOR_CODE_OK)
       shape <- shapeService.getByHash(color.next)
-      fruit <- fruitService.getByHash(shape.id) //TODO
-    } yield shape
-    println(s"result: $shape")
-    shape must beSome
+      fruit <- fruitService.getByHash(nextFruitHash(shape.name))
+    } yield fruit
+
+    fruit must beSome
   }
 
-  "service compositior color -> 1 should be None" >> {
+  s"service compositior color -> $COLOR_CODE_KO should be None" >> {
     val colorService: SimpleService[Color] = new ColorServiceImpl(new ColorRepository)
     val shapeService: SimpleService[Shape] = new ShapeServiceImpl(new ShapeRepository)
-    val fruitService: SimpleService[Fruit] = new FruitServiceImpl
+    val fruitService: SimpleService[Fruit] = new FruitServiceImpl(new FruitRepository)
 
     //TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
 
-    val shape = for {
-      color <- colorService.getByHash(1)
+    val fruit = for {
+      color <- colorService.getByHash(COLOR_CODE_KO)
       shape <- shapeService.getByHash(color.next)
-      fruit <- fruitService.getByHash(shape.id) //TODO
-    } yield shape
-    println(s"result: $shape")
-    shape must beNone
+      fruit <- fruitService.getByHash(nextFruitHash(shape.name)) //TODO
+    } yield fruit
+
+    fruit must beNone
   }
 }

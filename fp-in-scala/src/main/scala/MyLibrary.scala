@@ -56,6 +56,7 @@ object MyLibrary {
       else
         extractDigits(quotient) + moduleString
     }
+
     val signString = if (x < 0) "-" else ""
     signString + extractDigits(abs(x))
   }
@@ -112,6 +113,6 @@ object MyLibrary {
   }
 
   def prodHOF(l: List[Int]): Int = {
-    collapse(l)(1, (a,b) => a * b)
+    collapse(l)(1, (a, b) => a * b)
   }
 }

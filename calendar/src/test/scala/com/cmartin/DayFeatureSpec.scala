@@ -2,8 +2,8 @@ package com.cmartin
 
 import java.time.LocalDate
 
-import com.cmartin.model._
 import com.cmartin.PersonalCalendar._
+import com.cmartin.model._
 import org.scalatest._
 
 /**

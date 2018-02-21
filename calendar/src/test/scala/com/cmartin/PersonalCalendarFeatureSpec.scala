@@ -1,7 +1,6 @@
 package com.cmartin
 
-import com.cmartin.PersonalCalendar.{isAbsenceDay, isCountryHoliday, isHoliday, isWorkDay, isWorkableDay, isWeekendDay}
-import com.cmartin.model.{WorkDay}
+import com.cmartin.PersonalCalendar._
 import org.scalatest._
 
 /**
