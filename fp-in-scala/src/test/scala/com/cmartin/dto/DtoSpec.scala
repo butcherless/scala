@@ -1,5 +1,6 @@
 package com.cmartin.dto
 
+import com.cmartin.dto.Plane.buildPlane
 import org.specs2.mutable.Specification
 
 class DtoSpec extends Specification {
@@ -7,6 +8,8 @@ class DtoSpec extends Specification {
   val REGISTRATION = "EC-LXM"
   val MODEL = "350-800"
   val EMPTY_STRING = ""
+
+  def plane2Tuple(p: Plane) = Plane.unapply(p).get
 
   "mandatory constructor arguments" >> {
     val tuple = plane2Tuple(Plane(ID, REGISTRATION))
@@ -20,5 +23,18 @@ class DtoSpec extends Specification {
     resTuple must beEqualTo(tuple)
   }
 
-  def plane2Tuple(p: Plane) = Plane.unapply(p).get
+  "should return a valid Plane" >> {
+    val res = buildPlane(ID, REGISTRATION)
+    res.isDefined must beTrue
+  }
+
+  "should return None" >> {
+    val res = buildPlane(-1, REGISTRATION)
+    res.isDefined must beFalse
+  }
+
+  "should return None" >> {
+    val res = buildPlane(ID, "")
+    res.isDefined must beFalse
+  }
 }
