@@ -10,5 +10,9 @@ script:
   - cd spring-scala
   - ./gradlew build
 
+cache:
+  directories:
+    - $HOME/.gradle
+
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
