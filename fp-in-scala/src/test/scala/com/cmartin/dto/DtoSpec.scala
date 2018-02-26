@@ -3,6 +3,8 @@ package com.cmartin.dto
 import com.cmartin.dto.Plane.buildPlane
 import org.specs2.mutable.Specification
 
+import scala.collection.immutable.HashSet
+
 class DtoSpec extends Specification {
   val ID = 1234
   val REGISTRATION = "EC-LXM"
@@ -36,5 +38,21 @@ class DtoSpec extends Specification {
   "should return None" >> {
     val res = buildPlane(ID, "")
     res.isDefined must beFalse
+  }
+
+  "should be empty collection" >> {
+    val res = Parent(ID, "parent description", HashSet())
+    res.id must beEqualTo(ID)
+    res.desc.isEmpty must beFalse
+    res.children.isEmpty must beTrue
+  }
+
+  "should be non empty collection" >> {
+    val child = Child(ID, "child description")
+    val res = Parent(ID, "parent description", HashSet(child))
+    res.id must beEqualTo(ID)
+    res.desc.isEmpty must beFalse
+    res.children.isEmpty must beFalse
+    res.children.size must beEqualTo(1)
   }
 }
