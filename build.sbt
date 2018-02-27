@@ -8,15 +8,15 @@ lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.11"
 lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.11"
 val cats = "org.typelevel" %% "cats-core" % "1.0.1"
 val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
-val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
-val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.18"
+val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.8.0"
+val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.20"
 
-val specs2 = "org.specs2" %% "specs2-core" % "4.0.2" % "test"
+val specs2 = "org.specs2" %% "specs2-core" % "4.0.3" % "test"
 val uTest = "com.lihaoyi" %% "utest" % "0.6.3" % "test"
-lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
-val zinc = "org.scala-sbt" % "zinc_2.12" % "1.0.5"
-
+val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.1"
+ 
 
 lazy val root = (project in file(".")).aggregate(
   fpInScala,
@@ -31,7 +31,7 @@ lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
     commonSettings,
     name := "fp-in-scala",
-    libraryDependencies ++= fpInScalaDeps
+    libraryDependencies ++= fpInScalaDeps,
   )
 
 val fpInScalaDeps = Seq(
@@ -55,7 +55,8 @@ lazy val dtogen = (project in file("dtogen"))
     commonSettings,
     name := "dtogen",
     libraryDependencies ++= dtogenDeps,
-    testFrameworks += new TestFramework("utest.runner.Framework")
+    testFrameworks += new TestFramework("utest.runner.Framework"),
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
   )
 
 val dtogenDeps = Seq(
