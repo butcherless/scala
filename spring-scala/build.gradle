@@ -37,25 +37,26 @@ ext.libraries = [
 ]
 
 configurations {
-    compile.exclude module: "spring-boot-starter-tomcat"
+    implementation.exclude module: "spring-boot-starter-tomcat"
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-web',
+    implementation 'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-devtools',
             'org.springframework.boot:spring-boot-starter-undertow:1.5.10.RELEASE',
             libraries.scala_library
 
     // TESTING
-    testCompile 'junit:junit:4.12'
-    testCompile('org.scalatest:scalatest_2.12:3.0.5') {
+    testImplementation 'junit:junit:4.12'
+    testImplementation('org.scalatest:scalatest_2.12:3.0.5') {
         exclude module: 'scala-library'
     }
 
-    testRuntime 'org.pegdown:pegdown:1.4.2'
+    testRuntimeOnly 'org.pegdown:pegdown:1.4.2'
 }
 
 jacoco {
     toolVersion = "0.8.0"
 }
-// gradle wrapper --gradle-version 4.4.1
+
+// gradle wrapper --gradle-version 4.6
