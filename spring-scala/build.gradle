@@ -43,22 +43,23 @@ configurations {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.0.0.RELEASE',
+    compile 'org.springframework.boot:spring-boot-starter-web:2.0.0.RELEASE',
             'org.springframework.boot:spring-boot-devtools:2.0.0.RELEASE',
             "org.springframework.boot:spring-boot-starter-undertow:2.0.0.RELEASE",
             libraries.scala_library
 
 
-    implementation("org.springframework.data:spring-data-neo4j:${springNeo4jVersion}") {
+    compile("org.springframework.data:spring-data-neo4j:${springNeo4jVersion}") {
         exclude group: 'org.neo4j'
     }
-    implementation "org.neo4j:neo4j-ogm-core:${neo4jVersion}",
+    compile "org.neo4j:neo4j-ogm-core:${neo4jVersion}",
             "org.neo4j:neo4j-ogm-api:${neo4jVersion}",
             "org.neo4j:neo4j-ogm-bolt-driver:${neo4jVersion}"
 
     // TESTING
-    testImplementation 'junit:junit:4.12'
-    testImplementation('org.scalatest:scalatest_2.12:3.0.5') {
+    testCompile 'junit:junit:4.12',
+            "org.neo4j:neo4j-ogm-test:${neo4jVersion}"
+    testCompile('org.scalatest:scalatest_2.12:3.0.5') {
         exclude module: 'scala-library'
     }
 
