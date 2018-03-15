@@ -1,6 +1,6 @@
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
-  version := "0.1.1-SNAPSHOT",
+  version := "0.1.2-SNAPSHOT",
   scalaVersion := "2.12.4"
 )
 
@@ -16,7 +16,7 @@ val uTest = "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
 val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.1"
- 
+
 
 lazy val root = (project in file(".")).aggregate(
   fpInScala,
@@ -37,6 +37,13 @@ lazy val fpInScala = (project in file("fp-in-scala"))
 val fpInScalaDeps = Seq(
   zinc, scalaz, cats, specs2
 )
+
+
+lazy val depAnalyzer = (project in file("dep-analyzer"))
+  .settings(
+    commonSettings,
+    name := "depAnalyzer"
+  )
 
 lazy val typeclasses = (project in file("typeclasses"))
   .settings(
