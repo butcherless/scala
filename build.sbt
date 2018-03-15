@@ -19,13 +19,15 @@ val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.1"
 
 
 lazy val root = (project in file(".")).aggregate(
-  fpInScala,
-  typeclasses,
-  dtogen,
-  scalazlearn,
-  akkahttphw,
   akkahttpcl,
-  calendar)
+  akkahttphw,
+  calendar,
+  depAnalyzer,
+  dtogen,
+  fpInScala,
+  scalazlearn,
+  typeclasses
+)
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(

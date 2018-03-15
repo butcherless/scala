@@ -45,23 +45,27 @@ configurations {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web:2.0.0.RELEASE',
             'org.springframework.boot:spring-boot-devtools:2.0.0.RELEASE',
-            "org.springframework.boot:spring-boot-starter-undertow:2.0.0.RELEASE",
-            libraries.scala_library
+            "org.springframework.boot:spring-boot-starter-undertow:2.0.0.RELEASE"
 
 
-    compile("org.springframework.data:spring-data-neo4j:${springNeo4jVersion}") {
-        exclude group: 'org.neo4j'
-    }
-    compile "org.neo4j:neo4j-ogm-core:${neo4jVersion}",
-            "org.neo4j:neo4j-ogm-api:${neo4jVersion}",
-            "org.neo4j:neo4j-ogm-bolt-driver:${neo4jVersion}"
+    compile("org.springframework.data:spring-data-neo4j:${springNeo4jVersion}")
+            {
+                exclude group: 'org.neo4j'
+            }
+    compile "org.neo4j:neo4j-ogm-core:${neo4jVersion}"
+//            "org.neo4j:neo4j-ogm-api:${neo4jVersion}",
+//            "org.neo4j:neo4j-ogm-bolt-driver:${neo4jVersion}"
+    compile libraries.scala_library
 
     // TESTING
     testCompile 'junit:junit:4.12',
-            "org.neo4j:neo4j-ogm-test:${neo4jVersion}"
+            'org.springframework:spring-test:5.0.3.RELEASE',
+    "org.neo4j:neo4j-ogm-test:${neo4jVersion}"
     testCompile('org.scalatest:scalatest_2.12:3.0.5') {
         exclude module: 'scala-library'
     }
+    testRuntime "org.neo4j:neo4j-cypher:3.1.0"
+    testCompile "org.neo4j:neo4j-kernel:3.2.9"
 
     testRuntimeOnly 'org.pegdown:pegdown:1.4.2'
 }

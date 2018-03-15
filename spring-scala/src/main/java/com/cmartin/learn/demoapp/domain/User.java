@@ -1,5 +1,6 @@
 package com.cmartin.learn.demoapp.domain;
 
+import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -9,7 +10,7 @@ import org.springframework.data.annotation.Id;
 public class User {
 
     @Id
-    // TODO @GeneratedValue
+    @GeneratedValue
     private Long id;
 
     @Property(name = "firstName")

@@ -2,19 +2,20 @@ package com.cmartin.learn.demoapp.repository;
 
 import com.cmartin.learn.demoapp.domain.User;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.neo4j.harness.junit.Neo4jRule;
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Ignore
+@RunWith(SpringRunner.class)
 public class RepositoryTest {
     @Rule
     public Neo4jRule neoServer = new Neo4jRule();
@@ -40,7 +41,7 @@ public class RepositoryTest {
         session.save(user);
 
         Collection<User> allUsers = session.loadAll(User.class);
-        assertThat(allUsers).hasSize(10);
+        assertThat(allUsers).hasSize(1);
 
         assertThat(allUsers.iterator().next().getEmail()).isEqualTo("noone@nowhere.com");
     }
