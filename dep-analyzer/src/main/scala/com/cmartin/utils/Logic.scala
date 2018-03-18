@@ -8,7 +8,6 @@ object Logic {
 
   import scala.Console.{MAGENTA, RED, RESET, YELLOW}
 
-  val GAV_ELEMENT_COUNT = 3
   val GAV_GROUP_POS = 1
   val GAV_ARTIFACT_POS = 2
   val GAV_VERSION_POS = 3
@@ -62,9 +61,6 @@ object DependencyRepository {
     dep match {
       case None => false
       case Some(d) => {
-        val exists = deps.contains(d.key)
-        val entry = deps.getOrElse(d.key, List[String]())
-        println(s"$d -> exists($exists), count(${entry.size})")
         deps += ((d.key, deps.getOrElse(d.key, SortedSet[String]()) + d.version))
         true
       }

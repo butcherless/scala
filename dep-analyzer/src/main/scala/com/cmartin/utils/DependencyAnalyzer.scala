@@ -19,9 +19,6 @@ object DependencyAnalyzer extends App {
     val result = DependencyRepository.addDependency(dep)
     //println(s"added dep: $line result is $result")
 
-    // end new
-
-
   }
   bufferedSource.close
 
