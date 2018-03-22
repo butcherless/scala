@@ -6,3 +6,7 @@ sort -u
 
 
 ([0-9a-z.]+):([0-9a-z-]+):([0-9.]+)?.*
+ 
+http://queirozf.com/entries/scala-regular-expressions-examples-reference
+
+ https://logback.qos.ch/manual/configuration.html
