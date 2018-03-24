@@ -1,8 +1,8 @@
 package com.cmartin.utils
 
 
-import scala.collection.SortedSet
-import scala.collection.mutable.SortedMap
+import scala.collection.mutable.TreeSet
+import scala.collection.{SortedMap, SortedSet, mutable}
 
 object Logic {
 
@@ -21,6 +21,15 @@ object Logic {
     def key = s"$group:$artifact"
   }
 
+  object Dep {
+    implicit val ord = new Ordering[Dep] {
+      def compare(d1: Dep, d2: Dep): Int = {
+        d1.version.compareTo(d2.version)
+      }
+    }
+  }
+
+
   def getDependency(s: String): Option[Dep] = {
     val it = DEP_PATTERN.findAllMatchIn(s)
     if (it.isEmpty) None
@@ -30,10 +39,17 @@ object Logic {
     }
   }
 
-  def mkString(k: String, l: DepSet) = {
-    val s = l.mkString(", ")
-    s"$RESET$YELLOW$k$RESET ($RESET$MAGENTA${l.size}$RESET) => [$RESET$MAGENTA$s$RESET]"
+  def mkString(key: String, set: DepSet) = {
+    val s = set.mkString(", ")
+    s"$RESET$YELLOW$key$RESET ($RESET$MAGENTA${set.size}$RESET) => [$RESET$MAGENTA$s$RESET]"
   }
+
+  //TODO convert mutable => immutable, generic Set
+  def mkString(key: String, set: mutable.SortedSet[Dep]) = {
+    val s = set.map(_.version).mkString(", ")
+    s"$RESET$YELLOW$key$RESET ($RESET$MAGENTA${set.size}$RESET) => [$RESET$MAGENTA$s$RESET]"
+  }
+
 
   /*
     * Se agrega la version contenida en el value de la entry del map en la key
@@ -57,11 +73,14 @@ object DependencyRepository {
 
   var deps = SortedMap[String, DepSet]()
 
+  var depList = scala.collection.mutable.SortedSet[Dep]()
+
   def addDependency(dep: Option[Dep]): Boolean = {
     dep match {
       case None => false
       case Some(d) => {
         deps += ((d.key, deps.getOrElse(d.key, SortedSet[String]()) + d.version))
+        depList += d
         true
       }
     }
@@ -69,6 +88,11 @@ object DependencyRepository {
 
   def getByVersionCountGreaterThan(c: Int) = {
     deps.filter(_._2.size > c)
+  }
+
+  def getSetByVersionCountGreaterThan(c: Int) = {
+    depList.groupBy(_.key)
+      .filter(_._2.size > c)
   }
 
   def getAll = deps.toMap

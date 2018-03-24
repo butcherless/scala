@@ -27,4 +27,8 @@ object DependencyAnalyzer extends App {
 
   dups.foreach((t: (String, DepSet)) => println(mkString(t._1, t._2)))
 
+  val dups2 = DependencyRepository.getSetByVersionCountGreaterThan(1)
+
+  dups2.foreach(e => println(mkString(e._1, e._2)))
+
 }
