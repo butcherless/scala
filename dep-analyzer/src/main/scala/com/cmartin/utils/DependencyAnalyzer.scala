@@ -2,7 +2,7 @@ package com.cmartin.utils
 
 object DependencyAnalyzer extends App {
 
-  import com.cmartin.utils.Logic._
+  import com.cmartin.utils.Logic.{getDependency, mkString}
 
   import scala.io.Source
 
@@ -23,12 +23,9 @@ object DependencyAnalyzer extends App {
   bufferedSource.close
 
   // se filtran las tuplas que tienen más de una dependencia en la lista
-  val dups = DependencyRepository.getByVersionCountGreaterThan(1)
 
-  dups.foreach((t: (String, DepSet)) => println(mkString(t._1, t._2)))
+  val dups = DependencyRepository.getSetByVersionCountGreaterThan(1)
 
-  val dups2 = DependencyRepository.getSetByVersionCountGreaterThan(1)
-
-  dups2.foreach(e => println(mkString(e._1, e._2)))
+  dups.foreach(e => println(mkString(e._1, e._2)))
 
 }

@@ -1,22 +1,36 @@
 package com.cmartin.utils
 
 
-import scala.collection.mutable.TreeSet
-import scala.collection.{SortedMap, SortedSet, mutable}
-
 object Logic {
 
   import scala.Console.{MAGENTA, RED, RESET, YELLOW}
+  import scala.collection.SortedSet
 
+  /**
+    * dependency group capture position at the regex
+    */
   val GAV_GROUP_POS = 1
+  /**
+    * dependency artifact capture position at the regex
+    */
   val GAV_ARTIFACT_POS = 2
+  /**
+    * dependency version capture position at the regex
+    */
   val GAV_VERSION_POS = 3
 
-  type DepSet = SortedSet[String]
-  type DepMap = SortedMap[String, DepSet]
-
+  /**
+    * Dependency regex
+    */
   val DEP_PATTERN = "([0-9a-z.-]+):([0-9a-z.-]+):([0-9A-Za-z.-]+).*".r
 
+  /**
+    * class that represents a dependency
+    *
+    * @param group    dependency group
+    * @param artifact dependency artifact
+    * @param version  dependency version
+    */
   case class Dep(group: String, artifact: String, version: String) {
     def key = s"$group:$artifact"
   }
@@ -30,6 +44,12 @@ object Logic {
   }
 
 
+  /**
+    * Parse a string and returns a dependency if it matches a regex
+    *
+    * @param s a string that can contain a dependency
+    * @return a dependency option
+    */
   def getDependency(s: String): Option[Dep] = {
     val it = DEP_PATTERN.findAllMatchIn(s)
     if (it.isEmpty) None
@@ -39,13 +59,15 @@ object Logic {
     }
   }
 
-  def mkString(key: String, set: DepSet) = {
-    val s = set.mkString(", ")
-    s"$RESET$YELLOW$key$RESET ($RESET$MAGENTA${set.size}$RESET) => [$RESET$MAGENTA$s$RESET]"
-  }
 
-  //TODO convert mutable => immutable, generic Set
-  def mkString(key: String, set: mutable.SortedSet[Dep]) = {
+  /**
+    * A dependency string formatter
+    *
+    * @param key group and artifact
+    * @param set version collection backed by a Set
+    * @return the string formatted
+    */
+  def mkString(key: String, set: SortedSet[Dep]) = {
     val s = set.map(_.version).mkString(", ")
     s"$RESET$YELLOW$key$RESET ($RESET$MAGENTA${set.size}$RESET) => [$RESET$MAGENTA$s$RESET]"
   }
@@ -60,7 +82,12 @@ object Logic {
     * @return dependency map updated just in case
     */
 
-
+  /**
+    * An invalid dependency string formatter
+    *
+    * @param s string to format
+    * @return string formatted
+    */
   def mkErrorString(s: String): String = {
     s"dependency format error => $RESET$RED$s$RESET"
   }
@@ -69,9 +96,7 @@ object Logic {
 
 object DependencyRepository {
 
-  import com.cmartin.utils.Logic.{Dep, DepSet}
-
-  var deps = SortedMap[String, DepSet]()
+  import com.cmartin.utils.Logic.Dep
 
   var depList = scala.collection.mutable.SortedSet[Dep]()
 
@@ -79,23 +104,17 @@ object DependencyRepository {
     dep match {
       case None => false
       case Some(d) => {
-        deps += ((d.key, deps.getOrElse(d.key, SortedSet[String]()) + d.version))
         depList += d
         true
       }
     }
   }
 
-  def getByVersionCountGreaterThan(c: Int) = {
-    deps.filter(_._2.size > c)
+  def getSetByVersionCountGreaterThan(counter: Int) = {
+    depList
+      .groupBy(_.key)
+      .filter(_._2.size > counter)
   }
-
-  def getSetByVersionCountGreaterThan(c: Int) = {
-    depList.groupBy(_.key)
-      .filter(_._2.size > c)
-  }
-
-  def getAll = deps.toMap
 
 }
 
