@@ -20,7 +20,12 @@ object Logic {
   val GAV_VERSION_POS = 3
 
   /**
-    * Dependency regex
+    * Dependency regex root node
+    */
+  val DEP_ROOT_PATTERN = "([0-9a-z.-]+):([0-9a-z.-]+)\\s->\\s([0-9A-Za-z.-]+).*"
+
+  /**
+    * Dependency regex non root node
     */
   val DEP_PATTERN = "([0-9a-z.-]+):([0-9a-z.-]+):([0-9A-Za-z.-]+).*".r
 
