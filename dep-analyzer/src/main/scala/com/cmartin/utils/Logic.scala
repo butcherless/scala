@@ -1,5 +1,8 @@
 package com.cmartin.utils
 
+import scala.collection.{SortedSet, mutable}
+import scala.util.matching.Regex
+
 
 object Logic {
 
@@ -22,7 +25,7 @@ object Logic {
   /**
     * Dependency regex root node
     */
-  val DEP_ROOT_PATTERN = "([0-9a-z.-]+):([0-9a-z.-]+)\\s->\\s([0-9A-Za-z.-]+).*"
+  val DEP_ROOT_PATTERN = raw"([0-9a-z.-]+):([0-9a-z.-]+)\s->\s([0-9A-Za-z.-]+).*".r
 
   /**
     * Dependency regex non root node
@@ -40,14 +43,33 @@ object Logic {
     def key = s"$group:$artifact"
   }
 
+  /**
+    * Companion Object for Dep case class
+    */
   object Dep {
     implicit val ord = new Ordering[Dep] {
+      /**
+        * Comparator for dependencies classes
+        *
+        * @param d1 one dependency
+        * @param d2 another one dependency
+        * @return 0 if equals, -1 if less than, +1 if greater than
+        */
       def compare(d1: Dep, d2: Dep): Int = {
         d1.version.compareTo(d2.version)
       }
     }
   }
 
+  /**
+    * Find string matches against regex list
+    *
+    * @param s string to match
+    * @return match iterator option
+    */
+  def findMatches(s: String): Option[Iterator[Regex.Match]] = {
+    List(DEP_PATTERN, DEP_ROOT_PATTERN).map(_.findAllMatchIn(s)).find(!_.isEmpty)
+  }
 
   /**
     * Parse a string and returns a dependency if it matches a regex
@@ -56,11 +78,14 @@ object Logic {
     * @return a dependency option
     */
   def getDependency(s: String): Option[Dep] = {
-    val it = DEP_PATTERN.findAllMatchIn(s)
-    if (it.isEmpty) None
-    else {
-      val gs = it.next()
-      Some(Dep(gs.group(GAV_GROUP_POS), gs.group(GAV_ARTIFACT_POS), gs.group(GAV_VERSION_POS)))
+    findMatches(s) match {
+      case Some(it) => {
+        val gs = it.next()
+        Some(Dep(gs.group(GAV_GROUP_POS), gs.group(GAV_ARTIFACT_POS), gs.group(GAV_VERSION_POS)))
+      }
+      case None => None
+
+
     }
   }
 
@@ -74,7 +99,7 @@ object Logic {
     */
   def mkString(key: String, set: SortedSet[Dep]) = {
     val s = set.map(_.version).mkString(", ")
-    s"$RESET$YELLOW$key$RESET ($RESET$MAGENTA${set.size}$RESET) => [$RESET$MAGENTA$s$RESET]"
+    s"$RESET$YELLOW$key$RESET ($RESET$MAGENTA${set.size}$RESET) => [$RESET$RED$s$RESET]"
   }
 
 
@@ -115,7 +140,7 @@ object DependencyRepository {
     }
   }
 
-  def getSetByVersionCountGreaterThan(counter: Int) = {
+  def getSetByVersionCountGreaterThan(counter: Int): Map[String, SortedSet[Dep]] = {
     depList
       .groupBy(_.key)
       .filter(_._2.size > counter)

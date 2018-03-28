@@ -1,0 +1,29 @@
+= Release Train de librerías de Arquitectura Mutua
+Carlos Martin Garcia
+:toc: left
+:toclevels: 4
+:icons: font
+:sectnums:
+:tabsize: 4
+:docinfo1:
+:source-highlighter: prettify
+
+Obtener dependencias mediante comandos bash
+
+ gw dep | \
+ grep -e '([0-9a-z\.-]*):([a-z-]*):([a-zA-Z0-9\.-]*)' | \
+ sed 's/[+\]---//g; s/|//g' | \
+ awk '{print $1}' | \
+ sort -u
+
+Regex
+
+([0-9a-z.]+):([0-9a-z-]+):([0-9.]+)?.*
+ 
+http://queirozf.com/entries/scala-regular-expressions-examples-reference
+
+ https://logback.qos.ch/manual/configuration.html
+
+Obtener dependencias y generar un archivo
+
+ gw dep --configuration default > /tmp/gradle-deps-default
