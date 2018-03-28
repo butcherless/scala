@@ -130,6 +130,11 @@ object DependencyRepository {
 
   var depList = scala.collection.mutable.SortedSet[Dep]()
 
+  /**
+    * Adds a dependency to the repository
+    * @param dep dependency to add
+    * @return true if Some(dep)
+    */
   def addDependency(dep: Option[Dep]): Boolean = {
     dep match {
       case None => false

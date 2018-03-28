@@ -33,7 +33,7 @@ lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
     commonSettings,
     name := "fp-in-scala",
-    libraryDependencies ++= fpInScalaDeps,
+    libraryDependencies ++= fpInScalaDeps
   )
 
 val fpInScalaDeps = Seq(
@@ -44,7 +44,8 @@ val fpInScalaDeps = Seq(
 lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
     commonSettings,
-    name := "depAnalyzer"
+    name := "depAnalyzer",
+    libraryDependencies ++= Seq(specs2)
   )
 
 lazy val typeclasses = (project in file("typeclasses"))
