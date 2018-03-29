@@ -1,6 +1,6 @@
 package com.cmartin.utils
 
-import scala.collection.{SortedSet, mutable}
+import scala.collection.SortedSet
 import scala.util.matching.Regex
 
 
@@ -132,6 +132,7 @@ object DependencyRepository {
 
   /**
     * Adds a dependency to the repository
+    *
     * @param dep dependency to add
     * @return true if Some(dep)
     */
@@ -149,6 +150,15 @@ object DependencyRepository {
     depList
       .groupBy(_.key)
       .filter(_._2.size > counter)
+  }
+
+  /**
+    * Repository number of elements
+    *
+    * @return dependency count
+    */
+  def size = {
+    depList.size
   }
 
 }
