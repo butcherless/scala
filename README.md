@@ -1,3 +1,4 @@
+[![Build Status](https://semaphoreci.com/api/v1/butcherless/scala/branches/master/badge.svg)](https://semaphoreci.com/butcherless/scala)
 At the beginning of a long road...
 
 Training books:
