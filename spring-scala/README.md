@@ -1,9 +1,10 @@
-# scala/spring integration learning
 [![Build Status](https://travis-ci.org/butcherless/scala.svg?branch=master)](https://travis-ci.org/butcherless/scala/spring-scala)
+
+# scala/spring integration learning
 
 Build with Travis CI
 
-== How to run
+## How to run and check
 
 - build: ./gradlew clean build
 - run: ./gradlew bootRun
@@ -14,6 +15,6 @@ Build with Travis CI
 - http DELETE localhost:8080/delete/b08a6e8c-9d48-419a-a14c-29d34fc1c49d
 - http POST localhost:8080/create < src/test/resources/person.json
 
-== Links
+## Links
 
 - https://docs.spring.io/spring-data/neo4j/docs/current/reference/html/
