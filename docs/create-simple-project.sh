@@ -1,9 +1,9 @@
 #!/bin/bash
 
 PKG_DIR=com/cmartin/learn
-SBT_VER=1.1.1
-SCALA_VER="2.12.4"
-SCALATEST_VER="3.0.4"
+SBT_VER=1.1.2
+SCALA_VER="2.12.5"
+SCALATEST_VER="3.0.5"
 
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
@@ -11,7 +11,7 @@ mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src
 # create project properties file
 echo "sbt.version=${SBT_VER}" > project/build.properties
 echo 'name := "project-template"
-version := "1.0"
+version := "1.0.0-SNAPSHOT"
 scalaVersion := "'${SCALA_VER}'"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "'${SCALATEST_VER}'" % "test"' > build.sbt
