@@ -4,8 +4,8 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.5"
 )
 
-lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.11"
-lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.11"
+lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.13"
+lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.13"
 val cats = "org.typelevel" %% "cats-core" % "1.0.1"
 val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
 val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
