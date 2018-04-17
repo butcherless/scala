@@ -51,7 +51,7 @@ class GreetingController {
     new ResponseEntity[ApplicationVersion](appVersion, HttpStatus.OK)
   }
 
-//TODO 404 json error message
+  //TODO 404 json error message
   @GetMapping(path = Array("/randomWord/{number}"), produces = Array(MediaType.APPLICATION_JSON_UTF8_VALUE))
   def randomTarget(@PathVariable number: Int): ResponseEntity[_] = {
     logger.debug(s"input: ${number}")
