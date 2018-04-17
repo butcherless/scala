@@ -9,9 +9,9 @@ lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.13"
 val cats = "org.typelevel" %% "cats-core" % "1.0.1"
 val logback = "ch.qos.logback" % "logback-classic" % "1.2.3"
 val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
-val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.20"
+val scalaz = "org.scalaz" %% "scalaz-core" % "7.2.21"
 
-val specs2 = "org.specs2" %% "specs2-core" % "4.0.3" % "test"
+val specs2 = "org.specs2" %% "specs2-core" % "4.0.4" % "test"
 val uTest = "com.lihaoyi" %% "utest" % "0.6.3" % "test"
 lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
