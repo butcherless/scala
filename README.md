@@ -9,6 +9,9 @@
  - Scala in Depth, Joshua D. Suereth
  - http://www.hablapps.com/#functional-101
  - http://www.hablapps.com/#functional-advanced
+
+## Create basic project script
+- bash script @ ${PROJECT_ROOT}/docs directory
  
 ## Coverage report
 
