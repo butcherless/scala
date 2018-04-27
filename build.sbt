@@ -25,6 +25,7 @@ lazy val root = (project in file(".")).aggregate(
   depAnalyzer,
   dtogen,
   fpInScala,
+  hkTypes,
   scalazlearn,
   typeclasses
 )
