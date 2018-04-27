@@ -1,6 +1,6 @@
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
-  version := "0.1.2-SNAPSHOT",
+  version := "1.0.0-SNAPSHOT",
   scalaVersion := "2.12.5"
 )
 
@@ -46,6 +46,14 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
     commonSettings,
     name := "depAnalyzer",
     libraryDependencies ++= Seq(specs2)
+  )
+
+lazy val hkTypes = (project in file("hk-types"))
+  .settings(
+    commonSettings,
+    name := "hkTypes",
+    libraryDependencies ++= Seq(scalaTest),
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds")
   )
 
 lazy val typeclasses = (project in file("typeclasses"))

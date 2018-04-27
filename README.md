@@ -9,3 +9,8 @@
  - Scala in Depth, Joshua D. Suereth
  - http://www.hablapps.com/#functional-101
  - http://www.hablapps.com/#functional-advanced
+ 
+## Coverage report
+
+ - sbt ";clean;coverage;test;coverageReport"
+
