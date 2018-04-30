@@ -1,6 +1,7 @@
 package com.cmartin.learn
 
 import com.cmartin.learn.functions._
+import org.scalatest.OptionValues._
 import org.scalatest._
 
 
@@ -19,11 +20,10 @@ class hktypesSpecs extends FeatureSpec with GivenWhenThen {
       val cc = CrytoCurrency(buildUuid, BITCOIN_NAME, BigDecimal(5000), BigDecimal(10))
 
       When("call create operation")
-      val result = service.create(cc)
+      val result: Option[CrytoCurrency] = service.create(cc)
 
       Then("service returns a valid crypto currency")
-      assert(result.isDefined)
-      val currency = result.get
+      val currency = result.value
       assert(currency.id.toString.length == 36)
       assert(currency.name == cc.name)
       assert(currency.marketCap == cc.marketCap)

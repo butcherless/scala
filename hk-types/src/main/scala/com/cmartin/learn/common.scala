@@ -4,6 +4,8 @@ import java.util.UUID
 
 import com.cmartin.learn.functions._
 
+import scala.util.{Failure, Try}
+
 object functions {
   def buildUuid = UUID.randomUUID()
 
@@ -13,12 +15,21 @@ object Factory {
   def ZERO = BigDecimal(0)
 
 
-  def newCrytoCurrency(name: String, marketCap: BigDecimal, price: BigDecimal): Option[CrytoCurrency] = {
-    // validation NEL
+  def newOptionCrytoCurrency(name: String, marketCap: BigDecimal, price: BigDecimal): Option[CrytoCurrency] = {
+    // TODO validation NEL
     if (name.isEmpty) None
     else if (marketCap <= ZERO) None
     else if (price <= ZERO) None
     else Some(CrytoCurrency(buildUuid, name, marketCap, price))
+  }
+
+  def newTryCrytoCurrency(name: String, marketCap: BigDecimal, price: BigDecimal): Try[CrytoCurrency] = {
+    // TODO validation NEL
+    // TODO declare business exception
+    if (name.isEmpty) Failure(new RuntimeException("empty name"))
+    else if (marketCap <= ZERO) Failure(new RuntimeException("market cap less than zero"))
+    else if (price <= ZERO) Failure(new RuntimeException("currency price less than zero"))
+    else Try(CrytoCurrency(buildUuid, name, marketCap, price))
   }
 }
 

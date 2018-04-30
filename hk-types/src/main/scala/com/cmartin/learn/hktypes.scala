@@ -58,6 +58,8 @@ import java.util.UUID
 
 import com.cmartin.learn.types.MyMap
 
+import scala.util.Try
+
 object HktMap extends HktApi[MyMap] {
   def read(n: Long) = Map(n -> s"string: $n.toString")
 }
@@ -97,7 +99,7 @@ trait CoinMarketService[C[_]] {
 }
 
 class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Option] {
-  override def create(cc: CrytoCurrency): Option[CrytoCurrency] = Factory.newCrytoCurrency(cc.name, cc.marketCap, cc.price)
+  override def create(cc: CrytoCurrency): Option[CrytoCurrency] = Factory.newOptionCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
   override def update(cc: CrytoCurrency): Option[CrytoCurrency] = ???
 
@@ -108,4 +110,18 @@ class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketS
   override def readByName(name: String): Option[CrytoCurrency] = repo.getByName(name)
 
   override def readAll(): Option[List[CrytoCurrency]] = ???
+}
+
+class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Try] {
+  override def create(cc: CrytoCurrency): Try[CrytoCurrency] = Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)
+
+  override def update(cc: CrytoCurrency): Try[CrytoCurrency] = ???
+
+  override def delete(cc: CrytoCurrency): Try[UUID] = ???
+
+  override def readById(id: UUID): Try[CrytoCurrency] = ???
+
+  override def readByName(name: String): Try[CrytoCurrency] = ???
+
+  override def readAll(): Try[List[CrytoCurrency]] = ???
 }
