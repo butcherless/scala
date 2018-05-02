@@ -3,24 +3,40 @@ package com.cmartin.learn
 import java.util.UUID
 
 import com.cmartin.learn.functions._
+import scalaz.NonEmptyList
 
-import scala.util.{Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 object functions {
+  def ZERO = BigDecimal(0)
+
   def buildUuid = UUID.randomUUID()
 
+  def logErrorList(el: NonEmptyList[ValidationError]) = {
+    el.foreach(println(_))
+  }
+
+  def printOption(o: Option[CrytoCurrency]) = o match {
+    case Some(cc) => println(cc)
+    case None => println("no currency found")
+  }
+
+  def printTry(t: Try[CrytoCurrency]) = t match {
+    case Success(cc) => println(cc)
+    case Failure(e) => println(e.getMessage)
+  }
 }
 
 object Factory {
-  def ZERO = BigDecimal(0)
-
 
   def newOptionCrytoCurrency(name: String, marketCap: BigDecimal, price: BigDecimal): Option[CrytoCurrency] = {
-    // TODO validation NEL
-    if (name.isEmpty) None
-    else if (marketCap <= ZERO) None
-    else if (price <= ZERO) None
-    else Some(CrytoCurrency(buildUuid, name, marketCap, price))
+    CrytoCurrency.validate(name, marketCap, price) match {
+      case scalaz.Success(s) => Some(s)
+      case scalaz.Failure(el) => {
+        logErrorList(el)
+        None
+      }
+    }
   }
 
   def newTryCrytoCurrency(name: String, marketCap: BigDecimal, price: BigDecimal): Try[CrytoCurrency] = {

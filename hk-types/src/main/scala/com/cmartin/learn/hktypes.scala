@@ -1,5 +1,16 @@
 package com.cmartin.learn
 
+import java.util.UUID
+
+import com.cmartin.learn.functions._
+import com.cmartin.learn.types.MyMap
+import scalaz.ValidationNel
+import scalaz.syntax.apply._
+import scalaz.syntax.validation._
+
+import scala.util.{Failure, Success, Try}
+
+
 object main extends App {
 
   val s = ApiImpl.read(7)
@@ -14,6 +25,23 @@ object main extends App {
 
   val r3 = HktMap.read(3)
   println(s"HktMap: $r3, ${r3(3)}")
+
+  // option implementation
+  val optionService: CoinMarketService[Option] = new OptionCoinMarketService(new CrytoCurrencyRepository)
+
+  val resultNone = optionService.readByName("Dummy")
+  printOption(resultNone)
+
+  val resultSome = optionService.readByName(("Bitcoin"))
+  printOption(resultSome)
+
+  // try implementation
+  val tryService: CoinMarketService[Try] = new TryCoinMarketService(new CrytoCurrencyRepository)
+  val resultFailure = tryService.readByName("Dummy")
+  printTry(resultFailure)
+
+  val resultSuccess = tryService.readByName(("TRON"))
+  printTry(resultSuccess)
 
 }
 
@@ -33,15 +61,6 @@ object ApiImpl extends Api[Option] {
   }
 }
 
-/*
-object BananaApiImpl extends Api[Banana] {
-  def read(n:Long) : Banana = {
-    if (n > 0) Banana("good")
-    else Banana("bad")
-  }
-}
-*/
-
 trait HktApi[F[_]] {
   def read(n: Long): F[String]
 }
@@ -54,20 +73,15 @@ object HktList extends HktApi[List] {
   def read(n: Long): List[String] = List(s"String of $n")
 }
 
-import java.util.UUID
-
-import com.cmartin.learn.types.MyMap
-
-import scala.util.Try
 
 object HktMap extends HktApi[MyMap] {
   def read(n: Long) = Map(n -> s"string: $n.toString")
 }
 
 
-case class Banana(rate: String)
-
 case class CrytoCurrency(id: UUID, name: String, marketCap: BigDecimal, price: BigDecimal, change: Double = 0.0)
+
+case class ValidationError(message: String)
 
 object CrytoCurrency {
   implicit val ord = new Ordering[CrytoCurrency] {
@@ -82,7 +96,22 @@ object CrytoCurrency {
       c1.name.compareTo(c2.name)
     }
   }
+
+  def checkName(name: String): ValidationNel[ValidationError, String] =
+    if (name.isEmpty) ValidationError("Missing name").failureNel
+    else name.success
+
+  def checkNegativeValue(value: BigDecimal): ValidationNel[ValidationError, BigDecimal] =
+    if (value <= ZERO) ValidationError(s"Negative value: ${value.toString}").failureNel
+    else value.success
+
+  def validate(name: String, marketCap: BigDecimal, price: BigDecimal): ValidationNel[ValidationError, CrytoCurrency] =
+    (checkName(name) |@|
+      checkNegativeValue(marketCap) |@|
+      checkNegativeValue(price)) { (name, cap, price) => new CrytoCurrency(buildUuid, name, cap, price) }
 }
+
+// S E R V I C E   D E F I N I T I O N
 
 trait CoinMarketService[C[_]] {
   def create(cc: CrytoCurrency): C[CrytoCurrency]
@@ -98,6 +127,9 @@ trait CoinMarketService[C[_]] {
   def readAll(): C[List[CrytoCurrency]]
 }
 
+
+// S E R V I C E   I M P L E M E N T A T I O N S
+
 class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Option] {
   override def create(cc: CrytoCurrency): Option[CrytoCurrency] = Factory.newOptionCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
@@ -112,6 +144,9 @@ class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketS
   override def readAll(): Option[List[CrytoCurrency]] = ???
 }
 
+case class ServiceException(message: String) extends RuntimeException(message)
+
+
 class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Try] {
   override def create(cc: CrytoCurrency): Try[CrytoCurrency] = Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
@@ -121,7 +156,10 @@ class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketServ
 
   override def readById(id: UUID): Try[CrytoCurrency] = ???
 
-  override def readByName(name: String): Try[CrytoCurrency] = ???
+  override def readByName(name: String): Try[CrytoCurrency] = repo.getByName(name) match {
+    case Some(cc) => Success(cc)
+    case None => Failure(ServiceException(s"Currency not found [${name}]"))
+  }
 
   override def readAll(): Try[List[CrytoCurrency]] = ???
 }

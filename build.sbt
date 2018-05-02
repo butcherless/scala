@@ -53,7 +53,7 @@ lazy val hkTypes = (project in file("hk-types"))
   .settings(
     commonSettings,
     name := "hkTypes",
-    libraryDependencies ++= Seq(scalaTest),
+    libraryDependencies ++= Seq(scalaTest, scalaz),
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds")
   )
 
