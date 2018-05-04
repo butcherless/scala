@@ -2,7 +2,7 @@
 
 # At the beginning of a long road ...
 
-## Training books:
+## Training books:
 - Programming in Scala, Martin Odersky & Lex Spoon
 - Functional Programming in Scala, Paul Chiusano & Rúnar Bjarnason
 - Programming Scala: Scalability = Functional Programming + Objects, Dean Wampler & Alex Payne
@@ -15,5 +15,4 @@
 - bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/create-simple-project.sh)
  
 ## Coverage report
-
- - sbt ";clean;coverage;test;coverageReport"
+- sbt ";clean;coverage;test;coverageReport"
