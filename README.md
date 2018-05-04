@@ -12,6 +12,7 @@
 
 ## Create basic project script
 - bash script @ ${PROJECT_ROOT}/docs directory
+- bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/create-simple-project.sh)
  
 ## Coverage report
 
