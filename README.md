@@ -12,6 +12,7 @@
 - https://blog.hablapps.com/2016/01/22/from-hello-world-to-hello-monad-part-i/
 - https://github.com/hablapps/gist/tree/master/src/test/scala/hello-monads
 - https://blog.hablapps.com/2017/06/26/functional-apis-an-oop-approach-to-fp/
+- flatMap hell: https://www.reddit.com/r/scala/comments/75de27/concrete_examples_of_mapflatmap_solve_callback/
 
 ## Create basic project script
 - bash script @ ${PROJECT_ROOT}/docs directory
