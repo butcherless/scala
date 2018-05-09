@@ -16,7 +16,8 @@ Build with Travis CI
 - http POST localhost:8080/create < src/test/resources/person.json
 - http http://localhost:8080/api/v1/person
 - echo '{"name": "Donald"}' | http POST http://localhost:8080/api/v1/person
-http DELETE http://localhost:8080/api/v1/person/666
+- http DELETE http://localhost:8080/api/v1/person/666
+- http PUT http://localhost:8080/api/v1/person/185 nombre=Thief-u
 
 ## Links
 
