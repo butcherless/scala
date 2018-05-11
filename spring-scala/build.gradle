@@ -1,6 +1,6 @@
 buildscript {
-    ext.springBootVersion = '2.0.1.RELEASE'
-    ext.springNeo4jVersion = '5.0.5.RELEASE'
+    ext.springBootVersion = '2.0.2.RELEASE'
+    ext.springNeo4jVersion = '5.0.7.RELEASE'
     ext.neo4jVersion = '3.1.0'
     repositories {
         maven {
@@ -52,7 +52,7 @@ dependencies {
 
     // TESTING
     testCompile 'junit:junit:4.12',
-            'org.springframework:spring-test:5.0.5.RELEASE',
+            'org.springframework:spring-test:5.0.6.RELEASE',
             "org.neo4j:neo4j-ogm-test:${neo4jVersion}"
     testCompile('org.scalatest:scalatest_2.12:3.0.5') {
         exclude module: 'scala-library'
@@ -62,7 +62,7 @@ dependencies {
 }
 
 jacoco {
-    toolVersion = "0.8.0"
+    toolVersion = "0.8.1"
 }
 
 // gradle wrapper --gradle-version 4.6
