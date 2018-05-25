@@ -7,8 +7,7 @@ jdk:
 script:
   - sudo apt-get update
   - sbt ";clean;coverage;test;coverageReport ;typeclasses/run ;calendar/run"
-  - cd spring-scala
-  - ./gradlew build
+  - spring-scala/gradlew clean build -b spring-scala/build.gradle
 
 cache:
   directories:
