@@ -1,11 +1,14 @@
 language: scala
 group: travis_lts
 
+addons:
+  apt:
+    update: true
+
 jdk:
   - oraclejdk8
 
 script:
-  - sudo apt-get update
   - sbt ";clean;coverage;test;coverageReport ;typeclasses/run ;calendar/run"
   - spring-scala/gradlew clean build -b spring-scala/build.gradle
 
