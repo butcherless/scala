@@ -2,11 +2,11 @@ package com.cmartin
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
 import akka.stream.ActorMaterializer
 
 import scala.concurrent.Future
-import scala.util.{ Failure, Success }
+import scala.util.{Failure, Success}
 
 object WebClient extends Greeting {
   def main(args: Array[String]): Unit = {
@@ -20,7 +20,7 @@ object WebClient extends Greeting {
     responseFuture
       .onComplete {
         case Success(res) => println(res)
-        case Failure(_)   => sys.error("something wrong")
+        case Failure(_) => sys.error("something wrong")
       }
   }
 }

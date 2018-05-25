@@ -2,11 +2,11 @@ package com.cmartin
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
+import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-import spray.json._
+import spray.json.DefaultJsonProtocol
 
 import scala.io.StdIn
 
