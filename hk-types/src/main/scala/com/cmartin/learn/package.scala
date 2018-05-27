@@ -2,18 +2,20 @@ package com.cmartin.learn
 
 import cats.free.Free
 import cats.free.Free.liftF
-import cats.{Id, ~>}
+import cats.~>
 
 // https://typelevel.org/cats/datatypes/freemonad.html
+// https://blog.scalac.io/2016/06/02/overview-of-free-monad-in-cats.html
+
 package object freecats {
 
   // 1. Create an ADT Algebraic Data Type representing the business grammar
 
   sealed trait CrudFacadeA[A]
 
-  case class Create(cc: CrytoCurrency) extends CrudFacadeA[Unit]
+  case class Create(cc: CrytoCurrency) extends CrudFacadeA[String]
 
-  case class Read() extends CrudFacadeA[Unit]
+  case class Read(name: String) extends CrudFacadeA[CrytoCurrency]
 
   case class Update() extends CrudFacadeA[Unit]
 
@@ -24,9 +26,9 @@ package object freecats {
   type CrudFacade[A] = Free[CrudFacadeA, A] // give monadic feature to the ADT
 
   // Smart constructors
-  def create(cc: CrytoCurrency): CrudFacade[Unit] = liftF(Create(cc))
+  def create(cc: CrytoCurrency): CrudFacade[String] = liftF(Create(cc))
 
-  def read(): CrudFacade[Unit] = liftF(Read())
+  def read(name: String): CrudFacade[CrytoCurrency] = liftF(Read(name))
 
   def update(): CrudFacade[Unit] = liftF(Update())
 
@@ -35,25 +37,26 @@ package object freecats {
 
   // 3. Build a program
 
-  def myAwesomProgram(cc: CrytoCurrency): CrudFacade[Unit] = for {
-    _ <- read()
-    _ <- create(cc)
-    _ <- read()
+  def myAwesomProgram(name: String) = for {
+    cc <- read(name)
+    nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
+    ccLite <- read(nameLite)
     _ <- update()
     //    _ <- create()
     _ <- delete()
-  } yield ()
+  } yield ccLite
 
 
   // 4. Build the program compiler
-  def compiler: CrudFacadeA ~> Id = ???
+  //val compiler: CrudFacadeA ~> Id = ???
 
-  /*
-  def compiler: CrudFacadeA ~> Id = new (CrudFacadeA ~> Id) {
-    def apply[A](fa: CrudFacadeA[A]): Id[A] = fa match {
-      case Read() => println(s"create function")
-        ()
+/*
+  val compiler: CrudFacadeA ~> CrudFacade = new (CrudFacadeA ~> CrudFacade) {
+    def apply[A](fa: CrudFacadeA[A]): CrudFacade[A] = fa match {
+      case Read(name) => read(name)
+      //println(s"create function")
+
     }
   }
-  */
+*/
 }
