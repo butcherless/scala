@@ -14,6 +14,7 @@ lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
 lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
 val cats = "org.typelevel" %% "cats-core" % catsVersion
+val catsFree = "org.typelevel" %% "cats-free" % catsVersion
 val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
 val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
 val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
@@ -60,7 +61,7 @@ lazy val hkTypes = (project in file("hk-types"))
   .settings(
     commonSettings,
     name := "hkTypes",
-    libraryDependencies ++= Seq(scalaTest, scalaz),
+    libraryDependencies ++= Seq(cats, catsFree, scalaz, scalaTest),
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds")
   )
 

@@ -4,9 +4,6 @@ import java.util.UUID
 
 import com.cmartin.learn.functions._
 import com.cmartin.learn.types.MyMap
-import scalaz.ValidationNel
-import scalaz.syntax.apply._
-import scalaz.syntax.validation._
 
 import scala.util.{Failure, Success, Try}
 
@@ -78,38 +75,8 @@ object HktMap extends HktApi[MyMap] {
   def read(n: Long) = Map(n -> s"string: $n.toString")
 }
 
-
-case class CrytoCurrency(id: UUID, name: String, marketCap: BigDecimal, price: BigDecimal, change: Double = 0.0)
-
 case class ValidationError(message: String)
 
-object CrytoCurrency {
-  implicit val ord = new Ordering[CrytoCurrency] {
-    /**
-      * Comparator for dependencies classes
-      *
-      * @param c1 one dependency
-      * @param c2 another one dependency
-      * @return 0 if equals, -1 if less than, +1 if greater than
-      */
-    def compare(c1: CrytoCurrency, c2: CrytoCurrency): Int = {
-      c1.name.compareTo(c2.name)
-    }
-  }
-
-  def checkName(name: String): ValidationNel[ValidationError, String] =
-    if (name.isEmpty) ValidationError("Missing name").failureNel
-    else name.success
-
-  def checkNegativeValue(value: BigDecimal): ValidationNel[ValidationError, BigDecimal] =
-    if (value <= ZERO) ValidationError(s"Negative value: ${value.toString}").failureNel
-    else value.success
-
-  def validate(name: String, marketCap: BigDecimal, price: BigDecimal): ValidationNel[ValidationError, CrytoCurrency] =
-    (checkName(name) |@|
-      checkNegativeValue(marketCap) |@|
-      checkNegativeValue(price)) { (name, cap, price) => new CrytoCurrency(buildUuid, name, cap, price) }
-}
 
 // S E R V I C E   D E F I N I T I O N
 
