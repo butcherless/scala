@@ -2,7 +2,7 @@ package com.cmartin.learn
 
 import cats.free.Free
 import cats.free.Free.liftF
-import cats.~>
+import cats.{Id, ~>}
 
 // https://typelevel.org/cats/datatypes/freemonad.html
 // https://blog.scalac.io/2016/06/02/overview-of-free-monad-in-cats.html
@@ -11,33 +11,34 @@ package object freecats {
 
   // 1. Create an ADT Algebraic Data Type representing the business grammar
 
-  sealed trait CrudFacadeA[A]
+  /* Type A will be the type that Free Monad will be working on */
+  sealed trait CrudOperationA[A]
 
-  case class Create(cc: CrytoCurrency) extends CrudFacadeA[String]
+  case class Create(cc: CrytoCurrency) extends CrudOperationA[String]
 
-  case class Read(name: String) extends CrudFacadeA[CrytoCurrency]
+  case class Read(name: String) extends CrudOperationA[CrytoCurrency]
 
-  case class Update() extends CrudFacadeA[Unit]
+  case class Update() extends CrudOperationA[Unit]
 
-  case class Delete() extends CrudFacadeA[Unit]
+  case class Delete() extends CrudOperationA[Unit]
 
 
   // 2. Free the ADT
-  type CrudFacade[A] = Free[CrudFacadeA, A] // give monadic feature to the ADT
+  type CrudOperation[A] = Free[CrudOperationA, A] // give monadic feature to the ADT
 
   // Smart constructors
-  def create(cc: CrytoCurrency): CrudFacade[String] = liftF(Create(cc))
+  def create(cc: CrytoCurrency): CrudOperation[String] = liftF(Create(cc))
 
-  def read(name: String): CrudFacade[CrytoCurrency] = liftF(Read(name))
+  def read(name: String): CrudOperation[CrytoCurrency] = liftF(Read(name))
 
-  def update(): CrudFacade[Unit] = liftF(Update())
+  def update(): CrudOperation[Unit] = liftF(Update())
 
-  def delete(): CrudFacade[Unit] = liftF(Delete())
+  def delete(): CrudOperation[Unit] = liftF(Delete())
 
 
-  // 3. Build a program
+  // 3. Build a program made of a sequence of operations
 
-  def myAwesomProgram(name: String) = for {
+  def myAwesomProgram(name: String): CrudOperation[CrytoCurrency] = for {
     cc <- read(name)
     nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
     ccLite <- read(nameLite)
@@ -48,15 +49,15 @@ package object freecats {
 
 
   // 4. Build the program compiler
-  //val compiler: CrudFacadeA ~> Id = ???
+  val compiler: CrudOperationA ~> Id = ???
 
-/*
-  val compiler: CrudFacadeA ~> CrudFacade = new (CrudFacadeA ~> CrudFacade) {
-    def apply[A](fa: CrudFacadeA[A]): CrudFacade[A] = fa match {
-      case Read(name) => read(name)
-      //println(s"create function")
+  /*
+    val compiler: CrudFacadeA ~> CrudFacade = new (CrudFacadeA ~> CrudFacade) {
+      def apply[A](fa: CrudFacadeA[A]): CrudFacade[A] = fa match {
+        case Read(name) => read(name)
+        //println(s"create function")
 
+      }
     }
-  }
-*/
+  */
 }

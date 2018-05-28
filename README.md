@@ -14,6 +14,7 @@
 - https://blog.hablapps.com/2017/06/26/functional-apis-an-oop-approach-to-fp/
 - flatMap hell: https://www.reddit.com/r/scala/comments/75de27/concrete_examples_of_mapflatmap_solve_callback/
 - free monad: https://underscore.io/blog/posts/2015/04/14/free-monads-are-simple.html
+- Overview of free monad in cats: https://blog.scalac.io/2016/06/02/overview-of-free-monad-in-cats.html
 
 ## Create basic project script
 - bash script @ ${PROJECT_ROOT}/docs directory
