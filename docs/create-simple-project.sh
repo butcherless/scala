@@ -22,11 +22,20 @@ scalaVersion := "'${SCALA_VER}'"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "'${SCALATEST_VER}'" % "test"' > build.sbt
 
-echo 'package com.cmartin.learn
+# create common package
+echo 'package com.cmartin
 
-trait Greeting {
-  lazy val greeting: String = "simple-application-hello"
-}
+package object learn {
+
+  trait Greeting {
+    lazy val greeting: String = "simple-application-hello"
+  }
+
+}' > src/main/scala/${PKG_DIR}/package.scala
+
+
+# create main application
+echo 'package com.cmartin.learn
 
 object SimpleApp extends App with Greeting {
     println(greeting)
