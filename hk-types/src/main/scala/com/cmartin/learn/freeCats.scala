@@ -53,16 +53,15 @@ object freecats {
 
 
   def compiler: CrudOperationA ~> Id = new (CrudOperationA ~> Id) {
-
     def apply[A](fa: CrudOperationA[A]): Id[A] = fa match {
       case Create(cc) => println(s"create: $cc")
-        cc.name.asInstanceOf[A]
+        cc.name
       case Read(name) => println(s"read: $name")
-        buildCryptoCurrency(name).asInstanceOf[A]
+        buildCryptoCurrency(name)
       case Update() => println(s"update:")
-        ().asInstanceOf[A]
+        ()
       case Delete() => println(s"delete:")
-        ().asInstanceOf[A]
+        ()
     }
   }
 
