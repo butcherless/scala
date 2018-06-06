@@ -17,11 +17,11 @@ jobs:
     steps:
       - checkout
 
-      # test & run
+      # compiler, test & run
       - run:
-          name: test and typeclasses run
+          name: compile, test and run
           command: |
-                   cat /dev/null | sbt ";test:test ;typeclasses/run"
+                   cat /dev/null | sbt ";test:test ;typeclasses/run ;hkTypes/run"
 
 
   build_gradle:

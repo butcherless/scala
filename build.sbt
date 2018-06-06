@@ -2,7 +2,10 @@ lazy val akkaHttpVersion = "10.1.1"
 lazy val akkaVersion = "2.5.12"
 lazy val catsVersion = "1.1.0"
 lazy val logbackVersion = "1.2.3"
+lazy val scalaLoggingVersion = "3.9.0"
 lazy val scalazVersion = "7.2.24"
+lazy val scalatestVersion = "3.0.5"
+lazy val specs2Version = "4.2.0"
 
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
@@ -17,10 +20,10 @@ val cats = "org.typelevel" %% "cats-core" % catsVersion
 val catsFree = "org.typelevel" %% "cats-free" % catsVersion
 val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
 val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
-val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
+val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
 
-lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-val specs2 = "org.specs2" %% "specs2-core" % "4.2.0" % "test"
+lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
+val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
 val uTest = "com.lihaoyi" %% "utest" % "0.6.4" % "test"
 
 val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.7"
