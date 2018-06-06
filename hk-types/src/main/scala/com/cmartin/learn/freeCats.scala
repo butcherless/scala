@@ -50,18 +50,32 @@ object freecats {
 
   // 4. Build the program compiler
   //val compiler: CrudOperationA ~> Id = ???
+  //val compiler: CrudOperationA ~> Option = ???
 
 
   def compiler: CrudOperationA ~> Id = new (CrudOperationA ~> Id) {
     def apply[A](fa: CrudOperationA[A]): Id[A] = fa match {
-      case Create(cc) => println(s"create: $cc")
+      case Create(cc) => println(s"create id: $cc")
         cc.name
-      case Read(name) => println(s"read: $name")
+      case Read(name) => println(s"read id: $name")
         buildCryptoCurrency(name)
-      case Update() => println(s"update:")
+      case Update() => println(s"update id: TODO")
         ()
-      case Delete() => println(s"delete:")
+      case Delete() => println(s"delete id: TODO")
         ()
+    }
+  }
+
+  def optionCompiler: CrudOperationA ~> Option = new (CrudOperationA ~> Option) {
+    override def apply[A](fa: CrudOperationA[A]): Option[A] = fa match {
+      case Create(cc) => println(s"create option: $cc")
+        Some(cc.name)
+      case Read(name) => println(s"read option: $name")
+        Some(buildCryptoCurrency(name))
+      case Update() => println(s"update option: TODO")
+        Some(())
+      case Delete() => println(s"delete option: TODO")
+        Some(())
     }
   }
 
@@ -73,8 +87,12 @@ object freecats {
 
 object mainCats extends App {
 
-  import com.cmartin.learn.freecats.{compiler, myAwesomProgram}
+  import cats.implicits.catsStdInstancesForOption
+  import com.cmartin.learn.freecats.{compiler, myAwesomProgram, optionCompiler}
 
-  println("Running my fucking interpreted & awesome program")
+  println("Running Id[A] program interpreter")
   val result = myAwesomProgram("BitCoin").foldMap(compiler)
+
+  println("Running Option[A] program interpreter")
+  val optionResult = myAwesomProgram("LineCoin").foldMap(optionCompiler)
 }

@@ -3,9 +3,9 @@ package com.cmartin.learn
 import java.util.UUID
 
 import com.cmartin.learn.functions._
-import scalaz.{NonEmptyList, ValidationNel}
 import scalaz.syntax.apply._
 import scalaz.syntax.validation._
+import scalaz.{NonEmptyList, ValidationNel}
 
 import scala.util.{Failure, Success, Try}
 
