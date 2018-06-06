@@ -22,3 +22,4 @@
  
 ## Coverage report
 - sbt ";clean;coverage;test;coverageReport"
+- report: target/scala-2.12/scoverage-report/index.html
