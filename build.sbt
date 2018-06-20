@@ -1,11 +1,11 @@
 lazy val akkaHttpVersion = "10.1.1"
-lazy val akkaVersion = "2.5.12"
+lazy val akkaVersion = "2.5.13"
 lazy val catsVersion = "1.1.0"
 lazy val logbackVersion = "1.2.3"
 lazy val scalaLoggingVersion = "3.9.0"
 lazy val scalazVersion = "7.2.24"
 lazy val scalatestVersion = "3.0.5"
-lazy val specs2Version = "4.2.0"
+lazy val specs2Version = "4.3.0"
 
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
