@@ -9,6 +9,7 @@ lazy val specs2Version = "4.3.0"
 
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
+  name := "bundle",
   version := "1.0.0-SNAPSHOT",
   scalaVersion := "2.12.6"
 )
@@ -16,17 +17,17 @@ lazy val commonSettings = Seq(
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
 lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
-val cats = "org.typelevel" %% "cats-core" % catsVersion
-val catsFree = "org.typelevel" %% "cats-free" % catsVersion
-val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
-val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
-val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
+lazy val cats = "org.typelevel" %% "cats-core" % catsVersion
+lazy val catsFree = "org.typelevel" %% "cats-free" % catsVersion
+lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
+lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
+lazy val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
 
 lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
-val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
-val uTest = "com.lihaoyi" %% "utest" % "0.6.4" % "test"
+lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
+lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.4" % "test"
 
-val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.7"
+lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.7"
 
 
 lazy val root = (project in file(".")).aggregate(
