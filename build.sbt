@@ -110,7 +110,7 @@ val scalazlearnDeps = Seq(
 lazy val akkahttphw = (project in file("akka-http-hw"))
   .settings(commonSettings,
     name := "akka-http-webserver",
-    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream, scala_logging, logback, scalaTest)
+    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream, scala_logging, logback, akkaHttpTest, scalaTest)
   )
 
 lazy val akkahttpcl = (project in file("akka-http-cl"))
