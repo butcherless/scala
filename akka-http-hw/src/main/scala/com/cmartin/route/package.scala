@@ -11,6 +11,8 @@ package object route {
   val HOST = "localhost"
   val PORT = 8080
   val CURRENCY = "EUR"
+  val HELLO_MESSAGE = "hello from akka http"
+  val BYE_MESSAGE = "hello from akka http"
 
   val logger = LoggerFactory.getLogger("route")
 
@@ -24,25 +26,30 @@ package object route {
 
   // controller
 
+  object ControllerPath {
+    val HELLO = "hello"
+    val BYE = "bye"
+    val TRANSFER = "transfer"
+  }
+
   class ApiController extends Directives with JsonSupport {
 
     val route =
-      path("hello") {
+      path(ControllerPath.HELLO) {
         get {
           logger.debug("hello.in")
-          // logig goes here
-          val msg = "hello from akka http"
-          logger.debug(s"hello.out: $msg")
+          // logic goes here
+          logger.debug(s"hello.out: $HELLO_MESSAGE")
 
-          complete(buildTextResponse(200, msg))
+          complete(buildTextResponse(200, HELLO_MESSAGE))
         }
       } ~
-        path("bye") {
+        path(ControllerPath.BYE) {
           get {
-            complete(buildTextResponse(200, "good bye from akka http"))
+            complete(buildTextResponse(200, BYE_MESSAGE))
           }
         } ~
-        path("transfer") {
+        path(ControllerPath.TRANSFER) {
           get {
             //complete(buildJsonResponse(200, "good bye from akka http"))
             logger.debug("transfer.in")
