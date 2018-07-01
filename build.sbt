@@ -23,6 +23,7 @@ lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
 lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
 lazy val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
 
+lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test"
 lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
 lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
 lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.4" % "test"
