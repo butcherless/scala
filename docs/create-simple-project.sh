@@ -52,4 +52,4 @@ class SimpleAppSpec extends FlatSpec with Matchers {
   }
 }' > src/test/scala/${PKG_DIR}/SimpleAppSpec.scala
 
-sbt test run
+sbt -batch clean test run
