@@ -1,7 +1,9 @@
 package com.cmartin
 
+import java.util.UUID
+
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives
 import org.slf4j.LoggerFactory
 import spray.json.DefaultJsonProtocol
@@ -57,7 +59,15 @@ package object route {
             logger.debug(s"transfer.out: $transfer")
 
             complete(buildTransfer())
-          }
+          } ~
+            post {
+              entity(as[Transfer]) { t =>
+                complete {
+                  val id = UUID.randomUUID()
+                  buildTextResponse(StatusCodes.Created.intValue, s"Entity with ${id} was created")
+                }
+              }
+            }
         }
   }
 
