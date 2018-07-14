@@ -12,7 +12,7 @@ package object route {
   val PORT = 8080
   val CURRENCY = "EUR"
   val HELLO_MESSAGE = "hello from akka http"
-  val BYE_MESSAGE = "hello from akka http"
+  val BYE_MESSAGE = "bye from akka http"
 
   val logger = LoggerFactory.getLogger("route")
 
