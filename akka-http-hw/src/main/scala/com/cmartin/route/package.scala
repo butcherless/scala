@@ -1,9 +1,8 @@
 package com.cmartin
 
-import java.util.UUID
-
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
+import akka.http.scaladsl.model.StatusCodes._
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
 import akka.http.scaladsl.server.Directives
 import org.slf4j.LoggerFactory
 import spray.json.DefaultJsonProtocol
@@ -43,32 +42,59 @@ package object route {
           // logic goes here
           logger.debug(s"hello.out: $HELLO_MESSAGE")
 
-          complete(buildTextResponse(200, HELLO_MESSAGE))
+          complete(buildTextResponse(OK.intValue, HELLO_MESSAGE))
         }
       } ~
         path(ControllerPath.BYE) {
           get {
-            complete(buildTextResponse(200, BYE_MESSAGE))
+            complete(buildTextResponse(OK.intValue, BYE_MESSAGE))
           }
         } ~
-        path(ControllerPath.TRANSFER) {
+        path(ControllerPath.TRANSFER / IntNumber) { id =>
           get {
             //complete(buildJsonResponse(200, "good bye from akka http"))
-            logger.debug("transfer.in")
+            logger.debug(s"transfer.in: $id")
             val transfer = Transfer("20950230...1", "01822348...2", BigDecimal.apply(100.0), "EUR")
             logger.debug(s"transfer.out: $transfer")
 
             complete(buildTransfer())
-          } ~
-            post {
-              entity(as[Transfer]) { t =>
-                complete {
-                  val id = UUID.randomUUID()
-                  buildTextResponse(StatusCodes.Created.intValue, s"Entity with ${id} was created")
-                }
+          }
+        } ~
+        path(ControllerPath.TRANSFER / IntNumber) { id =>
+          put {
+            entity(as[Transfer]) { t =>
+              complete {
+                logger.debug(s"transfer.in: $id")
+                val amount = t.amount * 0.8
+                buildTextResponse(OK.intValue, s"Amount updated to ${amount}")
               }
             }
+          }
         }
+
+    /*
+       path(ControllerPath.TRANSFER) {
+         post {
+           entity(as[Transfer]) { t =>
+             complete {
+               val id = UUID.randomUUID()
+               buildTextResponse(Created.intValue, s"Entity with ${id} was created")
+             }
+           }
+         }
+       } ~
+         path(ControllerPath.TRANSFER / IntNumber) { id =>
+           put {
+             entity(as[Transfer]) { t =>
+               complete {
+                 logRequest(t.toString)
+                 val amount = t.amount * 0.8
+                 buildTextResponse(OK.intValue, s"Amount updated to ${amount}")
+               }
+             }
+           }
+         }
+           */
   }
 
   def buildTextResponse(code: Int, message: String) = {
