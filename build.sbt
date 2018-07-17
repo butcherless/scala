@@ -20,8 +20,8 @@ lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
 lazy val cats = "org.typelevel" %% "cats-core" % catsVersion
 lazy val catsFree = "org.typelevel" %% "cats-free" % catsVersion
 lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
+lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
 lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
-lazy val scala_logging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
 
 lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test"
 lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
@@ -79,7 +79,7 @@ lazy val typeclasses = (project in file("typeclasses"))
   )
 
 val typeclassesDeps = Seq(
-  zinc, scala_logging, logback, uTest
+  zinc, scalaLogging, logback, uTest
 )
 
 lazy val dtogen = (project in file("dtogen"))
@@ -92,7 +92,7 @@ lazy val dtogen = (project in file("dtogen"))
   )
 
 val dtogenDeps = Seq(
-  zinc, scala_logging, logback, uTest
+  zinc, scalaLogging, logback, uTest
 )
 
 lazy val scalazlearn = (project in file("scalaz"))
@@ -110,7 +110,7 @@ val scalazlearnDeps = Seq(
 lazy val akkahttphw = (project in file("akka-http-hw"))
   .settings(commonSettings,
     name := "akka-http-webserver",
-    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream, scala_logging, logback, akkaHttpTest, scalaTest)
+    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream, scalaLogging, logback, akkaHttpTest, scalaTest)
   )
 
 lazy val akkahttpcl = (project in file("akka-http-cl"))

@@ -1,7 +1,8 @@
 package com.cmartin
 
+import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import com.cmartin.route.ApiController
+import com.cmartin.route.{ApiController, ControllerPath}
 import org.scalatest._
 
 class WebServerSpec extends FlatSpec with Matchers with ScalatestRouteTest {
@@ -11,21 +12,39 @@ class WebServerSpec extends FlatSpec with Matchers with ScalatestRouteTest {
     WebServer.greeting shouldEqual "akka-http-server"
   }
 
-  /* TODO
-  "The controller GET hello" should "return hello message" in {
+  "The controller GET /hello" should "return hello message" in {
     Get(s"/${ControllerPath.HELLO}") ~> controller.route ~> check {
       status shouldEqual StatusCodes.OK
-      contentType shouldEqual ContentTypes.`text/plain(UTF-8)`
-      responseAs[String] shouldEqual HELLO_MESSAGE
+      contentType shouldEqual ContentTypes.`application/json`
+      responseAs[String].contains(route.HELLO_MESSAGE) shouldBe true
     }
   }
 
-  "The controller GET bye" should "return bye message" in {
+  "The controller GET /bye" should "return bye message" in {
     Get(s"/${ControllerPath.BYE}") ~> controller.route ~> check {
       status shouldEqual StatusCodes.OK
-      contentType shouldEqual ContentTypes.`text/plain(UTF-8)`
-      responseAs[String] shouldEqual BYE_MESSAGE
+      contentType shouldEqual ContentTypes.`application/json`
+      responseAs[String].contains(route.BYE_MESSAGE) shouldBe true
     }
   }
-  */
+
+  "The controller GET /transfer/uuid" should "return json transfer" in {
+    Get(s"/${ControllerPath.TRANSFER}/${ControllerPath.BYE}") ~> controller.route ~> check {
+      status shouldEqual StatusCodes.OK
+      contentType shouldEqual ContentTypes.`application/json`
+      responseAs[String].contains(route.CURRENCY) shouldBe true
+      responseAs[String].contains(route.SOURCE_ACCOUNT) shouldBe true
+      responseAs[String].contains(route.TARGET_ACCOUNT) shouldBe true
+    }
+  }
+
+  "The controller DELETE /transfer/uuid" should "return json message" in {
+    Delete(s"/${ControllerPath.TRANSFER}/${ControllerPath.BYE}") ~> controller.route ~> check {
+      status shouldEqual StatusCodes.OK
+      contentType shouldEqual ContentTypes.`application/json`
+      responseAs[String].contains("dateTime") shouldBe true
+      responseAs[String].contains("text") shouldBe true
+    }
+  }
+
 }
