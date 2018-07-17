@@ -53,32 +53,8 @@ package object route {
                 complete(buildTextResponse(OK.intValue, BYE_MESSAGE))
               }
              } ~ */
-
-      path(ControllerPath.TRANSFER / IntNumber) { id =>
-        get {
-          logger.debug(s"get.in: $id")
-          val transfer = buildTransfer()
-          logger.debug(s"transfer.out: $transfer")
-
-          complete(buildTransfer())
-        }
-      } ~
-        path(ControllerPath.TRANSFER / IntNumber) { id =>
-          put {
-            entity(as[Transfer]) { t =>
-
-              complete {
-                logger.debug(s"put.in: $t")
-                val r = new Random().nextDouble()
-                val updated = t.copy(amount = t.amount * r)
-                logger.debug(s"transfer.out: $updated")
-
-                buildTextResponse(OK.intValue, s"Amount updated to ${updated}")
-              }
-            }
-          }
-        } ~
-        path(ControllerPath.TRANSFER) {
+      pathPrefix(ControllerPath.TRANSFER) {
+        pathEnd {
           post {
             entity(as[Transfer]) { t =>
               logger.debug(s"post.in: $t")
@@ -89,14 +65,39 @@ package object route {
             }
           }
         } ~
-        path(ControllerPath.TRANSFER / """[a-z0-9-]+""".r) { id =>
-          delete {
-            complete {
-              logger.debug(s"delete.in: $id")
-              buildTextResponse(OK.intValue, s"Transfer deleted")
+          path(IntNumber) { id =>
+            get {
+              logger.debug(s"get.in: $id")
+              val transfer = buildTransfer()
+              logger.debug(s"transfer.out: $transfer")
+
+              complete(buildTransfer())
+            }
+          } ~
+          path(IntNumber) { id =>
+            put {
+              entity(as[Transfer]) { t =>
+
+                complete {
+                  logger.debug(s"put.in: $t")
+                  val r = new Random().nextDouble()
+                  val updated = t.copy(amount = t.amount * r)
+                  logger.debug(s"transfer.out: $updated")
+
+                  buildTextResponse(OK.intValue, s"Amount updated to ${updated}")
+                }
+              }
+            }
+          } ~
+          path( """[a-z0-9-]+""".r) { id =>
+            delete {
+              complete {
+                logger.debug(s"delete.in: $id")
+                buildTextResponse(OK.intValue, s"Transfer deleted")
+              }
             }
           }
-        }
+      }
   }
 
   def buildTextResponse(code: Int, message: String) = {
