@@ -16,11 +16,15 @@ import scala.util.Random
 package object route {
   val HOST = "localhost"
   val PORT = 8080
-  val CURRENCY = "EUR"
   val HELLO_MESSAGE = "hello from akka http"
   val BYE_MESSAGE = "bye from akka http"
-  val SOURCE_ACCOUNT = "20950230509755438646"
-  val TARGET_ACCOUNT = "01822348985742908767"
+  val CURRENCY = "EUR"
+  val SOURCE_ACCOUNT = "source"
+  val TARGET_ACCOUNT = "target"
+  val ID_NAME = "id"
+  val AMOUNT_NAME = "amount"
+  val DATE_TIME_NAME = "dateTime"
+  val TEXT_NAME = "text"
 
   val logger = LoggerFactory.getLogger("route")
 
