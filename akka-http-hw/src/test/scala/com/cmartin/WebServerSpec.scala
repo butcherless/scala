@@ -2,10 +2,10 @@ package com.cmartin
 
 import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import com.cmartin.route.{ApiController, ControllerPath}
+import com.cmartin.route.{ApiController, ControllerPath, JsonSupport}
 import org.scalatest._
 
-class WebServerSpec extends FlatSpec with Matchers with ScalatestRouteTest {
+class WebServerSpec extends FlatSpec with Matchers with ScalatestRouteTest with JsonSupport {
   val controller = new ApiController()
 
   "The WebServer object" should "say hello" in {
@@ -47,4 +47,9 @@ class WebServerSpec extends FlatSpec with Matchers with ScalatestRouteTest {
     }
   }
 
+  "The controller POST /transfer" should "return json message" in {
+    Post(s"/${ControllerPath.TRANSFER}", route.buildTransfer()) ~> controller.route ~> check {
+      status shouldEqual StatusCodes.Created
+    }
+  }
 }
