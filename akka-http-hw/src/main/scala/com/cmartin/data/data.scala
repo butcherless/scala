@@ -1,4 +1,4 @@
-package com.cmartin.data
+package com.cmartin
 
 import java.time.LocalDate
 
@@ -19,7 +19,7 @@ package object data {
         * @return 0 if equals, -1 if less than, +1 if greater than
         */
       def compare(a1: Aircraft, a2: Aircraft): Int = {
-        a1.date.compareTo(a2.date)
+        a1.id.compareTo(a2.id)
       }
     }
   }
@@ -38,6 +38,8 @@ package object data {
 
     def remove(t: T): Try[Boolean]
 
+    def removeAll(): Try[Unit]
+
     def save(t: T): Try[Boolean]
 
     /**
@@ -55,7 +57,7 @@ package object data {
 
   class AircraftRepository extends SimpleRepository[Aircraft] {
 
-    private var repo = TreeSet[Aircraft]()
+    private val repo = TreeSet[Aircraft]()
 
     override def getById(id: String): Try[Option[Aircraft]] = Try(repo.find(_.id == id))
 
@@ -65,18 +67,23 @@ package object data {
 
     override def remove(t: Aircraft): Try[Boolean] = Try(repo.remove(t))
 
-    override def save(t: Aircraft): Try[Boolean] = {
-      repo.find(_.id == t.id) match {
-        case Some(a) => repo.remove(t) // remove before update
+    override def removeAll(): Try[Unit] = Try(repo.clear())
+
+    override def save(ac: Aircraft): Try[Boolean] = {
+      //TODO Try[Aircraft)
+      repo.find(_.id == ac.id) match {
+        case Some(a) => repo.remove(ac) // remove before update
         case None => true
       }
-      Try(repo.add(t)) // save or update
+      repo += ac
+      Try(true) // save or update
     }
 
 
     override def count(): Try[Int] = Try(repo.size)
 
     override def isEmpty(): Try[Boolean] = Try(repo.isEmpty)
+
   }
 
 }
