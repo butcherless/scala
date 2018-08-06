@@ -1,0 +1,11 @@
+language: scala
+
+scala:
+  - 2.12.6
+
+build:
+  ci:
+    - sbt -batch clean test
+
+jdk:
+  - oraclejdk8
