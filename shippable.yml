@@ -5,7 +5,7 @@ scala:
 
 build:
   ci:
-    - sbt -batch clean test
+    - sbt ";clean;coverage;test;coverageReport"
 
 jdk:
   - oraclejdk8
