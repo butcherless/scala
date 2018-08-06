@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/butcherless/scala.svg?style=svg)](https://circleci.com/gh/butcherless/scala)
 
+[![Run Status](https://api.shippable.com/projects/5b68c6d5e815be060012a3c5/badge?branch=master)](https://app.shippable.com/github/butcherless/scala)
+
 [![](https://codescene.io/projects/3185/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/3185/jobs/latest-successful/results)
 
 # At the beginning of a long road ...
