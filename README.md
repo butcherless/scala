@@ -1,5 +1,6 @@
 [![Build Status](https://semaphoreci.com/api/v1/butcherless/scala/branches/master/badge.svg)](https://semaphoreci.com/butcherless/scala)
-* image:https://semaphoreci.com/api/v1/butcherless/scala/branches/master/badge.svg[] -> link:https://semaphoreci.com/butcherless/scala)[Semaphore CI]
+
+[![CircleCI](https://circleci.com/gh/butcherless/scala.svg?style=svg)](https://circleci.com/gh/butcherless/scala)
 
 [![](https://codescene.io/projects/3185/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/3185/jobs/latest-successful/results)
 
