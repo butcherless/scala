@@ -21,7 +21,7 @@ jobs:
       - run:
           name: compile, test and run
           command: |
-                   cat /dev/null | sbt ";test:test ;typeclasses/run ;hkTypes/run"
+                   cat /dev/null | sbt ";clean; ;test ;typeclasses/run ;hkTypes/run"
 
 
   build_gradle:

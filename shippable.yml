@@ -8,7 +8,7 @@ build:
     - sbt ";clean;coverage;test;coverageReport"
     - spring-scala/gradlew clean build -b spring-scala/build.gradle
     - cd webapp-api
-    - sbt ";clean; publishLocal"
+    - sbt ";clean; publishLocal; test; assembly"
 
 jdk:
   - oraclejdk8
