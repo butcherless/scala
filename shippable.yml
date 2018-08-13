@@ -5,7 +5,7 @@ scala:
 
 build:
   ci:
-    - sbt ";clean;coverage;test;coverageReport"
+    - sbt ";clean ;assembly"
     - spring-scala/gradlew clean build -b spring-scala/build.gradle
 
 jdk:

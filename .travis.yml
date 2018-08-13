@@ -12,7 +12,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - sbt ";clean;coverage;test;coverageReport ;typeclasses/run ;calendar/run"
+  - sbt ";clean ;assembly"
   - spring-scala/gradlew clean build -b spring-scala/build.gradle
 
 cache:
