@@ -6,9 +6,9 @@ scala:
 build:
   ci:
     - sbt ";clean ;coverage ;assembly ;coverageReport"
-    - mkdir -p shippable/codecoverage
-    - cp akka-http-hw/target/scala-2.12/scoverage-report/scoverage.xml shippable/codecoverage
-    - spring-scala/gradlew clean build -b spring-scala/build.gradle
+    - sbt coverageAggregate
+    - cp target/scala-2.12/coverage-report/cobertura.xml shippable/codecoverage
+    - spring-scala/gradlew clean build jacocoTestReport -b spring-scala/build.gradle
 
 jdk:
   - oraclejdk8
