@@ -12,12 +12,9 @@ jdk:
   - oraclejdk8
 
 script:
-  - sbt ";clean ;assembly"
+  - sbt ";clean ;coverage ;assembly ;coverageReport"
   - spring-scala/gradlew clean build -b spring-scala/build.gradle
 
 cache:
   directories:
     - $HOME/.gradle
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38

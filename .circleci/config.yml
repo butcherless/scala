@@ -21,7 +21,8 @@ jobs:
       - run:
           name: compile, test and run
           command: |
-                   cat /dev/null | sbt ";clean ;coverage ;test ;coverageReport ;assembly"
+                   cat /dev/null | sbt ";clean ;coverage ;assembly ;coverageReport"
+                   bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
 
 
   build_gradle:
