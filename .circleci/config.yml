@@ -21,7 +21,7 @@ jobs:
       - run:
           name: compile, test and run
           command: |
-                   cat /dev/null | sbt ";clean ;assembly"
+                   cat /dev/null | sbt ";clean ;coverage ;test ;coverageReport ;assembly"
 
 
   build_gradle:
@@ -41,7 +41,7 @@ jobs:
       - run:
           name: clean and build
           command: |
-                   spring-scala/gradlew clean build -b spring-scala/build.gradle
+                   spring-scala/gradlew clean build jacocoTestReport -b spring-scala/build.gradle
 
 
 workflows:

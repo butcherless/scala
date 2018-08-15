@@ -28,5 +28,5 @@
 - bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/create-simple-project.sh)
  
 ## Coverage report
-- sbt ";clean;coverage;test;coverageReport"
+- command: sbt ";clean;coverage;test;coverageReport"
 - report: target/scala-2.12/scoverage-report/index.html
