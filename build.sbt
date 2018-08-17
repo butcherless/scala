@@ -9,7 +9,6 @@ lazy val specs2Version = "4.3.3"
 
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
-  name := "bundle",
   version := "1.0.0-SNAPSHOT",
   scalaVersion := "2.12.6"
 )
@@ -31,17 +30,6 @@ lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.4" % "test"
 lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.7"
 
 
-lazy val root = (project in file(".")).aggregate(
-  akkahttpcl,
-  akkahttphw,
-  calendar,
-  depAnalyzer,
-  dtogen,
-  fpInScala,
-  hkTypes,
-  scalazlearn,
-  typeclasses
-)
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
@@ -53,7 +41,6 @@ lazy val fpInScala = (project in file("fp-in-scala"))
 val fpInScalaDeps = Seq(
   zinc, scalaz, cats, specs2
 )
-
 
 lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
