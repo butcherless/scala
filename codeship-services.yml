@@ -6,6 +6,6 @@ services:
     environment:
       ENV: my-var
   data:
-    image: alpine
+    image: openjdk:8-jre-slim
     volumes:
       - ./tmp/data:/data
