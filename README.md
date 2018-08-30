@@ -4,6 +4,8 @@
 
 [![Run Status](https://api.shippable.com/projects/5b68c6d5e815be060012a3c5/badge?branch=master)](https://app.shippable.com/github/butcherless/scala)
 
+[![Build Status](https://travis-ci.org/butcherless/scala.svg?branch=master)](https://travis-ci.org/butcherless/scala)
+
 [![Coverage Status](https://coveralls.io/repos/github/butcherless/scala/badge.svg?branch=master)](https://coveralls.io/github/butcherless/scala?branch=master)
 
 [![codecov](https://codecov.io/gh/butcherless/scala/branch/master/graph/badge.svg)](https://codecov.io/gh/butcherless/scala)
