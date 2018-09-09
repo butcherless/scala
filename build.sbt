@@ -29,7 +29,6 @@ lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.4" % "test"
 
 lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.7"
 
-
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
     commonSettings,
@@ -110,3 +109,8 @@ lazy val calendar = (project in file("calendar"))
     name := "personal-calendar",
     libraryDependencies ++= Seq(scalaz, scalaTest, specs2)
   )
+
+// console research
+// libraryDependencies += "com.typesafe.play" % "play-json_2.12" % "2.6.10"
+// libraryDependencies += akkaHttp
+// libraryDependencies += akkaStream
