@@ -1,6 +1,6 @@
 buildscript {
     ext.springBootVersion = '2.0.4.RELEASE'
-    ext.springNeo4jVersion = '5.0.9.RELEASE'
+    ext.springNeo4jVersion = '5.0.10.RELEASE'
     ext.neo4jVersion = '3.1.0'
     repositories {
         maven {
