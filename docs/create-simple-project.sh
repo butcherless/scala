@@ -4,7 +4,7 @@ PKG_DIR=com/cmartin/learn
 SBT_VER=1.2.1
 SCALA_VER="2.12.6"
 SCALATEST_VER="3.0.5"
-SCOVERAGE_VER="1.5.1"
+SCOVERAGE_VER="1.6.0-M3"
 
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
