@@ -1,6 +1,6 @@
 lazy val akkaHttpVersion = "10.1.5"
 lazy val akkaVersion = "2.5.16"
-lazy val catsVersion = "1.3.1"
+lazy val catsVersion = "1.4.0"
 lazy val logbackVersion = "1.2.3"
 lazy val scalaLoggingVersion = "3.9.0"
 lazy val scalazVersion = "7.2.26"
@@ -25,9 +25,9 @@ lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
 lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test"
 lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
 lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
-lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.4" % "test"
+lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.5" % "test"
 
-lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.1.7"
+lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.2.2"
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(

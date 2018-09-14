@@ -37,7 +37,7 @@ object WebClient extends Greeting {
 
 
     Thread.sleep(4000)
-    
+
     println(s"isCompleted: ${responseFuture.isCompleted}")
     materializer.shutdown()
     system.terminate()
