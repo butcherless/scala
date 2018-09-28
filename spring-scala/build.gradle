@@ -36,7 +36,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext.libraries = [
-        scala_library: 'org.scala-lang:scala-library:2.12.6'
+        scala_library: 'org.scala-lang:scala-library:2.12.7'
 ]
 
 configurations {
@@ -62,7 +62,7 @@ dependencies {
 }
 
 jacoco {
-    toolVersion = "0.8.1"
+    toolVersion = "0.8.2"
 }
 
 // gradle wrapper --gradle-version 4.7

@@ -1,5 +1,5 @@
 lazy val akkaHttpVersion = "10.1.5"
-lazy val akkaVersion = "2.5.16"
+lazy val akkaVersion = "2.5.17"
 lazy val catsVersion = "1.4.0"
 lazy val logbackVersion = "1.2.3"
 lazy val scalaLoggingVersion = "3.9.0"
@@ -10,7 +10,7 @@ lazy val specs2Version = "4.3.4"
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
   version := "1.0.0-SNAPSHOT",
-  scalaVersion := "2.12.6"
+  scalaVersion := "2.12.7"
 )
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
@@ -25,7 +25,7 @@ lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
 lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test"
 lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
 lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
-lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.5" % "test"
+lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.6" % "test"
 
 lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.2.2"
 
