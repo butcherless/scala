@@ -36,3 +36,7 @@
 ## Coverage report
 - command: sbt ";clean;coverage;test;coverageReport"
 - report: target/scala-2.12/scoverage-report/index.html
+
+## Plugins
+- https://github.com/jrudolph/sbt-dependency-graph
+- https://github.com/sbt/sbt-assembly/releases
