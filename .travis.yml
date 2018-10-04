@@ -9,7 +9,7 @@ addons:
     update: true
 
 jdk:
-  - oraclejdk8
+  - oraclejdk11
 
 script:
   - sbt ";clean ;coverage ;assembly ;coverageReport"
