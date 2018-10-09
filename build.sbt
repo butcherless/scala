@@ -27,7 +27,7 @@ lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
 lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
 lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.6" % "test"
 
-lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.2.2"
+lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.2.3"
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
