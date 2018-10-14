@@ -5,7 +5,7 @@ lazy val logbackVersion = "1.2.3"
 lazy val scalaLoggingVersion = "3.9.0"
 lazy val scalazVersion = "7.2.26"
 lazy val scalatestVersion = "3.0.5"
-lazy val specs2Version = "4.3.4"
+lazy val specs2Version = "4.3.5"
 
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
