@@ -3,7 +3,7 @@ lazy val akkaVersion = "2.5.17"
 lazy val catsVersion = "1.4.0"
 lazy val logbackVersion = "1.2.3"
 lazy val scalaLoggingVersion = "3.9.0"
-lazy val scalazVersion = "7.2.26"
+lazy val scalazVersion = "7.2.27"
 lazy val scalatestVersion = "3.0.5"
 lazy val specs2Version = "4.3.5"
 
