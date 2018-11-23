@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PKG_DIR=com/cmartin/learn
-SBT_VER=1.2.4
+SBT_VER=1.2.6
 SCALA_VER="2.12.7"
 SCALATEST_VER="3.0.5"
 SCOVERAGE_VER="1.6.0-M3"
