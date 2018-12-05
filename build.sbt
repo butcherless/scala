@@ -10,7 +10,7 @@ lazy val specs2Version = "4.3.5"
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
   version := "1.0.0-SNAPSHOT",
-  scalaVersion := "2.12.7"
+  scalaVersion := "2.12.8"
 )
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
