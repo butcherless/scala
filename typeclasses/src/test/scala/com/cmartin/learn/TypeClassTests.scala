@@ -1,24 +1,23 @@
 package com.cmartin.learn
 
 import com.cmartin.learn.MyTypeClasses.Show._
+import com.cmartin.learn.model.Constants._
+import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
 import utest._
 
 object TypeClassTests extends TestSuite {
-  val name = "Carlos"
-  val firstName = "Martin"
-  val id = "carlos.martin"
-
 
   val tests = Tests {
     'testShowPerson - {
-      val person = Person(name, firstName, id)
+      val person = Person(name, firstName, ObfuscatedInt(age), id, ObfuscatedString(password))
       val s = show(person)
 
       assert(!s.isEmpty(),
         s.contains(getNameToLower(person)),
         s.contains(name),
         s.contains(firstName),
-        s.contains(id))
+        s.contains(id)
+      )
     }
 
     'testShowInt - {
@@ -54,5 +53,4 @@ object TypeClassTests extends TestSuite {
   }
 
   def getNameToLower(c: Any) = c.getClass.getSimpleName.toLowerCase
-
 }

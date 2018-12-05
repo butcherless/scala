@@ -1,5 +1,7 @@
 package com.cmartin.learn
 
+import com.cmartin.learn.model.Person
+
 
 object MyTypeClasses {
 

@@ -2,6 +2,7 @@ package com.cmartin.learn
 
 import com.cmartin.learn.MyTypeClasses.Jsonable
 import com.cmartin.learn.MyTypeClasses.Show._
+import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
 import com.typesafe.scalalogging.Logger
 
 object MainApp extends App {
@@ -12,7 +13,7 @@ object MainApp extends App {
   def print[T](n: Int)(implicit j: Jsonable[Int]): String = j.serialize(n)
 
   val message = "Hi from project learning TypeClasses in Scala!"
-  val person = Person("Carlos", "Martin", "carlos.martin")
+  val person = Person("Carlos", "Martin", ObfuscatedInt(44), "carlos.martin", ObfuscatedString("dummy-password"))
 
   logger.debug(message)
 

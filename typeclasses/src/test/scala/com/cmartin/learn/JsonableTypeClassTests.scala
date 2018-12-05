@@ -1,17 +1,15 @@
 package com.cmartin.learn
 
 import com.cmartin.learn.MyTypeClasses.Jsonable._
+import com.cmartin.learn.model.Constants._
+import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
 import utest._
 
 object JsonableTypeClassTests extends TestSuite {
-  val name = "Carlos"
-  val firstName = "Martin"
-  val id = "carlos.martin"
-
 
   val tests = Tests {
     'testSerializePerson - {
-      val person = Person(name, firstName, id)
+      val person = Person(name, firstName, ObfuscatedInt(33), id, ObfuscatedString(password))
       val s = serialize(person)
 
       assert(!s.isEmpty(),
@@ -27,7 +25,6 @@ object JsonableTypeClassTests extends TestSuite {
       val s = serialize(int)
 
       assert(!s.isEmpty(),
-        //s.contains(getNameToLower(int)),
         s.contains(String.valueOf(int))
       )
     }
@@ -37,12 +34,10 @@ object JsonableTypeClassTests extends TestSuite {
       val s = serialize(double)
 
       assert(!s.isEmpty(),
-        //s.contains(getNameToLower(double)),
         s.contains(String.valueOf(double)),
         s.contains('.')
       )
     }
-
   }
 
   def getNameToLower(c: Any) = c.getClass.getSimpleName.toLowerCase
