@@ -36,7 +36,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext.libraries = [
-        scala_library: 'org.scala-lang:scala-library:2.12.7'
+        scala_library: 'org.scala-lang:scala-library:2.12.8'
 ]
 
 configurations {
@@ -52,7 +52,7 @@ dependencies {
 
     // TESTING
     testCompile 'junit:junit:4.12',
-            'org.springframework:spring-test:5.1.1.RELEASE',
+            'org.springframework:spring-test:5.1.3.RELEASE',
             "org.neo4j:neo4j-ogm-test:${neo4jVersion}"
     testCompile('org.scalatest:scalatest_2.12:3.0.5') {
         exclude module: 'scala-library'
