@@ -13,19 +13,20 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.8"
 )
 
-lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
-lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
-lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
-lazy val cats = "org.typelevel" %% "cats-core" % catsVersion
-lazy val catsFree = "org.typelevel" %% "cats-free" % catsVersion
-lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
+lazy val akkaHttp     = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
+lazy val akkaJson     = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
+lazy val akkaStream   = "com.typesafe.akka" %% "akka-stream" % akkaVersion
+lazy val cats         = "org.typelevel" %% "cats-core" % catsVersion
+lazy val catsFree     = "org.typelevel" %% "cats-free" % catsVersion
+lazy val logback      = "ch.qos.logback" % "logback-classic" % logbackVersion
 lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
-lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
+lazy val scalaz       = "org.scalaz" %% "scalaz-core" % scalazVersion
 
-lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test"
-lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % "test"
-lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % "test"
-lazy val uTest = "com.lihaoyi" %% "utest" % "0.6.6" % "test"
+lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test
+lazy val akkaTest     = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test
+lazy val scalaTest    = "org.scalatest" %% "scalatest" % scalatestVersion % Test
+lazy val specs2       = "org.specs2" %% "specs2-core" % specs2Version % Test
+lazy val uTest        = "com.lihaoyi" %% "utest" % "0.6.6" % Test
 
 lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.2.5"
 
@@ -95,7 +96,7 @@ val scalazlearnDeps = Seq(
 lazy val akkahttphw = (project in file("akka-http-hw"))
   .settings(commonSettings,
     name := "akka-http-webserver",
-    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream, scalaLogging, logback, akkaHttpTest, scalaTest)
+    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream, scalaLogging, logback, akkaHttpTest, scalaTest, akkaTest)
   )
 
 lazy val akkahttpcl = (project in file("akka-http-cl"))
