@@ -1,4 +1,4 @@
-lazy val akkaHttpVersion = "10.1.6"
+lazy val akkaHttpVersion = "10.1.7"
 lazy val akkaVersion = "2.5.19"
 lazy val catsVersion = "1.5.0"
 lazy val logbackVersion = "1.2.3"
