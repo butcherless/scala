@@ -1,3 +1,5 @@
+scalaVersion := "2.12.8"
+
 lazy val akkaHttpVersion = "10.1.7"
 lazy val akkaVersion = "2.5.19"
 lazy val catsVersion = "1.5.0"
