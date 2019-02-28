@@ -3,7 +3,7 @@
 PKG_DIR=com/cmartin/learn
 SBT_VER=1.2.8
 SCALA_VER="2.12.8"
-SCALATEST_VER="3.0.5"
+SCALATEST_VER="3.0.6"
 SCOVERAGE_VER="1.6.0-M5"
 
 # create filesystem

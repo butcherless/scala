@@ -6,7 +6,7 @@ lazy val catsVersion = "1.6.0"
 lazy val logbackVersion = "1.2.3"
 lazy val scalaLoggingVersion = "3.9.2"
 lazy val scalazVersion = "7.2.27"
-lazy val scalatestVersion = "3.0.5"
+lazy val scalatestVersion = "3.0.6"
 lazy val specs2Version = "4.4.1"
 
 lazy val commonSettings = Seq(
