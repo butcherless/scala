@@ -4,6 +4,7 @@ lazy val akkaHttpVersion = "10.1.7"
 lazy val akkaVersion = "2.5.21"
 lazy val catsVersion = "1.6.0"
 lazy val logbackVersion = "1.2.3"
+lazy val refinedVersion = "0.9.4"
 lazy val scalaLoggingVersion = "3.9.2"
 lazy val scalazVersion = "7.2.27"
 lazy val scalatestVersion = "3.0.6"
@@ -21,6 +22,7 @@ lazy val akkaStream   = "com.typesafe.akka" %% "akka-stream" % akkaVersion
 lazy val cats         = "org.typelevel" %% "cats-core" % catsVersion
 lazy val catsFree     = "org.typelevel" %% "cats-free" % catsVersion
 lazy val logback      = "ch.qos.logback" % "logback-classic" % logbackVersion
+lazy val refined      = "eu.timepit" %% "refined" % refinedVersion
 lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
 lazy val scalaz       = "org.scalaz" %% "scalaz-core" % scalazVersion
 
@@ -111,6 +113,12 @@ lazy val calendar = (project in file("calendar"))
   .settings(commonSettings,
     name := "personal-calendar",
     libraryDependencies ++= Seq(scalaz, scalaTest, specs2)
+  )
+
+lazy val refinedPoc = (project in file("refined-poc"))
+  .settings(commonSettings,
+    name := "refined-proof-of-concept",
+    libraryDependencies ++= Seq(refined, scalaTest)
   )
 
 // console research
