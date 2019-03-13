@@ -28,7 +28,7 @@ package object learn {
   def validateZipCode(zcs: String): Either[String, Refined[String, ValidInt]] = {
     val validInt: Either[String, Refined[String, ValidInt]] = refineV(zcs)
 
-    val zipCode = validInt match {
+    validInt match {
       case Right(_) => {
         refineV[ZipCode](zcs.toInt) match {
           case Right(_) => validInt
@@ -37,7 +37,5 @@ package object learn {
       }
       case Left(value) => Left(value)
     }
-
-    zipCode
   }
 }
