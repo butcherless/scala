@@ -2,7 +2,7 @@ package com.cmartin
 
 import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.boolean.{And, Or}
+import eu.timepit.refined.boolean.{And, Not, Or}
 import eu.timepit.refined.numeric._
 import eu.timepit.refined.string.ValidInt
 
@@ -14,6 +14,7 @@ package object learn {
   type UserPort = Interval.Closed[W.`1024`.T, W.`65535`.T]
   type NetworkPort = WellKnownPort Or UserPort
   type ZipCode = Interval.Closed[W.`1000`.T, W.`52999`.T]
+  type LeapYear = Positive And Divisible[W.`4`.T] And Not[Divisible[W.`100`.T]] Or Divisible[W.`400`.T]
 
   def validatePositiveInt(a: Int): Either[String, Refined[Int, Positive]] = refineV(a)
 
@@ -38,4 +39,6 @@ package object learn {
       case Left(value) => Left(value)
     }
   }
+
+  def validateLeapYear(y: Int): Either[String, Refined[Int, LeapYear]] = refineV(y)
 }

@@ -1,20 +1,15 @@
 package com.cmartin.learn
 
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.auto._
-import eu.timepit.refined.numeric.Positive
-import eu.timepit.refined.string.ValidInt
 import org.scalatest.EitherValues._
 import org.scalatest._
 
 class SimpleAppSpec extends FlatSpec with Matchers {
 
   it should "validate a positive integer" in {
-    val expected: Int Refined Positive = 1
     val a: Int = 1
     val res = validatePositiveInt(a)
 
-    res.right.value shouldBe expected
+    res.right.get.value shouldBe a
   }
 
   it should "reject a negative integer" in {
@@ -25,11 +20,10 @@ class SimpleAppSpec extends FlatSpec with Matchers {
   }
 
   it should "validate an even positive integer" in {
-    val expected: Int Refined Positive = 16
     val a: Int = 16
     val res = validateEvenPositive(a)
 
-    res.right.value shouldBe expected
+    res.right.get.value shouldBe a
   }
 
   it should "reject an odd positive integer" in {
@@ -40,11 +34,10 @@ class SimpleAppSpec extends FlatSpec with Matchers {
   }
 
   it should "validate a well known port" in {
-    val expected: Int Refined WellKnownPort = 22
     val a: Int = Constants.Port22
     val res = validateWellKnownPort(a)
 
-    res.right.get shouldBe expected
+    res.right.get.value shouldBe a
   }
 
   it should "reject a non well known port" in {
@@ -56,11 +49,10 @@ class SimpleAppSpec extends FlatSpec with Matchers {
   }
 
   it should "validate an user port" in {
-    val expected: Int Refined UserPort = 8080
     val a: Int = Constants.Port8080
     val res = validateUserPort(a)
 
-    res.right.get shouldBe expected
+    res.right.get.value shouldBe a
   }
 
   it should "reject a non user port" in {
@@ -72,25 +64,20 @@ class SimpleAppSpec extends FlatSpec with Matchers {
   }
 
   it should "validate a network port" in {
-    val port1 = Constants.Port22
-    val port2 = Constants.Port2222
-    val nport1: Int Refined NetworkPort = 22
-    val nport2: Int Refined NetworkPort = 2222
+    val expectedPorts = List(Constants.Port22, Constants.Port2222)
+    val resList = expectedPorts map (validateNetworkPort(_))
+    val pairs = resList zip expectedPorts
 
-    val res1 = validateNetworkPort(port1)
-    val res2 = validateNetworkPort(port2)
-
-    res1.right.get shouldBe nport1
-    res2.right.get shouldBe nport2
+    resList forall (_.isRight) shouldBe true
+    pairs forall (p => p._1.right.get.value == p._2)
   }
 
   it should "validate a zip code string" in {
-    val expected: String Refined ValidInt = "28020"
     val zipCode = Constants.zipCode28020
 
     val res = validateZipCode(zipCode)
 
-    res.right.get shouldBe expected
+    res.right.get.value shouldBe zipCode
   }
 
   it should "reject a low zip code string" in {
@@ -117,6 +104,26 @@ class SimpleAppSpec extends FlatSpec with Matchers {
     res.toOption shouldBe expected
   }
 
+  it should "validate a leap year list" in {
+    val expectedYears = List(1992, 2000, 2020)
+    val resList = expectedYears map (validateLeapYear(_))
+    val pairs = resList zip expectedYears
+
+    resList forall (_.isRight) shouldBe true
+    pairs forall (p => p._1.right.get.value == p._2)
+  }
+
+  it should "reject an invalid leap year" in {
+    // preconditions
+    val expected = None
+    val leapYear = 1900
+
+    // functionality
+    val res = validateLeapYear(leapYear)
+
+    // verifications
+    res.toOption shouldBe expected
+  }
 
 }
 
