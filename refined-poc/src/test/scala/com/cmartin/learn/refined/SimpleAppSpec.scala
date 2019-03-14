@@ -1,4 +1,4 @@
-package com.cmartin.learn
+package com.cmartin.learn.refined
 
 import org.scalatest.EitherValues._
 import org.scalatest._

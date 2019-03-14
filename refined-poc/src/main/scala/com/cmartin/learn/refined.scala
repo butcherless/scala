@@ -1,4 +1,4 @@
-package com.cmartin
+package com.cmartin.learn
 
 import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
@@ -7,7 +7,7 @@ import eu.timepit.refined.numeric._
 import eu.timepit.refined.string.ValidInt
 
 
-package object learn {
+package object refined {
 
   type EvenPositive = Positive And Even // TODO
   type WellKnownPort = Interval.Closed[W.`0`.T, W.`1023`.T]
