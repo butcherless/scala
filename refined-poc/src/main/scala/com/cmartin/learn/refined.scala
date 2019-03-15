@@ -3,6 +3,8 @@ package com.cmartin.learn
 import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.boolean.{And, Not, Or}
+import eu.timepit.refined.char.{Letter, Whitespace}
+import eu.timepit.refined.collection.Forall
 import eu.timepit.refined.numeric._
 import eu.timepit.refined.string.ValidInt
 
@@ -15,6 +17,7 @@ package object refined {
   type NetworkPort = WellKnownPort Or UserPort
   type ZipCode = Interval.Closed[W.`1000`.T, W.`52999`.T]
   type LeapYear = Positive And Divisible[W.`4`.T] And Not[Divisible[W.`100`.T]] Or Divisible[W.`400`.T]
+  type PersonName = Forall[Letter Or Whitespace]
 
   def validatePositiveInt(a: Int): Either[String, Refined[Int, Positive]] = refineV(a)
 
@@ -41,4 +44,7 @@ package object refined {
   }
 
   def validateLeapYear(y: Int): Either[String, Refined[Int, LeapYear]] = refineV(y)
+
+  def validatePersonName(name: String): Either[String, Refined[String, PersonName]] = refineV(name)
+
 }

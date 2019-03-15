@@ -125,6 +125,14 @@ class SimpleAppSpec extends FlatSpec with Matchers {
     res.toOption shouldBe expected
   }
 
+
+  it should "validate a string containing people names" in {
+    val name = "Kristin Scott Thomas"
+
+    val res = validatePersonName(name)
+
+  }
+
 }
 
 object Constants {
