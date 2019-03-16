@@ -5,13 +5,13 @@ class PersonNameSpec extends PropertySpec {
   val personNames = Table("name", "Robben Ford", "Katherine Jones-Smith", "Kristin Scott Thomas")
   val invalidPersonNames = Table("name", "Robben , Ford", "Roscoe Bec3", "Andrew Mar$hall")
 
-  property("zipCodes should contains valid zip code values") {
+  property("personNames should contains valid person name values") {
     forAll(personNames) {
       name => validatePersonName(name).isRight shouldBe true
     }
   }
 
-  property("nonLeapYears should contains invalid leap year values") {
+  property("invalidPersonNames should contains invalid person name values") {
     forAll(invalidPersonNames) {
       name => validatePersonName(name).isLeft shouldBe true
     }
