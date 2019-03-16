@@ -33,7 +33,8 @@
 - bash script @ ${PROJECT_ROOT}/docs directory
 - bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/create-simple-project.sh)
  
-## Coverage report
+## Test & Coverage report
+- testOnly TestSuite -- -z CURRENT
 - command: sbt ";clean;coverage;test;coverageReport"
 - report: target/scala-2.12/scoverage-report/index.html
 
