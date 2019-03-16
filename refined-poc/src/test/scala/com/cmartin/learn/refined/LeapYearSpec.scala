@@ -3,7 +3,7 @@ package com.cmartin.learn.refined
 class LeapYearSpec extends PropertySpec {
 
   val leapYears = Table("year", 1600, 1992, 2000, 2020)
-  val nonLeapYears = Table("year", 1700, 1800, 2002, 2100)
+  val invalidLeapYears = Table("year", 1700, 1800, 2002, 2100)
 
   property("leapYears should contains valid leap year values") {
     forAll(leapYears) {
@@ -12,7 +12,7 @@ class LeapYearSpec extends PropertySpec {
   }
 
   property("nonLeapYears should contains invalid leap year values") {
-    forAll(nonLeapYears) {
+    forAll(invalidLeapYears) {
       year => validateLeapYear(year).isLeft shouldBe true
     }
   }

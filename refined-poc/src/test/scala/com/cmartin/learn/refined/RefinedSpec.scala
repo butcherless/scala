@@ -72,55 +72,6 @@ class RefinedSpec extends FlatSpec with Matchers {
     pairs forall (p => p._1.right.get.value == p._2)
   }
 
-  it should "validate a zip code string" in {
-    val zipCode = Constants.zipCode28020
-
-    val res = validateZipCode(zipCode)
-
-    res.right.get.value shouldBe zipCode
-  }
-
-  it should "reject a low zip code string" in {
-    // preconditions
-    val expected = None
-    val zipCode = "00999"
-
-    // functionality
-    val res = validateZipCode(zipCode)
-
-    // verifications
-    res.toOption shouldBe expected
-  }
-
-  it should "reject an invalid zip code string" in {
-    // preconditions
-    val expected = None
-    val zipCode = "2802K"
-
-    // functionality
-    val res = validateZipCode(zipCode)
-
-    // verifications
-    res.toOption shouldBe expected
-  }
-
-  it should "validate a string containing people name" in {
-    val name = "Kristin Scott Thomas Orduña"
-
-    val res = validatePersonName(name)
-
-    res.isRight shouldBe true
-  }
-
-  it should "reject a string containing invalid people name" in {
-    val name = "John Sm1th"
-
-    val res = validatePersonName(name)
-
-    res.isLeft shouldBe true
-  }
-
-
 }
 
 object Constants {
