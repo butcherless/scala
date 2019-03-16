@@ -3,7 +3,7 @@ package com.cmartin.learn.refined
 import org.scalatest.EitherValues._
 import org.scalatest._
 
-class SimpleAppSpec extends FlatSpec with Matchers {
+class RefinedSpec extends FlatSpec with Matchers {
 
   it should "validate a positive integer" in {
     val a: Int = 1
@@ -104,34 +104,22 @@ class SimpleAppSpec extends FlatSpec with Matchers {
     res.toOption shouldBe expected
   }
 
-  it should "validate a leap year list" in {
-    val expectedYears = List(1992, 2000, 2020)
-    val resList = expectedYears map (validateLeapYear(_))
-    val pairs = resList zip expectedYears
-
-    resList forall (_.isRight) shouldBe true
-    pairs forall (p => p._1.right.get.value == p._2)
-  }
-
-  it should "reject an invalid leap year" in {
-    // preconditions
-    val expected = None
-    val leapYear = 1900
-
-    // functionality
-    val res = validateLeapYear(leapYear)
-
-    // verifications
-    res.toOption shouldBe expected
-  }
-
-
-  it should "validate a string containing people names" in {
-    val name = "Kristin Scott Thomas"
+  it should "validate a string containing people name" in {
+    val name = "Kristin Scott Thomas Orduña"
 
     val res = validatePersonName(name)
 
+    res.isRight shouldBe true
   }
+
+  it should "reject a string containing invalid people name" in {
+    val name = "John Sm1th"
+
+    val res = validatePersonName(name)
+
+    res.isLeft shouldBe true
+  }
+
 
 }
 

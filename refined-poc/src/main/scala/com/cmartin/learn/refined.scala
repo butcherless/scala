@@ -4,7 +4,7 @@ import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.boolean.{And, Not, Or}
 import eu.timepit.refined.char.{Letter, Whitespace}
-import eu.timepit.refined.collection.Forall
+import eu.timepit.refined.collection.{Contains, Forall}
 import eu.timepit.refined.numeric._
 import eu.timepit.refined.string.ValidInt
 
