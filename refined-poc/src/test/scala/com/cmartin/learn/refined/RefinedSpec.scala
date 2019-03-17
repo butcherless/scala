@@ -1,7 +1,10 @@
 package com.cmartin.learn.refined
 
+import eu.timepit.refined.auto._
 import org.scalatest.EitherValues._
 import org.scalatest._
+
+import scala.util.Right
 
 class RefinedSpec extends FlatSpec with Matchers {
 
@@ -9,7 +12,7 @@ class RefinedSpec extends FlatSpec with Matchers {
     val a: Int = 1
     val res = validatePositiveInt(a)
 
-    res.right.get.value shouldBe a
+    res map (_.toInt) shouldBe (Right(a))
   }
 
   it should "reject a negative integer" in {
@@ -23,7 +26,7 @@ class RefinedSpec extends FlatSpec with Matchers {
     val a: Int = 16
     val res = validateEvenPositive(a)
 
-    res.right.get.value shouldBe a
+    res map (_.toInt) shouldBe (Right(a))
   }
 
   it should "reject an odd positive integer" in {
@@ -36,8 +39,4 @@ class RefinedSpec extends FlatSpec with Matchers {
 
 object Constants {
   val PredicateFailed = "failed"
-  val Port22 = 22
-  val Port2222 = 2222
-  val Port8080 = 8080
-  val zipCode28020 = "28020"
 }
