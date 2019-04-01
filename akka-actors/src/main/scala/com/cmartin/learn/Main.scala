@@ -11,10 +11,9 @@ object Main extends App {
   val producer = system.actorOf(Props[Producer], "producer")
   val consumer = system.actorOf(Props(classOf[Consumer],producer), "consumer")
 
-  //producer ! Consumer.Success(3)
-  //producer ! Consumer.Failure("dummy error")
+  producer ! Consumer.Success(3)
+  producer ! Consumer.Failure("dummy error")
 
-    producer
-    //consumer ! Producer.Module(22)
+  consumer ! Producer.Module(22)
 
 }
