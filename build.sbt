@@ -16,6 +16,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.8"
 )
 
+lazy val akkaActor    = "com.typesafe.akka" %% "akka-actor" % akkaVersion
 lazy val akkaHttp     = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 lazy val akkaJson     = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
 lazy val akkaStream   = "com.typesafe.akka" %% "akka-stream" % akkaVersion
@@ -97,6 +98,12 @@ val scalazlearnDeps = Seq(
   scalaz, uTest
 )
 
+lazy val akkaActors = (project in file("akka-actors"))
+  .settings(commonSettings,
+    name := "akka-actors-proof-of-concept",
+    libraryDependencies ++= Seq(akkaActor, logback, scalaTest)
+  )
+
 lazy val akkahttphw = (project in file("akka-http-hw"))
   .settings(commonSettings,
     name := "akka-http-webserver",
@@ -120,6 +127,7 @@ lazy val refinedPoc = (project in file("refined-poc"))
     name := "refined-proof-of-concept",
     libraryDependencies ++= Seq(refined, scalaTest)
   )
+
 
 // console research
 // libraryDependencies += "com.typesafe.play" % "play-json_2.12" % "2.6.10"
