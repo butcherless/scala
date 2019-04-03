@@ -16,4 +16,6 @@ object Main extends App {
 
   consumer ! Producer.Module(22)
 
+  system.terminate()
+
 }
