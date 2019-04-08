@@ -4,6 +4,9 @@ import cats.free.Free
 import cats.free.Free.liftF
 import cats.{Id, ~>}
 import com.cmartin.learn.functions.buildUuid
+
+import scala.concurrent.Future
+
 // https://typelevel.org/cats/datatypes/freemonad.html
 // https://blog.scalac.io/2016/06/02/overview-of-free-monad-in-cats.html
 
@@ -38,7 +41,7 @@ object freecats {
 
   // 3. Build a program made of a sequence of operations
 
-  def myAwesomProgram(name: String): CrudOperation[CrytoCurrency] = for {
+  def myAwesomeProgram(name: String): CrudOperation[CrytoCurrency] = for {
     cc <- read(name)
     nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
     ccLite <- read(nameLite)
@@ -79,6 +82,34 @@ object freecats {
     }
   }
 
+  type SingleEither[A] = Either[String, A]
+
+  def eitherCompiler: CrudOperationA ~> SingleEither = new (CrudOperationA ~> SingleEither) {
+    override def apply[A](fa: CrudOperationA[A]): Either[String, A] = fa match {
+      case Create(cc) => println(s"create option: $cc")
+        Right(cc.name)
+      case Read(name) => println(s"read option: $name")
+        Right(buildCryptoCurrency(name))
+      case Update() => println(s"update option: TODO")
+        Right(())
+      case Delete() => println(s"delete option: TODO")
+        Right(())
+    }
+  }
+
+  def futureCompiler: CrudOperationA ~> Future = new (CrudOperationA ~> Future) {
+    override def apply[A](fa: CrudOperationA[A]): Future[A] = fa match {
+      case Create(cc) => println(s"create option: $cc")
+        Future.successful(cc.name)
+      case Read(name) => println(s"read option: $name")
+        Future.successful(buildCryptoCurrency(name))
+      case Update() => println(s"update option: TODO")
+        Future.successful(())
+      case Delete() => println(s"delete option: TODO")
+        Future.successful(())
+    }
+  }
+
 
   // H E L P E R
   def buildCryptoCurrency(name: String) =
@@ -87,12 +118,22 @@ object freecats {
 
 object mainCats extends App {
 
-  import cats.implicits.catsStdInstancesForOption
-  import com.cmartin.learn.freecats.{compiler, myAwesomProgram, optionCompiler}
+  import cats.instances.either.catsStdInstancesForEither
+  import cats.instances.future.catsStdInstancesForFuture
+  import cats.instances.option.catsStdInstancesForOption
+  import com.cmartin.learn.freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
 
-  println("Running Id[A] program interpreter")
-  val result = myAwesomProgram("BitCoin").foldMap(compiler)
+  import scala.concurrent.ExecutionContext.Implicits.global
 
-  println("Running Option[A] program interpreter")
-  val optionResult = myAwesomProgram("LineCoin").foldMap(optionCompiler)
+  println("\nRunning Id[A] program interpreter")
+  val result = myAwesomeProgram("BitCoin").foldMap(compiler)
+
+  println("\nRunning Option[A] program interpreter")
+  val optionResult = myAwesomeProgram("LineCoin").foldMap(optionCompiler)
+
+  println("\nRunning Either[String, A] program interpreter")
+  val eitherResult = myAwesomeProgram("LineCoin").foldMap(eitherCompiler)
+
+  println("\nRunning Future[A] program interpreter")
+  val futureResult = myAwesomeProgram("LineCoin").foldMap(futureCompiler)
 }
