@@ -58,7 +58,7 @@ lazy val hkTypes = (project in file("hk-types"))
     commonSettings,
     name := "hkTypes",
     libraryDependencies ++= Seq(cats, catsFree, scalaz, scalaTest),
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds")
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds", "-language:postfixOps")
   )
 
 lazy val typeclasses = (project in file("typeclasses"))
