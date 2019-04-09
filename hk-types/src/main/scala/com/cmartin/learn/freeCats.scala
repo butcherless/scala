@@ -20,31 +20,31 @@ object freecats {
   /* Type A will be the type that Free Monad will be working on */
   sealed trait CrudOperationA[A]
 
-  case class Create(cc: CrytoCurrency) extends CrudOperationA[String]
+  case class Create(cc: CryptoCurrency) extends CrudOperationA[String]
 
-  case class Read(name: String) extends CrudOperationA[CrytoCurrency]
+  case class Read(name: String) extends CrudOperationA[CryptoCurrency]
 
-  case class Update(cc: CrytoCurrency) extends CrudOperationA[CrytoCurrency]
+  case class Update(cc: CryptoCurrency) extends CrudOperationA[CryptoCurrency]
 
-  case class Delete(cc: CrytoCurrency) extends CrudOperationA[UUID]
+  case class Delete(cc: CryptoCurrency) extends CrudOperationA[UUID]
 
 
   // 2. Free the ADT
   type CrudOperation[A] = Free[CrudOperationA, A] // give monadic feature to the ADT
 
   // 3. Smart constructors
-  def create(cc: CrytoCurrency): CrudOperation[String] = liftF(Create(cc))
+  def create(cc: CryptoCurrency): CrudOperation[String] = liftF(Create(cc))
 
-  def read(name: String): CrudOperation[CrytoCurrency] = liftF(Read(name))
+  def read(name: String): CrudOperation[CryptoCurrency] = liftF(Read(name))
 
-  def update(cc: CrytoCurrency): CrudOperation[CrytoCurrency] = liftF(Update(cc))
+  def update(cc: CryptoCurrency): CrudOperation[CryptoCurrency] = liftF(Update(cc))
 
-  def delete(cc: CrytoCurrency): CrudOperation[UUID] = liftF(Delete(cc))
+  def delete(cc: CryptoCurrency): CrudOperation[UUID] = liftF(Delete(cc))
 
 
   // 4. Build a program made of a sequence of operations
 
-  def myAwesomeProgram(name: String, price: BigDecimal): CrudOperation[CrytoCurrency] = for {
+  def myAwesomeProgram(name: String, price: BigDecimal): CrudOperation[CryptoCurrency] = for {
     cc <- read(name)
     nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
     ccLite <- read(nameLite)
@@ -118,7 +118,7 @@ object freecats {
 
   // H E L P E R
   def buildCryptoCurrency(name: String) =
-    CrytoCurrency(buildUuid, name, BigDecimal(4933580502.0), BigDecimal(0.075038), 3.94)
+    CryptoCurrency(buildUuid, name, BigDecimal(4933580502.0), BigDecimal(0.075038), 3.94)
 }
 
 object MainCats extends App {

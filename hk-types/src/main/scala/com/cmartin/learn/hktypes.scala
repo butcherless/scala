@@ -82,52 +82,52 @@ case class ValidationError(message: String)
 // S E R V I C E   D E F I N I T I O N
 
 trait CoinMarketService[C[_]] {
-  def create(cc: CrytoCurrency): C[CrytoCurrency]
+  def create(cc: CryptoCurrency): C[CryptoCurrency]
 
-  def update(cc: CrytoCurrency): C[CrytoCurrency]
+  def update(cc: CryptoCurrency): C[CryptoCurrency]
 
-  def delete(cc: CrytoCurrency): C[UUID]
+  def delete(cc: CryptoCurrency): C[UUID]
 
-  def readById(id: UUID): C[CrytoCurrency]
+  def readById(id: UUID): C[CryptoCurrency]
 
-  def readByName(name: String): C[CrytoCurrency]
+  def readByName(name: String): C[CryptoCurrency]
 
-  def readAll(): C[List[CrytoCurrency]]
+  def readAll(): C[List[CryptoCurrency]]
 }
 
 
 // S E R V I C E   I M P L E M E N T A T I O N S
 
 class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Option] {
-  override def create(cc: CrytoCurrency): Option[CrytoCurrency] = Factory.newOptionCrytoCurrency(cc.name, cc.marketCap, cc.price)
+  override def create(cc: CryptoCurrency): Option[CryptoCurrency] = Factory.newOptionCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
-  override def update(cc: CrytoCurrency): Option[CrytoCurrency] = ???
+  override def update(cc: CryptoCurrency): Option[CryptoCurrency] = ???
 
-  override def delete(cc: CrytoCurrency): Option[UUID] = ???
+  override def delete(cc: CryptoCurrency): Option[UUID] = ???
 
-  override def readById(id: UUID): Option[CrytoCurrency] = ???
+  override def readById(id: UUID): Option[CryptoCurrency] = ???
 
-  override def readByName(name: String): Option[CrytoCurrency] = repo.getByName(name)
+  override def readByName(name: String): Option[CryptoCurrency] = repo.getByName(name)
 
-  override def readAll(): Option[List[CrytoCurrency]] = ???
+  override def readAll(): Option[List[CryptoCurrency]] = ???
 }
 
 case class ServiceException(message: String) extends RuntimeException(message)
 
 
 class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Try] {
-  override def create(cc: CrytoCurrency): Try[CrytoCurrency] = Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)
+  override def create(cc: CryptoCurrency): Try[CryptoCurrency] = Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
-  override def update(cc: CrytoCurrency): Try[CrytoCurrency] = ???
+  override def update(cc: CryptoCurrency): Try[CryptoCurrency] = ???
 
-  override def delete(cc: CrytoCurrency): Try[UUID] = ???
+  override def delete(cc: CryptoCurrency): Try[UUID] = ???
 
-  override def readById(id: UUID): Try[CrytoCurrency] = ???
+  override def readById(id: UUID): Try[CryptoCurrency] = ???
 
-  override def readByName(name: String): Try[CrytoCurrency] = repo.getByName(name) match {
+  override def readByName(name: String): Try[CryptoCurrency] = repo.getByName(name) match {
     case Some(cc) => Success(cc)
     case None => Failure(ServiceException(s"Currency not found [${name}]"))
   }
 
-  override def readAll(): Try[List[CrytoCurrency]] = ???
+  override def readAll(): Try[List[CryptoCurrency]] = ???
 }

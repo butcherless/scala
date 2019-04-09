@@ -18,10 +18,10 @@ class hktypesSpecs extends FeatureSpec with GivenWhenThen {
     scenario("create crypto coin success") {
 
       Given("coin market service and valid crypto currency")
-      val cc = CrytoCurrency(buildUuid, BITCOIN_NAME, BigDecimal(5000), BigDecimal(10))
+      val cc = CryptoCurrency(buildUuid, BITCOIN_NAME, BigDecimal(5000), BigDecimal(10))
 
       When("call create operation")
-      val result: Option[CrytoCurrency] = service.create(cc)
+      val result: Option[CryptoCurrency] = service.create(cc)
 
       Then("service returns a valid crypto currency")
       val currency = result.value
@@ -36,7 +36,7 @@ class hktypesSpecs extends FeatureSpec with GivenWhenThen {
     scenario("create crypto coin failure") {
 
       Given("coin market service and invalid crypto currency")
-      val cc = CrytoCurrency(buildUuid, "", BigDecimal(10), BigDecimal(10))
+      val cc = CryptoCurrency(buildUuid, "", BigDecimal(10), BigDecimal(10))
 
       When("call create operation")
       val result = service.create(cc)
