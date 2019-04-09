@@ -1,5 +1,7 @@
 package com.cmartin.learn
 
+import java.util.UUID
+
 import cats.free.Free
 import cats.free.Free.liftF
 import cats.{Id, ~>}
@@ -24,7 +26,7 @@ object freecats {
 
   case class Update(cc: CrytoCurrency) extends CrudOperationA[CrytoCurrency]
 
-  case class Delete() extends CrudOperationA[Unit]
+  case class Delete(cc: CrytoCurrency) extends CrudOperationA[UUID]
 
 
   // 2. Free the ADT
@@ -37,7 +39,7 @@ object freecats {
 
   def update(cc: CrytoCurrency): CrudOperation[CrytoCurrency] = liftF(Update(cc))
 
-  def delete(): CrudOperation[Unit] = liftF(Delete())
+  def delete(cc: CrytoCurrency): CrudOperation[UUID] = liftF(Delete(cc))
 
 
   // 4. Build a program made of a sequence of operations
@@ -46,8 +48,8 @@ object freecats {
     cc <- read(name)
     nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
     ccLite <- read(nameLite)
-    ccUpdated <- update(cc.copy(price = price))
-    _ <- delete()
+    _ <- update(cc.copy(id = cc.id, price = price))
+    _ <- delete(cc)
   } yield ccLite
 
 
@@ -65,8 +67,8 @@ object freecats {
         buildCryptoCurrency(name)
       case Update(cc) => println(s"update crypto currency Id: ${cc}")
         cc
-      case Delete() => println(s"delete Id: TODO")
-        ()
+      case Delete(cc) => println(s"delete crypto currency Id: ${cc.id}")
+        cc.id
     }
   }
 
@@ -76,10 +78,11 @@ object freecats {
         Some(cc.name)
       case Read(name) => println(s"read name Option: $name")
         Some(buildCryptoCurrency(name))
+      //None
       case Update(cc) => println(s"update crypto currency Option: ${cc}")
         Some(cc)
-      case Delete() => println(s"delete Option: TODO")
-        Some(())
+      case Delete(cc) => println(s"delete crypto currency Option: ${cc.id}")
+        Some(cc.id)
     }
   }
 
@@ -90,11 +93,12 @@ object freecats {
       case Create(cc) => println(s"create crypto currency Either: $cc")
         Right(cc.name)
       case Read(name) => println(s"read name Either: $name")
-        Right(buildCryptoCurrency(name))
+        //Right(buildCryptoCurrency(name))
+        Left(s"unable to find: $name")
       case Update(cc) => println(s"update crypto currency Either: ${cc}")
         Right(cc)
-      case Delete() => println(s"delete either: TODO")
-        Right(())
+      case Delete(cc) => println(s"delete crypto currency Either: ${cc.id}")
+        Right(cc.id)
     }
   }
 
@@ -106,8 +110,8 @@ object freecats {
         Future.successful(buildCryptoCurrency(name))
       case Update(cc) => println(s"update crypto currency Future: ${cc}")
         Future.successful(cc)
-      case Delete() => println(s"delete future: TODO")
-        Future.successful(())
+      case Delete(cc) => println(s"delete crypto currency Future: ${cc.id}")
+        Future.successful(cc.id)
     }
   }
 
@@ -128,16 +132,20 @@ object MainCats extends App {
 
   // 6. Run the program, fold the sentence list
   println("\nRunning Id[A] program interpreter")
-  val result = myAwesomeProgram("BitCoin", BigDecimal(0.077123)).foldMap(compiler)
+  val idResult = myAwesomeProgram("BitCoin", BigDecimal(0.077123)).foldMap(compiler)
+  println(s"Id Interpreter result: $idResult")
 
   println("\nRunning Option[A] program interpreter")
   val optionResult = myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(optionCompiler)
+  println(s"Option Interpreter result: $optionResult")
 
   println("\nRunning Either[String, A] program interpreter")
   val eitherResult = myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(eitherCompiler)
+  println(s"Either Interpreter result: $eitherResult")
 
   println("\nRunning Future[A] program interpreter")
   val futureResult = myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(futureCompiler)
 
   Await.result(futureResult, 250 millis)
+  println(s"Future Interpreter result: $futureResult")
 }
