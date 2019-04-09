@@ -9,6 +9,7 @@ lazy val scalaLoggingVersion = "3.9.2"
 lazy val scalazVersion = "7.2.27"
 lazy val scalatestVersion = "3.0.7"
 lazy val specs2Version = "4.5.1"
+lazy val uTestVersion = "0.6.7"
 
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
@@ -31,7 +32,7 @@ lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVer
 lazy val akkaTest     = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test
 lazy val scalaTest    = "org.scalatest" %% "scalatest" % scalatestVersion % Test
 lazy val specs2       = "org.specs2" %% "specs2-core" % specs2Version % Test
-lazy val uTest        = "com.lihaoyi" %% "utest" % "0.6.6" % Test
+lazy val uTest        = "com.lihaoyi" %% "utest" % uTestVersion % Test
 
 lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.2.5"
 
