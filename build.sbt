@@ -4,6 +4,7 @@ lazy val akkaHttpVersion = "10.1.8"
 lazy val akkaVersion = "2.5.22"
 lazy val catsVersion = "1.6.0"
 lazy val logbackVersion = "1.2.3"
+lazy val pegdownVersion = "1.6.0"
 lazy val refinedVersion = "0.9.4"
 lazy val scalaLoggingVersion = "3.9.2"
 lazy val scalazVersion = "7.2.27"
@@ -15,6 +16,11 @@ lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
   version := "1.0.0-SNAPSHOT",
   scalaVersion := "2.12.8"
+)
+
+lazy val basicScalacOptions = Seq(
+  "-encoding", "UTF-8",
+  "-language:postfixOps"
 )
 
 lazy val akkaActor    = "com.typesafe.akka" %% "akka-actor" % akkaVersion
@@ -30,11 +36,14 @@ lazy val scalaz       = "org.scalaz" %% "scalaz-core" % scalazVersion
 
 lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test
 lazy val akkaTest     = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test
+lazy val pegdown      = "org.pegdown" % "pegdown" % pegdownVersion % Test
 lazy val scalaTest    = "org.scalatest" %% "scalatest" % scalatestVersion % Test
 lazy val specs2       = "org.specs2" %% "specs2-core" % specs2Version % Test
 lazy val uTest        = "com.lihaoyi" %% "utest" % uTestVersion % Test
 
 lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.2.5"
+
+
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
@@ -59,7 +68,7 @@ lazy val hkTypes = (project in file("hk-types"))
     commonSettings,
     name := "hkTypes",
     libraryDependencies ++= Seq(cats, catsFree, scalaz, scalaTest),
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds", "-language:postfixOps")
+    scalacOptions ++= basicScalacOptions ++ Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds"),
   )
 
 lazy val typeclasses = (project in file("typeclasses"))

@@ -27,8 +27,12 @@ object functions {
     case Success(cc) => println(cc)
     case Failure(e) => println(e.getMessage)
   }
-}
 
+  // H E L P E R
+  def buildCryptoCurrency(name: String) =
+    CryptoCurrency(buildUuid, name, BigDecimal(4933580502.0), BigDecimal(0.075038), 3.94)
+
+}
 
 case class CryptoCurrency(id: UUID, name: String, marketCap: BigDecimal, price: BigDecimal, change: Double = 0.0)
 
