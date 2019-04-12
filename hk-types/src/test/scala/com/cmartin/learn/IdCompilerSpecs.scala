@@ -1,21 +1,36 @@
 package com.cmartin.learn
 
-import cats.{Id, ~>}
-import com.cmartin.learn.algebra.{CrudOperation, create, delete, read, update}
-import com.cmartin.learn.interpreter.compiler
-import org.scalatest.FlatSpec
+import java.util.UUID
 
-class IdCompilerSpecs extends FlatSpec {
+import cats.{Id, ~>}
+import com.cmartin.learn.algebra.{create, delete, read, update}
+import com.cmartin.learn.interpreter.compiler
+
+class IdCompilerSpecs extends AbstractCompilerSpecs {
 
   val idCompiler: algebra.CrudOperationA ~> Id = compiler
 
-  def program(name: String): CrudOperation[CryptoCurrency] = for {
-    cc <- read(name)
-  } yield cc
+  it should "create a CryptoCurrency" in {
+    val result: Id[String] = create(cryptoCurrency).map(c => c).foldMap(idCompiler)
 
-  it should "..." in {
-    val result: Id[CryptoCurrency] = read("BitCoin").map(x => x).foldMap(idCompiler)
+    result shouldBe currencyName
+  }
 
-    result
+  it should "read a CryptoCurrency" in {
+    val result: Id[CryptoCurrency] = read(currencyName).map(c => c).foldMap(idCompiler)
+
+    result.name shouldBe currencyName
+  }
+
+  it should "update a CryptoCurrency" in {
+    val result: Id[CryptoCurrency] = update(cryptoCurrency).map(c => c).foldMap(idCompiler)
+
+    result shouldBe cryptoCurrency
+  }
+
+  it should "delete a CryptoCurrency" in {
+    val result: Id[UUID] = delete(cryptoCurrency).map(c => c).foldMap(idCompiler)
+
+    result shouldBe cryptoCurrency.id
   }
 }

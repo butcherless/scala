@@ -41,6 +41,7 @@ package object interpreter {
     }
   }
 
+  //TODO rename
   type SingleEither[A] = Either[String, A]
 
   def eitherCompiler: CrudOperationA ~> SingleEither = new (CrudOperationA ~> SingleEither) {
@@ -48,8 +49,8 @@ package object interpreter {
       case Create(cc) => println(s"create crypto currency Either: $cc")
         Right(cc.name)
       case Read(name) => println(s"read name Either: $name")
-        //Right(buildCryptoCurrency(name))
-        Left(s"unable to find: $name")
+        Right(buildCryptoCurrency(name))
+        //Left(s"unable to find: $name")
       case Update(cc) => println(s"update crypto currency Either: ${cc}")
         Right(cc)
       case Delete(cc) => println(s"delete crypto currency Either: ${cc.id}")
