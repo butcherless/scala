@@ -4,11 +4,11 @@ import java.util.UUID
 
 import cats.{Id, ~>}
 import com.cmartin.learn.algebra.{create, delete, read, update}
-import com.cmartin.learn.interpreter.compiler
+import com.cmartin.learn.interpreter.idCompiler
 
 class IdCompilerSpecs extends AbstractCompilerSpecs {
 
-  val idCompiler: algebra.CrudOperationA ~> Id = compiler
+  val compiler: algebra.CrudOperationA ~> Id = idCompiler
 
   it should "create a CryptoCurrency" in {
     val result: Id[String] = create(cryptoCurrency).map(c => c).foldMap(idCompiler)

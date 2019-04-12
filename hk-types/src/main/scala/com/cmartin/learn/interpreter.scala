@@ -14,7 +14,7 @@ package object interpreter {
   //val compiler: CrudOperationA ~> Either = ???
   //val compiler: CrudOperationA ~> Future = ???
 
-  def compiler: CrudOperationA ~> Id = new (CrudOperationA ~> Id) {
+  def idCompiler: CrudOperationA ~> Id = new (CrudOperationA ~> Id) {
     def apply[A](fa: CrudOperationA[A]): Id[A] = fa match {
       case Create(cc) => println(s"create crypto currency Id: $cc")
         cc.name
@@ -50,7 +50,7 @@ package object interpreter {
         Right(cc.name)
       case Read(name) => println(s"read name Either: $name")
         Right(buildCryptoCurrency(name))
-        //Left(s"unable to find: $name")
+      //Left(s"unable to find: $name")
       case Update(cc) => println(s"update crypto currency Either: ${cc}")
         Right(cc)
       case Delete(cc) => println(s"delete crypto currency Either: ${cc.id}")

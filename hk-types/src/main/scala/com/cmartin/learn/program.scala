@@ -21,7 +21,7 @@ package object program {
     import cats.instances.either.catsStdInstancesForEither
     import cats.instances.future.catsStdInstancesForFuture
     import cats.instances.option.catsStdInstancesForOption
-    import com.cmartin.learn.interpreter.{compiler, eitherCompiler, futureCompiler, optionCompiler}
+    import com.cmartin.learn.interpreter.{eitherCompiler, futureCompiler, idCompiler, optionCompiler}
 
     import scala.concurrent.Await
     import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,7 +30,7 @@ package object program {
 
     // 6. Run the program, fold the sentence list
     println("\nRunning Id[A] program interpreter")
-    val idResult = myAwesomeProgram("BitCoin", BigDecimal(0.077123)).foldMap(compiler)
+    val idResult = myAwesomeProgram("BitCoin", BigDecimal(0.077123)).foldMap(idCompiler)
     println(s"Id Interpreter result: $idResult")
 
     println("\nRunning Option[A] program interpreter")
