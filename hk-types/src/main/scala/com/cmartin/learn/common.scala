@@ -13,6 +13,8 @@ object constants {
   val notFoundUuid = buildUuid
   val foundUuid = buildUuid
   val notFoundName = "name-not-found"
+  val operationErrorMessage = "operation-error-message"
+
 }
 
 object functions {

@@ -50,14 +50,17 @@ package object interpreter {
   def eitherCompiler: CrudOperationA ~> SingleEither = new (CrudOperationA ~> SingleEither) {
     override def apply[A](fa: CrudOperationA[A]): Either[String, A] = fa match {
       case Create(cc) => println(s"create crypto currency Either: $cc")
-        Right(cc.name)
+        if (cc.id == constants.foundUuid) Left(constants.operationErrorMessage)
+        else Right(cc.name)
       case Read(name) => println(s"read name Either: $name")
-        Right(buildCryptoCurrency(name))
-      //Left(s"unable to find: $name")
+        if (name == constants.notFoundName) Left(constants.operationErrorMessage)
+        else Right(buildCryptoCurrency(name))
       case Update(cc) => println(s"update crypto currency Either: ${cc}")
-        Right(cc)
+        if (cc.id == constants.notFoundUuid) Left(constants.operationErrorMessage)
+        else Right(cc)
       case Delete(cc) => println(s"delete crypto currency Either: ${cc.id}")
-        Right(cc.id)
+        if (cc.id == constants.notFoundUuid) Left(constants.operationErrorMessage)
+        else Right(cc.id)
     }
   }
 
