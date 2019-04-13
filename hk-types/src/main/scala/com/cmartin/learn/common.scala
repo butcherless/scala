@@ -9,6 +9,12 @@ import scalaz.{NonEmptyList, ValidationNel}
 
 import scala.util.{Failure, Success, Try}
 
+object constants {
+  val notFoundUuid = buildUuid
+  val foundUuid = buildUuid
+  val notFoundName = "name-not-found"
+}
+
 object functions {
   def ZERO = BigDecimal(0)
 

@@ -30,14 +30,17 @@ package object interpreter {
   def optionCompiler: CrudOperationA ~> Option = new (CrudOperationA ~> Option) {
     override def apply[A](fa: CrudOperationA[A]): Option[A] = fa match {
       case Create(cc) => println(s"create crypto currency Option: $cc")
-        Some(cc.name)
+        if (cc.id == constants.foundUuid) None
+        else Some(cc.name)
       case Read(name) => println(s"read name Option: $name")
-        Some(buildCryptoCurrency(name))
-      //None
+        if (name == constants.notFoundName) None
+        else Some(buildCryptoCurrency(name))
       case Update(cc) => println(s"update crypto currency Option: ${cc}")
-        Some(cc)
+        if (cc.id == constants.notFoundUuid) None
+        else Some(cc)
       case Delete(cc) => println(s"delete crypto currency Option: ${cc.id}")
-        Some(cc.id)
+        if (cc.id == constants.notFoundUuid) None
+        else Some(cc.id)
     }
   }
 
