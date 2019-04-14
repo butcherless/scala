@@ -67,13 +67,17 @@ package object interpreter {
   def futureCompiler: CrudOperationA ~> Future = new (CrudOperationA ~> Future) {
     override def apply[A](fa: CrudOperationA[A]): Future[A] = fa match {
       case Create(cc) => println(s"create crypto currency Future: ${cc}")
-        Future.successful(cc.name)
+        if (cc.id == constants.foundUuid) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        else Future.successful(cc.name)
       case Read(name) => println(s"read name Future: $name")
-        Future.successful(buildCryptoCurrency(name))
+        if ((name == constants.notFoundName)) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        else Future.successful(buildCryptoCurrency(name))
       case Update(cc) => println(s"update crypto currency Future: ${cc}")
-        Future.successful(cc)
+        if (cc.id == constants.notFoundUuid) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        else Future.successful(cc)
       case Delete(cc) => println(s"delete crypto currency Future: ${cc.id}")
-        Future.successful(cc.id)
+        if (cc.id == constants.notFoundUuid) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        else Future.successful(cc.id)
     }
   }
 
