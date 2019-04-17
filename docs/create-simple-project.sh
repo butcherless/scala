@@ -20,6 +20,18 @@ echo 'name := "project-template"
 version := "1.0.0-SNAPSHOT"
 scalaVersion := "'${SCALA_VER}'"
 
+scalacOptions ++= Seq( // some of the Rob Norris tpolecat options
+    "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
+    "-encoding", "utf-8",                // Specify character encoding used by source files.
+    "-explaintypes",                     // Explain type errors in more detail.
+    "-explaintypes",                     // Explain type errors in more detail.
+    "-unchecked",                        // Enable additional warnings where generated code depends on assumptions.
+    "-feature",                          // Emit warning and location for usages of features that should be imported explicitly.
+    "-language:higherKinds",             // Allow higher-kinded types
+    "-language:implicitConversions",
+    "-language:postfixOps"
+  )
+
 libraryDependencies += "org.scalatest" %% "scalatest" % "'${SCALATEST_VER}'" % "test"' > build.sbt
 
 # create common package
