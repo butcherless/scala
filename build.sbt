@@ -53,7 +53,7 @@ lazy val fpInScala = (project in file("fp-in-scala"))
   )
 
 val fpInScalaDeps = Seq(
-  zinc, scalaz, cats, specs2
+  zinc, scalaz, cats, scalaTest, specs2
 )
 
 lazy val depAnalyzer = (project in file("dep-analyzer"))
