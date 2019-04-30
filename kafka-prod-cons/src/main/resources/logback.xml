@@ -1,0 +1,16 @@
+<configuration>
+    <logger name="org.apache.kafka" level="INFO"/>
+    <logger name="com.cmartin.learn" level="INFO"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <root level="ERROR">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
