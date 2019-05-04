@@ -20,7 +20,7 @@ echo 'name := "project-template"
 version := "1.0.0-SNAPSHOT"
 scalaVersion := "'${SCALA_VER}'"
 
-scalacOptions ++= Seq( // some of the Rob Norris tpolecat options
+scalacOptions ++= Seq(                   // some of the Rob Norris tpolecat options
     "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
     "-encoding", "utf-8",                // Specify character encoding used by source files.
     "-explaintypes",                     // Explain type errors in more detail.
@@ -64,4 +64,4 @@ class SimpleAppSpec extends FlatSpec with Matchers {
   }
 }' > src/test/scala/${PKG_DIR}/SimpleAppSpec.scala
 
-sbt -batch clean test run
+sbt -batch clean coverage test coverageReport run
