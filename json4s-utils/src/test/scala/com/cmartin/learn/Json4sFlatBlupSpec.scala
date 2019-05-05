@@ -1,0 +1,197 @@
+package com.cmartin.learn
+
+import com.cmartin.learn.utils.StringExtensions.StringExtensionsOps
+import org.json4s.JsonAST.JNothing
+import org.json4s.native.JsonMethods
+import org.json4s.{DefaultFormats, Diff}
+import org.scalatest.OptionValues._
+import org.scalatest.{FlatSpec, Matchers}
+
+class Json4sFlatBlupSpec extends FlatSpec with Matchers {
+
+  val nestedJson: String =
+    """
+      |{
+      |  "k1": "value-1",
+      |  "k2": {
+      |    "k21": 2.0,
+      |    "k22" : 3
+      |  },
+      |  "k3": null,
+      |  "k4": {
+      |    "k41": {
+      |      "k411": "value-5",
+      |      "k412": true
+      |    },
+      |    "k42": "value-6",
+      |    "k43": [1,2,3],
+      |    "k44": []
+      |  }
+      |}
+    """.stripMargin.removeSpaces
+
+  val flattenedJson: String =
+    """
+      |{
+      |  "k1": "value-1",
+      |  "k2.k21": 2.0,
+      |  "k2.k22": 3,
+      |  "k3": null,
+      |  "k4.k41.k411": "value-5",
+      |  "k4.k41.k412": true,
+      |  "k4.k42": "value-6"
+      |  "k4.k43.[0]": 1
+      |  "k4.k43.[1]": 2
+      |  "k4.k43.[2]": 3
+      |  "k4.k44": []
+      |}
+    """.stripMargin.removeSpaces
+
+  val nestedArrayJson: String =
+    """
+      |[
+      |{
+      |  "k1": "value-1",
+      |  "k2": {
+      |    "k21": 2.0,
+      |    "k22" : 3
+      |  },
+      |  "k3": null
+      |},
+      |{
+      |  "k4": {
+      |    "k41": {
+      |      "k411": "value-5",
+      |      "k412": true
+      |    }
+      |  }
+      |}
+      |]
+    """.stripMargin.removeSpaces
+
+  val flattenedArrayJson: String =
+    """
+      |{
+      |"[0].k1": "value-1",
+      |"[0].k2.k21": 2.0,
+      |"[0].k2.k22": 3,
+      |"[0].k3": null,
+      |"[1].k4.k41.k411": "value-5",
+      |"[1].k4.k41.k412": true
+      |}
+    """.stripMargin.removeSpaces
+
+
+  val invalidNestedJson: String =
+    """
+      |{
+      |  "k1": "value-1",
+      |  "k2": {
+      |    "k21": 9.99,
+      |    "k22" : 9
+      |  },
+      |  "k3": null,
+      |  "k4": {
+      |    "k41": {
+      |      "k411": INVALID,
+      |      "k412": true
+      |    },
+      |    "k42": "value-6"
+      |  }
+      |}
+    """.stripMargin.removeSpaces
+
+  val invalidFlattenedJson: String =
+    """
+      |{
+      |  "k1": "value-1",
+      |  "k2.k21": 2.0,
+      |  "k2.k22": 3,
+      |  "k3": null,
+      |  "k4.k41.k411": "value-5",
+      |  "k4.k41.k412": true,
+      |  "k4.k42": "value-6
+      |}
+    """.stripMargin.removeSpaces
+
+
+  behavior of "Json4sFlatBlup"
+
+  implicit val formats: DefaultFormats = org.json4s.DefaultFormats
+
+
+  /*
+     for {
+      parsed <- JsonMethods.parseOpt(blowup)
+      flattened <- Option(
+        Extraction
+          .flatten(parsed)
+          .map(tuple => (tuple._1.tail, tuple._2))
+      )
+      result <- {
+        val r = Serialization.write(flattened)
+        Option(r)
+      }
+    } yield result
+   */
+
+
+  /*
+     F L A T T E N
+   */
+
+  it should "flatten json keys in a Json Object" in {
+
+    val result = Json4sFlatBlup.flatten(nestedJson).value
+
+    val resultAst = JsonMethods.parse(result)
+    val expectedAst = JsonMethods.parse(flattenedJson)
+
+    resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)
+  }
+
+  it should "get a None value for an invalid nested json" in {
+    val result = Json4sFlatBlup.flatten(invalidNestedJson)
+
+    result shouldBe None
+  }
+
+  it should "flatten json keys in a Json Array" in {
+    val result = Json4sFlatBlup.flatten(nestedArrayJson).value
+
+    result shouldBe flattenedArrayJson
+  }
+
+
+  /*
+     B L O W U P
+   */
+
+  ignore should "blow up json keys in a flattened Json Object" in {
+
+    val result = Json4sFlatBlup.blowup(flattenedJson).value
+
+    /* el orden de los elementos del json no está garantizado
+       por lo que hay que comparar via AST
+     */
+    val resultAst = JsonMethods.parse(result)
+    val expectedAst = JsonMethods.parse(nestedJson)
+
+    resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)
+  }
+
+  ignore should "get a None value for an invalid flattened json" in {
+    val result = Json4sFlatBlup.blowup(invalidFlattenedJson)
+
+    result shouldBe None
+  }
+
+
+  ignore should "blow up nested keys in a Json array" in {
+
+    val result = Json4sFlatBlup.blowup(flattenedArrayJson)
+
+    result shouldBe nestedArrayJson
+  }
+
+}

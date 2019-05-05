@@ -4,6 +4,7 @@ lazy val akkaHttpVersion     = "10.1.8"
 lazy val akkaVersion         = "2.5.22"
 lazy val catsVersion         = "1.6.0"
 lazy val configVersion       = "1.3.4"
+lazy val json4sVersion       = "3.6.5"
 lazy val kafkaClientVersion  = "2.2.0"
 lazy val logbackVersion      = "1.2.3"
 lazy val pegdownVersion      = "1.6.0"
@@ -35,7 +36,9 @@ lazy val akkaStream   = "com.typesafe.akka" %% "akka-stream" % akkaVersion
 lazy val cats         = "org.typelevel" %% "cats-core" % catsVersion
 lazy val catsFree     = "org.typelevel" %% "cats-free" % catsVersion
 lazy val config       = "com.typesafe" % "config" % configVersion
-lazy val kafkaClient  = "org.apache.kafka" % "kafka-clients" % kafkaClientVersion
+lazy val json4s       = "org.json4s" %% "json4s-native" % json4sVersion
+//lazy val kafkaClient  = "org.apache.kafka" % "kafka-clients" % kafkaClientVersion
+lazy val kafkaClient  = "org.apache.kafka" % "kafka-clients" % "2.2.0"
 lazy val logback      = "ch.qos.logback" % "logback-classic" % logbackVersion
 lazy val refined      = "eu.timepit" %% "refined" % refinedVersion
 lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
@@ -152,6 +155,11 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
     libraryDependencies ++= Seq(config, kafkaClient, logback, scalaLogging, scalaTest)
   )
 
+lazy val json4sUtils = (project in file("json4s-utils"))
+  .settings(commonSettings,
+    name := "json4s-utils",
+    libraryDependencies ++= Seq(json4s, logback, scalaLogging, scalaTest)
+  )
 
 // console research
 // libraryDependencies += "com.typesafe.play" % "play-json_2.12" % "2.6.10"
