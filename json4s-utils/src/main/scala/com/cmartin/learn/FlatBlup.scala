@@ -12,10 +12,12 @@ trait FlatBlup[I, O] {
   /** Convierte el Path contenido en el tipo de entrada en una clave compuesta
     * en el tipo de salida.
     *
-    * @param blowup tipo de entrada con el `Path``
+    * @param blownUp tipo de entrada con el `Path``
     *               @return tipo de salida con la `Key` compuesta
-    **/
-  def flatten(blowup: I): O
+    * */
+  def flatten(blownUp: I): O
+
+  def flattenToMap(blownUp: I): Option[Map[String, _]]
 
   /** Convierte la `Key` compuesta en el tipo de entrada en un `Path` contenido
     * en el tipo de salida.

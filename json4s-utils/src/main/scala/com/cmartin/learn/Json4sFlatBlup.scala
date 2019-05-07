@@ -79,6 +79,39 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
     } yield jsonString
   }
 
+  override def flattenToMap(blownUp: String): Option[Map[String, Any]] = {
+
+    def _flatten(json: JValue, path: String = ""): Map[String, Any] = {
+      def flattenArray(elems: List[JValue]): Map[String, Any] = {
+        elems.size match {
+          case 0 => Map(path -> Nil)
+          case _ => elems.zipWithIndex
+            .map { case (v, i) => _flatten(v, buildArrayPath(path, i)) }
+            .fold(Map[String, Any]())(_ ++ _)
+        }
+      }
+
+      json match {
+        case JObject(tuples) => tuples
+          .map { case (k, v) => _flatten(v, buildPath(path, k)) }
+          .fold(Map[String, Any]())(_ ++ _)
+
+        case JArray(elems) => flattenArray(elems)
+
+        case _ => Map(path -> json.extract[Any])
+      }
+
+    }
+
+    /*
+        flatten steps: {parse, flatten, serialize}
+     */
+    for {
+      json: JValue <- JsonMethods.parseOpt(blownUp)
+      flattened: Map[String, Any] <- Option(_flatten(json))
+    } yield flattened
+  }
+
   /*
   TODO
    */
@@ -125,4 +158,6 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
   }
 
   private val ArrayElem = """^\[(\d+)\]$""".r
+
+
 }

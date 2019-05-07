@@ -135,7 +135,19 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
     val expectedAst: JValue = JsonMethods.parse(flattenedJson)
 
     resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)
+
   }
+
+  it should "flatten json keys in a Json Object returning a Map" in {
+
+    val resultMap: Map[String, Any] = Json4sFlatBlup.flattenToMap(nestedJson).value
+
+    //    val resultAst: JValue = JsonMethods.parse(result)
+    val expectedMap: Map[String, Any] = JsonMethods.parse(flattenedJson).extract[Map[String, Any]]
+    //
+    resultMap shouldBe expectedMap
+  }
+
 
   it should "get a None value for an invalid nested json" in {
     val result: Option[String] = Json4sFlatBlup.flatten(invalidNestedJson)
