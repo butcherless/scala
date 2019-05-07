@@ -1,9 +1,9 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.utils.StringExtensions.StringExtensionsOps
+import com.cmartin.learn.StringExtensions.StringExtensionsOps
 import org.json4s.JsonAST.JNothing
 import org.json4s.native.JsonMethods
-import org.json4s.{DefaultFormats, Diff}
+import org.json4s.{DefaultFormats, Diff, JValue}
 import org.scalatest.OptionValues._
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -39,10 +39,10 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
       |  "k3": null,
       |  "k4.k41.k411": "value-5",
       |  "k4.k41.k412": true,
-      |  "k4.k42": "value-6"
-      |  "k4.k43.[0]": 1
-      |  "k4.k43.[1]": 2
-      |  "k4.k43.[2]": 3
+      |  "k4.k42": "value-6",
+      |  "k4.k43.[0]": 1,
+      |  "k4.k43.[1]": 2,
+      |  "k4.k43.[2]": 3,
       |  "k4.k44": []
       |}
     """.stripMargin.removeSpaces
@@ -110,7 +110,10 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
       |  "k3": null,
       |  "k4.k41.k411": "value-5",
       |  "k4.k41.k412": true,
-      |  "k4.k42": "value-6
+      |  "k4.k42": "value-6,
+      |  "k4.k43.[0]": 1,
+      |  "k4.k43.[1]": 2,
+      |  "k4.k43.[2]": 3
       |}
     """.stripMargin.removeSpaces
 
@@ -121,43 +124,27 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
 
 
   /*
-     for {
-      parsed <- JsonMethods.parseOpt(blowup)
-      flattened <- Option(
-        Extraction
-          .flatten(parsed)
-          .map(tuple => (tuple._1.tail, tuple._2))
-      )
-      result <- {
-        val r = Serialization.write(flattened)
-        Option(r)
-      }
-    } yield result
-   */
-
-
-  /*
      F L A T T E N
    */
 
   it should "flatten json keys in a Json Object" in {
 
-    val result = Json4sFlatBlup.flatten(nestedJson).value
+    val result: String = Json4sFlatBlup.flatten(nestedJson).value
 
-    val resultAst = JsonMethods.parse(result)
-    val expectedAst = JsonMethods.parse(flattenedJson)
+    val resultAst: JValue = JsonMethods.parse(result)
+    val expectedAst: JValue = JsonMethods.parse(flattenedJson)
 
     resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)
   }
 
   it should "get a None value for an invalid nested json" in {
-    val result = Json4sFlatBlup.flatten(invalidNestedJson)
+    val result: Option[String] = Json4sFlatBlup.flatten(invalidNestedJson)
 
     result shouldBe None
   }
 
   it should "flatten json keys in a Json Array" in {
-    val result = Json4sFlatBlup.flatten(nestedArrayJson).value
+    val result: String = Json4sFlatBlup.flatten(nestedArrayJson).value
 
     result shouldBe flattenedArrayJson
   }
@@ -167,29 +154,29 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
      B L O W U P
    */
 
-  ignore should "blow up json keys in a flattened Json Object" in {
 
-    val result = Json4sFlatBlup.blowup(flattenedJson).value
+  it should "blow up json keys in a flattened Json Object" in {
+
+    val result: String = Json4sFlatBlup.blowup(flattenedJson).value
 
     /* el orden de los elementos del json no está garantizado
        por lo que hay que comparar via AST
      */
-    val resultAst = JsonMethods.parse(result)
-    val expectedAst = JsonMethods.parse(nestedJson)
+    val resultAst: JValue = JsonMethods.parse(result)
+    val expectedAst: JValue = JsonMethods.parse(nestedJson)
 
     resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)
   }
 
-  ignore should "get a None value for an invalid flattened json" in {
-    val result = Json4sFlatBlup.blowup(invalidFlattenedJson)
+  it should "get a None value for an invalid flattened json" in {
+    val result: Option[String] = Json4sFlatBlup.blowup(invalidFlattenedJson)
 
     result shouldBe None
   }
 
-
   ignore should "blow up nested keys in a Json array" in {
 
-    val result = Json4sFlatBlup.blowup(flattenedArrayJson)
+    val result: String = Json4sFlatBlup.blowup(flattenedArrayJson).value
 
     result shouldBe nestedArrayJson
   }

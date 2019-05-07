@@ -45,7 +45,7 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
    */
 
 
-  override def flatten(blowup: String): Option[String] = {
+  override def flatten(blownUp: String): Option[String] = {
 
     def _flatten(json: JValue, path: String = ""): JValue = {
       def flattenArray(elems: List[JValue]): JValue = {
@@ -73,17 +73,45 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
         flatten steps: {parse, flatten, serialize}
      */
     for {
-      json: JValue <- JsonMethods.parseOpt(blowup)
+      json: JValue <- JsonMethods.parseOpt(blownUp)
       flattened: JValue <- _flatten(json).toOption
       jsonString: String <- Option(Serialization.write(flattened))
     } yield jsonString
   }
 
-
   /*
   TODO
    */
-  override def blowup(flatten: String): Option[String] = ???
+  override def blowup(flatten: String): Option[String] = {
+
+    def _blowup(json: JValue): JValue = {
+      def blowupElem(keys: Array[String] = Array(), value: JValue): JValue = {
+        if (keys.isEmpty) value
+        else keys.head match {
+          case ArrayElem(_) => //JArray(value :: Nil)
+            JArray(blowupElem(keys.tail, value) :: Nil)
+          case _ => JObject(keys.head -> blowupElem(keys.tail, value))
+        }
+      }
+
+      json match {
+        case JObject(tuples) => val r = tuples.sortWith(_._1 < _._1)
+          .map(tuple => blowupElem(tuple._1.split('.'), tuple._2))
+
+          r.fold(JNothing)(_ merge _)
+
+        //TODO case JArray
+        case _ => JNothing
+      }
+    }
+
+    for {
+      parsed: JValue <- JsonMethods.parseOpt(flatten)
+      blownUp: JValue <- _blowup(parsed).toOption
+      jsonString: String <- Option(Serialization.write(blownUp))
+    } yield jsonString
+
+  }
 
   private def buildPath(path: String, key: String): String =
     if (path.isEmpty) key else s"$path.$key"
@@ -95,4 +123,6 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
     val elem = s"[$index]"
     if (path.isEmpty) elem else s"$path.$elem"
   }
+
+  private val ArrayElem = """^\[(\d+)\]$""".r
 }

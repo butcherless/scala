@@ -1,4 +1,4 @@
-package com.cmartin.learn.utils
+package com.cmartin.learn
 
 /*
     String Refinements Type Class
@@ -19,7 +19,7 @@ object StringExtensions {
   }
 
   implicit val stringExt: StringExtensions[String] =
-    (s: String) => s.replaceAll("[\\n\\s]", "")
+    (s: String) => s.replaceAll("""[\n\s]""", "")
 
 }
 
