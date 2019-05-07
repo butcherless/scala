@@ -1,8 +1,8 @@
 package com.cmartin.learn
 
+import org.json4s.JValue
 import org.json4s.JsonAST.{JArray, JNothing, JObject}
 import org.json4s.native.{JsonMethods, Serialization}
-import org.json4s.{DefaultFormats, JValue}
 
 
 /** Implementación de la funcionalidad para el tipo
@@ -27,7 +27,6 @@ import org.json4s.{DefaultFormats, JValue}
   */
 object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
 
-  implicit val formats: DefaultFormats = org.json4s.DefaultFormats
   /*
       sealed abstract class JValue
       case object JNothing extends JValue // 'zero' for JValue
@@ -79,39 +78,6 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
     } yield jsonString
   }
 
-  override def flattenToMap(blownUp: String): Option[Map[String, Any]] = {
-
-    def _flatten(json: JValue, path: String = ""): Map[String, Any] = {
-      def flattenArray(elems: List[JValue]): Map[String, Any] = {
-        elems.size match {
-          case 0 => Map(path -> Nil)
-          case _ => elems.zipWithIndex
-            .map { case (v, i) => _flatten(v, buildArrayPath(path, i)) }
-            .fold(Map[String, Any]())(_ ++ _)
-        }
-      }
-
-      json match {
-        case JObject(tuples) => tuples
-          .map { case (k, v) => _flatten(v, buildPath(path, k)) }
-          .fold(Map[String, Any]())(_ ++ _)
-
-        case JArray(elems) => flattenArray(elems)
-
-        case _ => Map(path -> json.extract[Any])
-      }
-
-    }
-
-    /*
-        flatten steps: {parse, flatten, serialize}
-     */
-    for {
-      json: JValue <- JsonMethods.parseOpt(blownUp)
-      flattened: Map[String, Any] <- Option(_flatten(json))
-    } yield flattened
-  }
-
   /*
   TODO
    */
@@ -128,10 +94,9 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
       }
 
       json match {
-        case JObject(tuples) => val r = tuples.sortWith(_._1 < _._1)
+        case JObject(tuples) => tuples.sortWith(_._1 < _._1)
           .map(tuple => blowupElem(tuple._1.split('.'), tuple._2))
-
-          r.fold(JNothing)(_ merge _)
+          .fold(JNothing)(_ merge _)
 
         //TODO case JArray
         case _ => JNothing
@@ -145,19 +110,6 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
     } yield jsonString
 
   }
-
-  private def buildPath(path: String, key: String): String =
-    if (path.isEmpty) key else s"$path.$key"
-
-  /*
-    array size > 0
-   */
-  private def buildArrayPath(path: String, index: Int): String = {
-    val elem = s"[$index]"
-    if (path.isEmpty) elem else s"$path.$elem"
-  }
-
-  private val ArrayElem = """^\[(\d+)\]$""".r
 
 
 }
