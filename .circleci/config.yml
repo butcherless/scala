@@ -19,9 +19,9 @@ jobs:
 
       # compiler, test & run
       - run:
-          name: compile, test and run
+          name: compile, test and assembly
           command: |
-                   cat /dev/null | sbt -mem 2048 ";clean ;coverage ;assembly ;coverageReport"
+                   sbt -mem 2048 release
                    bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
 
 
