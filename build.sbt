@@ -18,7 +18,8 @@ lazy val uTestVersion        = "0.6.7"
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
   version := "1.0.0-SNAPSHOT",
-  scalaVersion := "2.12.8"
+  scalaVersion := "2.12.8",
+  test in assembly := {}
 )
 
 lazy val basicScalacOptions = Seq(
