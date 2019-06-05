@@ -1,7 +1,7 @@
 package com.cmartin.learn
 
-import akka.actor.{ ActorSystem, Props }
-import com.cmartin.learn.actors.{ Consumer, Producer }
+import akka.actor.{ActorSystem, Props}
+import com.cmartin.learn.actors.{Consumer, Producer}
 
 import scala.concurrent.duration._
 

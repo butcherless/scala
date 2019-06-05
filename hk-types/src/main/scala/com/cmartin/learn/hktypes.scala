@@ -5,7 +5,7 @@ import java.util.UUID
 import com.cmartin.learn.functions._
 import com.cmartin.learn.types.MyMap
 
-import scala.util.{ Failure, Success, Try }
+import scala.util.{Failure, Success, Try}
 
 object main {
   //extends App {
@@ -23,7 +23,9 @@ object main {
   println(s"HktMap: $r3, ${r3(3)}")
 
   // option implementation
-  val optionService: CoinMarketService[Option] = new OptionCoinMarketService(new CrytoCurrencyRepository)
+  val optionService: CoinMarketService[Option] = new OptionCoinMarketService(
+    new CrytoCurrencyRepository
+  )
 
   val resultNone = optionService.readByName("Dummy")
   printOption(resultNone)
@@ -33,7 +35,7 @@ object main {
 
   // try implementation
   val tryService: CoinMarketService[Try] = new TryCoinMarketService(new CrytoCurrencyRepository)
-  val resultFailure = tryService.readByName("Dummy")
+  val resultFailure                      = tryService.readByName("Dummy")
   printTry(resultFailure)
 
   val resultSuccess = tryService.readByName(("TRON"))
@@ -52,7 +54,7 @@ trait Api[T[String]] {
 object ApiImpl extends Api[Option] {
   def read(n: Long): Option[String] = (n > 0) match {
     case true => Option(n.toString)
-    case _ => None
+    case _    => None
   }
 }
 
@@ -93,7 +95,8 @@ trait CoinMarketService[C[_]] {
 // S E R V I C E   I M P L E M E N T A T I O N S
 
 class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Option] {
-  override def create(cc: CryptoCurrency): Option[CryptoCurrency] = Factory.newOptionCrytoCurrency(cc.name, cc.marketCap, cc.price)
+  override def create(cc: CryptoCurrency): Option[CryptoCurrency] =
+    Factory.newOptionCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
   override def update(cc: CryptoCurrency): Option[CryptoCurrency] = ???
 
@@ -109,7 +112,8 @@ class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketS
 case class ServiceException(message: String) extends RuntimeException(message)
 
 class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Try] {
-  override def create(cc: CryptoCurrency): Try[CryptoCurrency] = Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)
+  override def create(cc: CryptoCurrency): Try[CryptoCurrency] =
+    Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
   override def update(cc: CryptoCurrency): Try[CryptoCurrency] = ???
 
@@ -119,7 +123,7 @@ class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketServ
 
   override def readByName(name: String): Try[CryptoCurrency] = repo.getByName(name) match {
     case Some(cc) => Success(cc)
-    case None => Failure(ServiceException(s"Currency not found [${name}]"))
+    case None     => Failure(ServiceException(s"Currency not found [${name}]"))
   }
 
   override def readAll(): Try[List[CryptoCurrency]] = ???

@@ -2,16 +2,16 @@ package com.cmartin
 
 import java.time.LocalDate
 
-import com.cmartin.data.{ Aircraft, AircraftRepository }
+import com.cmartin.data.{Aircraft, AircraftRepository}
 import org.scalatest.OptionValues._
 import org.scalatest.TryValues._
-import org.scalatest.{ BeforeAndAfter, FlatSpec, Matchers }
+import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
 class AircraftRepositorySpec extends FlatSpec with Matchers with BeforeAndAfter {
 
-  private val AIRCRAFT_ID = "EC-MXV"
+  private val AIRCRAFT_ID        = "EC-MXV"
   private val AIR_EUROPA_AIRLINE = "Air Europa"
-  private val IBERIA_AIRLINE = "Iberia"
+  private val IBERIA_AIRLINE     = "Iberia"
 
   val repo = new AircraftRepository()
 
@@ -87,7 +87,8 @@ class AircraftRepositorySpec extends FlatSpec with Matchers with BeforeAndAfter 
 
   private def assertRepoCount(c: Int) = repo.count().get shouldBe c
 
-  private def buildAircraft(id: String, airline: String) = Aircraft(id, "A332", airline, "Sierra de Cazorla", LocalDate.now)
+  private def buildAircraft(id: String, airline: String) =
+    Aircraft(id, "A332", airline, "Sierra de Cazorla", LocalDate.now)
 
   private def buildAircraft(id: String): Aircraft = buildAircraft(id, IBERIA_AIRLINE)
 

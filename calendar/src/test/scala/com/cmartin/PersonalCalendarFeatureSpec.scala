@@ -4,8 +4,8 @@ import com.cmartin.PersonalCalendar._
 import org.scalatest._
 
 /**
- * Created by cmartin on 02/02/2017.
- */
+  * Created by cmartin on 02/02/2017.
+  */
 class PersonalCalendarFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
   info("As a PersonalCalendar class user")
 
@@ -57,7 +57,9 @@ class PersonalCalendarFeatureSpec extends FeatureSpec with GivenWhenThen with Ma
     Then("every day should be a work day")
     workableDays.forall(isWorkableDay(_)) should be(true)
 
-    Then("number of workable days should be greater or equals than number of work days due to number of absences")
+    Then(
+      "number of workable days should be greater or equals than number of work days due to number of absences"
+    )
     workableDays.size should be >= workDays.size
   }
 }

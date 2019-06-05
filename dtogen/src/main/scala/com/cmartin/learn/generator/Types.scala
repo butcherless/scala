@@ -9,4 +9,3 @@ case object BOOLEAN extends Types
 case object INTEGER extends Types
 
 case object STRING extends Types
-

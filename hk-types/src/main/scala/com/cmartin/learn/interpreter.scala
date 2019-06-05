@@ -1,7 +1,7 @@
 package com.cmartin.learn
 
-import cats.{ Id, ~> }
-import com.cmartin.learn.algebra.{ Create, CrudOperationA, Delete, Read, Update }
+import cats.{Id, ~>}
+import com.cmartin.learn.algebra.{Create, CrudOperationA, Delete, Read, Update}
 import com.cmartin.learn.functions.buildCryptoCurrency
 
 import scala.concurrent.Future
@@ -80,19 +80,23 @@ package object interpreter {
     override def apply[A](fa: CrudOperationA[A]): Future[A] = fa match {
       case Create(cc) =>
         println(s"create crypto currency Future: ${cc}")
-        if (cc.id == constants.foundUuid) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        if (cc.id == constants.foundUuid)
+          Future.failed(new RuntimeException(constants.operationErrorMessage))
         else Future.successful(cc.name)
       case Read(name) =>
         println(s"read name Future: $name")
-        if ((name == constants.notFoundName)) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        if ((name == constants.notFoundName))
+          Future.failed(new RuntimeException(constants.operationErrorMessage))
         else Future.successful(buildCryptoCurrency(name))
       case Update(cc) =>
         println(s"update crypto currency Future: ${cc}")
-        if (cc.id == constants.notFoundUuid) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        if (cc.id == constants.notFoundUuid)
+          Future.failed(new RuntimeException(constants.operationErrorMessage))
         else Future.successful(cc)
       case Delete(cc) =>
         println(s"delete crypto currency Future: ${cc.id}")
-        if (cc.id == constants.notFoundUuid) Future.failed(new RuntimeException(constants.operationErrorMessage))
+        if (cc.id == constants.notFoundUuid)
+          Future.failed(new RuntimeException(constants.operationErrorMessage))
         else Future.successful(cc.id)
     }
   }

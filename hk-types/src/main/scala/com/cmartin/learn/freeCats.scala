@@ -4,11 +4,11 @@ import java.util.UUID
 
 import cats.free.Free
 import cats.free.Free.liftF
-import cats.{ Id, ~> }
+import cats.{Id, ~>}
 import com.cmartin.learn.functions.buildUuid
 
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.{Await, Future}
 
 // https://typelevel.org/cats/datatypes/freemonad.html
 // https://blog.scalac.io/2016/06/02/overview-of-free-monad-in-cats.html
@@ -42,13 +42,14 @@ object freecats {
 
   // 4. Build a program made of a sequence of operations
 
-  def myAwesomeProgram(name: String, price: BigDecimal): CrudOperation[CryptoCurrency] = for {
-    cc <- read(name)
-    nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
-    ccLite <- read(nameLite)
-    _ <- update(cc.copy(id = cc.id, price = price))
-    _ <- delete(cc)
-  } yield ccLite
+  def myAwesomeProgram(name: String, price: BigDecimal): CrudOperation[CryptoCurrency] =
+    for {
+      cc       <- read(name)
+      nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
+      ccLite   <- read(nameLite)
+      _        <- update(cc.copy(id = cc.id, price = price))
+      _        <- delete(cc)
+    } yield ccLite
 
   // 5. Build the program compiler
   //val compiler: CrudOperationA ~> Id = ???
@@ -138,7 +139,13 @@ object MainCats extends App {
   import cats.instances.either.catsStdInstancesForEither
   import cats.instances.future.catsStdInstancesForFuture
   import cats.instances.option.catsStdInstancesForOption
-  import com.cmartin.learn.freecats.{ compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler }
+  import com.cmartin.learn.freecats.{
+    compiler,
+    eitherCompiler,
+    futureCompiler,
+    myAwesomeProgram,
+    optionCompiler
+  }
 
   import scala.concurrent.ExecutionContext.Implicits.global
 

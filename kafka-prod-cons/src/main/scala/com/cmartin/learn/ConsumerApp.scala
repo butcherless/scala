@@ -11,7 +11,7 @@ object UuidConsumer extends SimpleConsumer
 
 object ConsumerApp extends App {
 
-  val logger = Logger[ConsumerApp.type]
+  val logger    = Logger[ConsumerApp.type]
   val loopCount = 10
 
   UuidConsumer.consumer.subscribe(util.Collections.singletonList(UuidConsumer.kafkaTopic))

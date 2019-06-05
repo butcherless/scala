@@ -12,7 +12,7 @@ trait DtoGenerator[P[_]] {
   def addGetter(prop: Property): P[TypeRepresentation]
 
   def addToString(builder: ToStringBuilder): P[TypeRepresentation]
-  */
+ */
 }
 
 object TryDtoGenerator extends DtoGenerator[Try] {
@@ -26,7 +26,7 @@ object TryDtoGenerator extends DtoGenerator[Try] {
   override def addGetter(prop: Property) = ???
 
   override def addToString(builder: ToStringBuilder) = ???
-  */
+ */
 
 }
 
@@ -43,5 +43,5 @@ object OptionDtoGenerator extends DtoGenerator[Option] {
   override def addGetter(prop: Property) = ???
 
   override def addToString(builder: ToStringBuilder) = ???
-  */
+ */
 }

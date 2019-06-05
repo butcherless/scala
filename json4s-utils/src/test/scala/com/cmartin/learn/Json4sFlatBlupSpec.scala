@@ -3,9 +3,9 @@ package com.cmartin.learn
 import com.cmartin.learn.TestSamples._
 import org.json4s.JsonAST.JNothing
 import org.json4s.native.JsonMethods
-import org.json4s.{ DefaultFormats, Diff, JValue }
+import org.json4s.{DefaultFormats, Diff, JValue}
 import org.scalatest.OptionValues._
-import org.scalatest.{ FlatSpec, Matchers }
+import org.scalatest.{FlatSpec, Matchers}
 
 class Json4sFlatBlupSpec extends FlatSpec with Matchers {
 
@@ -21,7 +21,7 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
 
     val result: String = Json4sFlatBlup.flatten(nestedJson).value
 
-    val resultAst: JValue = JsonMethods.parse(result)
+    val resultAst: JValue   = JsonMethods.parse(result)
     val expectedAst: JValue = JsonMethods.parse(flattenedJson)
 
     resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)
@@ -51,7 +51,7 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
     /* el orden de los elementos del json no está garantizado
        por lo que hay que comparar via AST
      */
-    val resultAst: JValue = JsonMethods.parse(result)
+    val resultAst: JValue   = JsonMethods.parse(result)
     val expectedAst: JValue = JsonMethods.parse(nestedJson)
 
     resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)

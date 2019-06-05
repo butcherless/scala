@@ -5,14 +5,14 @@ import org.specs2.mutable.Specification
 
 class ServicesSpec extends Specification {
 
-  val RED = "red"
-  val LIGHT_RED = "light-red"
+  val RED           = "red"
+  val LIGHT_RED     = "light-red"
   val COLOR_CODE_OK = 4
   val COLOR_CODE_KO = 2
 
   "hash function should generate an Int between 1 and 10 for Color class" >> {
     val color = Color("red", 1)
-    val res = Services.calcHashId(color)
+    val res   = Services.calcHashId(color)
     res must beGreaterThanOrEqualTo(1) and beLessThanOrEqualTo(10)
   }
 

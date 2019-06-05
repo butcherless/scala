@@ -5,32 +5,38 @@ import java.util.UUID
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes._
-import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse }
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
 import akka.http.scaladsl.server.Directives
 import org.slf4j.LoggerFactory
-import spray.json.{ DefaultJsonProtocol, JsObject, JsString, JsValue, RootJsonFormat }
+import spray.json.{DefaultJsonProtocol, JsObject, JsString, JsValue, RootJsonFormat}
 
 import scala.util.Random
 
 package object route {
-  val HOST = "localhost"
-  val PORT = 8080
-  val HELLO_MESSAGE = "hello from akka http"
-  val BYE_MESSAGE = "bye from akka http"
-  val CURRENCY = "EUR"
+  val HOST           = "localhost"
+  val PORT           = 8080
+  val HELLO_MESSAGE  = "hello from akka http"
+  val BYE_MESSAGE    = "bye from akka http"
+  val CURRENCY       = "EUR"
   val SOURCE_ACCOUNT = "source"
   val TARGET_ACCOUNT = "target"
-  val ID_NAME = "id"
-  val AMOUNT_NAME = "amount"
+  val ID_NAME        = "id"
+  val AMOUNT_NAME    = "amount"
   val DATE_TIME_NAME = "dateTime"
-  val TEXT_NAME = "text"
+  val TEXT_NAME      = "text"
 
   val logger = LoggerFactory.getLogger("route")
 
   // domain model
   final case class Message(text: String, dateTime: LocalDateTime)
 
-  final case class Transfer(source: String, target: String, amount: BigDecimal, currency: String, id: String)
+  final case class Transfer(
+      source: String,
+      target: String,
+      amount: BigDecimal,
+      currency: String,
+      id: String
+  )
 
   // JSON Format, Marshaller & Unmarshaller
   trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
@@ -39,9 +45,11 @@ package object route {
     implicit object MessageJsonFormat extends RootJsonFormat[Message] {
       override def read(json: JsValue): Message = ???
 
-      override def write(message: Message) = JsObject(
-        "dateTime" -> JsString(message.dateTime.toString),
-        "text" -> JsString(message.text))
+      override def write(message: Message) =
+        JsObject(
+          "dateTime" -> JsString(message.dateTime.toString),
+          "text"     -> JsString(message.text)
+        )
     }
 
   }
@@ -49,8 +57,8 @@ package object route {
   // controller
 
   object ControllerPath {
-    val HELLO = "hello"
-    val BYE = "bye"
+    val HELLO    = "hello"
+    val BYE      = "bye"
     val TRANSFER = "transfer"
     val ID_REGEX = """[a-z0-9-]+""".r
   }
@@ -95,7 +103,7 @@ package object route {
               put {
                 entity(as[Transfer]) { t =>
                   logger.debug(s"put.in: $t")
-                  val r = new Random().nextDouble()
+                  val r       = new Random().nextDouble()
                   val updated = t.copy(amount = t.amount * r)
                   logger.debug(s"transfer.out: $updated")
 
@@ -126,6 +134,7 @@ package object route {
 
   def buildTransfer(): Transfer = buildTransfer(getId())
 
-  def buildTransfer(id: String): Transfer = Transfer(SOURCE_ACCOUNT, TARGET_ACCOUNT, BigDecimal.apply(100.0), CURRENCY, id)
+  def buildTransfer(id: String): Transfer =
+    Transfer(SOURCE_ACCOUNT, TARGET_ACCOUNT, BigDecimal.apply(100.0), CURRENCY, id)
 
 }

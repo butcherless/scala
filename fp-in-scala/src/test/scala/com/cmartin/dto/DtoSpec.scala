@@ -6,21 +6,21 @@ import org.specs2.mutable.Specification
 import scala.collection.immutable.HashSet
 
 class DtoSpec extends Specification {
-  val ID = 1234
+  val ID           = 1234
   val REGISTRATION = "EC-LXM"
-  val MODEL = "350-800"
+  val MODEL        = "350-800"
   val EMPTY_STRING = ""
 
   def plane2Tuple(p: Plane) = Plane.unapply(p).get
 
   "mandatory constructor arguments" >> {
-    val tuple = plane2Tuple(Plane(ID, REGISTRATION))
+    val tuple    = plane2Tuple(Plane(ID, REGISTRATION))
     val resTuple = (ID, REGISTRATION, EMPTY_STRING, EMPTY_STRING)
     resTuple must beEqualTo(tuple)
   }
 
   "named constructor arguments" >> {
-    val tuple = plane2Tuple(Plane(ID, REGISTRATION, model = MODEL))
+    val tuple    = plane2Tuple(Plane(ID, REGISTRATION, model = MODEL))
     val resTuple = (ID, REGISTRATION, EMPTY_STRING, MODEL)
     resTuple must beEqualTo(tuple)
   }
@@ -49,7 +49,7 @@ class DtoSpec extends Specification {
 
   "should be non empty collection" >> {
     val child = Child(ID, "child description")
-    val res = Parent(ID, "parent description", HashSet(child))
+    val res   = Parent(ID, "parent description", HashSet(child))
     res.id must beEqualTo(ID)
     res.desc.isEmpty must beFalse
     res.children.isEmpty must beFalse

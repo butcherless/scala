@@ -3,7 +3,7 @@ package com.cmartin.learn
 import com.cmartin.learn.generator._
 import com.typesafe.scalalogging.Logger
 
-import scala.util.{ Failure, Success }
+import scala.util.{Failure, Success}
 
 object MainApp extends App {
   val logger = Logger[App]
@@ -27,14 +27,10 @@ object MainApp extends App {
     .withPackage("name")
     .withStringBuilder(sb)
 
-  val dto = DTO("transfer")
-    .withSerializable
-    .withToString
+  val dto = DTO("transfer").withSerializable.withToString
     .withProperty(PROP("sender", STRING) isMandatory (true))
     .withProperty(PROP("receiver", STRING) isMandatory (true))
-    .withProperties(List(
-      PROP("amount", BIGDECIMAL),
-      PROP("currency", STRING)))
+    .withProperties(List(PROP("amount", BIGDECIMAL), PROP("currency", STRING)))
     .withGetters
     .build
 }

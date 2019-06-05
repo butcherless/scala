@@ -1,25 +1,31 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.algebra.{ CrudOperation, create, delete, read, update }
+import com.cmartin.learn.algebra.{CrudOperation, create, delete, read, update}
 
 package object program {
 
   // 4. Build a program made of a sequence of operations
 
-  def myAwesomeProgram(name: String, price: BigDecimal): CrudOperation[CryptoCurrency] = for {
-    cc <- read(name)
-    nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
-    ccLite <- read(nameLite)
-    _ <- update(cc.copy(id = cc.id, price = price))
-    _ <- delete(cc)
-  } yield ccLite
+  def myAwesomeProgram(name: String, price: BigDecimal): CrudOperation[CryptoCurrency] =
+    for {
+      cc       <- read(name)
+      nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
+      ccLite   <- read(nameLite)
+      _        <- update(cc.copy(id = cc.id, price = price))
+      _        <- delete(cc)
+    } yield ccLite
 
   object Application extends App {
 
     import cats.instances.either.catsStdInstancesForEither
     import cats.instances.future.catsStdInstancesForFuture
     import cats.instances.option.catsStdInstancesForOption
-    import com.cmartin.learn.interpreter.{ eitherCompiler, futureCompiler, idCompiler, optionCompiler }
+    import com.cmartin.learn.interpreter.{
+      eitherCompiler,
+      futureCompiler,
+      idCompiler,
+      optionCompiler
+    }
 
     import scala.concurrent.Await
     import scala.concurrent.ExecutionContext.Implicits.global

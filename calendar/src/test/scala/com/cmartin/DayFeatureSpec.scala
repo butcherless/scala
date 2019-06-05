@@ -7,11 +7,11 @@ import com.cmartin.model._
 import org.scalatest._
 
 /**
- * Created by cmartin on 02/02/2017.
- */
+  * Created by cmartin on 02/02/2017.
+  */
 class DayFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
   val weekenddate_2017_01_01 = LocalDate.ofYearDay(2017, 1)
-  val workdate_2017_01_02 = LocalDate.ofYearDay(2017, 2)
+  val workdate_2017_01_02    = LocalDate.ofYearDay(2017, 2)
 
   info("As a Day class user")
 
@@ -41,7 +41,14 @@ class DayFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
 
       Then("weekend day predicates validation should be Ok")
       val negativePredicates =
-        List(isAbsenceDay(_), isAnyHoliday(_), isCountryHoliday(_), isHoliday(_), isWorkDay(_), isWorkableDay(_))
+        List(
+          isAbsenceDay(_),
+          isAnyHoliday(_),
+          isCountryHoliday(_),
+          isHoliday(_),
+          isWorkDay(_),
+          isWorkableDay(_)
+        )
       negativePredicates.forall(_(weekendDay)) should be(false)
     }
 

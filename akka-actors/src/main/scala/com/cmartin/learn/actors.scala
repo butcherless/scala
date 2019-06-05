@@ -1,6 +1,6 @@
 package com.cmartin.learn
 
-import akka.actor.{ Actor, ActorLogging, ActorRef, PoisonPill }
+import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill}
 import com.cmartin.learn.actors.Consumer.Success
 
 package object actors {

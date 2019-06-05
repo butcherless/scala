@@ -1,13 +1,13 @@
 import MyLibrary._
 
 /**
- * Created by cmartin on 16/05/16.
- */
+  * Created by cmartin on 16/05/16.
+  */
 class MyLibrarySpec extends org.specs2.mutable.Specification {
 
-  val EMPTY_STRING = ""
-  val STRING_1 = "A"
-  val STRING_10 = "1234567890"
+  val EMPTY_STRING   = ""
+  val STRING_1       = "A"
+  val STRING_10      = "1234567890"
   val STRING_SAUDADE = "saudade"
 
   "intToString '0' specification" >> {
@@ -105,37 +105,37 @@ class MyLibrarySpec extends org.specs2.mutable.Specification {
   }
 
   "sum result for Nil List is zero" >> {
-    val l = Nil
+    val l      = Nil
     val result = sum(l)
     result must be equalTo (0)
   }
 
   "sum result for 1..5 List is 15" >> {
-    val l = List(1, 2, 3, 4, 5)
+    val l      = List(1, 2, 3, 4, 5)
     val result = sum(l)
     result must be equalTo (15)
   }
 
   "sumHOF result for Nil List is zero" >> {
-    val l = Nil
+    val l      = Nil
     val result = sumHOF(l)
     result must be equalTo (0)
   }
 
   "sumHOF result for 1..5 List is 15" >> {
-    val l = List(1, 2, 3, 4, 5)
+    val l      = List(1, 2, 3, 4, 5)
     val result = sumHOF(l)
     result must be equalTo (15)
   }
 
   "prodHOF result for 1..5 List is 120" >> {
-    val l = List(1, 2, 3, 4, 5)
+    val l      = List(1, 2, 3, 4, 5)
     val result = prodHOF(l)
     result must be equalTo (120)
   }
 
   "prodHOF result for 0..5 List is 0" >> {
-    val l = List(0, 1, 2, 3, 4, 5)
+    val l      = List(0, 1, 2, 3, 4, 5)
     val result = prodHOF(l)
     result must be equalTo (0)
   }

@@ -3,7 +3,7 @@ package com.cmartin.learn
 import com.cmartin.learn.TestSamples._
 import org.json4s.native.JsonMethods
 import org.scalatest.OptionValues._
-import org.scalatest.{ FlatSpec, Matchers }
+import org.scalatest.{FlatSpec, Matchers}
 
 class MapFlatBlupSpec extends FlatSpec with Matchers {
 
@@ -11,7 +11,7 @@ class MapFlatBlupSpec extends FlatSpec with Matchers {
 
   /*
     F L A T T E N
-  */
+   */
 
   it should "flatten json keys in a Json Object" in {
 

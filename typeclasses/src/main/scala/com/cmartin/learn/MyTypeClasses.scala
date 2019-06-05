@@ -5,9 +5,8 @@ import com.cmartin.learn.model.Person
 object MyTypeClasses {
 
   /**
-   * Created by cmartin on 26/12/2016.
-   */
-
+    * Created by cmartin on 26/12/2016.
+    */
   // Jsonable typeclass
 
   trait Jsonable[T] {

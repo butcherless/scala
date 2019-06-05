@@ -2,8 +2,8 @@ package com.cmartin.learn
 
 import java.util.UUID
 
-import cats.{ Id, ~> }
-import com.cmartin.learn.algebra.{ create, delete, read, update }
+import cats.{Id, ~>}
+import com.cmartin.learn.algebra.{create, delete, read, update}
 import com.cmartin.learn.interpreter.idCompiler
 
 class IdCompilerSpecs extends AbstractCompilerSpecs {

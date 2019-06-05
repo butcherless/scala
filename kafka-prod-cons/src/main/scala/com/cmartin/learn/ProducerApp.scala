@@ -14,7 +14,8 @@ object ProducerApp extends App {
     new ProducerRecord[String, String](
       UuidProducer.kafkaTopic,
       "myKey",
-      s"{message: $m, id: ${UUID.randomUUID()}}")
+      s"{message: $m, id: ${UUID.randomUUID()}}"
+    )
   }
 
   val messageCount = 100

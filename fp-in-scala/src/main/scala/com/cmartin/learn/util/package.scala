@@ -4,7 +4,10 @@ package object util {
 
   def copy(map: Map[String, Any]): Map[String, Any] = {
 
-    def go(map: Map[String, Any], res: Map[String, Any] = Map.empty[String, Any]): Map[String, Any] = {
+    def go(
+        map: Map[String, Any],
+        res: Map[String, Any] = Map.empty[String, Any]
+    ): Map[String, Any] = {
       if (map.isEmpty)
         res
       else {

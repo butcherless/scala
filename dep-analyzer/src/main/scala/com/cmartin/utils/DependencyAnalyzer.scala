@@ -2,7 +2,7 @@ package com.cmartin.utils
 
 object DependencyAnalyzer extends App {
 
-  import com.cmartin.utils.Logic.{ getDependency, mkString }
+  import com.cmartin.utils.Logic.{getDependency, mkString}
 
   import scala.io.Source
 

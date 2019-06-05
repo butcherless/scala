@@ -1,8 +1,6 @@
-
-
 /**
- * Created by cmartin on 14/05/16.
- */
+  * Created by cmartin on 14/05/16.
+  */
 object MyLibrary {
 
   def digitToString(d: Int): String = d match {
@@ -25,8 +23,8 @@ object MyLibrary {
         0 -> 0
       else {
         val result = go(s.tail)
-        val sum = charToDigit(s.head) * pow10(result._2) + result._1
-        val power = result._2 + 1
+        val sum    = charToDigit(s.head) * pow10(result._2) + result._1
+        val power  = result._2 + 1
 
         sum -> power
       }
@@ -49,7 +47,7 @@ object MyLibrary {
 
   def intToString(x: Int): String = {
     def extractDigits(x: Int): String = {
-      val quotient = x / 10
+      val quotient     = x / 10
       val moduleString = digitToString(x % 10)
       if (quotient == 0)
         moduleString
@@ -98,13 +96,13 @@ object MyLibrary {
 
   def sum(l: List[Int]): Int =
     l match {
-      case Nil => 0
+      case Nil    => 0
       case h :: s => h + sum(s)
     }
 
   def collapse[A](l: List[A])(zero: A, add: (A, A) => A): A =
     l match {
-      case Nil => zero
+      case Nil    => zero
       case x :: r => add(x, collapse(r)(zero, add))
     }
 
