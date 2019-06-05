@@ -9,34 +9,33 @@ case class Shape(id: Int, name: String, area: Double)
 
 case class Fruit(id: Int, name: String, color: Color)
 
-
 trait SimpleService[T] {
   /**
-    *
-    * @param h entity code
-    * @return
-    */
+   *
+   * @param h entity code
+   * @return
+   */
   def getByHash(h: Int): Option[T]
 }
 
 trait SimpleRepository[T] {
   /**
-    *
-    * @param id entity identifier
-    * @return
-    */
+   *
+   * @param id entity identifier
+   * @return
+   */
   def getById(id: Int): Option[T]
 
   /**
-    *
-    * @return
-    */
+   *
+   * @return
+   */
   def count(): Int
 
   /**
-    *
-    * @return
-    */
+   *
+   * @return
+   */
   def isEmpty(): Boolean
 }
 
@@ -66,39 +65,39 @@ class FruitServiceImpl(repo: SimpleRepository[Fruit]) extends SimpleService[Frui
 
 object Services {
   /**
-    *
-    * @param t color entity
-    * @return calculated code
-    */
+   *
+   * @param t color entity
+   * @return calculated code
+   */
   def calcHashId(t: Color): Int = math.abs(t.hashCode() % 10 + 1)
 
   /**
-    *
-    * @param i an integer
-    * @return integer double
-    */
+   *
+   * @param i an integer
+   * @return integer double
+   */
   def getEven(i: Int): Int = 2 * i
 
   /**
-    *
-    * @param i an integer
-    * @return an even from i
-    */
+   *
+   * @param i an integer
+   * @return an even from i
+   */
   def getOdd(i: Int): Int = getEven(i) - 1
 
   /**
-    *
-    * @param s a name
-    * @return
-    */
+   *
+   * @param s a name
+   * @return
+   */
   def nextFruitHash(s: String): Int = s.length - math.abs(s.hashCode) % 2
 
   /**
-    * generates sequence: 1, 4, 7, 10, 13
-    *
-    * @param i an integer
-    * @return
-    */
+   * generates sequence: 1, 4, 7, 10, 13
+   *
+   * @param i an integer
+   * @return
+   */
   def tripleMinusTwo(i: Int): Int = 3 * i - 2
 }
 

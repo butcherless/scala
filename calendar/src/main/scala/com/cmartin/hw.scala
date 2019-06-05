@@ -5,7 +5,6 @@ import java.time.LocalDate
 import scalaz.Scalaz._
 //import std.option._, std.list._ // functions and type class instances for Option and List
 
-
 object HelloWorld extends App {
 
   trait Monoid[A] {

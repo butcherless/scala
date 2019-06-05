@@ -3,10 +3,9 @@ package com.cmartin.learn
 import com.cmartin.learn.TestSamples._
 import org.json4s.native.JsonMethods
 import org.scalatest.OptionValues._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{ FlatSpec, Matchers }
 
 class MapFlatBlupSpec extends FlatSpec with Matchers {
-
 
   behavior of "MapFlatBlup"
 
@@ -34,7 +33,6 @@ class MapFlatBlupSpec extends FlatSpec with Matchers {
 
     resultMap shouldBe JsonMethods.parse(flattenedArrayJson).extract[Map[String, Any]]
   }
-
 
   /*
      B L O W U P

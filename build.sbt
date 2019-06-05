@@ -1,19 +1,17 @@
-scalaVersion := "2.12.8"
-
-lazy val akkaHttpVersion     = "10.1.8"
-lazy val akkaVersion         = "2.5.23"
-lazy val catsVersion         = "1.6.1"
-lazy val configVersion       = "1.3.4"
-lazy val json4sVersion       = "3.6.6"
-lazy val kafkaClientVersion  = "2.2.1"
-lazy val logbackVersion      = "1.2.3"
-lazy val pegdownVersion      = "1.6.0"
-lazy val refinedVersion      = "0.9.7"
+lazy val akkaHttpVersion = "10.1.8"
+lazy val akkaVersion = "2.5.23"
+lazy val catsVersion = "1.6.1"
+lazy val configVersion = "1.3.4"
+lazy val json4sVersion = "3.6.6"
+lazy val kafkaClientVersion = "2.2.1"
+lazy val logbackVersion = "1.2.3"
+lazy val pegdownVersion = "1.6.0"
+lazy val refinedVersion = "0.9.7"
 lazy val scalaLoggingVersion = "3.9.2"
-lazy val scalazVersion       = "7.2.27"
-lazy val scalatestVersion    = "3.0.7"
-lazy val specs2Version       = "4.5.1"
-lazy val uTestVersion        = "0.6.7"
+lazy val scalazVersion = "7.2.27"
+lazy val scalatestVersion = "3.0.7"
+lazy val specs2Version = "4.5.1"
+lazy val uTestVersion = "0.6.7"
 
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
@@ -26,34 +24,33 @@ lazy val basicScalacOptions = Seq(
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
-  "-language:postfixOps"
+  "-unchecked",
+  "-language:postfixOps",
+  "-language:higherKinds"
 )
 
 // production code
-lazy val akkaActor    = "com.typesafe.akka" %% "akka-actor" % akkaVersion
-lazy val akkaHttp     = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
-lazy val akkaJson     = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
-lazy val akkaStream   = "com.typesafe.akka" %% "akka-stream" % akkaVersion
-lazy val cats         = "org.typelevel" %% "cats-core" % catsVersion
-lazy val catsFree     = "org.typelevel" %% "cats-free" % catsVersion
-lazy val config       = "com.typesafe" % "config" % configVersion
-lazy val json4s       = "org.json4s" %% "json4s-native" % json4sVersion
-//lazy val kafkaClient  = "org.apache.kafka" % "kafka-clients" % kafkaClientVersion
-lazy val kafkaClient  = "org.apache.kafka" % "kafka-clients" % "2.2.0"
-lazy val logback      = "ch.qos.logback" % "logback-classic" % logbackVersion
-lazy val refined      = "eu.timepit" %% "refined" % refinedVersion
+lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
+lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
+lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
+lazy val cats = "org.typelevel" %% "cats-core" % catsVersion
+lazy val catsFree = "org.typelevel" %% "cats-free" % catsVersion
+lazy val config = "com.typesafe" % "config" % configVersion
+lazy val json4s = "org.json4s" %% "json4s-native" % json4sVersion
+lazy val kafkaClient = "org.apache.kafka" % "kafka-clients" % kafkaClientVersion
+lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
+lazy val refined = "eu.timepit" %% "refined" % refinedVersion
 lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
-lazy val scalaz       = "org.scalaz" %% "scalaz-core" % scalazVersion
+lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
 
 // testing code
 lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test
-lazy val akkaTest     = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test
-lazy val pegdown      = "org.pegdown" % "pegdown" % pegdownVersion % Test
-lazy val scalaTest    = "org.scalatest" %% "scalatest" % scalatestVersion % Test
-lazy val specs2       = "org.specs2" %% "specs2-core" % specs2Version % Test
-lazy val uTest        = "com.lihaoyi" %% "utest" % uTestVersion % Test
-
-lazy val zinc = "org.scala-sbt" % "zinc_2.12" % "1.3.0-M4"
+lazy val akkaTest = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test
+lazy val pegdown = "org.pegdown" % "pegdown" % pegdownVersion % Test
+lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % Test
+lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % Test
+lazy val uTest = "com.lihaoyi" %% "utest" % uTestVersion % Test
 
 
 lazy val fpInScala = (project in file("fp-in-scala"))
@@ -63,9 +60,7 @@ lazy val fpInScala = (project in file("fp-in-scala"))
     libraryDependencies ++= fpInScalaDeps
   )
 
-val fpInScalaDeps = Seq(
-  zinc, scalaz, cats, scalaTest, specs2
-)
+val fpInScalaDeps = Seq(scalaz, cats, scalaTest, specs2)
 
 lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
@@ -79,7 +74,7 @@ lazy val hkTypes = (project in file("hk-types"))
     commonSettings,
     name := "hkTypes",
     libraryDependencies ++= Seq(cats, catsFree, scalaz, scalaTest),
-    scalacOptions ++= basicScalacOptions ++ Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds"),
+    scalacOptions ++= basicScalacOptions
   )
 
 lazy val typeclasses = (project in file("typeclasses"))
@@ -91,7 +86,7 @@ lazy val typeclasses = (project in file("typeclasses"))
   )
 
 val typeclassesDeps = Seq(
-  zinc, scalaLogging, logback, uTest
+  scalaLogging, logback, uTest
 )
 
 lazy val dtogen = (project in file("dtogen"))
@@ -100,12 +95,10 @@ lazy val dtogen = (project in file("dtogen"))
     name := "dtogen",
     libraryDependencies ++= dtogenDeps,
     testFrameworks += new TestFramework("utest.runner.Framework"),
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
+    scalacOptions ++= basicScalacOptions
   )
 
-val dtogenDeps = Seq(
-  zinc, scalaLogging, logback, uTest
-)
+val dtogenDeps = Seq(scalaLogging, logback, uTest)
 
 lazy val scalazlearn = (project in file("scalaz"))
   .settings(
@@ -115,9 +108,7 @@ lazy val scalazlearn = (project in file("scalaz"))
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
-val scalazlearnDeps = Seq(
-  scalaz, uTest
-)
+val scalazlearnDeps = Seq(scalaz, uTest)
 
 lazy val akkaActors = (project in file("akka-actors"))
   .settings(commonSettings,
@@ -161,8 +152,3 @@ lazy val json4sUtils = (project in file("json4s-utils"))
     name := "json4s-utils",
     libraryDependencies ++= Seq(json4s, logback, scalaLogging, scalaTest)
   )
-
-// console research
-// libraryDependencies += "com.typesafe.play" % "play-json_2.12" % "2.6.10"
-// libraryDependencies += akkaHttp
-// libraryDependencies += akkaStream

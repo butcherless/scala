@@ -1,7 +1,6 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.algebra.{CrudOperation, create, delete, read, update}
-
+import com.cmartin.learn.algebra.{ CrudOperation, create, delete, read, update }
 
 package object program {
 
@@ -15,18 +14,16 @@ package object program {
     _ <- delete(cc)
   } yield ccLite
 
-
   object Application extends App {
 
     import cats.instances.either.catsStdInstancesForEither
     import cats.instances.future.catsStdInstancesForFuture
     import cats.instances.option.catsStdInstancesForOption
-    import com.cmartin.learn.interpreter.{eitherCompiler, futureCompiler, idCompiler, optionCompiler}
+    import com.cmartin.learn.interpreter.{ eitherCompiler, futureCompiler, idCompiler, optionCompiler }
 
     import scala.concurrent.Await
     import scala.concurrent.ExecutionContext.Implicits.global
     import scala.concurrent.duration._
-
 
     // 6. Run the program, fold the sentence list
     println("\nRunning Id[A] program interpreter")

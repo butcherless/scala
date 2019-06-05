@@ -1,8 +1,8 @@
 
 
 /**
-  * Created by cmartin on 14/05/16.
-  */
+ * Created by cmartin on 14/05/16.
+ */
 object MyLibrary {
 
   def digitToString(d: Int): String = d match {

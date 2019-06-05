@@ -6,7 +6,6 @@ package object learn {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
-
   def buildPath(path: String, key: String): String =
     if (path.isEmpty) key else s"$path.$key"
 

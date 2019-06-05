@@ -1,13 +1,13 @@
 package com.cmartin
 
-import java.time.{DayOfWeek, LocalDate, Year}
+import java.time.{ DayOfWeek, LocalDate, Year }
 
 import com.cmartin.model._
 
 /**
-  * Created by cmartin on 21/01/2017.
-  * read file: http://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples
-  */
+ * Created by cmartin on 21/01/2017.
+ * read file: http://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples
+ */
 trait PersonalCalendar {
 
   def dayCount: Int
@@ -82,7 +82,6 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
 
   def getWorkableDay = yearDays.filter(PersonalCalendar.isWorkableDay(_))
 
-
   require(_year >= 0, "the number must be non-negative")
 
   private val year = Year.of(_year)
@@ -108,13 +107,14 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
     val holidays = readHolidays()
     val absences = readAbsences()
 
-    for (i <- 1 to dayCount;
-         date = LocalDate.ofYearDay(2017, i);
-         day = getWeekendDay(date)
-           .orElse(getCountryHolidaysDay(date, countryHolidays))
-           .orElse(getHolidaysDay(date, holidays))
-           .orElse(getAbsenceDay(date, absences))
-           .orElse(getWorkDay(date))
+    for (
+      i <- 1 to dayCount;
+      date = LocalDate.ofYearDay(2017, i);
+      day = getWeekendDay(date)
+        .orElse(getCountryHolidaysDay(date, countryHolidays))
+        .orElse(getHolidaysDay(date, holidays))
+        .orElse(getAbsenceDay(date, absences))
+        .orElse(getWorkDay(date))
     ) yield day.get
   }
 
@@ -130,9 +130,9 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
     LocalDate.ofYearDay(_year, n)
   }
 
-
   private def buildCountryHolidays: IndexedSeq[LocalDate] = {
-    Vector(LocalDate.ofYearDay(2017, 9),
+    Vector(
+      LocalDate.ofYearDay(2017, 9),
       LocalDate.ofYearDay(2017, 13),
       LocalDate.ofYearDay(2017, 17),
       LocalDate.ofYearDay(2017, 19))
@@ -141,10 +141,10 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
   def buildCountryHolidayDate = {
     val countryHolidays = buildCountryHolidays
 
-    for (i <- 1 to dayCount;
-         d = LocalDate.ofYearDay(2017, i)
-         if (countryHolidays contains d))
-      yield HolidayDay(d)
+    for (
+      i <- 1 to dayCount;
+      d = LocalDate.ofYearDay(2017, i) if (countryHolidays contains d)
+    ) yield HolidayDay(d)
   }
 
   def getWeekendDay(date: LocalDate): Option[MyDay] = {

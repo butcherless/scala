@@ -1,10 +1,9 @@
 package com.cmartin.learn
 
-import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill}
+import akka.actor.{ Actor, ActorLogging, ActorRef, PoisonPill }
 import com.cmartin.learn.actors.Consumer.Success
 
 package object actors {
-
 
   class Producer extends Actor with ActorLogging {
     override def receive: Receive = {
@@ -13,7 +12,7 @@ package object actors {
       }
       case Consumer.Failure(e) => log.error(s"processing error: $e")
 
-      case Producer.Request(n) => 
+      case Producer.Request(n) =>
     }
 
     def requestSequence(consumer: ActorRef) = {

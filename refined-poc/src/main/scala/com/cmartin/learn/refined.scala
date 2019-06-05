@@ -2,10 +2,9 @@ package com.cmartin.learn
 
 import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.boolean.{And, Not, Or}
+import eu.timepit.refined.boolean.{ And, Not, Or }
 import eu.timepit.refined.numeric._
-import eu.timepit.refined.string.{MatchesRegex, ValidInt}
-
+import eu.timepit.refined.string.{ MatchesRegex, ValidInt }
 
 package object refined {
 

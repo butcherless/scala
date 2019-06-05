@@ -3,17 +3,15 @@ package com.cmartin.learn
 import com.cmartin.learn.TestSamples._
 import org.json4s.JsonAST.JNothing
 import org.json4s.native.JsonMethods
-import org.json4s.{DefaultFormats, Diff, JValue}
+import org.json4s.{ DefaultFormats, Diff, JValue }
 import org.scalatest.OptionValues._
-import org.scalatest.{FlatSpec, Matchers}
-
+import org.scalatest.{ FlatSpec, Matchers }
 
 class Json4sFlatBlupSpec extends FlatSpec with Matchers {
 
   behavior of "Json4sFlatBlup"
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
-
 
   /*
      F L A T T E N
@@ -30,7 +28,6 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
 
   }
 
-
   it should "get a None value for an invalid nested json" in {
     val result: Option[String] = Json4sFlatBlup.flatten(invalidNestedJson)
 
@@ -42,7 +39,6 @@ class Json4sFlatBlupSpec extends FlatSpec with Matchers {
 
     result shouldBe flattenedArrayJson
   }
-
 
   /*
      B L O W U P

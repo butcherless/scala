@@ -99,7 +99,6 @@ object TestSamples {
       |}
     """.stripMargin.removeSpaces
 
-
   val invalidNestedJson: String =
     """
       |{

@@ -4,7 +4,7 @@ import java.util.UUID
 
 import cats.instances.future.catsStdInstancesForFuture
 import cats.~>
-import com.cmartin.learn.algebra.{create, delete, read, update}
+import com.cmartin.learn.algebra.{ create, delete, read, update }
 import com.cmartin.learn.interpreter.futureCompiler
 import org.scalatest.concurrent.ScalaFutures
 
@@ -32,7 +32,6 @@ class FutureCompilerSpecs extends AbstractCompilerSpecs with ScalaFutures {
       e => e.getMessage shouldBe constants.operationErrorMessage
     }
   }
-
 
   it should "read a CryptoCurrency" in {
     val result: Future[CryptoCurrency] = read(currencyName).map(c => c).foldMap(futureCompiler)

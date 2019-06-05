@@ -20,7 +20,6 @@ package object algebra {
 
   case class Delete(cc: CryptoCurrency) extends CrudOperationA[UUID]
 
-
   // 2. Free the ADT
   type CrudOperation[A] = Free[CrudOperationA, A] // give monadic feature to the ADT
 

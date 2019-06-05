@@ -5,13 +5,12 @@ import java.util.UUID
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes._
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
+import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse }
 import akka.http.scaladsl.server.Directives
 import org.slf4j.LoggerFactory
-import spray.json.{DefaultJsonProtocol, JsObject, JsString, JsValue, RootJsonFormat}
+import spray.json.{ DefaultJsonProtocol, JsObject, JsString, JsValue, RootJsonFormat }
 
 import scala.util.Random
-
 
 package object route {
   val HOST = "localhost"
@@ -33,7 +32,6 @@ package object route {
 
   final case class Transfer(source: String, target: String, amount: BigDecimal, currency: String, id: String)
 
-
   // JSON Format, Marshaller & Unmarshaller
   trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
     implicit val transferFormat = jsonFormat5(Transfer)
@@ -43,8 +41,7 @@ package object route {
 
       override def write(message: Message) = JsObject(
         "dateTime" -> JsString(message.dateTime.toString),
-        "text" -> JsString(message.text)
-      )
+        "text" -> JsString(message.text))
     }
 
   }
@@ -130,6 +127,5 @@ package object route {
   def buildTransfer(): Transfer = buildTransfer(getId())
 
   def buildTransfer(id: String): Transfer = Transfer(SOURCE_ACCOUNT, TARGET_ACCOUNT, BigDecimal.apply(100.0), CURRENCY, id)
-
 
 }

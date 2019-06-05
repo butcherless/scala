@@ -3,10 +3,9 @@ package com.cmartin.learn
 package object model {
 
   /**
-    * Created by cmartin on 26/12/2016.
-    */
+   * Created by cmartin on 26/12/2016.
+   */
   case class Person(name: String, firstName: String, age: ObfuscatedInt, id: String, password: ObfuscatedString)
-
 
   case class ObfuscatedString(s: String) {
     override def toString(): String = ("*" * s.length).take(8)

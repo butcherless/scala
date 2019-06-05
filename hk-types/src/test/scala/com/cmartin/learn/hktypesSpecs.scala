@@ -4,7 +4,6 @@ import com.cmartin.learn.functions._
 import org.scalatest.OptionValues._
 import org.scalatest._
 
-
 class hktypesSpecs extends FeatureSpec with GivenWhenThen {
 
   val BITCOIN_NAME = "Bitcoin"
@@ -31,7 +30,6 @@ class hktypesSpecs extends FeatureSpec with GivenWhenThen {
       assert(currency.price == cc.price)
       assert(currency.change == cc.change)
     }
-
 
     scenario("create crypto coin failure") {
 

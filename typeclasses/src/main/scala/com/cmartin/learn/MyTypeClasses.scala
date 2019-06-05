@@ -2,12 +2,11 @@ package com.cmartin.learn
 
 import com.cmartin.learn.model.Person
 
-
 object MyTypeClasses {
 
   /**
-    * Created by cmartin on 26/12/2016.
-    */
+   * Created by cmartin on 26/12/2016.
+   */
 
   // Jsonable typeclass
 
@@ -31,7 +30,6 @@ object MyTypeClasses {
       }
     }
 
-
     implicit def doubleInstance = new Jsonable[Double] {
       override def serialize(x: Double): String = {
         "{ \"value\":" + x.toString + "}"
@@ -39,7 +37,6 @@ object MyTypeClasses {
     }
 
   }
-
 
   // Show typeclass
 

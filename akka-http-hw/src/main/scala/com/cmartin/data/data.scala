@@ -12,12 +12,12 @@ package object data {
   object Aircraft {
     implicit val ord = new Ordering[Aircraft] {
       /**
-        * Comparator for dependencies classes
-        *
-        * @param c1 one dependency
-        * @param c2 another one dependency
-        * @return 0 if equals, -1 if less than, +1 if greater than
-        */
+       * Comparator for dependencies classes
+       *
+       * @param c1 one dependency
+       * @param c2 another one dependency
+       * @return 0 if equals, -1 if less than, +1 if greater than
+       */
       def compare(a1: Aircraft, a2: Aircraft): Int = {
         a1.id.compareTo(a2.id)
       }
@@ -26,10 +26,10 @@ package object data {
 
   trait SimpleRepository[T] {
     /**
-      *
-      * @param id entity identifier
-      * @return
-      */
+     *
+     * @param id entity identifier
+     * @return
+     */
     def getById(id: String): Try[Option[T]]
 
     def getAll(): Try[List[T]]
@@ -43,15 +43,15 @@ package object data {
     def save(t: T): Try[Boolean]
 
     /**
-      *
-      * @return
-      */
+     *
+     * @return
+     */
     def count(): Try[Int]
 
     /**
-      *
-      * @return
-      */
+     *
+     * @return
+     */
     def isEmpty(): Try[Boolean]
   }
 
@@ -78,7 +78,6 @@ package object data {
       repo += ac
       Try(true) // save or update
     }
-
 
     override def count(): Try[Int] = Try(repo.size)
 

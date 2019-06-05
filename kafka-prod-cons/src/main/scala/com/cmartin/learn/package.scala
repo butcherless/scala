@@ -1,18 +1,17 @@
 package com.cmartin
 
-import java.util.{Properties, UUID}
+import java.util.{ Properties, UUID }
 
 import com.typesafe.config.ConfigFactory
-import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
-import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
+import org.apache.kafka.clients.consumer.{ ConsumerConfig, KafkaConsumer }
+import org.apache.kafka.clients.producer.{ KafkaProducer, ProducerConfig }
+import org.apache.kafka.common.serialization.{ StringDeserializer, StringSerializer }
 
 package object learn {
 
   trait Greeting {
     lazy val greeting: String = "simple-application-hello"
   }
-
 
   trait KafkaConf {
     // config object

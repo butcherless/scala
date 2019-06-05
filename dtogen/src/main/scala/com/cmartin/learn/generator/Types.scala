@@ -10,5 +10,3 @@ case object INTEGER extends Types
 
 case object STRING extends Types
 
-
-

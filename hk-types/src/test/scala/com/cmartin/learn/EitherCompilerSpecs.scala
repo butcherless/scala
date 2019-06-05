@@ -4,7 +4,7 @@ import java.util.UUID
 
 import cats.instances.either.catsStdInstancesForEither
 import cats.~>
-import com.cmartin.learn.algebra.{create, delete, read, update}
+import com.cmartin.learn.algebra.{ create, delete, read, update }
 import com.cmartin.learn.freecats.SingleEither
 import com.cmartin.learn.interpreter.eitherCompiler
 import org.scalatest.EitherValues._
@@ -48,7 +48,6 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
 
     result shouldBe Left(constants.operationErrorMessage)
   }
-
 
   it should "delete a CryptoCurrency" in {
     val result: Either[String, UUID] = delete(cryptoCurrency).map(c => c).foldMap(eitherCompiler)

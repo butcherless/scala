@@ -4,8 +4,8 @@ import com.cmartin.PersonalCalendar._
 import org.scalatest._
 
 /**
-  * Created by cmartin on 02/02/2017.
-  */
+ * Created by cmartin on 02/02/2017.
+ */
 class PersonalCalendarFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
   info("As a PersonalCalendar class user")
 
@@ -27,7 +27,6 @@ class PersonalCalendarFeatureSpec extends FeatureSpec with GivenWhenThen with Ma
       an[IllegalArgumentException] should be thrownBy new LocalDateCalendar(-1)
     }
   }
-
 
   scenario("retrieving day collections") {
     Given("a year calendar")

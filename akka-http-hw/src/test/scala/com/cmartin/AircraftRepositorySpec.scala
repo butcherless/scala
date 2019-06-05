@@ -2,10 +2,10 @@ package com.cmartin
 
 import java.time.LocalDate
 
-import com.cmartin.data.{Aircraft, AircraftRepository}
+import com.cmartin.data.{ Aircraft, AircraftRepository }
 import org.scalatest.OptionValues._
 import org.scalatest.TryValues._
-import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
+import org.scalatest.{ BeforeAndAfter, FlatSpec, Matchers }
 
 class AircraftRepositorySpec extends FlatSpec with Matchers with BeforeAndAfter {
 

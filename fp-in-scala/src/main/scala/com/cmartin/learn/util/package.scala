@@ -9,7 +9,7 @@ package object util {
         res
       else {
         map.head match {
-          case (k: String, v: Map[String, Any]@unchecked) => go(map.tail, res + (k -> go(v)))
+          case (k: String, v: Map[String, Any] @unchecked) => go(map.tail, res + (k -> go(v)))
 
           case (k: String, v: Any) => go(map.tail, res + (k -> v))
         }
@@ -23,7 +23,7 @@ package object util {
     println(s"map size: ${map.size}, type: ${map.getClass}")
     if (map.nonEmpty)
       map.head match {
-        case (k: String, v: Map[String, Any]@unchecked) =>
+        case (k: String, v: Map[String, Any] @unchecked) =>
           println(s"key: ${k}, value map")
           debug(v)
           debug(map.tail)

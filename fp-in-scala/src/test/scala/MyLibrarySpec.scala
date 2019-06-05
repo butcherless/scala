@@ -1,8 +1,8 @@
 import MyLibrary._
 
 /**
-  * Created by cmartin on 16/05/16.
-  */
+ * Created by cmartin on 16/05/16.
+ */
 class MyLibrarySpec extends org.specs2.mutable.Specification {
 
   val EMPTY_STRING = ""

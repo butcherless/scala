@@ -5,15 +5,13 @@ import java.util.UUID
 import com.cmartin.learn.functions._
 import com.cmartin.learn.types.MyMap
 
-import scala.util.{Failure, Success, Try}
-
+import scala.util.{ Failure, Success, Try }
 
 object main {
   //extends App {
 
   val s = ApiImpl.read(7)
   println(s"Generic: $s")
-
 
   val r1 = HktOption.read(1)
   println(s"HktOption: $r1")
@@ -47,7 +45,6 @@ object types {
   type MyMap[String] = Map[Long, String]
 }
 
-
 trait Api[T[String]] {
   def read(n: Long): T[String]
 }
@@ -71,13 +68,11 @@ object HktList extends HktApi[List] {
   def read(n: Long): List[String] = List(s"String of $n")
 }
 
-
 object HktMap extends HktApi[MyMap] {
   def read(n: Long) = Map(n -> s"string: $n.toString")
 }
 
 case class ValidationError(message: String)
-
 
 // S E R V I C E   D E F I N I T I O N
 
@@ -94,7 +89,6 @@ trait CoinMarketService[C[_]] {
 
   def readAll(): C[List[CryptoCurrency]]
 }
-
 
 // S E R V I C E   I M P L E M E N T A T I O N S
 
@@ -113,7 +107,6 @@ class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketS
 }
 
 case class ServiceException(message: String) extends RuntimeException(message)
-
 
 class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Try] {
   override def create(cc: CryptoCurrency): Try[CryptoCurrency] = Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)

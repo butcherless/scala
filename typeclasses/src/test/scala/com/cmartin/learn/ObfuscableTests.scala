@@ -1,12 +1,10 @@
 package com.cmartin.learn
 
 import com.cmartin.learn.model.Constants._
-import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
+import com.cmartin.learn.model.{ ObfuscatedInt, ObfuscatedString, Person }
 import utest._
 
 object ObfuscableTests extends TestSuite {
-
-
 
   val tests = Tests {
     'obfuscateString - {
@@ -15,8 +13,7 @@ object ObfuscableTests extends TestSuite {
 
       assert(
         !result.isEmpty(),
-        result.length == text.length
-      )
+        result.length == text.length)
     }
 
     'obfuscateInt - {
@@ -25,8 +22,7 @@ object ObfuscableTests extends TestSuite {
 
       assert(
         !result.isEmpty(),
-        result.length == 3
-      )
+        result.length == 3)
     }
 
     'obfuscatePerson - {
@@ -39,8 +35,7 @@ object ObfuscableTests extends TestSuite {
       assert(
         !result.isEmpty(),
         ageResult == "*" * 2,
-        passwordResult == "*" * 8
-      )
+        passwordResult == "*" * 8)
     }
   }
 }

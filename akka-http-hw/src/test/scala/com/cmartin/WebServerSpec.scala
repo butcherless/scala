@@ -1,15 +1,13 @@
 package com.cmartin
 
-import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
+import akka.http.scaladsl.model.{ ContentTypes, StatusCodes }
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import com.cmartin.route.{ApiController, ControllerPath, JsonSupport}
+import com.cmartin.route.{ ApiController, ControllerPath, JsonSupport }
 import org.scalatest._
 
 class WebServerSpec extends FlatSpec with Matchers with ScalatestRouteTest with JsonSupport {
   val JSON_CONTENT_TYPE = ContentTypes.`application/json`
   val ID = "4e4387c4-38e0-4fd8-80cd-2ca7a6395d8e"
-
-
 
   val controller = new ApiController()
 
@@ -64,7 +62,6 @@ class WebServerSpec extends FlatSpec with Matchers with ScalatestRouteTest with 
       checkTransferResponse(responseAs[String])
     }
   }
-
 
   def checkTransferResponse(json: String) = {
     json.contains(route.CURRENCY) shouldBe true

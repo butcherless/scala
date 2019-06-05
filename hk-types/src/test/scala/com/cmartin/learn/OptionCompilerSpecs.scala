@@ -4,7 +4,7 @@ import java.util.UUID
 
 import cats.instances.option.catsStdInstancesForOption
 import cats.~>
-import com.cmartin.learn.algebra.{create, delete, read, update}
+import com.cmartin.learn.algebra.{ create, delete, read, update }
 import com.cmartin.learn.interpreter.optionCompiler
 import org.scalatest.OptionValues._
 
@@ -24,7 +24,6 @@ class OptionCompilerSpecs extends AbstractCompilerSpecs {
     result shouldBe None
   }
 
-
   it should "read a CryptoCurrency, Some" in {
     val result: Option[CryptoCurrency] = read(currencyName).map(c => c).foldMap(optionCompiler)
 
@@ -36,7 +35,6 @@ class OptionCompilerSpecs extends AbstractCompilerSpecs {
 
     result shouldBe None
   }
-
 
   it should "update a CryptoCurrency, Some" in {
     val result: Option[CryptoCurrency] = update(cryptoCurrency).map(c => c).foldMap(optionCompiler)

@@ -1,11 +1,10 @@
 package com.cmartin.learn
 
 import org.json4s.JValue
-import org.json4s.JsonAST.{JArray, JObject}
+import org.json4s.JsonAST.{ JArray, JObject }
 import org.json4s.native.JsonMethods
 
 object MapFlatBlup extends FlatBlup[String, Option[Map[String, Any]]] {
-
 
   override def flatten(blownUp: String): Option[Map[String, Any]] = {
 
@@ -40,11 +39,12 @@ object MapFlatBlup extends FlatBlup[String, Option[Map[String, Any]]] {
     } yield flattened
   }
 
-  /** Convierte la `Key` compuesta en el tipo de entrada en un `Path` contenido
-    * en el tipo de salida.
-    *
-    * @param flatten tipo de entrada con la `Key`
-    * @return tipo de salida con el `Path`
-    */
+  /**
+   * Convierte la `Key` compuesta en el tipo de entrada en un `Path` contenido
+   * en el tipo de salida.
+   *
+   * @param flatten tipo de entrada con la `Key`
+   * @return tipo de salida con el `Path`
+   */
   override def blowup(flatten: String): Option[Map[String, Any]] = ???
 }

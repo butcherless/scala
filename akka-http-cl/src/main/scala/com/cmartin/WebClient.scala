@@ -4,13 +4,13 @@ import java.io.File
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
+import akka.http.scaladsl.model.{ HttpRequest, HttpResponse }
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{FileIO, Framing}
+import akka.stream.scaladsl.{ FileIO, Framing }
 import akka.util.ByteString
 
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 object WebClient extends Greeting {
   def main(args: Array[String]): Unit = {
@@ -34,7 +34,6 @@ object WebClient extends Greeting {
       }
 
     def transformEachLine(line: ByteString): ByteString = ByteString(line.utf8String.toUpperCase)
-
 
     Thread.sleep(4000)
 

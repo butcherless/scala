@@ -1,8 +1,9 @@
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 object Logic {
-  def matchLikelihood(kitten: Kitten,
-                      buyer: BuyerPreferences): Double = {
+  def matchLikelihood(
+    kitten: Kitten,
+    buyer: BuyerPreferences): Double = {
     val matches = buyer.attributes map { attribute =>
       kitten.attributes contains attribute
     }
