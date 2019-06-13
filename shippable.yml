@@ -6,10 +6,8 @@ scala:
 build:
   ci:
     - sbt release
-    - find . -type d
-    - mkdir -p shippable/codecoverage
     - cp target/scala-2.12/coverage-report/cobertura.xml shippable/codecoverage
-    - spring-scala/gradlew clean build jacocoTestReport -b spring-scala/build.gradle
+    - ls -lRt shippable
 
 jdk:
   - openjdk11
