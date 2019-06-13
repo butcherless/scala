@@ -5,10 +5,10 @@ scala:
 
 build:
   ci:
-    - sbt ";clean ;coverage ;assembly ;coverageReport"
-    - sbt coverageAggregate
+    - sbt release
+    - ls -lRt
     - cp target/scala-2.12/coverage-report/cobertura.xml shippable/codecoverage
     - spring-scala/gradlew clean build jacocoTestReport -b spring-scala/build.gradle
 
 jdk:
-  - oraclejdk8
+  - openjdk11
