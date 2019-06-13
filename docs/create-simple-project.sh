@@ -3,8 +3,9 @@
 PKG_DIR=com/cmartin/learn
 SBT_VER=1.2.8
 SCALA_VER="2.12.8"
-SCALATEST_VER="3.0.7"
-SCOVERAGE_VER="1.6.0-RC2"
+SCALATEST_VER="3.0.8"
+SCOVERAGE_VER="1.6.0"
+DEP_UP_VER="1.2.0"
 
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
@@ -13,7 +14,8 @@ mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src
 echo "sbt.version=${SBT_VER}" > project/build.properties
 
 # create sbt plugins file
-echo 'addSbtPlugin("org.scoverage" % "sbt-scoverage" % "'${SCOVERAGE_VER}'")' > project/plugins.sbt
+echo 'addSbtPlugin("org.scoverage" % "sbt-scoverage" % "'${SCOVERAGE_VER}'")
+addSbtPlugin("org.jmotor.sbt" % "sbt-dependency-updates" % "'${DEP_UP_VER}'")' > project/plugins.sbt
 
 # create sbt build file
 echo 'name := "project-template"
@@ -64,4 +66,4 @@ class SimpleAppSpec extends FlatSpec with Matchers {
   }
 }' > src/test/scala/${PKG_DIR}/SimpleAppSpec.scala
 
-sbt -batch clean coverage test coverageReport run
+sbt -batch clean coverage test coverageReport dependencyUpdates run
