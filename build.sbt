@@ -13,10 +13,14 @@ lazy val scalatestVersion = "3.0.8"
 lazy val specs2Version = "4.5.1"
 lazy val uTestVersion = "0.6.9"
 
+val scalaCompiler = "2.12.8"
+
+scalaVersion := scalaCompiler
+
 lazy val commonSettings = Seq(
   organization := "com.cmartin.learn",
   version := "1.0.0-SNAPSHOT",
-  scalaVersion := "2.12.8",
+  scalaVersion := scalaCompiler,
   test in assembly := {}
 )
 
