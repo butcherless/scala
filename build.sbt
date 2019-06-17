@@ -11,7 +11,7 @@ lazy val scalaLoggingVersion = "3.9.2"
 lazy val scalazVersion = "7.2.27"
 lazy val scalatestVersion = "3.0.8"
 lazy val specs2Version = "4.5.1"
-lazy val uTestVersion = "0.6.9"
+lazy val uTestVersion = "0.7.1"
 
 val scalaCompiler = "2.12.8"
 
