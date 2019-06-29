@@ -1,15 +1,11 @@
 language: scala
 group: travis_lts
 scala:
-  - 2.12.7
-jdk: oraclejdk8
+  - 2.12.8
 
 addons:
   apt:
     update: true
-
-jdk:
-  - oraclejdk11
 
 script:
   - sbt ";clean ;coverage ;assembly ;coverageReport"
