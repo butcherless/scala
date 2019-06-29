@@ -10,9 +10,10 @@ addons:
 script:
   - sbt ";clean ;coverage ;assembly ;coverageReport"
   - sbt coverageAggregate
+  - sbt dependencyUpdates
 after_success:
   - sbt coveralls
 
 cache:
   directories:
-    - $HOME/.gradle
+    - $HOME/.sbt
