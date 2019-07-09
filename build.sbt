@@ -1,6 +1,6 @@
 lazy val akkaHttpVersion = "10.1.8"
 lazy val akkaVersion = "2.5.23"
-lazy val catsVersion = "1.6.1"
+lazy val catsVersion = "2.0.0-M4"
 lazy val configVersion = "1.3.4"
 lazy val json4sVersion = "3.6.7"
 lazy val kafkaClientVersion = "2.3.0"
@@ -13,7 +13,7 @@ lazy val scalatestVersion = "3.0.8"
 lazy val specs2Version = "4.6.0"
 lazy val uTestVersion = "0.7.1"
 
-val scalaCompiler = "2.12.8"
+val scalaCompiler = "2.13.0"
 
 scalaVersion := scalaCompiler
 
@@ -117,7 +117,8 @@ val scalazlearnDeps = Seq(scalaz, uTest)
 lazy val akkaActors = (project in file("akka-actors"))
   .settings(commonSettings,
     name := "akka-actors-proof-of-concept",
-    libraryDependencies ++= Seq(akkaActor, logback, scalaTest)
+    libraryDependencies ++= Seq(akkaActor, logback, scalaTest),
+    scalacOptions ++= basicScalacOptions
   )
 
 lazy val akkahttphw = (project in file("akka-http-hw"))
