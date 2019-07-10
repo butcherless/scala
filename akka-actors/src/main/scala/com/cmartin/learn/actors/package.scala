@@ -1,7 +1,6 @@
 package com.cmartin.learn
 
 import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
-import com.cmartin.learn.actors.Consumer.Success
 
 package object actors {
 
@@ -30,6 +29,7 @@ package object actors {
     case class Request(number: Int)
 
     case object Init
+
     case object Gromenauer
 
     case object Accepted
@@ -60,17 +60,6 @@ package object actors {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
   class Producer extends Actor with ActorLogging {
     override def receive: Receive = {
       case Consumer.Success(mod) => {
@@ -98,6 +87,9 @@ package object actors {
   }
 
   class Consumer(producer: ActorRef) extends Actor with ActorLogging {
+
+    import Consumer._
+
     override def receive: Receive = {
       case Producer.Module(n) => {
         producer ! Success(n % 10)

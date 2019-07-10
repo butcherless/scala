@@ -1,11 +1,10 @@
-package com.cmartin.learn
+package com.cmartin.learn.actors
 
-import akka.actor.{ActorSystem, PoisonPill}
+import akka.actor.ActorSystem
 import com.cmartin.learn.actors.NumberProcessor.{Gromenauer, Init}
-import com.cmartin.learn.actors.{NumberProcessor, RequestDispatcher}
-import scala.concurrent.duration._
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
+import scala.concurrent.duration._
 
 object Main extends App {
   val system = ActorSystem("IntegerCalc")
@@ -23,8 +22,6 @@ object Main extends App {
 
   dispatcher ! Gromenauer
   val result = dispatcher ! Init
-
-
 
 
   Await.ready(system.terminate(), 5 seconds)

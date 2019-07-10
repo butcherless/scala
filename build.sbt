@@ -117,7 +117,7 @@ val scalazlearnDeps = Seq(scalaz, uTest)
 lazy val akkaActors = (project in file("akka-actors"))
   .settings(commonSettings,
     name := "akka-actors-proof-of-concept",
-    libraryDependencies ++= Seq(akkaActor, logback, scalaTest),
+    libraryDependencies ++= Seq(akkaActor, akkaStream, logback, scalaTest),
     scalacOptions ++= basicScalacOptions
   )
 
