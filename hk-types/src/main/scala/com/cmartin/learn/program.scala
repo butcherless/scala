@@ -8,11 +8,11 @@ package object program {
 
   def myAwesomeProgram(name: String, price: BigDecimal): CrudOperation[CryptoCurrency] =
     for {
-      cc       <- read(name)
+      cc <- read(name)
       nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
-      ccLite   <- read(nameLite)
-      _        <- update(cc.copy(id = cc.id, price = price))
-      _        <- delete(cc)
+      ccLite <- read(nameLite)
+      _ <- update(cc.copy(id = cc.id, price = price))
+      _ <- delete(cc)
     } yield ccLite
 
   object Application extends App {
@@ -20,12 +20,7 @@ package object program {
     import cats.instances.either.catsStdInstancesForEither
     import cats.instances.future.catsStdInstancesForFuture
     import cats.instances.option.catsStdInstancesForOption
-    import com.cmartin.learn.interpreter.{
-      eitherCompiler,
-      futureCompiler,
-      idCompiler,
-      optionCompiler
-    }
+    import com.cmartin.learn.interpreter.{eitherCompiler, futureCompiler, idCompiler, optionCompiler}
 
     import scala.concurrent.Await
     import scala.concurrent.ExecutionContext.Implicits.global

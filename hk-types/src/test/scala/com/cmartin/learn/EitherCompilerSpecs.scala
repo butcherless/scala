@@ -7,16 +7,15 @@ import cats.~>
 import com.cmartin.learn.algebra.{create, delete, read, update}
 import com.cmartin.learn.freecats.SingleEither
 import com.cmartin.learn.interpreter.eitherCompiler
-import org.scalatest.EitherValues._
 
 class EitherCompilerSpecs extends AbstractCompilerSpecs {
 
   val compiler: algebra.CrudOperationA ~> SingleEither = eitherCompiler
 
-  it should "create a CryptoCurrency" in {
+  "Either compiler" should "create a CryptoCurrency" in {
     val result: Either[String, String] = create(cryptoCurrency).map(c => c).foldMap(eitherCompiler)
 
-    result.right.value shouldBe currencyName
+    result shouldBe Right(currencyName)
   }
 
   it should "not create a CryptoCurrency, Left" in {
@@ -30,7 +29,7 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
     val result: Either[String, CryptoCurrency] =
       read(currencyName).map(c => c).foldMap(eitherCompiler)
 
-    result.right.value.name shouldBe currencyName
+    result.map(cc => cc.name) shouldBe Right(currencyName) //TODO fix uuid in read operation, Map repository
   }
 
   it should "not read a CryptoCurrency, Left" in {
@@ -44,7 +43,7 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
     val result: Either[String, CryptoCurrency] =
       update(cryptoCurrency).map(c => c).foldMap(eitherCompiler)
 
-    result.right.value shouldBe cryptoCurrency
+    result shouldBe Right(cryptoCurrency)
   }
 
   it should "not update a CryptoCurrency, Left" in {
@@ -57,7 +56,7 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
   it should "delete a CryptoCurrency" in {
     val result: Either[String, UUID] = delete(cryptoCurrency).map(c => c).foldMap(eitherCompiler)
 
-    result.right.value shouldBe cryptoCurrency.id
+    result shouldBe Right(cryptoCurrency.id)
   }
 
   it should "not delete a CryptoCurrency, Left" in {
