@@ -1,8 +1,9 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
-import com.cmartin.learn.algebra.{CrudOperation, create, delete, read, update}
+import com.cmartin.learn.freemonad.algebra._
+import com.cmartin.learn.freemonad.interpreter._
 
-package object program {
+object program {
 
   // 4. Build a program made of a sequence of operations
 
@@ -20,11 +21,11 @@ package object program {
     import cats.instances.either.catsStdInstancesForEither
     import cats.instances.future.catsStdInstancesForFuture
     import cats.instances.option.catsStdInstancesForOption
-    import com.cmartin.learn.interpreter.{eitherCompiler, futureCompiler, idCompiler, optionCompiler}
 
     import scala.concurrent.Await
     import scala.concurrent.ExecutionContext.Implicits.global
     import scala.concurrent.duration._
+
 
     // 6. Run the program, fold the sentence list
     println("\nRunning Id[A] program interpreter")

@@ -1,10 +1,10 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
 import cats.{Id, ~>}
-import com.cmartin.learn.algebra.{create, delete, read, update}
-import com.cmartin.learn.interpreter.idCompiler
+import com.cmartin.learn.freemonad.algebra.{create, delete, read, update}
+import com.cmartin.learn.freemonad.interpreter.idCompiler
 
 class IdCompilerSpecs extends AbstractCompilerSpecs {
 

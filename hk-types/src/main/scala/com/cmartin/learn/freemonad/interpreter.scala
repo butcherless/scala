@@ -1,12 +1,12 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
 import cats.{Id, ~>}
-import com.cmartin.learn.algebra.{Create, CrudOperationA, Delete, Read, Update}
-import com.cmartin.learn.functions.buildCryptoCurrency
+import com.cmartin.learn.freemonad.algebra.{Create, CrudOperationA, Delete, Read, Update}
+import com.cmartin.learn.freemonad.functions.buildCryptoCurrency
 
 import scala.concurrent.Future
 
-package object interpreter {
+object interpreter {
 
   // 5. Build the program compiler
   //val compiler: CrudOperationA ~> Id = ???

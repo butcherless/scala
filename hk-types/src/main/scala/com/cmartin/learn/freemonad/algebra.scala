@@ -1,11 +1,11 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
 import cats.free.Free
 import cats.free.Free.liftF
 
-package object algebra {
+object algebra {
 
   // 1. Create an ADT Algebraic Data Type representing the business grammar
 

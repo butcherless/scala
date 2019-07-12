@@ -1,6 +1,6 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
-import com.cmartin.learn.functions.buildCryptoCurrency
+import com.cmartin.learn.freemonad.functions.buildCryptoCurrency
 import org.scalatest.{FlatSpec, Matchers}
 
 abstract class AbstractCompilerSpecs extends FlatSpec with Matchers {

@@ -1,8 +1,8 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
-import com.cmartin.learn.functions._
+import com.cmartin.learn.freemonad.functions._
 import scalaz.syntax.apply._
 import scalaz.syntax.validation._
 import scalaz.{NonEmptyList, ValidationNel}

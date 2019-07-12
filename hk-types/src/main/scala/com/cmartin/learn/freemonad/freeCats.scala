@@ -1,11 +1,11 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
 import cats.free.Free
 import cats.free.Free.liftF
 import cats.{Id, ~>}
-import com.cmartin.learn.functions.buildUuid
+import com.cmartin.learn.freemonad.functions.buildUuid
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -139,7 +139,7 @@ object MainCats extends App {
   import cats.instances.either.catsStdInstancesForEither
   import cats.instances.future.catsStdInstancesForFuture
   import cats.instances.option.catsStdInstancesForOption
-  import com.cmartin.learn.freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
+  import freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
 
   import scala.concurrent.ExecutionContext.Implicits.global
 

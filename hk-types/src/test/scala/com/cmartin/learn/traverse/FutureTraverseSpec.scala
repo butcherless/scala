@@ -13,7 +13,7 @@ class FutureTraverseSpec extends AsyncFlatSpec with TimeLimits {
   it should "retrieve a list with a sequenced service responses" in {
     // simulates an arbitrary list of services
     val serviceList = List(Ko, Ok, Ok, Ko, Ok)
-    failAfter(1.25 * delayMax milliseconds) {
+    failAfter(2 * delayMax milliseconds) {
 
       val result: Future[Seq[ServiceResponse]] = composeServiceResponses(serviceList)
 

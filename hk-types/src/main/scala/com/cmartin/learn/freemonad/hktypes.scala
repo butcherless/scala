@@ -1,9 +1,9 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
-import com.cmartin.learn.functions._
-import com.cmartin.learn.types.MyMap
+import com.cmartin.learn.freemonad.functions._
+import com.cmartin.learn.freemonad.types.MyMap
 
 import scala.util.{Failure, Success, Try}
 

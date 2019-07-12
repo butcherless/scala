@@ -1,11 +1,11 @@
-package com.cmartin.learn
+package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
 import cats.instances.option.catsStdInstancesForOption
 import cats.~>
-import com.cmartin.learn.algebra.{create, delete, read, update}
-import com.cmartin.learn.interpreter.optionCompiler
+import com.cmartin.learn.freemonad.algebra.{create, delete, read, update}
+import com.cmartin.learn.freemonad.interpreter.optionCompiler
 import org.scalatest.OptionValues._
 
 class OptionCompilerSpecs extends AbstractCompilerSpecs {

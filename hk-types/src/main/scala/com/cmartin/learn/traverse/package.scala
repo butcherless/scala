@@ -55,5 +55,5 @@ package object traverse {
   def composeServiceResponses(serviceList: List[ServiceResult]): Future[List[ServiceResponse]] = {
     Future.sequence(serviceList.map(callRemoteService))
   }
-  
+
 }
