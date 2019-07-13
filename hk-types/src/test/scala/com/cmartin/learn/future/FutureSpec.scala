@@ -4,6 +4,7 @@ import org.scalatest.AsyncFlatSpec
 
 import scala.concurrent.Future
 
+// https://gist.github.com/rtitle/f73d35e79a2f95871bca27d24be3a805
 class FutureSpec extends AsyncFlatSpec {
 
   "Future fold" should "sum the results" in {
