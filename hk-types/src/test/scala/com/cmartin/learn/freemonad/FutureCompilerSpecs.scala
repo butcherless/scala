@@ -12,7 +12,7 @@ import org.scalatest.time.{Seconds, Span}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class FutureCompilerSpecs extends AbstractCompilerSpecs with ScalaFutures {
+class FutureCompilerSpecs extends AbstractCompilerSpecs with ScalaFutures { //TODO change to AsyncFlatSpec
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(5, Seconds))
 
