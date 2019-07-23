@@ -64,7 +64,7 @@ package object route {
   }
 
   class ApiController extends Directives with JsonSupport {
-    val route =
+    val routes =
       path(ControllerPath.HELLO) {
         get {
           logger.debug("hello.in")
