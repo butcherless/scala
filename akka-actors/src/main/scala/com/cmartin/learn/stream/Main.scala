@@ -8,7 +8,7 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 import scala.collection.immutable
 import scala.concurrent.duration._
 
-object Main extends App {
+object Main {//extends App {
   println("Main streams")
 
   implicit val system = ActorSystem("QuickStart")
@@ -27,7 +27,7 @@ object Main extends App {
   val s1 = Source[Int](1 to 10)
   val s2 = Source[Int](11 to 20)
   val onePerSecSource: Source[Int, NotUsed] = s1.throttle(1, 1 second)
-  val halfPerSecSource: Source[Int, NotUsed] = s2.throttle(1, 500 milliseconds)
+  val twoPerSecSource: Source[Int, NotUsed] = s2.throttle(2, 1 second)
 
   val printSink = Sink.foreach(println)
 
@@ -44,7 +44,7 @@ object Main extends App {
 
   val zipFut = Source
     //        .zipN(Seq(onePerSecSource, halfPerSecSource.via(sHalfFlow)))
-    .zipN(Seq(onePerSecSource, halfPerSecSource))
+    .zipN(Seq(onePerSecSource, twoPerSecSource))
     .runWith(printSink)
 
 
