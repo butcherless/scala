@@ -7,7 +7,7 @@ class PersonNameSpec extends PropertySpec {
 
   property("personNames should contains valid person name values") {
     forAll(personNames) { name =>
-      validatePersonName(name).isRight shouldBe true
+      validatePersonName(name) contains name
     }
   }
 
