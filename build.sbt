@@ -20,6 +20,7 @@ lazy val commonSettings = Seq(
   version := "1.0.0-SNAPSHOT",
   scalaVersion := scalaCompiler,
   libraryDependencies ++= Seq(scalaTest),
+  scalacOptions ++= basicScalacOptions,
   test in assembly := {}
 )
 
@@ -43,7 +44,6 @@ lazy val hkTypes = (project in file("hk-types"))
     commonSettings,
     name := "hkTypes",
     libraryDependencies ++= Seq(cats, catsFree, scalaz),
-    scalacOptions ++= basicScalacOptions
   )
 
 lazy val typeclasses = (project in file("typeclasses"))
@@ -60,7 +60,6 @@ lazy val dtogen = (project in file("dtogen"))
     name := "dtogen",
     libraryDependencies ++= Seq(scalaLogging, logback, uTest),
     testFrameworks += new TestFramework("utest.runner.Framework"),
-    scalacOptions ++= basicScalacOptions
   )
 
 lazy val scalazlearn = (project in file("scalaz"))
@@ -75,7 +74,6 @@ lazy val akkaActors = (project in file("akka-actors"))
   .settings(commonSettings,
     name := "akka-actors-proof-of-concept",
     libraryDependencies ++= Seq(akkaActor, akkaStream, logback),
-    scalacOptions ++= basicScalacOptions
   )
 
 lazy val akkahttphw = (project in file("akka-http-hw"))
