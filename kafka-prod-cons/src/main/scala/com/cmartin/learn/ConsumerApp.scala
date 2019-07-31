@@ -5,13 +5,13 @@ import java.util
 
 import com.typesafe.scalalogging.Logger
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object UuidConsumer extends SimpleConsumer
 
 object ConsumerApp extends App {
 
-  val logger    = Logger[ConsumerApp.type]
+  val logger = Logger[ConsumerApp.type]
   val loopCount = 10
 
   UuidConsumer.consumer.subscribe(util.Collections.singletonList(UuidConsumer.kafkaTopic))

@@ -50,7 +50,7 @@ lazy val typeclasses = (project in file("typeclasses"))
   .settings(
     commonSettings,
     name := "typeclasses",
-    libraryDependencies ++= Seq(scalaLogging, logback, uTest),
+    libraryDependencies ++= Seq(scalaLogging, logback),
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
