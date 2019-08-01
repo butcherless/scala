@@ -44,7 +44,9 @@ class StreamSpec extends AsyncFlatSpec {
 
     val result: Future[Int] = intSource.via(countFlow).runFold[Int](0)(_ + _)
 
-    result map { count => assert(count == expectedCount) }
+    result map { count =>
+      assert(count == expectedCount)
+    }
   }
 
   it should "generate a finite random sequence of integers with extended syntax" in {
@@ -58,7 +60,9 @@ class StreamSpec extends AsyncFlatSpec {
       .via(countFlow)
       .runWith(sumSink)
 
-    result map { count => assert(count == expectedCount) }
+    result map { count =>
+      assert(count == expectedCount)
+    }
   }
 
   it should "merge several sources into a single sink" in {
