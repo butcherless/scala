@@ -1,15 +1,12 @@
 package com.cmartin.learn
 
-import utest._
+import org.scalatest.FlatSpec
 
-object DtoGenTest extends TestSuite {
+class DtoGenSpec extends FlatSpec {
 
-  val tests = Tests {
-    'testDummyAsserts - {
+  "DtoGenSpec" should "pass a dummy test" in {
 
-      assert(1 == 1)
-
-    }
+    assert(1 == 1)
   }
 
 }

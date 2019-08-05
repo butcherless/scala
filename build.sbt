@@ -58,7 +58,7 @@ lazy val dtogen = (project in file("dtogen"))
   .settings(
     commonSettings,
     name := "dtogen",
-    libraryDependencies ++= Seq(scalaLogging, logback, uTest),
+    libraryDependencies ++= Seq(scalaLogging, logback),
     testFrameworks += new TestFramework("utest.runner.Framework"),
   )
 
