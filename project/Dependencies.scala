@@ -26,7 +26,7 @@ object Dependencies {
   lazy val typesafeConfig = "com.typesafe" % "config" % configVersion
   lazy val json4s = "org.json4s" %% "json4s-native" % json4sVersion
   lazy val kafkaClient = "org.apache.kafka" % "kafka-clients" % kafkaClientVersion
-  lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion
+  lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion exclude("org.slf4j", "slf4j-api")
   lazy val refined = "eu.timepit" %% "refined" % refinedVersion
   lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
   lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion

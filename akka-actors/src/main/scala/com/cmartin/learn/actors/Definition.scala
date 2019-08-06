@@ -44,7 +44,7 @@ object Definition {
           map -= id // remove message
           rejected += 1
           reqInfo.sender ! number // stream back-pressure
-          log.error(s"Discarded($number,$id)}")
+          log.info(s"Discarded($number,$id)}")
         }
 
       case Stats =>
