@@ -12,3 +12,5 @@ object MyModuleMain {
     println("string reverse: " + stringReverse("reverse"))
   }
 }
+
+# this leads to a compilation error
