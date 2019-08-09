@@ -25,14 +25,14 @@ jobs:
                    bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
 
 
-  build_gradle:
+  build_template:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:11-jdk
 
     working_directory: ~/repo
 
     environment:
-      JVM_OPTS: -Xmx1024m
+      JVM_OPTS: -Xmx1536m
       TERM: dumb
 
     steps:
@@ -40,14 +40,15 @@ jobs:
 
       # test & build
       - run:
-          name: clean and build
+          name: create, compile, test, run
           command: |
-                   spring-scala/gradlew clean build jacocoTestReport -b spring-scala/build.gradle
-
+                   cd docs
+                   chmod u+x create-simple-project.sh
+                   ./create-simple-project.sh
 
 workflows:
   version: 2
   build:
     jobs:
       - build_sbt
-      - build_gradle
+      - build_template
