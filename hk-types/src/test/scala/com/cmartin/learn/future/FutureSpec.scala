@@ -90,11 +90,12 @@ class FutureSpec extends AsyncFlatSpec {
       r4 <- Future(r3.repo + r3.flatten + r3.shadow) // task waiting for 3 previous tasks
     } yield r4
 
+    val expectedText = "Service result S[X] successful"
     result map { text =>
       assert(text.contains("Service result S[1] successful"))
       assert(text.contains("Service result S[2] successful"))
       assert(text.contains("Service result S[3] successful"))
-      assert(text.length == 90)
+      assert(text.length == expectedText.length * 3)
     }
   }
 
@@ -124,9 +125,10 @@ class FutureSpec extends AsyncFlatSpec {
       case e: RuntimeException => Future(e.getMessage)
     }
 
+    val expectedText = "Service result F[102] failed"
     result map { text =>
-      assert(text.contains("Service result F[102] failed"))
-      assert(text.length == 0)
+      assert(text.contains(expectedText))
+      assert(text.length == expectedText.length)
     }
   }
 }
