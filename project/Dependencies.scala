@@ -2,7 +2,8 @@ import sbt._
 
 object Dependencies {
   lazy val akkaHttpVersion = "10.1.9"
-  lazy val akkaVersion = "2.5.24"
+  lazy val akkaVersion = "2.5.25"
+  lazy val akkaTypedVersion = "2.5.25"
   lazy val catsVersion = "2.0.0-RC1"
   lazy val configVersion = "1.3.4"
   lazy val json4sVersion = "3.6.7"
@@ -18,6 +19,7 @@ object Dependencies {
 
   // production code
   lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+  lazy val akkaActorTyped = "com.typesafe.akka" %% "akka-actor-typed" % akkaTypedVersion
   lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
   lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
   lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion

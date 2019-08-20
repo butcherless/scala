@@ -76,6 +76,12 @@ lazy val akkaActors = (project in file("akka-actors"))
     libraryDependencies ++= Seq(akkaActor, akkaStream, logback),
   )
 
+lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
+  .settings(commonSettings,
+    name := "akka-actors-typed-poc",
+    libraryDependencies ++= Seq(akkaActorTyped, logback),
+  )
+
 lazy val akkahttphw = (project in file("akka-http-hw"))
   .settings(commonSettings,
     name := "akka-http-webserver",
