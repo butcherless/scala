@@ -8,5 +8,5 @@ object Main extends App {
   // Create ActorSystem and top level supervisor
   val system: ActorSystem[Nothing] = ActorSystem[Nothing](IotSupervisor(), "iot-system")
 
-  system ! GracefulS
+  system.terminate()
 }
