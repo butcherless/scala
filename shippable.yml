@@ -5,7 +5,7 @@ scala:
 
 build:
   ci:
-    - sbt release
+    - sbt ";clean ;coverage ;test ;coverageReport ;coverageAggregate"
     - cp target/scala-2.13/coverage-report/cobertura.xml shippable/codecoverage
     - ls -lRt shippable
 
