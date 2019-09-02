@@ -16,7 +16,7 @@ object DummyInfrastructureManager {
   def getPostgresqlStatus(): String =
     """
       |{
-      |  "postgresql": "postgresqul database running"
+      |  "postgresql": "postgresql database running"
       |}
       |""".stripMargin
 

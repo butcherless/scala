@@ -48,7 +48,7 @@ class HealthAggregator(context: ActorContext[AggregatorMessage]) extends Abstrac
     message match {
       case WrappedAgentResponse(response) =>
         response match {
-          case RespondStatus(requestId, status, ref) =>
+          case RespondStatus(requestId, status, _) =>
             context.log.info("Receive response for requesId {} with status {}", requestId, status)
             context.log.debug(s"agent count=$agentCount")
             agentCount = agentCount - 1
