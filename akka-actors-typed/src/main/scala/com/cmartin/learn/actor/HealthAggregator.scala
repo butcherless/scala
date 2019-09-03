@@ -13,7 +13,8 @@ object HealthAggregator {
   sealed trait AggregatorMessage
 
   // Agregator incoming message from external protocol
-  case class WrappedAgentResponse(response: HealthAgent.AgentResponse) extends AggregatorMessage
+  case class WrappedAgentResponse(response: HealthAgent.AgentResponse)
+    extends AggregatorMessage
 
 
   /*
@@ -25,7 +26,8 @@ object HealthAggregator {
     Behaviors.setup[AggregatorMessage](context => new HealthAggregator(context))
 }
 
-class HealthAggregator(context: ActorContext[AggregatorMessage]) extends AbstractBehavior[AggregatorMessage] {
+class HealthAggregator(context: ActorContext[AggregatorMessage])
+  extends AbstractBehavior[AggregatorMessage] {
 
   import DummyInfrastructureManager._
 
@@ -35,7 +37,7 @@ class HealthAggregator(context: ActorContext[AggregatorMessage]) extends Abstrac
   val agentResponseAdapter: ActorRef[HealthAgent.AgentResponse] =
     context.messageAdapter { response => WrappedAgentResponse(response) }
 
-  val kafkaAgent = context.spawn(HealthAgent(KAFKA_AGENT), "kafka-agent")
+  val kafkaAgent: ActorRef[HealthAgent.HealthMessage] = context.spawn(HealthAgent(KAFKA_AGENT), "kafka-agent")
   val postgresDbAgent = context.spawn(HealthAgent(POSTGRESQL_AGENT), "postgres-agent")
   val systemAgent = context.spawn(HealthAgent(SYSTEM_AGENT), "system-agent")
 
