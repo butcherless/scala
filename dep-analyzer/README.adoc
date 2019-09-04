@@ -27,3 +27,24 @@ http://queirozf.com/entries/scala-regular-expressions-examples-reference
 Obtener dependencias y generar un archivo
 
  gw dep --configuration default > /tmp/gradle-deps-default
+
+
+Lista de tareas previas al caso de uso:
+
+- sbt dependencyList > sbt-dependencies.log
+
+- regex para filtrar líneas con deps: ^[a-z]([a-z0-9-_\.]+:){2}([0-9A-Z-\.]+)
+
+- log con los positivos y negativos para verificar si la regex filtra correctamente
+
+- split del GAV por el caracter ":" (dos puntos)
+
+- añadir las deps a un Set para eliminar duplicados
+
+- obtener del repository todas las dependencias para el par (G,A)
+
+- obtener la última versión
+
+- consultar con maven central para verificar si ha cambiado
+
+- elaborar el report con las dependencias que tienen nueva versión
