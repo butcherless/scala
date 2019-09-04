@@ -2,7 +2,7 @@
 
 PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
-SBT_VER=1.2.8
+SBT_VER=1.3.0
 SCALA_VER="2.13.0"
 ASSEMBLY_VER="0.14.10"
 LOGBACK_VER="1.2.3"
