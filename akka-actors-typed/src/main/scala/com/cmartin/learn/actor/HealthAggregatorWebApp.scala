@@ -16,16 +16,15 @@ object HealthAggregatorWebApp
     with ComponentLogging
     with ApiConfiguration {
 
-  implicit val system: ActorSystem[Done] = ActorSystem[Done](Behaviors.setup[Done] { context =>
+//  implicit val system: ActorSystem[Done] = ActorSystem[Done](Behaviors.setup[Done] { context =>
+   ActorSystem[Done](Behaviors.setup[Done] { context =>
     implicit lazy val untypedSystem: actor.ActorSystem = context.system.toUntyped
     implicit val materializer: ActorMaterializer = ActorMaterializer()
     implicit lazy val ec: ExecutionContextExecutor = context.system.executionContext
 
     context.log.info("HealthAggregator ActorSystem started")
 
-    val agent = context.spawn(ServiceActor("service-1"), "service-1")
-
-    lazy val routes: Route = new ApiRoutes(agent).routes
+    lazy val routes: Route = new ApiRoutes(context).routes
 
     val serverBinding: Future[Http.ServerBinding] =
       Http()(untypedSystem)

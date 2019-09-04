@@ -1,7 +1,7 @@
 package com.cmartin.learn.actor
 
-import akka.actor.ActorSystem
-import akka.actor.typed.ActorRef
+import akka.Done
+import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AskPattern._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -12,11 +12,13 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 
-class ApiRoutes(serviceActor: ActorRef[ServiceActor.ServiceActorCommand])(implicit system: ActorSystem)
+class ApiRoutes(context: ActorContext[Done])
   extends ComponentLogging {
 
   implicit val timeout: Timeout = 3.seconds
-  implicit val scheduler = system.scheduler
+  implicit val scheduler = context.system.scheduler
+
+  val serviceActor = context.spawn(ServiceActor("service-1"), "service-1")
 
   lazy val routes: Route =
     get {

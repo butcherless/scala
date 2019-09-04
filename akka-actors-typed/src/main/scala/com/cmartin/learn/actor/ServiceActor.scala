@@ -17,6 +17,7 @@ object ServiceActor {
 
   case object Stop extends ServiceActorCommand
 
+
   sealed trait ServiceActorResponse
 
   case class ServiceResponseEven(message: String) extends ServiceActorResponse
@@ -30,7 +31,7 @@ class ServiceActor(context: ActorContext[ServiceActor.ServiceActorCommand], serv
 
   import ServiceActor._
 
-  context.log.info("Health agent {} created", serviceId)
+  context.log.info("Service Actor {} created", serviceId)
 
   override def onMessage(message: ServiceActorCommand): Behavior[ServiceActorCommand] = {
     message match {
@@ -54,7 +55,7 @@ class ServiceActor(context: ActorContext[ServiceActor.ServiceActorCommand], serv
 
   override def onSignal: PartialFunction[Signal, Behavior[ServiceActorCommand]] = {
     case PostStop =>
-      context.log.info("Health agent actor {} stopped", serviceId)
+      context.log.info("Service Actor {} stopped", serviceId)
       this
   }
 }

@@ -20,8 +20,10 @@ object Dependencies {
   // production code
   lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   lazy val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
-  lazy val akkaActorTyped = "com.typesafe.akka" %% "akka-actor-typed" % akkaTypedVersion
   lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
+
+  lazy val akkaActorTyped = "com.typesafe.akka" %% "akka-actor-typed" % akkaTypedVersion
+  lazy val akkaStreamTyped = "com.typesafe.akka" %% "akka-stream-typed" % akkaTypedVersion
 
   lazy val akkaJson = "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion
   lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
