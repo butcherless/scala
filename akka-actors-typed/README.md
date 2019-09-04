@@ -6,7 +6,7 @@ Goal: restrict `ActorRef` to sending the right message. Tell operator accepts on
 - add a type parameter: `ActorRef[T]`
 - only allow sending messages of type `T` with `tell` or `!`
 - add type of understood messages to trait `Actor` (1)
-- add type of understood messages to `ActorContext[T`
+- add type of understood messages to `ActorContext[T]`
 
 Remember Actor actions:
 
@@ -17,9 +17,9 @@ Remember Actor actions:
 
 Changes from non-typed Actor:
 
-- turn stateful trait `Actor` into pure `Behaviour[T]`. Behaviour of T describe the reaction of the Actor to an incomimg message:
+- turn stateful trait `Actor` into pure `Behaviour[T]`. Behaviour of T describe the reaction of the Actor to an incoming message. Behavior is a function from incoming message to next behavior of the actor.
 - guardian behavior, remove system.actorOf
-- ActorSystem[T] is an ActorRef[T] for the guardian
+- `ActorSystem[T]` is an ActorRef[T] for the guardian
 
 In akka typed we don't create an actor, we create its behavior
 
