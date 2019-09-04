@@ -11,13 +11,13 @@ import akka.{Done, actor}
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
 
-object HealthAggregatorWebApp
+object ThreeLayerWebApp
   extends App
     with ComponentLogging
     with ApiConfiguration {
 
-//  implicit val system: ActorSystem[Done] = ActorSystem[Done](Behaviors.setup[Done] { context =>
-   ActorSystem[Done](Behaviors.setup[Done] { context =>
+  //  implicit val system: ActorSystem[Done] = ActorSystem[Done](Behaviors.setup[Done] { context =>
+  ActorSystem[Done](Behaviors.setup[Done] { context =>
     implicit lazy val untypedSystem: actor.ActorSystem = context.system.toUntyped
     implicit val materializer: ActorMaterializer = ActorMaterializer()
     implicit lazy val ec: ExecutionContextExecutor = context.system.executionContext
@@ -43,7 +43,7 @@ object HealthAggregatorWebApp
 
     Behaviors.receiveMessage {
       case Done =>
-        log.error(s"Server could not start!")
+        Thread.sleep(1000)
         Behaviors.stopped
     }
 

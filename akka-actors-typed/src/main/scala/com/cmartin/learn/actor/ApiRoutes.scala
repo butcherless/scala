@@ -39,6 +39,10 @@ class ApiRoutes(context: ActorContext[Done])
               complete(response.toString)
             }
           }
+        },
+        path("shutdown") {
+          context.self ! Done
+          complete("Shutdown")
         }
       )
     }
