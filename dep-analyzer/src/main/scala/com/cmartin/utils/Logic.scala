@@ -76,13 +76,14 @@ object Logic {
   /**
     * Parse a string and returns a dependency if it matches a regex
     *
-    * @param s a string that can contain a dependency
+    * @param s a string that could contain a dependency
     * @return a dependency option
     */
   def getDependency(s: String): Option[Dep] = {
     findMatches(s) match {
       case Some(it) => {
         val gs = it.next()
+        println(s"gs = $gs")
         Some(Dep(gs.group(GAV_GROUP_POS), gs.group(GAV_ARTIFACT_POS), gs.group(GAV_VERSION_POS)))
       }
       case None => None
@@ -112,7 +113,7 @@ object Logic {
    */
 
   /**
-    * An invalid dependency string formatter
+    * A string formatter for n invalid dependencies
     *
     * @param s string to format
     * @return string formatted
