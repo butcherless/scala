@@ -11,18 +11,18 @@ object ServiceActor {
 
   sealed trait ServiceActorCommand
 
-  case class ServiceCommandTwo(id: UUID) extends ServiceActorCommand
+  case class ServiceTellCommand(id: UUID) extends ServiceActorCommand
 
-  case class ServiceCommandAsk(number: Long, replayTo: ActorRef[ServiceActorResponse]) extends ServiceActorCommand
+  case class ServiceAskCommand(number: Long, replayTo: ActorRef[ServiceActorResponse]) extends ServiceActorCommand
 
   case object Stop extends ServiceActorCommand
 
 
   sealed trait ServiceActorResponse
 
-  case class ServiceResponseEven(message: String) extends ServiceActorResponse
+  case class ServiceEvenResponse(message: String) extends ServiceActorResponse
 
-  case class ServiceResponseOdd(message: String) extends ServiceActorResponse
+  case class ServiceOddResponse(message: String) extends ServiceActorResponse
 
 }
 
@@ -36,16 +36,16 @@ class ServiceActor(context: ActorContext[ServiceActor.ServiceActorCommand], serv
   override def onMessage(message: ServiceActorCommand): Behavior[ServiceActorCommand] = {
     message match {
 
-      case ServiceCommandTwo(id) =>
+      case ServiceTellCommand(id) =>
         context.log.info(s"service command tell received with id: $id")
         Behaviors.same
 
-      case ServiceCommandAsk(number, replayTo) =>
+      case ServiceAskCommand(number, replayTo) =>
         context.log.info(s"service command ask received with number: $number")
         if (isEven(number))
-          replayTo ! ServiceResponseEven(s"even number: $number")
+          replayTo ! ServiceEvenResponse(s"even number: $number")
         else
-          replayTo ! ServiceResponseOdd(s"oddnumber: $number")
+          replayTo ! ServiceOddResponse(s"odd number: $number")
         Behaviors.same
 
       case Stop =>

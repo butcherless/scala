@@ -22,7 +22,7 @@ object ThreeLayerWebApp
     implicit val materializer: ActorMaterializer = ActorMaterializer()
     implicit lazy val ec: ExecutionContextExecutor = context.system.executionContext
 
-    context.log.info("HealthAggregator ActorSystem started")
+    context.log.info("ThreeLayerWebApp ActorSystem started")
 
     lazy val routes: Route = new ApiRoutes(context).routes
 

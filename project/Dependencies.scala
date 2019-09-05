@@ -41,7 +41,7 @@ object Dependencies {
 
   // testing code
   lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test
-  lazy val akkaTest = "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test
+  lazy val akkaTest = "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test
   lazy val pegdown = "org.pegdown" % "pegdown" % pegdownVersion % Test
   lazy val scalaTest = "org.scalatest" %% "scalatest" % scalatestVersion % Test
   lazy val specs2 = "org.specs2" %% "specs2-core" % specs2Version % Test
