@@ -5,10 +5,11 @@ SOURCE_PKG=com.cmartin.learn
 SBT_VER=1.3.0
 SCALA_VER="2.13.0"
 ASSEMBLY_VER="0.14.10"
+DEP_GRAPH_VER="0.10.0-RC1"
+DEP_UP_VER="1.2.1"
 LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.0.8"
 SCOVERAGE_VER="1.6.0"
-DEP_UP_VER="1.2.1"
 
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
@@ -20,9 +21,9 @@ echo "sbt.version=${SBT_VER}" > project/build.properties
 
 # create sbt plugins file
 echo 'addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "'${ASSEMBLY_VER}'")
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "'${DEP_GRAPH_VER}'")
 addSbtPlugin("org.jmotor.sbt" % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "'${SCOVERAGE_VER}'")' > project/plugins.sbt
-
 
 # create dependencies file
 echo 'import sbt._
@@ -103,7 +104,7 @@ object Library {
 # create main application
 echo 'package '${SOURCE_PKG}'
 
-import com.cmartin.learn.Library._
+import '${SOURCE_PKG}'.Library._
 import org.slf4j.LoggerFactory
 
 object SimpleApp extends App {
@@ -116,7 +117,7 @@ object SimpleApp extends App {
 
 echo 'package '${SOURCE_PKG}'
 
-import com.cmartin.learn.Library._
+import '${SOURCE_PKG}'.Library._
 import org.scalatest._
 
 class LibrarySpec extends FlatSpec with Matchers {
