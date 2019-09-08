@@ -15,6 +15,7 @@ object Dependencies {
   lazy val scalazVersion = "7.2.28"
   lazy val scalatestVersion = "3.0.8"
   lazy val specs2Version = "4.7.0"
+  lazy val sttpVersion = "1.6.6"
   lazy val uTestVersion = "0.7.1"
 
   // production code
@@ -38,6 +39,8 @@ object Dependencies {
   lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
   lazy val zinc = "org.scala-sbt" %% "zinc" % "1.3.0-M6"
 
+  lazy val sttpBackend = "com.softwaremill.sttp" %% "akka-http-backend" % sttpVersion
+  lazy val sttpJson4s = "com.softwaremill.sttp" %% "json4s" % sttpVersion
 
   // testing code
   lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test

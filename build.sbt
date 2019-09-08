@@ -36,7 +36,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
     commonSettings,
     name := "depAnalyzer",
-    libraryDependencies ++= Seq(specs2)
+    libraryDependencies ++= Seq(akkaStream, json4s, sttpBackend, sttpJson4s, specs2)
   )
 
 lazy val hkTypes = (project in file("hk-types"))
