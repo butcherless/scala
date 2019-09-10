@@ -4,7 +4,7 @@ object Dependencies {
   lazy val akkaHttpVersion = "10.1.9"
   lazy val akkaVersion = "2.5.25"
   lazy val akkaTypedVersion = "2.5.25"
-  lazy val catsVersion = "2.0.0-RC3"
+  lazy val catsVersion = "2.0.0"
   lazy val configVersion = "1.3.4"
   lazy val json4sVersion = "3.6.7"
   lazy val kafkaClientVersion = "2.3.0"
