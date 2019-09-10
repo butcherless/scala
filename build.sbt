@@ -36,14 +36,14 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
     commonSettings,
     name := "depAnalyzer",
-    libraryDependencies ++= Seq(akkaStream, json4s, sttpBackend, sttpJson4s, specs2)
+    libraryDependencies ++= Seq(akkaStream, json4s, sttpBackend, sttpJson4s, logback, specs2)
   )
 
 lazy val hkTypes = (project in file("hk-types"))
   .settings(
     commonSettings,
     name := "hkTypes",
-    libraryDependencies ++= Seq(cats, catsFree, scalaz),
+    libraryDependencies ++= Seq(cats, catsFree, scalaz)
   )
 
 lazy val typeclasses = (project in file("typeclasses"))
@@ -59,7 +59,7 @@ lazy val dtogen = (project in file("dtogen"))
     commonSettings,
     name := "dtogen",
     libraryDependencies ++= Seq(scalaLogging, logback),
-    testFrameworks += new TestFramework("utest.runner.Framework"),
+    testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
 lazy val scalazlearn = (project in file("scalaz"))
@@ -73,13 +73,13 @@ lazy val scalazlearn = (project in file("scalaz"))
 lazy val akkaActors = (project in file("akka-actors"))
   .settings(commonSettings,
     name := "akka-actors-proof-of-concept",
-    libraryDependencies ++= Seq(akkaActor, akkaStream, logback),
+    libraryDependencies ++= Seq(akkaActor, akkaStream, logback)
   )
 
 lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
   .settings(commonSettings,
     name := "akka-actors-typed-poc",
-    libraryDependencies ++= Seq(akkaHttp, akkaActorTyped, akkaStreamTyped, akkaSlf4j, logback, akkaTest),
+    libraryDependencies ++= Seq(akkaHttp, akkaActorTyped, akkaStreamTyped, logback, akkaTest)
   )
 
 lazy val akkahttphw = (project in file("akka-http-hw"))

@@ -1,6 +1,7 @@
-package com.cmartin.learn.actor
+package com.cmartin.utils
 
 import org.slf4j.{Logger, LoggerFactory}
+
 
 /**
   * Proprociona un logger al componente que lo utilice (mixin)

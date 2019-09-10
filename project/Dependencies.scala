@@ -14,6 +14,7 @@ object Dependencies {
   lazy val scalaLoggingVersion = "3.9.2"
   lazy val scalazVersion = "7.2.28"
   lazy val scalatestVersion = "3.0.8"
+  lazy val slf4jVersion = "1.7.26"
   lazy val specs2Version = "4.7.0"
   lazy val sttpVersion = "1.6.6"
   lazy val uTestVersion = "0.7.1"
@@ -33,7 +34,9 @@ object Dependencies {
   lazy val typesafeConfig = "com.typesafe" % "config" % configVersion
   lazy val json4s = "org.json4s" %% "json4s-native" % json4sVersion
   lazy val kafkaClient = "org.apache.kafka" % "kafka-clients" % kafkaClientVersion
-  lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion exclude("org.slf4j", "slf4j-api")
+  lazy val logback = "ch.qos.logback" % "logback-classic" % logbackVersion //exclude("org.slf4j", "slf4j-api")
+  //lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion
+
   lazy val refined = "eu.timepit" %% "refined" % refinedVersion
   lazy val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
   lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
