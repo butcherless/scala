@@ -58,7 +58,9 @@ class HttpManager
     docList.headOption match {
       case Some(remoteDep) =>
         val isNew = remoteDep.latestVersion != dep.version
-        log.info(s"dependency: ${remoteDep.g}:${remoteDep.a}:${remoteDep.latestVersion} <-> ${dep.version} is new? $isNew")
+        if (isNew) {
+          log.info(s"dependency: ${remoteDep.g}:${remoteDep.a}:${remoteDep.latestVersion} <-> ${dep.version} is new? $isNew")
+        }
       case None =>
         log.debug(s"dependency not found: $dep")
     }

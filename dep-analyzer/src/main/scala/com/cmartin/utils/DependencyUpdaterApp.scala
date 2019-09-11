@@ -8,7 +8,7 @@ import scala.util.matching.Regex
 
 object DependencyAnalyzer
   extends App
-with ComponentLogging {
+    with ComponentLogging {
 
   import Logic._
 
@@ -29,13 +29,15 @@ with ComponentLogging {
 
     log.debug(s"reading dep candidate: $line matches regex? $matches")
 
-    val r1: Iterator[Regex.Match] = pattern.findAllMatchIn(line)
-    val regexMatch: Regex.Match = r1.next()
+    if (matches) {
+      val r1: Iterator[Regex.Match] = pattern.findAllMatchIn(line)
+      val regexMatch: Regex.Match = r1.next()
 
-    val dep = Dep(regexMatch.group(1), regexMatch.group(2), regexMatch.group(3))
-    log.debug(s"searching version for: $dep")
+      val dep = Dep(regexMatch.group(1), regexMatch.group(2), regexMatch.group(3))
+      log.debug(s"searching version for: $dep")
 
-    httpManager.getDependencies(dep)
+      httpManager.getDependencies(dep)
+    }
 
   }
   bufferedSource.close
