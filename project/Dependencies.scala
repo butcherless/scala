@@ -10,13 +10,13 @@ object Dependencies {
   lazy val kafkaClientVersion = "2.3.0"
   lazy val logbackVersion = "1.2.3"
   lazy val pegdownVersion = "1.6.0"
-  lazy val refinedVersion = "0.9.9"
+  lazy val refinedVersion = "0.9.10"
   lazy val scalaLoggingVersion = "3.9.2"
   lazy val scalazVersion = "7.2.28"
   lazy val scalatestVersion = "3.0.8"
   lazy val slf4jVersion = "1.7.26"
-  lazy val specs2Version = "4.7.0"
-  lazy val sttpVersion = "1.6.6"
+  lazy val specs2Version = "4.7.1"
+  lazy val sttpVersion = "1.6.7"
   lazy val uTestVersion = "0.7.1"
 
   // production code
