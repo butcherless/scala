@@ -8,7 +8,7 @@ addons:
     update: true
 
 script:
-  - sbt ";clean ;coverage ;test ;coverageReport ;coverageAggregate"
+  - sbt clean test
   - sbt dependencyUpdates
 after_success:
   - sbt coveralls
