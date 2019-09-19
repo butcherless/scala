@@ -1,7 +1,7 @@
 language: scala
 group: travis_lts
 scala:
-  - 2.12.8
+  - 2.13.1
 
 addons:
   apt:
