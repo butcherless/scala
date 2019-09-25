@@ -1,4 +1,4 @@
-package com.cmartin
+package com.cmartin.learn
 
 import java.util.{Properties, UUID}
 
@@ -7,19 +7,15 @@ import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
 
-package object learn {
-
-  trait Greeting {
-    lazy val greeting: String = "simple-application-hello"
-  }
+object Configuration {
 
   trait KafkaConf {
     // config object
     val conf = ConfigFactory.load("kafka.conf")
 
     // kafka config
-    lazy val kafkaHost  = conf.getString("kafka.host")
-    lazy val kafkaPort  = conf.getInt("kafka.port")
+    lazy val kafkaHost = conf.getString("kafka.host")
+    lazy val kafkaPort = conf.getInt("kafka.port")
     lazy val kafkaTopic = conf.getString("kafka.topic")
   }
 
@@ -58,5 +54,6 @@ package object learn {
 
     lazy val consumer = new KafkaConsumer[String, String](props)
   }
+
 
 }

@@ -3,13 +3,16 @@ package com.cmartin.learn
 import java.time.Duration
 import java.util
 
+import com.cmartin.learn.Configuration.SimpleConsumer
 import com.typesafe.scalalogging.Logger
 
 import scala.jdk.CollectionConverters._
 
-object UuidConsumer extends SimpleConsumer
+object UuidConsumer
+  extends SimpleConsumer
 
-object ConsumerApp extends App {
+object ConsumerApp
+  extends App {
 
   val logger = Logger[ConsumerApp.type]
   val loopCount = 10
@@ -20,10 +23,11 @@ object ConsumerApp extends App {
     val records = UuidConsumer.consumer.poll(Duration.ofMillis(500))
     logger.info(s"loop count=$c, records: ${records.count}")
     for (record <- records.asScala) {
-      logger.info(s"kafka message: ${record}")
+      logger.debug(s"kafka message: $record")
+      logger.info(s"kafka message: ${record.value}")
       UuidConsumer.consumer.commitSync
     }
   }
 
-  UuidConsumer.consumer.close
+  UuidConsumer.consumer.close()
 }

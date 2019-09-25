@@ -1,4 +1,4 @@
-= Release Train de librerías de Arquitectura Mutua
+= Release Train de librerías
 Carlos Martin Garcia
 :toc: left
 :toclevels: 4

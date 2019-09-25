@@ -2,13 +2,19 @@ package com.cmartin.learn
 
 import java.util.UUID
 
+import com.cmartin.learn.Configuration.SimpleProducer
+import com.typesafe.scalalogging.Logger
 import org.apache.kafka.clients.producer.ProducerRecord
 
 import scala.util.Random
 
-object UuidProducer extends SimpleProducer
+object UuidProducer
+  extends SimpleProducer
 
-object ProducerApp extends App {
+object ProducerApp
+  extends App {
+
+  val logger = Logger[ProducerApp.type]
 
   def buildRecord(m: String): ProducerRecord[String, String] = {
     new ProducerRecord[String, String](
@@ -18,14 +24,14 @@ object ProducerApp extends App {
     )
   }
 
-  val messageCount = 100
+  val messageCount = 1000
 
   for (i <- 1 to messageCount) {
     val randomString = Random.alphanumeric.take(64).mkString
     UuidProducer.producer.send(buildRecord(s"$randomString[$i]"))
-    Thread.sleep(messageCount / 10)
+    logger.info(s"message $i sent")
   }
 
-  UuidProducer.producer.close
+  UuidProducer.producer.close()
 
 }
