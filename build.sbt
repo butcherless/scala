@@ -24,6 +24,12 @@ lazy val commonSettings = Seq(
   test in assembly := {}
 )
 
+lazy val common = (project in file("common"))
+  .settings(
+    commonSettings,
+    name := "common",
+    libraryDependencies ++= Seq(logback, scalaTest)
+  )
 
 lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
@@ -110,7 +116,7 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
   .settings(commonSettings,
     name := "kafka-producer-consumer",
     libraryDependencies ++= Seq(typesafeConfig, kafkaClient, logback, scalaLogging)
-  )
+  ).dependsOn(common)
 
 lazy val json4sUtils = (project in file("json4s-utils"))
   .settings(commonSettings,
