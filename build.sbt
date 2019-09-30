@@ -42,7 +42,16 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
     commonSettings,
     name := "depAnalyzer",
-    libraryDependencies ++= Seq(akkaStream, json4s, sttpBackend, sttpJson4s, logback, specs2)
+    libraryDependencies ++= Seq(
+      akkaStream,
+      circeGeneric,
+      circeParser,
+      json4s,
+      sttpBackend,
+      sttpJson4s,
+      logback,
+      zio,
+      specs2)
   )
 
 lazy val hkTypes = (project in file("hk-types"))

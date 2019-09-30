@@ -5,6 +5,7 @@ object Dependencies {
   lazy val akkaVersion = "2.5.25"
   lazy val akkaTypedVersion = "2.5.25"
   lazy val catsVersion = "2.0.0"
+  lazy val circeVersion = "0.12.1"
   lazy val configVersion = "1.3.4"
   lazy val json4sVersion = "3.6.7"
   lazy val kafkaClientVersion = "2.3.0"
@@ -18,6 +19,7 @@ object Dependencies {
   lazy val specs2Version = "4.7.1"
   lazy val sttpVersion = "1.6.7"
   lazy val uTestVersion = "0.7.1"
+  lazy val zioVersion = "1.0.0-RC13"
 
   // production code
   lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
@@ -31,6 +33,10 @@ object Dependencies {
   lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
   lazy val cats = "org.typelevel" %% "cats-core" % catsVersion
   lazy val catsFree = "org.typelevel" %% "cats-free" % catsVersion
+
+  lazy val circeParser = "io.circe" %% "circe-parser" % circeVersion
+  lazy val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
+
   lazy val typesafeConfig = "com.typesafe" % "config" % configVersion
   lazy val json4s = "org.json4s" %% "json4s-native" % json4sVersion
   lazy val kafkaClient = "org.apache.kafka" % "kafka-clients" % kafkaClientVersion
@@ -44,6 +50,8 @@ object Dependencies {
 
   lazy val sttpBackend = "com.softwaremill.sttp" %% "akka-http-backend" % sttpVersion
   lazy val sttpJson4s = "com.softwaremill.sttp" %% "json4s" % sttpVersion
+
+  lazy val zio = "dev.zio" %% "zio" % zioVersion
 
   // testing code
   lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test

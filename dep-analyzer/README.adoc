@@ -1,4 +1,4 @@
-= Release Train de librerías
+= Dependency Analyzer
 Carlos Martin Garcia
 :toc: left
 :toclevels: 4
@@ -7,6 +7,8 @@ Carlos Martin Garcia
 :tabsize: 4
 :docinfo1:
 :source-highlighter: prettify
+
+== Estudio
 
 Obtener dependencias mediante comandos bash
 
@@ -48,3 +50,8 @@ Lista de tareas previas al caso de uso:
 - consultar con maven central para verificar si ha cambiado
 
 - elaborar el report con las dependencias que tienen nueva versión
+
+== Links
+
+- ZIO Error Management: https://www.youtube.com/watch?v=mGxcaQs3JWI
+- Functional Concurrency in Scala with ZIO: https://www.youtube.com/watch?v=m5nas4Hndqo&t=
