@@ -7,11 +7,11 @@ services:
       - "2181:2181"
 
   kafka:
-    image: kafka-docker_kafka
+    image: wurstmeister/kafka
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 192.168.6.198
+      KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_CREATE_TOPICS: "test:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
@@ -24,7 +24,7 @@ services:
     ports:
       - 9000:9000
     environment:
-      ZK_HOSTS: 192.168.6.198:2181
+      ZK_HOSTS: zookeeper:2181
       APPLICATION_SECRET: letmein
       KM_ARGS: -Djava.net.preferIPv4Stack=true
     depends_on:
