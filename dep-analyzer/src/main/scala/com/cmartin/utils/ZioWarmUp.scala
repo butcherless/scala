@@ -1,7 +1,9 @@
 package com.cmartin.utils
 
 import com.cmartin.utils.JsonManager.Action
-import zio.{IO, UIO}
+import zio.{IO, Task, UIO}
+
+import scala.util.Random
 
 object ZioWarmUp {
   val jsonKeys: List[String] = List("k1", "k2", "k3")
@@ -56,6 +58,26 @@ object ZioWarmUp {
     }.either
   }
 
+  case class Gav(group: String, artifact: String, version: String)
+
+  def checkDependency(gav: Gav): Task[Gav] = {
+    println(s"performing action over artifact $gav")
+    val delay = 1000 + Random.nextInt(1000)
+    val fibername = Thread.currentThread().getName()
+    Thread.sleep(delay)
+    println(s"fiber($fibername) took $delay milliseconds")
+    if (gav.version == "v0") IO.fail(new RuntimeException("connection error"))
+    else IO.effect(gav)
+  }
+
+  def checkDependencies(artifactList: List[Gav]): List[Gav] = {
+
+
+    //ZIO.collectAllParN(4)(Iterable.from(actions))
+
+
+    List.empty[Gav] // TODO
+  }
 
   val validMessage =
     """
