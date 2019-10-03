@@ -1,5 +1,6 @@
 package com.cmartin.utils
 
+import com.cmartin.learn.common.TimeUtils
 import com.cmartin.utils.JsonManager.Action
 import zio.{IO, Task, UIO}
 
@@ -60,14 +61,15 @@ object ZioWarmUp {
 
   case class Gav(group: String, artifact: String, version: String)
 
+
   def checkDependency(gav: Gav): Task[Gav] = {
-    println(s"performing action over artifact $gav")
-    val delay = 1000 + Random.nextInt(1000)
-    val fibername = Thread.currentThread().getName()
-    Thread.sleep(delay)
-    println(s"fiber($fibername) took $delay milliseconds")
-    if (gav.version == "v0") IO.fail(new RuntimeException("connection error"))
-    else IO.effect(gav)
+    //println(s"performing action over artifact $gav")
+    val delay = 500 + Random.nextInt(1000)
+    val fiberName = Thread.currentThread().getName()
+    TimeUtils.doDelay(delay)
+    //println(s"fiber($fiberName) took $delay milliseconds")
+    if (gav.version == "") IO.fail(new RuntimeException("connection error"))
+    else IO.effect(gav.copy(version = s"${gav.version}\u2713"))
   }
 
   def checkDependencies(artifactList: List[Gav]): List[Gav] = {

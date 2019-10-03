@@ -1,8 +1,9 @@
 package com.cmartin.utils
 
 import com.cmartin.utils.JsonManager.Action
+import com.cmartin.utils.ZioWarmUp.Gav
 import org.scalatest.{FlatSpec, Matchers}
-import zio.{DefaultRuntime, UIO, ZIO}
+import zio.{DefaultRuntime, Task, UIO, ZIO}
 
 class ZioWarmUpSpec
   extends FlatSpec
@@ -79,29 +80,58 @@ class ZioWarmUpSpec
   }
 
   it should "process actions in parallel" in {
-    val artifactList :  List[Gav] = List(
-      Gav("g1","a11","v1"),
-      Gav("g1","a12","v2"),
-      Gav("g1","a13","v5"),
-      Gav("g2","a21","v32"),
-      Gav("g2","a22","v31"),
-      Gav("g3","a31","v23"),
-      Gav("g3","a32","v23"),
-      Gav("g3","a33","v23"),
-      Gav("g3","a34","v23"),
-      Gav("g3","a35","v23"),
-      Gav("g3","a36","v43"),
-      Gav("g4","a41","v41")
-    )
+    import ZioWarmUpSpec._
 
     val time0 = System.currentTimeMillis()
-    val result = ZIO.foreachParN(4)(artifactList)(checkDependency)
-    runtime.unsafeRun(result)
+
+    val dependencies: Task[List[Gav]] = ZIO.foreachParN(5)(artifactList)(checkDependency)
+    val result: Seq[Gav] = runtime.unsafeRun(dependencies)
+
     val time1 = System.currentTimeMillis()
     val timeElapsed = (time1 - time0) / 1000.toDouble
-    println(s"processing time was: $timeElapsed")
-    //Thread.sleep(5000)
-
+    println(s"processing time was: $timeElapsed, result: ${result.mkString("\n[\n","\n","\n]")}")
   }
+
+}
+
+object ZioWarmUpSpec {
+  val artifactList: List[Gav] = List(
+    Gav("ch.qos.logback", "logback-classic", "1.2.3"),
+    Gav("ch.qos.logback", "logback-core", "1.2.3"),
+    Gav("com.chuusai", "shapeless_2.13", "2.3.3"),
+    Gav("com.cmartin.learn", "depanalyzer_2.13", "1.0.0-SNAPSHOT"),
+    Gav("com.softwaremill.sttp", "akka-http-backend_2.13", "1.6.8"),
+    Gav("com.softwaremill.sttp", "core_2.13", "1.6.8"),
+    Gav("com.softwaremill.sttp", "json-common_2.13", "1.6.8"),
+    Gav("com.softwaremill.sttp", "json4s_2.13", "1.6.8"),
+    Gav("com.thoughtworks.paranamer", "paranamer", "2.8"),
+    Gav("com.typesafe", "config", "1.3.3"),
+    Gav("com.typesafe", "ssl-config-core_2.13", "0.3.8"),
+    Gav("com.typesafe.akka", "akka-actor_2.13", "2.5.25"),
+    Gav("com.typesafe.akka", "akka-http-core_2.13", "10.1.9"),
+    Gav("com.typesafe.akka", "akka-http_2.13", "10.1.9"),
+    Gav("com.typesafe.akka", "akka-parsing_2.13", "10.1.9"),
+    Gav("com.typesafe.akka", "akka-protobuf_2.13", "2.5.25"),
+    Gav("com.typesafe.akka", "akka-stream_2.13", "2.5.25"),
+    Gav("dev.zio", "zio-stacktracer_2.13", "1.0.0-RC13"),
+    Gav("dev.zio", "zio_2.13", "1.0.0-RC13"),
+    Gav("io.circe", "circe-core_2.13", "0.12.1"),
+    Gav("io.circe", "circe-generic_2.13", "0.12.1"),
+    Gav("io.circe", "circe-jawn_2.13", "0.12.1"),
+    Gav("io.circe", "circe-numbers_2.13", "0.12.1"),
+    Gav("io.circe", "circe-parser_2.13", "0.12.1"),
+    Gav("org.json4s", "json4s-ast_2.13", "3.6.7"),
+    Gav("org.json4s", "json4s-core_2.13", "3.6.7"),
+    Gav("org.json4s", "json4s-native_2.13", "3.6.7"),
+    Gav("org.json4s", "json4s-scalap_2.13", "3.6.7"),
+    Gav("org.reactivestreams", "reactive-streams", "1.0.2"),
+    Gav("org.scala-lang.modules", "scala-java8-compat_2.13", "0.9.0"),
+    Gav("org.scala-lang.modules", "scala-parser-combinators_2.13", "1.1.2"),
+    Gav("org.slf4j", "slf4j-api", "1.7.25"),
+    Gav("org.typelevel", "cats-core_2.13", "2.0.0"),
+    Gav("org.typelevel", "cats-kernel_2.13", "2.0.0"),
+    Gav("org.typelevel", "cats-macros_2.13", "2.0.0"),
+    Gav("org.typelevel", "jawn-parser_2.13", "0.14.2")
+  )
 
 }

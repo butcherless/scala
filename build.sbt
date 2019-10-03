@@ -52,7 +52,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       logback,
       zio,
       specs2)
-  )
+  ).dependsOn(common)
 
 lazy val hkTypes = (project in file("hk-types"))
   .settings(
