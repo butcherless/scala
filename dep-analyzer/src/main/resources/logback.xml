@@ -7,7 +7,7 @@
     </appender>
 
     <!-- application loggers -->
-    <logger name="com.cmartin.utils" level="INFO"/>
+    <logger name="com.cmartin.utils" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

@@ -48,7 +48,9 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       circeParser,
       json4s,
       sttpBackend,
+      sttpCore,
       sttpJson4s,
+      sttpZio,
       logback,
       zio,
       specs2)

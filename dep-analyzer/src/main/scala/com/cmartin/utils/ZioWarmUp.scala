@@ -64,7 +64,7 @@ object ZioWarmUp {
 
   def checkDependency(gav: Gav): Task[Gav] = {
     //println(s"performing action over artifact $gav")
-    val delay = 500 + Random.nextInt(1000)
+    val delay = 250 + Random.nextInt(250)
     val fiberName = Thread.currentThread().getName()
     TimeUtils.doDelay(delay)
     //println(s"fiber($fiberName) took $delay milliseconds")

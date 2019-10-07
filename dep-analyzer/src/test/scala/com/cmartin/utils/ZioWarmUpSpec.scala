@@ -3,7 +3,7 @@ package com.cmartin.utils
 import com.cmartin.utils.JsonManager.Action
 import com.cmartin.utils.ZioWarmUp.Gav
 import org.scalatest.{FlatSpec, Matchers}
-import zio.{DefaultRuntime, Task, UIO, ZIO}
+import zio.{DefaultRuntime, IO, Task, UIO, ZIO}
 
 class ZioWarmUpSpec
   extends FlatSpec
@@ -89,7 +89,82 @@ class ZioWarmUpSpec
 
     val time1 = System.currentTimeMillis()
     val timeElapsed = (time1 - time0) / 1000.toDouble
-    println(s"processing time was: $timeElapsed, result: ${result.mkString("\n[\n","\n","\n]")}")
+    println(s"processing time was: $timeElapsed, result: ${result.mkString("\n[\n", "\n", "\n]")}")
+  }
+
+  def doBusinessOperation(message: String): IO[JsonError, String] = {
+    val effect = IO.effect {
+      message match {
+        case "" => throw ParsingException("invalid format")
+        case "mapping" => throw MappingException("invalid type")
+        case "unknown" => throw new RuntimeException("business exception")
+        case _ => "{...processed message...}"
+      }
+    }.mapError {
+      case ParsingException(m) => ParsingError(m)
+      case MappingException(m) => MappingError(m)
+      case _ => UnknownError("unknown error")
+    }
+
+    effect
+  }
+
+  // work with IO and Throwable
+  it should "return processed message" in {
+
+    val prog: IO[JsonError, String] = for {
+      _ <- doBusinessOperation("1")
+      r <- doBusinessOperation("2")
+    } yield r
+
+    val result: String = runtime.unsafeRun(
+      prog
+        .catchAll(_ => IO.succeed("error"))
+    )
+
+    result shouldBe "{...processed message...}"
+  }
+
+  it should "return parsing error" in {
+
+    val prog: IO[JsonError, String] = for {
+      _ <- doBusinessOperation("")
+      r <- doBusinessOperation("2")
+    } yield r
+
+    val result: Either[JsonError, String] = runtime.unsafeRun(
+      prog
+        .either
+    )
+    result.swap.contains(ParsingError("invalid format")) shouldBe true
+  }
+
+  it should "return mapping error" in {
+
+    val prog: IO[JsonError, String] = for {
+      _ <- doBusinessOperation("1")
+      r <- doBusinessOperation("mapping")
+    } yield r
+
+    val result: Either[JsonError, String] = runtime.unsafeRun(
+      prog
+        .either
+    )
+    result.swap.contains(MappingError("invalid type")) shouldBe true
+  }
+
+  it should "return unknown error" in {
+
+    val prog: IO[JsonError, String] = for {
+      _ <- doBusinessOperation("1")
+      r <- doBusinessOperation("unknown")
+    } yield r
+
+    val result: Either[JsonError, String] = runtime.unsafeRun(
+      prog
+        .either
+    )
+    result.swap.contains(UnknownError("unknown error")) shouldBe true
   }
 
 }

@@ -48,8 +48,10 @@ object Dependencies {
   lazy val scalaz = "org.scalaz" %% "scalaz-core" % scalazVersion
   lazy val zinc = "org.scala-sbt" %% "zinc" % "1.3.0-M6"
 
+  lazy val sttpCore = "com.softwaremill.sttp" %% "core" % sttpVersion
   lazy val sttpBackend = "com.softwaremill.sttp" %% "akka-http-backend" % sttpVersion
   lazy val sttpJson4s = "com.softwaremill.sttp" %% "json4s" % sttpVersion
+  lazy val sttpZio = "com.softwaremill.sttp" %% "async-http-client-backend-zio" % sttpVersion
 
   lazy val zio = "dev.zio" %% "zio" % zioVersion
 

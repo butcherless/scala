@@ -1,15 +1,14 @@
 package com.cmartin.utils
 
-import com.cmartin.utils.HttpManager.{Document, HttpBinResponse}
+import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.utils.HttpManager.Document
 import com.cmartin.utils.Logic.Dep
 import com.softwaremill.sttp._
-import com.softwaremill.sttp.akkahttp._
-import com.softwaremill.sttp.json4s._
+import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
+import io.circe.generic.auto._
+import io.circe.parser._
 import org.json4s._
-import org.json4s.native.JsonMethods._
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import zio.{DefaultRuntime, IO, UIO, ZIO}
 
 class HttpManager
   extends ComponentLogging {
@@ -17,54 +16,77 @@ class HttpManager
   implicit val serialization = org.json4s.native.Serialization
   implicit val formats = DefaultFormats
 
-  def getDependencyDoc(uri: String) = {
-    val request = sttp
-      .get(uri"$uri")
-      .response(asJson[HttpBinResponse])
+  val runtime = new DefaultRuntime {}
+  implicit val backend = AsyncHttpClientZioBackend()
 
-    implicit val backend = AkkaHttpBackend()
-    val response: Future[Response[HttpBinResponse]] = request.send()
 
-    println(s"uri: $uri")
+  def checkDependencies(deps: Seq[Dep]): Unit = {
+    val program = ZIO.foreachParN(4)(deps)(getDependency)
+    val exec: Seq[Either[Throwable, (Dep, Dep)]] = runtime.unsafeRun(program)
 
-    for {
-      r <- response
-    } {
-      println(s"Got response code: ${r.code}")
-      println(r.body)
-      backend.close()
+    exec.foreach {
+      case Left(value) => log.error(value.getMessage)
+      case Right(value) =>
+        val (local, remote) = value
+        if (local != remote) log.info(value.toString())
     }
+
+    backend.close()
   }
 
-  def getDependencies(dep: Dep) = {
-    val uri = raw"https://search.maven.org/solrsearch/select?q=g:${dep.group}%20AND%20a:${dep.artifact}%20AND%20p:jar&rows=1&wt=json"
 
-    val request = sttp.get(uri"$uri")
+  def buildUri(dep: Dep): Uri = {
+    val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
+    val rawUri = raw"https://search.maven.org/solrsearch/select?$filter"
+    uri"$rawUri"
+  }
 
-    implicit val backend = HttpURLConnectionBackend()
-    val response = request.send()
 
-    val headers = response.headers.mkString(",\n")
-    log.debug(s"headers $headers")
+  def getDependency(dep: Dep): UIO[Either[Throwable, (Dep, Dep)]] = {
+    IO.effect {
+      val getRequest = sttp
+        .get(buildUri(dep))
 
-    // response.unsafeBody: by default read into a String
-    val bodyString = response.unsafeBody
-    log.debug(s"response body: $bodyString")
+      val bodyResult: UIO[Either[Throwable, Response[String]]] =
+        getRequest
+          .send()
+          .either
+      val exec: Either[Throwable, Response[String]] = runtime.unsafeRun(bodyResult)
 
-    val responseJson = parse(bodyString) \ "response" \ "docs"
-    log.debug(s"doc list: $responseJson")
-    val docList = responseJson.extract[Seq[Document]]
+      exec match {
+        case Right(response) => response.body match {
+          case Right(body) =>
+            log.debug(body)
+            (dep, getDepFromResponse(body))
 
-    docList.headOption match {
-      case Some(remoteDep) =>
-        val isNew = remoteDep.latestVersion != dep.version
-        if (isNew) {
-          log.info(s"dependency: ${remoteDep.g}:${remoteDep.a}:${remoteDep.latestVersion} <-> ${dep.version} is new? $isNew")
+          case Left(errorMessage) =>
+            log.info(s"expected successful result: $errorMessage")
+            throw new RuntimeException(errorMessage)
         }
-      case None =>
-        log.debug(s"dependency not found: $dep")
-    }
+        case Left(exception) =>
+          log.info(s"expected successful result: $exception")
+          throw exception
+      }
+
+    }.either
   }
+
+  def getDepFromResponse(body: String): Dep = {
+    val depEither = for {
+      json <- parse(body)
+      _ <- {
+        val cursor = json.hcursor
+        cursor.downField("response").get[Int]("numFound").filterOrElse(_ == 1, 0)
+      }
+      doc <- {
+        val cursor = json.hcursor
+        cursor.downField("response").downField("docs").downArray.as[Document]
+      }
+    } yield Dep(doc.g, doc.a, doc.latestVersion)
+
+    depEither.fold(e => throw new RuntimeException(s"unavailable dependency count: $e"), d => d)
+  }
+
 }
 
 object HttpManager {
