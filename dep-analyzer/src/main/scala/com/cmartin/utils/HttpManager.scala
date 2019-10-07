@@ -21,7 +21,7 @@ class HttpManager
 
 
   def checkDependencies(deps: Seq[Dep]): Unit = {
-    val program = ZIO.foreachParN(4)(deps)(getDependency)
+    val program = ZIO.foreachParN(2)(deps)(getDependency)
     val exec: Seq[Either[Throwable, (Dep, Dep)]] = runtime.unsafeRun(program)
 
     exec.foreach {
@@ -42,6 +42,7 @@ class HttpManager
   }
 
 
+  //TODO translate from UIO[A] => IO[E,A], 1 for comprehension
   def getDependency(dep: Dep): UIO[Either[Throwable, (Dep, Dep)]] = {
     IO.effect {
       val getRequest = sttp

@@ -41,7 +41,7 @@ object DependencyAnalyzer
     }
   }
 
-  val parsedDeps: Seq[Either[String, Dep]] = parseDependencies("/tmp/deps.log")
+  val parsedDeps: Seq[Either[String, Dep]] = parseDependencies("dep-analyzer/src/main/resources/deps.log")
   val validDeps: Seq[Dep] =
     parsedDeps
       .filter(_.isRight)
@@ -51,9 +51,12 @@ object DependencyAnalyzer
 
   log.debug(s"valid rate: $validRate")
 
+
+  val finalDeps = validDeps.filterNot(_.group.startsWith("com.cmartin"))
+
   val httpManager = HttpManager()
 
-  httpManager.checkDependencies(validDeps)
+  httpManager.checkDependencies(finalDeps)
 
 
   //https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json

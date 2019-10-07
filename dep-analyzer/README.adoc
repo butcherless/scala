@@ -8,6 +8,12 @@ Carlos Martin Garcia
 :docinfo1:
 :source-highlighter: prettify
 
+== TODOes
+
+- manage `java.io.FileNotFoundException`
+- manage `429 Too Many Requests` HTTP status code
+- close resources with _ZIO_ utility to avoid resource leaks, `bufferedSource.close`
+
 == Estudio
 
 Obtener dependencias mediante comandos bash
