@@ -48,6 +48,8 @@ class HttpManager
       val getRequest = sttp
         .get(buildUri(dep))
 
+      log.debug(s"get request: $getRequest")
+
       val bodyResult: UIO[Either[Throwable, Response[String]]] =
         getRequest
           .send()

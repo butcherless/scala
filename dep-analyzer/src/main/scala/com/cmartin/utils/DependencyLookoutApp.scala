@@ -22,14 +22,14 @@ object DependencyAnalyzer
     Source
       .fromFile(filename)
       .getLines()
-      .map(parseDep)
+      .map(parseDepLine)
       .toSeq
 
     //TODO java.io.FileNotFoundException
     // TODO close resources with ZIO utility to avoid resource leaks, bufferedSource.close
   }
 
-  def parseDep(line: String): Either[String, Dep] = {
+  def parseDepLine(line: String): Either[String, Dep] = {
     val matches = pattern.matches(line)
     log.debug(s"reading dependency candidate: $line matches regex? $matches")
 
@@ -41,20 +41,29 @@ object DependencyAnalyzer
     }
   }
 
-  val parsedDeps: Seq[Either[String, Dep]] = parseDependencies("dep-analyzer/src/main/resources/deps.log")
+  /*
+     E X E C U T I O N
+   */
+
+  val httpManager = HttpManager()
+
+
+  val parsedDeps: Seq[Either[String, Dep]] =
+    parseDependencies("dep-analyzer/src/main/resources/deps.log")
+
   val validDeps: Seq[Dep] =
     parsedDeps
-      .filter(_.isRight)
-      .map { case Right(d) => d }
+      .collect {
+        case Right(dep) => dep
+      }
 
   val validRate: Double = 100.toDouble * validDeps.size / parsedDeps.size
-
   log.debug(s"valid rate: $validRate")
 
 
-  val finalDeps = validDeps.filterNot(_.group.startsWith("com.cmartin"))
+  val finalDeps = validDeps
+    .filterNot(_.group.startsWith("com.cmartin"))
 
-  val httpManager = HttpManager()
 
   httpManager.checkDependencies(finalDeps)
 

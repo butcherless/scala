@@ -3,12 +3,11 @@ package com.cmartin.utils
 import com.cmartin.utils.JsonManager.Action
 import com.cmartin.utils.ZioWarmUp.Gav
 import org.scalatest.{FlatSpec, Matchers}
-import zio.{DefaultRuntime, IO, Task, UIO, ZIO}
+import zio._
 
 class ZioWarmUpSpec
   extends FlatSpec
     with Matchers {
-  //with EitherValues{
 
   import ZioWarmUp._
 
@@ -165,6 +164,18 @@ class ZioWarmUpSpec
         .either
     )
     result.swap.contains(UnknownError("unknown error")) shouldBe true
+  }
+
+  // Liskov substitution principle soLid
+  "Sealed trait pattern matching" should "match a subclass" in {
+    val error: JsonError = UnknownError("unknown error")
+
+    val result = error match {
+      case e: JsonError => "subclass"
+      case _ => "not a subclass"
+    }
+
+    assert(result == "subclass")
   }
 
 }

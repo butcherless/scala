@@ -58,32 +58,4 @@ class DepAnalyzerSpec extends Specification {
     result must contain(message)
   }
 
-  //TODO repository must be class instead of object
-
-  /*
-  "repository should return false when Option is None" >> {
-    val previousSize = DependencyRepository.size
-    val depOption = Option.empty
-    val result = DependencyRepository.addDependency(depOption)
-    val currentSize = DependencyRepository.size
-    result must beFalse
-    currentSize must beEqualTo(previousSize)
-  }
-
-  "repository should return true when Option is Some" >> {
-    val previousSize = DependencyRepository.size
-    val depOption = Some(dep1)
-    val result = DependencyRepository.addDependency(depOption)
-    val currentSize = DependencyRepository.size
-    result must beTrue
-    currentSize must beEqualTo(previousSize + 1)
-  }
-
-    "filter should return empty map" >> {
-      println(s"size: ${DependencyRepository.size}")
-      val result1 = DependencyRepository.getSetByVersionCountGreaterThan(1)
-      println(result1)
-      result1.size must beEqualTo(0)
-    }
- */
 }
