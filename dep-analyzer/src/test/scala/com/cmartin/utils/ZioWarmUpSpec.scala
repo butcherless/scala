@@ -1,9 +1,9 @@
 package com.cmartin.utils
 
-import com.cmartin.utils.JsonManager.Action
+import com.cmartin.utils.Domain.FileIOError
 import com.cmartin.utils.ZioWarmUp.Gav
 import org.scalatest.{FlatSpec, Matchers}
-import zio._
+import zio.{Task, _}
 
 class ZioWarmUpSpec
   extends FlatSpec
@@ -177,6 +177,38 @@ class ZioWarmUpSpec
 
     assert(result == "subclass")
   }
+
+  "FileManager" should "read all the lines from a file" in {
+
+    val filename = "dep-analyzer/src/main/resources/deps.log"
+
+    val program = FileManager.getLinesFromFile(filename).refineOrDie {
+      case e: java.io.IOException => FileIOError(s"IO access error: ${e.getMessage}")
+    }
+    val lines = runtime.unsafeRun(program.either)
+
+    lines.isRight shouldBe true
+    lines.map {
+      i => assert(i.nonEmpty)
+    }
+  }
+
+  "FileManager" should "return an error trying to read all the lines from a file" in {
+    val errorMessage = "IO access error"
+
+    val filename = "non-existent.file"
+
+    val program = FileManager.getLinesFromFile(filename).refineOrDie {
+      case e: java.io.IOException => FileIOError(s"$errorMessage: ${e.getMessage}")
+    }
+    val lines = runtime.unsafeRun(program.either)
+
+    lines.isLeft shouldBe true
+    lines.swap.map {
+      e => assert(e.isInstanceOf[FileIOError])
+    }
+  }
+
 
 }
 

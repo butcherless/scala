@@ -1,6 +1,7 @@
 package com.cmartin.utils
 
-import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.learn.common.{ComponentLogging, Utils}
+import zio.{App, Task, UIO}
 
 import scala.util.matching.Regex
 
@@ -8,38 +9,14 @@ import scala.util.matching.Regex
   http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
  */
 
-object DependencyAnalyzer
+object DependencyLookoutApp
   extends App
     with ComponentLogging {
 
-  import Logic._
-
-  import scala.io.Source
+  import Domain._
 
   val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
-  def parseDependencies(filename: String): Seq[Either[String, Dep]] = {
-    Source
-      .fromFile(filename)
-      .getLines()
-      .map(parseDepLine)
-      .toSeq
-
-    //TODO java.io.FileNotFoundException
-    // TODO close resources with ZIO utility to avoid resource leaks, bufferedSource.close
-  }
-
-  def parseDepLine(line: String): Either[String, Dep] = {
-    val matches = pattern.matches(line)
-    log.debug(s"reading dependency candidate: $line matches regex? $matches")
-
-    if (matches) {
-      val regexMatch: Regex.Match = pattern.findAllMatchIn(line).next()
-      Right(Dep(regexMatch.group(1), regexMatch.group(2), regexMatch.group(3)))
-    } else {
-      Left(line)
-    }
-  }
 
   /*
      E X E C U T I O N
@@ -47,7 +24,36 @@ object DependencyAnalyzer
 
   val httpManager = HttpManager()
 
+  val program = for {
+    lines <- FileManager.getLinesFromFile("dep-analyzer/src/main/resources/deps.log")
+    dependencies <- FileManager.parseLines(lines)
+    validDeps <- FileManager.filterValid(dependencies)
+    validRate <- Task.succeed(100.toDouble * validDeps.size / dependencies.size)
+    finalDeps <- Task.succeed(validDeps.filterNot(_.group.startsWith("com.cmartin")))
+    remoteDeps <- httpManager.checkDependencies2(finalDeps)
+  } yield (finalDeps, validRate)
 
+  //httpManager.checkDependencies(exec)
+
+
+  //https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
+  //val uri = raw"https://search.maven.org/solrsearch/select?q=g:com.typesafe.akka%20AND%20a:akka-actor_2.13%20AND%20v:2.5.25%20AND%20p:jar&rows=1&wt=json"
+  override def run(args: List[String]): UIO[Int] = {
+
+    val (deps,rate) = unsafeRun(program)
+
+    //log.info(s"Valid rate of dependencies in the file: $validRate")
+
+    //log.info(s"Dependency list[${deps.size}]")
+
+    log.debug(Utils.prettyPrint(deps))
+    log.debug((s"valid rate: $rate %"))
+
+    UIO(0)
+  }
+}
+
+/* old code
   val parsedDeps: Seq[Either[String, Dep]] =
     parseDependencies("dep-analyzer/src/main/resources/deps.log")
 
@@ -58,18 +64,7 @@ object DependencyAnalyzer
       }
 
   val validRate: Double = 100.toDouble * validDeps.size / parsedDeps.size
-  log.debug(s"valid rate: $validRate")
 
+    log.debug(s"valid rate: $validRate")
 
-  val finalDeps = validDeps
-    .filterNot(_.group.startsWith("com.cmartin"))
-
-
-  httpManager.checkDependencies(finalDeps)
-
-
-  //https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
-  //val uri = raw"https://search.maven.org/solrsearch/select?q=g:com.typesafe.akka%20AND%20a:akka-actor_2.13%20AND%20v:2.5.25%20AND%20p:jar&rows=1&wt=json"
-
-}
-
+ */

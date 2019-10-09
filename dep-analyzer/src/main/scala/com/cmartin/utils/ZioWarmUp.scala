@@ -1,7 +1,6 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.TimeUtils
-import com.cmartin.utils.JsonManager.Action
 import zio.{IO, Task, UIO}
 
 import scala.util.Random
@@ -24,6 +23,7 @@ object ZioWarmUp {
 
   case class UnknownError(m: String) extends JsonError
 
+  case class Action(name: String, result: Int)
 
   case class Json(keys: List[String])
 

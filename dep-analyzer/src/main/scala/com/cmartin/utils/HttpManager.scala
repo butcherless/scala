@@ -1,17 +1,21 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.utils.Domain.Dep
 import com.cmartin.utils.HttpManager.Document
-import com.cmartin.utils.Logic.Dep
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
+import io.circe
+import io.circe.CursorOp.DownField
+import io.circe.DecodingFailure
 import io.circe.generic.auto._
 import io.circe.parser._
 import org.json4s._
-import zio.{DefaultRuntime, IO, UIO, ZIO}
+import zio._
 
-class HttpManager
+final class HttpManager
   extends ComponentLogging {
+
 
   implicit val serialization = org.json4s.native.Serialization
   implicit val formats = DefaultFormats
@@ -19,6 +23,30 @@ class HttpManager
   val runtime = new DefaultRuntime {}
   implicit val backend = AsyncHttpClientZioBackend()
 
+
+  def checkDependencies2(deps: List[Dep]): Task[List[(Dep, Dep)]] = {
+    ZIO.foreachParN(2)(deps)(getDependency2)
+  }
+
+
+  def getDependency2(dep: Dep): Task[(Dep, Dep)] = {
+    val response: Task[Response[String]] = sttp
+      .get(buildUri(dep))
+      .send()
+
+    for {
+      response <- sttp.get(buildUri(dep)).send()
+      remote <- parseResponse(response)
+    } yield (dep, remote)
+
+  }
+
+  def parseResponse(response: Response[String]): Task[ Dep] = {
+    response.body match {
+      case Left(value) => Task.fail(new RuntimeException(value))
+      case Right(value) => parseResponse(value)
+    }
+  }
 
   def checkDependencies(deps: Seq[Dep]): Unit = {
     val program = ZIO.foreachParN(2)(deps)(getDependency)
@@ -32,13 +60,6 @@ class HttpManager
     }
 
     backend.close()
-  }
-
-
-  def buildUri(dep: Dep): Uri = {
-    val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
-    val rawUri = raw"https://search.maven.org/solrsearch/select?$filter"
-    uri"$rawUri"
   }
 
 
@@ -90,6 +111,30 @@ class HttpManager
     depEither.fold(e => throw new RuntimeException(s"unavailable dependency count: $e"), d => d)
   }
 
+
+  def parseResponse(response: String): Either[circe.Error, Dep] = {
+    val opsResult: Either[circe.Error, Dep] = for {
+      json <- parse(response)
+      cursor = json.hcursor
+      count <- cursor.downField("response").get[Int]("numFound")
+      doc <- {
+        if (count > 0)
+          cursor.downField("response").downField("docs").downArray.as[Document]
+        else
+          Left(DecodingFailure("no elements", List(DownField("response"), DownField("numFound"))))
+      }
+    } yield Dep(doc.g, doc.a, doc.latestVersion)
+
+    opsResult
+  }
+
+
+  private def buildUri(dep: Dep): Uri = {
+    val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
+    val rawUri = raw"https://search.maven.org/solrsearch/select?$filter"
+    uri"$rawUri"
+  }
+
 }
 
 object HttpManager {
@@ -112,5 +157,6 @@ object HttpManager {
   def apply(): HttpManager = new HttpManager()
 
   case class HttpBinResponse(origin: String, headers: Map[String, String])
+
 
 }
