@@ -10,107 +10,37 @@ import io.circe.CursorOp.DownField
 import io.circe.DecodingFailure
 import io.circe.generic.auto._
 import io.circe.parser._
-import org.json4s._
 import zio._
 
 final class HttpManager
   extends ComponentLogging {
 
-
-  implicit val serialization = org.json4s.native.Serialization
-  implicit val formats = DefaultFormats
-
-  val runtime = new DefaultRuntime {}
   implicit val backend = AsyncHttpClientZioBackend()
 
 
-  def checkDependencies2(deps: List[Dep]): Task[List[(Dep, Dep)]] = {
-    ZIO.foreachParN(2)(deps)(getDependency2)
+  def checkDependencies(deps: List[Dep]): UIO[List[Either[Throwable, (Dep,Dep)]]] = {
+    ZIO.foreachParN(3)(deps)(getDependency)
   }
 
-
-  def getDependency2(dep: Dep): Task[(Dep, Dep)] = {
-    val response: Task[Response[String]] = sttp
-      .get(buildUri(dep))
-      .send()
-
-    for {
+  def getDependency(dep: Dep): UIO[Either[Throwable, (Dep,Dep)]] = {
+    (for {
       response <- sttp.get(buildUri(dep)).send()
-      remote <- parseResponse(response)
-    } yield (dep, remote)
+      remote <- parseResponse(response)(dep)
+    } yield (dep, remote))
+      .either
 
   }
 
-  def parseResponse(response: Response[String]): Task[ Dep] = {
+  def parseResponse(response: Response[String])(dep: Dep): Task[Dep] = {
     response.body match {
-      case Left(value) => Task.fail(new RuntimeException(value))
-      case Right(value) => parseResponse(value)
-    }
-  }
-
-  def checkDependencies(deps: Seq[Dep]): Unit = {
-    val program = ZIO.foreachParN(2)(deps)(getDependency)
-    val exec: Seq[Either[Throwable, (Dep, Dep)]] = runtime.unsafeRun(program)
-
-    exec.foreach {
-      case Left(value) => log.error(value.getMessage)
-      case Right(value) =>
-        val (local, remote) = value
-        if (local != remote) log.info(value.toString())
-    }
-
-    backend.close()
-  }
-
-
-  //TODO translate from UIO[A] => IO[E,A], 1 for comprehension
-  def getDependency(dep: Dep): UIO[Either[Throwable, (Dep, Dep)]] = {
-    IO.effect {
-      val getRequest = sttp
-        .get(buildUri(dep))
-
-      log.debug(s"get request: $getRequest")
-
-      val bodyResult: UIO[Either[Throwable, Response[String]]] =
-        getRequest
-          .send()
-          .either
-      val exec: Either[Throwable, Response[String]] = runtime.unsafeRun(bodyResult)
-
-      exec match {
-        case Right(response) => response.body match {
-          case Right(body) =>
-            log.debug(body)
-            (dep, getDepFromResponse(body))
-
-          case Left(errorMessage) =>
-            log.info(s"expected successful result: $errorMessage")
-            throw new RuntimeException(errorMessage)
+      case Left(error) => Task.fail(new RuntimeException(error)) //TODO
+      case Right(response) =>
+        parseResponse(response) match {
+          case Left(value) => Task.fail(new RuntimeException(s"${value.getMessage} for $dep"))
+          case Right(value) => Task.succeed(value)
         }
-        case Left(exception) =>
-          log.info(s"expected successful result: $exception")
-          throw exception
-      }
-
-    }.either
+    }
   }
-
-  def getDepFromResponse(body: String): Dep = {
-    val depEither = for {
-      json <- parse(body)
-      _ <- {
-        val cursor = json.hcursor
-        cursor.downField("response").get[Int]("numFound").filterOrElse(_ == 1, 0)
-      }
-      doc <- {
-        val cursor = json.hcursor
-        cursor.downField("response").downField("docs").downArray.as[Document]
-      }
-    } yield Dep(doc.g, doc.a, doc.latestVersion)
-
-    depEither.fold(e => throw new RuntimeException(s"unavailable dependency count: $e"), d => d)
-  }
-
 
   def parseResponse(response: String): Either[circe.Error, Dep] = {
     val opsResult: Either[circe.Error, Dep] = for {
@@ -128,6 +58,70 @@ final class HttpManager
     opsResult
   }
 
+  /*
+    def checkDependencies(deps: Seq[Dep]): Unit = {
+      val program = ZIO.foreachParN(2)(deps)(getDependency)
+      val exec: Seq[Either[Throwable, (Dep, Dep)]] = runtime.unsafeRun(program)
+
+      exec.foreach {
+        case Left(value) => log.error(value.getMessage)
+        case Right(value) =>
+          val (local, remote) = value
+          if (local != remote) log.info(value.toString())
+      }
+
+      backend.close()
+    }
+
+
+    //TODO translate from UIO[A] => IO[E,A], 1 for comprehension
+    def getDependency(dep: Dep): UIO[Either[Throwable, (Dep, Dep)]] = {
+      IO.effect {
+        val getRequest = sttp
+          .get(buildUri(dep))
+
+        log.debug(s"get request: $getRequest")
+
+        val bodyResult: UIO[Either[Throwable, Response[String]]] =
+          getRequest
+            .send()
+            .either
+        val exec: Either[Throwable, Response[String]] = runtime.unsafeRun(bodyResult)
+
+        exec match {
+          case Right(response) => response.body match {
+            case Right(body) =>
+              log.debug(body)
+              (dep, getDepFromResponse(body))
+
+            case Left(errorMessage) =>
+              log.info(s"expected successful result: $errorMessage")
+              throw new RuntimeException(errorMessage)
+          }
+          case Left(exception) =>
+            log.info(s"expected successful result: $exception")
+            throw exception
+        }
+
+      }.either
+    }
+
+    def getDepFromResponse(body: String): Dep = {
+      val depEither = for {
+        json <- parse(body)
+        _ <- {
+          val cursor = json.hcursor
+          cursor.downField("response").get[Int]("numFound").filterOrElse(_ == 1, 0)
+        }
+        doc <- {
+          val cursor = json.hcursor
+          cursor.downField("response").downField("docs").downArray.as[Document]
+        }
+      } yield Dep(doc.g, doc.a, doc.latestVersion)
+
+      depEither.fold(e => throw new RuntimeException(s"unavailable dependency count: $e"), d => d)
+    }
+  */
 
   private def buildUri(dep: Dep): Uri = {
     val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
