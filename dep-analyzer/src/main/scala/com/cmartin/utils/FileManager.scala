@@ -4,7 +4,7 @@ import java.io.{File, FileInputStream}
 
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.DependencyLookoutApp.pattern
-import com.cmartin.utils.Domain.Dep
+import com.cmartin.utils.Domain.Gav
 import zio.{Task, UIO}
 
 import scala.io.BufferedSource
@@ -24,16 +24,16 @@ final object FileManager
 
     if (matches) {
       val regexMatch: Regex.Match = pattern.findAllMatchIn(line).next()
-      Right(Dep(regexMatch.group(1), regexMatch.group(2), regexMatch.group(3)))
+      Right(Gav(regexMatch.group(1), regexMatch.group(2), regexMatch.group(3)))
     } else {
       Left(line)
     }
   }
 
-  def parseLines(lines: List[String]): UIO[List[Either[String, Dep]]] =
+  def parseLines(lines: List[String]): UIO[List[Either[String, Gav]]] =
     UIO(lines.map(parseDepLine))
 
-  def filterValid(dependencies: List[Either[String, Dep]]): UIO[List[Dep]] =
+  def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]] =
     UIO(
       dependencies
         .collect {

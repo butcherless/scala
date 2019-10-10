@@ -15,15 +15,15 @@ object Domain {
     * @param artifact dependency artifact
     * @param version  dependency version
     */
-  case class Dep(group: String, artifact: String, version: String) {
+  case class Gav(group: String, artifact: String, version: String) {
     def key = s"$group:$artifact"
   }
 
   /**
-    * Companion Object for Dep case class
+    * Companion Object for Gav case class
     */
-  object Dep {
-    implicit val ord = new Ordering[Dep] {
+  object Gav {
+    implicit val ord = new Ordering[Gav] {
 
       /**
         * Comparator for dependencies classes
@@ -32,7 +32,7 @@ object Domain {
         * @param d2 another one dependency
         * @return 0 if equals, -1 if less than, +1 if greater than
         */
-      def compare(d1: Dep, d2: Dep): Int = {
+      def compare(d1: Gav, d2: Gav): Int = {
         d1.version.compareTo(d2.version)
       }
     }

@@ -45,7 +45,7 @@ object Logic {
   }
 
   /**
-    * Companion Object for Dep case class
+    * Companion Object for Gav case class
     */
   object Dep {
     implicit val ord = new Ordering[Dep] {

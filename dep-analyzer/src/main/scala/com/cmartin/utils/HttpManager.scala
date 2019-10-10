@@ -1,7 +1,7 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.utils.Domain.Dep
+import com.cmartin.utils.Domain.Gav
 import com.cmartin.utils.HttpManager.Document
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
@@ -18,11 +18,11 @@ final class HttpManager
   implicit val backend = AsyncHttpClientZioBackend()
 
 
-  def checkDependencies(deps: List[Dep]): UIO[List[Either[Throwable, (Dep, Dep)]]] = {
+  def checkDependencies(deps: List[Gav]): UIO[List[Either[Throwable, (Gav, Gav)]]] = {
     ZIO.foreachParN(2)(deps)(getDependency)
   }
 
-  def getDependency(dep: Dep): UIO[Either[Throwable, (Dep, Dep)]] = {
+  def getDependency(dep: Gav): UIO[Either[Throwable, (Gav, Gav)]] = {
     (for {
       response <- sttp.get(buildUri(dep)).send()
       remote <- parseResponse(response)(dep)
@@ -31,7 +31,7 @@ final class HttpManager
 
   }
 
-  def parseResponse(response: Response[String])(dep: Dep): Task[Dep] = {
+  def parseResponse(response: Response[String])(dep: Gav): Task[Gav] = {
     response.body match {
       case Left(error) => Task.fail(new RuntimeException(error)) //TODO
       case Right(response) =>
@@ -42,8 +42,8 @@ final class HttpManager
     }
   }
 
-  def parseResponse(response: String): Either[circe.Error, Dep] = {
-    val opsResult: Either[circe.Error, Dep] = for {
+  def parseResponse(response: String): Either[circe.Error, Gav] = {
+    val opsResult: Either[circe.Error, Gav] = for {
       json <- parse(response)
       cursor = json.hcursor
       count <- cursor.downField("response").get[Int]("numFound")
@@ -53,13 +53,13 @@ final class HttpManager
         else
           Left(DecodingFailure("no elements", List(DownField("response"), DownField("numFound"))))
       }
-    } yield Dep(doc.g, doc.a, doc.latestVersion)
+    } yield Gav(doc.g, doc.a, doc.latestVersion)
 
     opsResult
   }
 
 
-  private def buildUri(dep: Dep): Uri = {
+  private def buildUri(dep: Gav): Uri = {
     val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
     val rawUri = raw"https://search.maven.org/solrsearch/select?$filter"
     uri"$rawUri"
