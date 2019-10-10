@@ -11,7 +11,7 @@
     </appender>
 
     <!-- application loggers -->
-    <logger name="com.cmartin.utils" level="DEBUG"/>
+    <logger name="com.cmartin.utils" level="INFO"/>
 
     <!-- infrastructure loggers -->
     <logger name="io.netty" level="ERROR"/>

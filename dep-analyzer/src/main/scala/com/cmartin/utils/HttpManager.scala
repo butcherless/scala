@@ -18,11 +18,11 @@ final class HttpManager
   implicit val backend = AsyncHttpClientZioBackend()
 
 
-  def checkDependencies(deps: List[Dep]): UIO[List[Either[Throwable, (Dep,Dep)]]] = {
-    ZIO.foreachParN(3)(deps)(getDependency)
+  def checkDependencies(deps: List[Dep]): UIO[List[Either[Throwable, (Dep, Dep)]]] = {
+    ZIO.foreachParN(2)(deps)(getDependency)
   }
 
-  def getDependency(dep: Dep): UIO[Either[Throwable, (Dep,Dep)]] = {
+  def getDependency(dep: Dep): UIO[Either[Throwable, (Dep, Dep)]] = {
     (for {
       response <- sttp.get(buildUri(dep)).send()
       remote <- parseResponse(response)(dep)
@@ -58,70 +58,6 @@ final class HttpManager
     opsResult
   }
 
-  /*
-    def checkDependencies(deps: Seq[Dep]): Unit = {
-      val program = ZIO.foreachParN(2)(deps)(getDependency)
-      val exec: Seq[Either[Throwable, (Dep, Dep)]] = runtime.unsafeRun(program)
-
-      exec.foreach {
-        case Left(value) => log.error(value.getMessage)
-        case Right(value) =>
-          val (local, remote) = value
-          if (local != remote) log.info(value.toString())
-      }
-
-      backend.close()
-    }
-
-
-    //TODO translate from UIO[A] => IO[E,A], 1 for comprehension
-    def getDependency(dep: Dep): UIO[Either[Throwable, (Dep, Dep)]] = {
-      IO.effect {
-        val getRequest = sttp
-          .get(buildUri(dep))
-
-        log.debug(s"get request: $getRequest")
-
-        val bodyResult: UIO[Either[Throwable, Response[String]]] =
-          getRequest
-            .send()
-            .either
-        val exec: Either[Throwable, Response[String]] = runtime.unsafeRun(bodyResult)
-
-        exec match {
-          case Right(response) => response.body match {
-            case Right(body) =>
-              log.debug(body)
-              (dep, getDepFromResponse(body))
-
-            case Left(errorMessage) =>
-              log.info(s"expected successful result: $errorMessage")
-              throw new RuntimeException(errorMessage)
-          }
-          case Left(exception) =>
-            log.info(s"expected successful result: $exception")
-            throw exception
-        }
-
-      }.either
-    }
-
-    def getDepFromResponse(body: String): Dep = {
-      val depEither = for {
-        json <- parse(body)
-        _ <- {
-          val cursor = json.hcursor
-          cursor.downField("response").get[Int]("numFound").filterOrElse(_ == 1, 0)
-        }
-        doc <- {
-          val cursor = json.hcursor
-          cursor.downField("response").downField("docs").downArray.as[Document]
-        }
-      } yield Dep(doc.g, doc.a, doc.latestVersion)
-
-      depEither.fold(e => throw new RuntimeException(s"unavailable dependency count: $e"), d => d)
-    }
-  */
 
   private def buildUri(dep: Dep): Uri = {
     val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
