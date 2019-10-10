@@ -13,7 +13,11 @@
     <!-- application loggers -->
     <logger name="com.cmartin.utils" level="DEBUG"/>
 
-    <root level="INFO">
+    <!-- infrastructure loggers -->
+    <logger name="io.netty" level="ERROR"/>
+    <logger name="org.asynchttpclient" level="ERROR"/>
+
+    <root level="DEBUG">
         <appender-ref ref="ASYNC"/>
     </root>
 
