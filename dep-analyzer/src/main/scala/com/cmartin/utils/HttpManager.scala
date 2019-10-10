@@ -2,7 +2,6 @@ package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.HttpManager.Document
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
 import io.circe
@@ -14,6 +13,8 @@ import zio._
 
 final class HttpManager
   extends ComponentLogging {
+
+  import HttpManager._
 
   implicit val backend = AsyncHttpClientZioBackend()
 
@@ -69,6 +70,8 @@ final class HttpManager
 
 object HttpManager {
 
+  def apply(): HttpManager = new HttpManager()
+
   case class Document(
                        id: String,
                        g: String,
@@ -78,13 +81,12 @@ object HttpManager {
                        timestamp: Long
                      )
 
-  case class Response(
-                       numFound: Int,
-                       start: Int,
-                       docs: Seq[Document]
-                     )
+  case class MavenResponse(
+                            numFound: Int,
+                            start: Int,
+                            docs: Seq[Document]
+                          )
 
-  def apply(): HttpManager = new HttpManager()
 
   case class HttpBinResponse(origin: String, headers: Map[String, String])
 

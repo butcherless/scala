@@ -3,15 +3,23 @@ package com.cmartin.utils
 import java.io.{File, FileInputStream}
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.utils.DependencyLookoutApp.pattern
 import com.cmartin.utils.Domain.Gav
 import zio.{Task, UIO}
 
+import scala.Console.{BLUE, GREEN, RESET}
 import scala.io.BufferedSource
 import scala.util.matching.Regex
 
 final object FileManager
   extends ComponentLogging {
+
+  val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
+
+
+  def formatChanges(tuple: (Gav, Gav)): String = {
+    val (local, remote) = tuple
+    s"${local.formatShort} $RESET$GREEN=>$RESET $RESET$BLUE${remote.version}$RESET"
+  }
 
   def getLinesFromFile(filename: String): Task[List[String]] = for {
     fis <- openFile(filename)
@@ -24,14 +32,21 @@ final object FileManager
 
     if (matches) {
       val regexMatch: Regex.Match = pattern.findAllMatchIn(line).next()
-      Right(Gav(regexMatch.group(1), regexMatch.group(2), regexMatch.group(3)))
+      Right(Gav(
+        regexMatch.group(1), // group
+        regexMatch.group(2), // artifact
+        regexMatch.group(3)) // version
+      )
     } else {
       Left(line)
     }
   }
 
   def parseLines(lines: List[String]): UIO[List[Either[String, Gav]]] =
-    UIO(lines.map(parseDepLine))
+    UIO(
+      lines
+        .map(parseDepLine)
+    )
 
   def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]] =
     UIO(
@@ -52,7 +67,10 @@ final object FileManager
 
 
   private def closeSource(source: BufferedSource): UIO[Unit] = {
-    UIO(source.close())
+    UIO(
+      source
+        .close()
+    )
   }
 
 

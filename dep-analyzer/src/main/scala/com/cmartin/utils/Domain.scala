@@ -17,6 +17,8 @@ object Domain {
     */
   case class Gav(group: String, artifact: String, version: String) {
     def key = s"$group:$artifact"
+
+    def formatShort = s"$group:$artifact:$version"
   }
 
   /**

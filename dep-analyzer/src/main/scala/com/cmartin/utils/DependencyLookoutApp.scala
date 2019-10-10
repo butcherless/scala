@@ -3,6 +3,8 @@ package com.cmartin.utils
 import com.cmartin.learn.common.ComponentLogging
 import zio.{App, Task, UIO}
 
+import scala.Console.{RED, RESET}
+
 /*
   http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
  */
@@ -10,8 +12,6 @@ import zio.{App, Task, UIO}
 object DependencyLookoutApp
   extends App
     with ComponentLogging {
-
-  val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
 
   /*
@@ -38,8 +38,8 @@ object DependencyLookoutApp
     log.debug((s"valid rate: $rate %"))
 
     deps.foreach {
-      case Left(error) => log.info(error.toString())
-      case Right(tuple) => if (tuple._1 != tuple._2) log.info(tuple.toString())
+      case Left(error) => log.info(s"$RESET$RED${error.toString}$RESET")
+      case Right(tuple) => if (tuple._1 != tuple._2) log.info(FileManager.formatChanges(tuple))
     }
 
     UIO(0) //TODO exit code
