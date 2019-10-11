@@ -26,7 +26,7 @@ final object FileManager
     lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
   } yield lines.toList
 
-  def parseDepLine(line: String) = {
+  def parseDepLine(line: String): Either[String, Gav] = {
     val matches = pattern.matches(line)
     log.debug(s"reading dependency candidate: $line matches regex? $matches")
 
