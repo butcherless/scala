@@ -8,6 +8,6 @@ package object environment {
   def getLinesFromFile(filename: String): ZIO[FileManagerEnv, Throwable, List[String]] =
     ZIO.accessM(_.fileManagerEnv getLinesFromFile filename)
 
-//  def parseDepLine(line: String): ZIO[FileManagerEnv, String,  Gav] =
-//    ZIO.accessM(_.fileManagerEnv parseDepLine line)
+  def parseDepLine(line: String): ZIO[FileManagerEnv, Nothing,  Either[String,Gav]] =
+    ZIO.accessM(_.fileManagerEnv parseDepLine line)
 }

@@ -17,7 +17,7 @@
     <logger name="io.netty" level="ERROR"/>
     <logger name="org.asynchttpclient" level="ERROR"/>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="ASYNC"/>
     </root>
 

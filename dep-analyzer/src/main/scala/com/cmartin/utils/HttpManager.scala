@@ -20,7 +20,7 @@ final class HttpManager
 
 
   def checkDependencies(deps: List[Gav]): UIO[List[Either[Throwable, (Gav, Gav)]]] = {
-    ZIO.foreachParN(2)(deps)(getDependency)
+    ZIO.foreachParN(1)(deps)(getDependency)
   }
 
   def getDependency(dep: Gav): UIO[Either[Throwable, (Gav, Gav)]] = {
@@ -29,7 +29,6 @@ final class HttpManager
       remote <- parseResponse(response)(dep)
     } yield (dep, remote))
       .either
-
   }
 
   def parseResponse(response: Response[String])(dep: Gav): Task[Gav] = {

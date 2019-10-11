@@ -16,9 +16,9 @@ object Domain {
     * @param version  dependency version
     */
   case class Gav(group: String, artifact: String, version: String) {
-    def key = s"$group:$artifact"
+    def key: String = s"$group:$artifact"
 
-    def formatShort = s"$group:$artifact:$version"
+    def formatShort: String = s"$group:$artifact:$version"
   }
 
   /**

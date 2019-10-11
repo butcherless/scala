@@ -21,12 +21,14 @@ object DependencyLookoutApp
   val httpManager = HttpManager()
 
   val program = for {
-    lines <- FileManager.getLinesFromFile("dep-analyzer/src/main/resources/deps.log")
+    lines <- FileManager.getLinesFromFile("dep-analyzer/src/main/resources/deps2.log")
     dependencies <- FileManager.parseLines(lines)
+    _ <- FileManager.logErrors(dependencies)
     validDeps <- FileManager.filterValid(dependencies)
     validRate <- Task.succeed(100.toDouble * validDeps.size / dependencies.size)
     finalDeps <- Task.succeed(validDeps.filterNot(_.group.startsWith("com.cmartin")))
     remoteDeps <- httpManager.checkDependencies(finalDeps)
+    //TODO shutdown backend httpManager.shutdown
   } yield (remoteDeps, validRate)
 
   override def run(args: List[String]): UIO[Int] = {

@@ -18,7 +18,7 @@ object FileManagerEnv {
   trait Service {
     def getLinesFromFile(filename: String): Task[List[String]]
 
-    def parseDepLine(line: String): Either[String, Gav]
+    def parseDepLine(line: String): UIO[Either[String, Gav]]
   }
 
   trait Live
@@ -32,7 +32,7 @@ object FileManagerEnv {
       lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
     } yield lines.toList
 
-    override def parseDepLine(line: String): Either[String, Gav] = {
+    override def parseDepLine(line: String): UIO[Either[String, Gav]] = UIO {
       val matches = pattern.matches(line)
       log.debug(s"reading dependency candidate: $line matches regex? $matches")
 

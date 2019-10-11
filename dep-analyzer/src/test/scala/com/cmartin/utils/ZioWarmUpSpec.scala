@@ -7,11 +7,11 @@ import zio.{Task, _}
 
 class ZioWarmUpSpec
   extends FlatSpec
-    with Matchers {
+    with Matchers
+    with DefaultRuntime {
 
   import ZioWarmUp._
 
-  val runtime = new DefaultRuntime {}
 
   "ZIO UIO effect" should "return a value" in {
     // given
@@ -21,7 +21,7 @@ class ZioWarmUpSpec
     // when
     val program: UIO[Int] = sum(a, b)
 
-    val result: Int = runtime.unsafeRun(program)
+    val result: Int = unsafeRun(program)
 
     // then
     assert(result == 4)
@@ -36,7 +36,7 @@ class ZioWarmUpSpec
     val effectResult: UIO[Either[Throwable, Json]] = simulateParseJson(message)
 
     // then
-    val jsonEither: Either[Throwable, Json] = runtime.unsafeRun(effectResult)
+    val jsonEither: Either[Throwable, Json] = unsafeRun(effectResult)
 
     jsonEither.contains(Json(jsonKeys)) shouldBe true
   }
@@ -50,7 +50,7 @@ class ZioWarmUpSpec
     val effectResult: UIO[Either[Throwable, Json]] = simulateParseJson(message)
 
     // then
-    val jsonEither = runtime.unsafeRun(effectResult)
+    val jsonEither = unsafeRun(effectResult)
 
     //val exception = jsonEither.fold(e => e, v => v)
     val isRuntimeException = jsonEither.swap.exists(_.isInstanceOf[RuntimeException])
@@ -63,7 +63,7 @@ class ZioWarmUpSpec
 
     val effectResult: UIO[Either[JsonError, Action]] = simulateJsonMapping(message)
 
-    val action: Either[JsonError, Action] = runtime.unsafeRun(effectResult)
+    val action: Either[JsonError, Action] = unsafeRun(effectResult)
 
     action.contains(Action(message, 0)) shouldBe true
   }
@@ -73,7 +73,7 @@ class ZioWarmUpSpec
 
     val effectResult: UIO[Either[JsonError, Action]] = simulateJsonMapping(message)
 
-    val error: Either[JsonError, Action] = runtime.unsafeRun(effectResult)
+    val error: Either[JsonError, Action] = unsafeRun(effectResult)
 
     error.swap.contains(MappingError("invalid type")) shouldBe true
   }
@@ -84,7 +84,7 @@ class ZioWarmUpSpec
     val time0 = System.currentTimeMillis()
 
     val dependencies: Task[List[Gav]] = ZIO.foreachParN(5)(artifactList)(checkDependency)
-    val result: Seq[Gav] = runtime.unsafeRun(dependencies)
+    val result: Seq[Gav] = unsafeRun(dependencies)
 
     val time1 = System.currentTimeMillis()
     val timeElapsed = (time1 - time0) / 1000.toDouble
@@ -116,7 +116,7 @@ class ZioWarmUpSpec
       r <- doBusinessOperation("2")
     } yield r
 
-    val result: String = runtime.unsafeRun(
+    val result: String = unsafeRun(
       prog
         .catchAll(_ => IO.succeed("error"))
     )
@@ -131,7 +131,7 @@ class ZioWarmUpSpec
       r <- doBusinessOperation("2")
     } yield r
 
-    val result: Either[JsonError, String] = runtime.unsafeRun(
+    val result: Either[JsonError, String] = unsafeRun(
       prog
         .either
     )
@@ -145,7 +145,7 @@ class ZioWarmUpSpec
       r <- doBusinessOperation("mapping")
     } yield r
 
-    val result: Either[JsonError, String] = runtime.unsafeRun(
+    val result: Either[JsonError, String] = unsafeRun(
       prog
         .either
     )
@@ -159,7 +159,7 @@ class ZioWarmUpSpec
       r <- doBusinessOperation("unknown")
     } yield r
 
-    val result: Either[JsonError, String] = runtime.unsafeRun(
+    val result: Either[JsonError, String] = unsafeRun(
       prog
         .either
     )
@@ -185,7 +185,7 @@ class ZioWarmUpSpec
     val program = FileManager.getLinesFromFile(filename).refineOrDie {
       case e: java.io.IOException => FileIOError(s"IO access error: ${e.getMessage}")
     }
-    val lines = runtime.unsafeRun(program.either)
+    val lines = unsafeRun(program.either)
 
     lines.isRight shouldBe true
     lines.map {
@@ -201,7 +201,7 @@ class ZioWarmUpSpec
     val program = FileManager.getLinesFromFile(filename).refineOrDie {
       case e: java.io.IOException => FileIOError(s"$errorMessage: ${e.getMessage}")
     }
-    val lines = runtime.unsafeRun(program.either)
+    val lines = unsafeRun(program.either)
 
     lines.isLeft shouldBe true
     lines.swap.map {
@@ -209,7 +209,17 @@ class ZioWarmUpSpec
     }
   }
 
+  //TODO tests ZIO.sleep(duration)
+  it should "sleep the fiber" in {
+    import zio.duration._
+    val program = for {
+      _ <- UIO.succeed(println(1))
+      _ <- ZIO.sleep(2.second)
+      _ <- UIO.succeed(println(2))
+    } yield ()
 
+    unsafeRun(program)
+  }
 }
 
 object ZioWarmUpSpec {

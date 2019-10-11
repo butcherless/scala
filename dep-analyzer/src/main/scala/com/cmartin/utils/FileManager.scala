@@ -13,7 +13,8 @@ import scala.util.matching.Regex
 final object FileManager
   extends ComponentLogging {
 
-  val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
+
+  val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
 
   def formatChanges(tuple: (Gav, Gav)): String = {
@@ -26,7 +27,7 @@ final object FileManager
     lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
   } yield lines.toList
 
-  def parseDepLine(line: String): Either[String, Gav] = {
+  def parseDepLine(line: String): UIO[Either[String, Gav]] = UIO{
     val matches = pattern.matches(line)
     log.debug(s"reading dependency candidate: $line matches regex? $matches")
 
@@ -43,10 +44,7 @@ final object FileManager
   }
 
   def parseLines(lines: List[String]): UIO[List[Either[String, Gav]]] =
-    UIO(
-      lines
-        .map(parseDepLine)
-    )
+    UIO.foreach(lines)(line => parseDepLine(line))
 
   def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]] =
     UIO(
@@ -56,6 +54,14 @@ final object FileManager
         }
     )
 
+  def logErrors(dependencies: List[Either[String, Gav]]) = {
+    UIO(
+      dependencies.foreach {
+        case Left(value) => log.error(value)
+        case Right(value) => log.info(value.toString)
+      }
+    )
+  }
 
   /*
     H E L P E R S
