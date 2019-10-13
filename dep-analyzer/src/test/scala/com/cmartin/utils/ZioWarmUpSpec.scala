@@ -182,7 +182,7 @@ class ZioWarmUpSpec
 
     val filename = "dep-analyzer/src/main/resources/deps.log"
 
-    val program = FileManager.getLinesFromFile(filename).refineOrDie {
+    val program = OldFileManager.getLinesFromFile(filename).refineOrDie {
       case e: java.io.IOException => FileIOError(s"IO access error: ${e.getMessage}")
     }
     val lines = unsafeRun(program.either)
@@ -198,7 +198,7 @@ class ZioWarmUpSpec
 
     val filename = "non-existent.file"
 
-    val program = FileManager.getLinesFromFile(filename).refineOrDie {
+    val program = OldFileManager.getLinesFromFile(filename).refineOrDie {
       case e: java.io.IOException => FileIOError(s"$errorMessage: ${e.getMessage}")
     }
     val lines = unsafeRun(program.either)

@@ -10,7 +10,7 @@ import scala.Console.{BLUE, GREEN, RESET}
 import scala.io.BufferedSource
 import scala.util.matching.Regex
 
-final object FileManager
+final object OldFileManager
   extends ComponentLogging {
 
 
