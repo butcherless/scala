@@ -1,6 +1,7 @@
 package com.cmartin.utils
 
 import com.cmartin.utils.Domain.FileIOError
+import com.cmartin.utils.TestDomain.{MyException1, MyException2, MyTestException}
 import com.cmartin.utils.ZioWarmUp.Gav
 import org.scalatest.{FlatSpec, Matchers}
 import zio.{Task, _}
@@ -220,6 +221,24 @@ class ZioWarmUpSpec
 
     unsafeRun(program)
   }
+
+
+  // catch some exceptions or die
+  it should "todo" in {
+    val task: IO[MyTestException, Int] =
+      Task
+        .effect(1 + 1 / 0)
+        .refineOrDie {
+          case e: java.lang.IllegalArgumentException => MyException1("refine illegal argument")
+          case e: java.lang.ArithmeticException => MyException2("refine arithmetic")
+        }
+
+    val result = unsafeRun(task.either)
+    result.swap.map { e =>
+      assert(e.isInstanceOf[MyException2])
+    }
+  }
+
 }
 
 object ZioWarmUpSpec {
