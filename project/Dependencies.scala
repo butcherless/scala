@@ -16,10 +16,10 @@ object Dependencies {
   lazy val scalazVersion = "7.2.29"
   lazy val scalatestVersion = "3.0.8"
   lazy val slf4jVersion = "1.7.26"
-  lazy val specs2Version = "4.7.1"
+  lazy val specs2Version = "4.8.0"
   lazy val sttpVersion = "1.7.2"
   lazy val uTestVersion = "0.7.1"
-  lazy val zioVersion = "1.0.0-RC14"
+  lazy val zioVersion = "1.0.0-RC15"
 
   // production code
   lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
