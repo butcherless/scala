@@ -7,6 +7,7 @@ import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.Gav
 import zio.{Task, UIO, ZIO}
 
+import scala.Console.{GREEN, RED, RESET}
 import scala.io.BufferedSource
 import scala.util.matching.Regex
 
@@ -22,8 +23,9 @@ trait FileManagerLive
       lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
     } yield lines.toList
 
-    override def parseLines(lines: List[String]): UIO[List[Either[String, Domain.Gav]]] =
+    override def parseLines(lines: List[String]): UIO[List[Either[String, Domain.Gav]]] = {
       UIO.foreach(lines)(line => UIO(parseDepLine(line)))
+    }
 
     override def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]] =
       UIO(
@@ -36,7 +38,7 @@ trait FileManagerLive
     override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
       Task(
         dependencies.foreach {
-          case Left(line) => log.info(line)
+          case Left(line) => log.info(s"$RESET${RED}invalid dependency$RESET => $line") //TODO create printRed helper function
           case Right(dep) => log.info(dep.toString)
         }
       )
@@ -89,4 +91,8 @@ object FileManagerLive extends FileManagerLive
 object FileManagerHelper {
   def getLinesFromFile(filename: String): ZIO[FileManager, Throwable, List[String]] =
     ZIO.accessM(_.manager getLinesFromFile filename)
+
+  def parseLines(lines: List[String]): ZIO[FileManager, Nothing, List[Either[String, Gav]]] =
+    ZIO.accessM(_.manager parseLines lines)
+
 }

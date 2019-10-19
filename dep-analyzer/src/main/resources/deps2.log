@@ -15,7 +15,7 @@ com.openhtmltopdf:openhtmltopdf-pdfbox:0.0.1-RC13
 com.openhtmltopdf:openhtmltopdf-rtl-support:0.0.1-RC13
 com.thesamet.scalapb:lenses_2.13:0.9.0
 com.thesamet.scalapb:scalapb-runtime_2.13:0.9.0
-com.typesafe:config:1.2.1
+com.typesafe$:config:1.2.1
 com.vladsch.flexmark:flexmark:0.40.4
 com.vladsch.flexmark:flexmark-all:0.40.4
 com.vladsch.flexmark:flexmark-ext-abbreviation:0.40.4

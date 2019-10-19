@@ -11,8 +11,11 @@ object FileManager {
 
   trait Service {
     def getLinesFromFile(filename: String): Task[List[String]]
+
     def parseLines(lines: List[String]): UIO[List[Either[String, Gav]]]
+
     def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]]
+
     def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit]
   }
 

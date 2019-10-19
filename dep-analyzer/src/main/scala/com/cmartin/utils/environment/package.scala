@@ -1,7 +1,7 @@
 package com.cmartin.utils
 
 import com.cmartin.utils.Domain.Gav
-import zio.{RIO, ZIO}
+import zio.ZIO
 
 package object environment {
 
@@ -14,6 +14,6 @@ package object environment {
   def logDepCollection(dependencies: List[Either[String, Gav]]): ZIO[FileManager, Throwable, Unit] =
     ZIO.accessM(_.manager logDepCollection dependencies)
 
-  def filterValid(dependencies: List[Either[String, Gav]]): RIO[FileManager, List[Gav]] =
+  def filterValid(dependencies: List[Either[String, Gav]]): ZIO[FileManager, Nothing, List[Gav]] =
     ZIO.accessM(_.manager filterValid dependencies)
 }
