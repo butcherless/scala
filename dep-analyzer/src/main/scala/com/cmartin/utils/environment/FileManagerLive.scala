@@ -3,11 +3,11 @@ package com.cmartin.utils.environment
 import java.io.{File, FileInputStream}
 
 import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.learn.common.Utils.colourRed
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.Gav
 import zio.{Task, UIO, ZIO}
 
-import scala.Console.{GREEN, RED, RESET}
 import scala.io.BufferedSource
 import scala.util.matching.Regex
 
@@ -28,17 +28,22 @@ trait FileManagerLive
     }
 
     override def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]] =
-      UIO(
+      UIO.effectTotal(
         dependencies
           .collect {
             case Right(dep) => dep
           }
       )
 
+    override def excludeList(dependencies: List[Gav], exclusionList: List[String]): UIO[List[Gav]] =
+      UIO.effectTotal(
+        dependencies.filterNot(dep => exclusionList.contains(dep.group))
+      )
+
     override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
       Task(
         dependencies.foreach {
-          case Left(line) => log.info(s"$RESET${RED}invalid dependency$RESET => $line") //TODO create printRed helper function
+          case Left(line) => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}") //TODO create printRed helper function
           case Right(dep) => log.info(dep.toString)
         }
       )

@@ -17,6 +17,8 @@ object FileManager {
     def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]]
 
     def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit]
+
+    def excludeList(dependencies: List[Gav], exclusionList: List[String]): UIO[List[Gav]]
   }
 
 }

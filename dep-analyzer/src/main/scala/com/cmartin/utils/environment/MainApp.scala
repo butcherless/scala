@@ -8,6 +8,7 @@ object MainApp
     with ComponentLogging {
 
   val filename = "dep-analyzer/src/main/resources/deps2.log"
+  val exclusionList = List("com.cmartin.learn")
 
   override def run(args: List[String]): UIO[Int] = {
 
@@ -20,7 +21,9 @@ object MainApp
         validDeps <- filterValid(parsedLines)
         t <- UIO(System.currentTimeMillis() - t0)
         _ <- logDepCollection(parsedLines)
-      } yield (validDeps, t)
+        finalDeps <- excludeList(validDeps, exclusionList) //TODO exclude(validDeps, exclusionList)
+
+      } yield (finalDeps, t)
 
 
     val programLive = program.provide(FileManagerLive)
@@ -33,8 +36,7 @@ object MainApp
         UIO(1)
 
       case Right(list) =>
-        val prettyList = Utils.prettyPrint(list._1)
-        //log.info(s"lines: $prettyList, nano time: ${list._2}")
+        Utils.prettyPrint(list._1)
         UIO(0)
     }
   }

@@ -1,5 +1,6 @@
 package com.cmartin.zio
 
+import com.cmartin.utils.Domain.Gav
 import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
 import org.scalatest.{FlatSpec, Matchers}
 import zio.{DefaultRuntime, FiberFailure, IO, Task, ZIO}
@@ -82,4 +83,29 @@ class ZioLearnSpec
     result shouldBe Left("mapped error")
   }
 
+
+  it should "todo" in {
+    import ZioLearnSpec._
+
+    val exclusionList = List("group-2", "group-4")
+    val result = artifacts.filterNot(dep => exclusionList.contains(dep.group))
+
+    result shouldBe filteredArtifacts
+  }
+}
+
+object ZioLearnSpec {
+  val artifacts: List[Gav] = List(
+    Gav("group-1", "a11", "v11"),
+    Gav("group-1", "a12", "v12"),
+    Gav("group-2", "a21", "v21"),
+    Gav("group-3", "a31", "v31"),
+    Gav("group-4", "a4", "v41")
+  )
+
+  val filteredArtifacts: List[Gav] = List(
+    Gav("group-1", "a11", "v11"),
+    Gav("group-1", "a12", "v12"),
+    Gav("group-3", "a31", "v31")
+  )
 }
