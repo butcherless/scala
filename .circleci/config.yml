@@ -11,7 +11,6 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      JVM_OPTS: -Xmx2048m
       TERM: dumb
 
     steps:
@@ -21,7 +20,7 @@ jobs:
       - run:
           name: compile, test
           command: |
-                   sbt -mem 2048 ";clean ;coverageReport ;test ;coverageAggregate; dependencyUpdates"
+                   sbt ";clean ;coverageReport ;test ;coverageAggregate; dependencyUpdates"
                    bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
 
 
@@ -32,7 +31,6 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      JVM_OPTS: -Xmx1536m
       TERM: dumb
 
     steps:
