@@ -1,6 +1,6 @@
--server
--Xms512M
--Xmx3000M
--Xss1M
--XX:+UseG1GC
--XX:NewRatio=8
+-J-server
+-J-Xms512M
+-J-Xmx3000M
+-J-Xss1M
+-J-XX:+UseG1GC
+-J-XX:NewRatio=8
