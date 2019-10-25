@@ -1,9 +1,11 @@
 .DS_Store
-.idea
 .gradle
-*.class
-*.iml
-build/
-target/
-out/
+.idea
 .metals/
+.sbtopts
+.vscode/
+bin/
+build/
+out/
+target/
+*.iml
