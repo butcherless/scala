@@ -17,6 +17,9 @@ package object environment {
   def filterValid(dependencies: List[Either[String, Gav]]): ZIO[FileManager, Nothing, List[Gav]] =
     ZIO.accessM(_.manager filterValid dependencies)
 
-  def excludeList(dependencies: List[Gav], exclusionList: List[String]): ZIO[FileManager, Nothing, List[Gav]] =
-    ZIO.accessM(_.manager excludeList(dependencies, exclusionList))
+  def excludeList(
+      dependencies: List[Gav],
+      exclusionList: List[String]
+  ): ZIO[FileManager, Nothing, List[Gav]] =
+    ZIO.accessM(_.manager excludeList (dependencies, exclusionList))
 }

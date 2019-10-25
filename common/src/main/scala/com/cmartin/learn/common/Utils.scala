@@ -1,6 +1,6 @@
 package com.cmartin.learn.common
 
-import scala.Console.{GREEN, RED, RESET}
+import scala.Console.{BLUE, GREEN, RED, RESET}
 
 object Utils {
 
@@ -12,6 +12,9 @@ object Utils {
 
   def colourGreen(text: String): String =
     colour(text, GREEN)
+
+  def colourBlue(text: String): String =
+    colour(text, BLUE)
 
   private def colour(text: String, color: String): String =
     s"$RESET$color$text$RESET"

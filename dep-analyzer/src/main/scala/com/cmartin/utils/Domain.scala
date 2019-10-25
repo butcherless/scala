@@ -2,11 +2,18 @@ package com.cmartin.utils
 
 object Domain {
 
+  type RepoResult[GavPair] = Either[Throwable, GavPair]
+
   sealed trait DomainError
 
   case class FileIOError(message: String) extends DomainError
 
   case class NetworkError(message: String) extends DomainError
+
+  case class GavPair(local: Gav, remote: Gav) {
+    def hasNewVersion(): Boolean =
+      local.version != remote.version
+  }
 
   /**
     * It represents a maven dependency

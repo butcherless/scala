@@ -3,7 +3,7 @@ package com.cmartin.utils.environment
 import java.io.{File, FileInputStream}
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.learn.common.Utils.colourRed
+import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.Gav
 import zio.{Task, UIO, ZIO}
@@ -11,17 +11,16 @@ import zio.{Task, UIO, ZIO}
 import scala.io.BufferedSource
 import scala.util.matching.Regex
 
-trait FileManagerLive
-  extends FileManager
-    with ComponentLogging {
+trait FileManagerLive extends FileManager with ComponentLogging {
 
   val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
   val manager = new FileManager.Service {
-    override def getLinesFromFile(filename: String): Task[List[String]] = for {
-      fis <- openFile(filename)
-      lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
-    } yield lines.toList
+    override def getLinesFromFile(filename: String): Task[List[String]] =
+      for {
+        fis   <- openFile(filename)
+        lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
+      } yield lines.toList
 
     override def parseLines(lines: List[String]): UIO[List[Either[String, Domain.Gav]]] = {
       UIO.foreach(lines)(line => UIO(parseDepLine(line)))
@@ -43,7 +42,8 @@ trait FileManagerLive
     override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
       Task(
         dependencies.foreach {
-          case Left(line) => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}") //TODO create printRed helper function
+          case Left(line) =>
+            log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}") //TODO create printRed helper function
           case Right(dep) => log.info(dep.toString)
         }
       )
@@ -53,7 +53,7 @@ trait FileManagerLive
 
   /*
   H E L P E R S
- */
+   */
 
   private def openFile(filename: String): Task[FileInputStream] =
     Task(
@@ -79,10 +79,12 @@ trait FileManagerLive
 
     if (matches) {
       val regexMatch: Regex.Match = pattern.findAllMatchIn(line).next()
-      Right(Gav(
-        regexMatch.group(1), // group
-        regexMatch.group(2), // artifact
-        regexMatch.group(3)) // version
+      Right(
+        Gav(
+          regexMatch.group(1), // group
+          regexMatch.group(2), // artifact
+          regexMatch.group(3)
+        ) // version
       )
     } else {
       Left(line)
