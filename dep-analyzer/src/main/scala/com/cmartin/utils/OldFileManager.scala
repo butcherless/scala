@@ -10,33 +10,33 @@ import scala.Console.{BLUE, GREEN, RESET}
 import scala.io.BufferedSource
 import scala.util.matching.Regex
 
-final object OldFileManager
-  extends ComponentLogging {
-
+final object OldFileManager extends ComponentLogging {
 
   val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
-
 
   def formatChanges(tuple: (Gav, Gav)): String = {
     val (local, remote) = tuple
     s"${local.formatShort} $RESET$GREEN=>$RESET $RESET$BLUE${remote.version}$RESET"
   }
 
-  def getLinesFromFile(filename: String): Task[List[String]] = for {
-    fis <- openFile(filename)
-    lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
-  } yield lines.toList
+  def getLinesFromFile(filename: String): Task[List[String]] =
+    for {
+      fis   <- openFile(filename)
+      lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
+    } yield lines.toList
 
-  def parseDepLine(line: String): UIO[Either[String, Gav]] = UIO{
+  def parseDepLine(line: String): UIO[Either[String, Gav]] = UIO {
     val matches = pattern.matches(line)
     log.debug(s"reading dependency candidate: $line matches regex? $matches")
 
     if (matches) {
       val regexMatch: Regex.Match = pattern.findAllMatchIn(line).next()
-      Right(Gav(
-        regexMatch.group(1), // group
-        regexMatch.group(2), // artifact
-        regexMatch.group(3)) // version
+      Right(
+        Gav(
+          regexMatch.group(1), // group
+          regexMatch.group(2), // artifact
+          regexMatch.group(3)
+        ) // version
       )
     } else {
       Left(line)
@@ -57,7 +57,7 @@ final object OldFileManager
   def logErrors(dependencies: List[Either[String, Gav]]) = {
     UIO(
       dependencies.foreach {
-        case Left(value) => log.error(value)
+        case Left(value)  => log.error(value)
         case Right(value) => log.info(value.toString)
       }
     )
@@ -71,14 +71,12 @@ final object OldFileManager
       new FileInputStream(new File(filename))
     )
 
-
   private def closeSource(source: BufferedSource): UIO[Unit] = {
     UIO(
       source
         .close()
     )
   }
-
 
   private def getLines(source: BufferedSource): Task[Iterator[String]] =
     Task(

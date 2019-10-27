@@ -3,11 +3,9 @@ package com.cmartin.utils.environment
 import com.cmartin.learn.common.{ComponentLogging, Utils}
 import zio.{App, UIO}
 
-object MainApp
-  extends App
-    with ComponentLogging {
+object MainApp extends App with ComponentLogging {
 
-  val filename = "dep-analyzer/src/main/resources/deps2.log"
+  val filename      = "dep-analyzer/src/main/resources/deps2.log"
   val exclusionList = List("com.cmartin.learn")
 
   override def run(args: List[String]): UIO[Int] = {
@@ -15,16 +13,15 @@ object MainApp
     log.info(s"Running MainApp")
     val program =
       for {
-        lines <- getLinesFromFile(filename)
-        t0 <- UIO(System.currentTimeMillis())
+        lines       <- getLinesFromFile(filename)
+        t0          <- UIO(System.currentTimeMillis())
         parsedLines <- parseLines(lines)
-        validDeps <- filterValid(parsedLines)
-        t <- UIO(System.currentTimeMillis() - t0)
-        _ <- logDepCollection(parsedLines)
-        finalDeps <- excludeList(validDeps, exclusionList) //TODO exclude(validDeps, exclusionList)
+        validDeps   <- filterValid(parsedLines)
+        t           <- UIO(System.currentTimeMillis() - t0)
+        _           <- logDepCollection(parsedLines)
+        finalDeps   <- excludeList(validDeps, exclusionList) //TODO exclude(validDeps, exclusionList)
 
       } yield (finalDeps, t)
-
 
     val programLive = program.provide(FileManagerLive)
 

@@ -7,7 +7,7 @@ import scala.util.Random
 
 object ZioWarmUp {
   val jsonKeys: List[String] = List("k1", "k2", "k3")
-  val jsonDoc: Json = Json(jsonKeys)
+  val jsonDoc: Json          = Json(jsonKeys)
 
   sealed trait JsonException extends Exception
 
@@ -42,7 +42,6 @@ object ZioWarmUp {
     }.either
   }
 
-
   def simulateJsonMapping(message: String): UIO[Either[JsonError, Action]] = {
 
     def extract(message: String): Action = {
@@ -51,20 +50,21 @@ object ZioWarmUp {
     }
 
     IO.effect {
-      extract(message)
-    }.mapError {
-      case e: ParsingException => ParsingError("invalid format")
-      case e: MappingException => MappingError("invalid type")
-      case e: Throwable => UnknownError("error while processing json message")
-    }.either
+        extract(message)
+      }
+      .mapError {
+        case e: ParsingException => ParsingError("invalid format")
+        case e: MappingException => MappingError("invalid type")
+        case e: Throwable        => UnknownError("error while processing json message")
+      }
+      .either
   }
 
   case class Gav(group: String, artifact: String, version: String)
 
-
   def checkDependency(gav: Gav): Task[Gav] = {
     //println(s"performing action over artifact $gav")
-    val delay = 250 + Random.nextInt(250)
+    val delay     = 250 + Random.nextInt(250)
     val fiberName = Thread.currentThread().getName()
     TimeUtils.doDelay(delay)
     //println(s"fiber($fiberName) took $delay milliseconds")
@@ -74,9 +74,7 @@ object ZioWarmUp {
 
   def checkDependencies(artifactList: List[Gav]): List[Gav] = {
 
-
     //ZIO.collectAllParN(4)(Iterable.from(actions))
-
 
     List.empty[Gav] // TODO
   }

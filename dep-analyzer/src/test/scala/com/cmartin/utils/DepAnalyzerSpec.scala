@@ -11,22 +11,22 @@ class DepAnalyzerSpec extends Specification {
   val dep2 = Dep("dep.group", "dep-artifact", "dep-version-2")
 
   "get dependency empty string" >> {
-    val s = "non-dependency-line"
+    val s      = "non-dependency-line"
     val result = getDependency(s)
     result must beNone
   }
 
   "get dependency string  match" >> {
-    val s = "+--- org.springframework.boot:spring-boot-starter-web -> 1.5.10.RELEASE (*)"
+    val s      = "+--- org.springframework.boot:spring-boot-starter-web -> 1.5.10.RELEASE (*)"
     val result = getDependency(s)
     result must beSome
   }
 
   "dependency key must be group:artifact" >> {
-    val group = "org.springframework.boot"
+    val group    = "org.springframework.boot"
     val artifact = "spring-boot-starter-web"
-    val version = "1.5.10.RELEASE"
-    val result = Dep(group, artifact, version).key
+    val version  = "1.5.10.RELEASE"
+    val result   = Dep(group, artifact, version).key
     result must beEqualTo(s"$group:$artifact")
   }
 
@@ -46,15 +46,15 @@ class DepAnalyzerSpec extends Specification {
   }
 
   "mkString formatter string should contain dependency key" >> {
-    val key = "dependency-key"
+    val key                 = "dependency-key"
     val set: SortedSet[Dep] = SortedSet[Dep]()
-    val result = mkString(key, set)
+    val result              = mkString(key, set)
     result must contain(key)
   }
 
   "mkErrorString formatter string should contain parameter" >> {
     val message = "error-message"
-    val result = mkErrorString(message)
+    val result  = mkErrorString(message)
     result must contain(message)
   }
 

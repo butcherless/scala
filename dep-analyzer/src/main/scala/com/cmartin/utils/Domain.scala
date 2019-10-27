@@ -15,6 +15,8 @@ object Domain {
       local.version != remote.version
   }
 
+  case class Results(pairs: List[RepoResult[GavPair]], validRate: Double)
+
   /**
     * It represents a maven dependency
     *

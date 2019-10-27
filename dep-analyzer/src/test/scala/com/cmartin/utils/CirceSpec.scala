@@ -9,9 +9,7 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import org.scalatest.{FlatSpec, Matchers}
 
-class CirceSpec
-  extends FlatSpec
-    with Matchers {
+class CirceSpec extends FlatSpec with Matchers {
 
   import CirceSpec._
 
@@ -35,7 +33,7 @@ class CirceSpec
     // then
     val result = depEither match {
       case Left(value) => value.isInstanceOf[DecodingFailure]
-      case Right(_) => false
+      case Right(_)    => false
     }
 
     result shouldBe true
@@ -60,7 +58,6 @@ object CirceSpec {
 
     opsResult
   }
-
 
   val searchOkResponse =
     """

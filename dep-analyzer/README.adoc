@@ -57,6 +57,16 @@ Lista de tareas previas al caso de uso:
 
 - elaborar el report con las dependencias que tienen nueva versión
 
+
+== Secuencia
+
+. Se obtiene la colección de dependencias de un archivo de texto en el que cada línea de texto contiene un dependencia.
+. Se realiza el parsing de cada línea mediante una `regex` y se obtiene una colección de resultados coincidentes o no.
+. Se filtran los casos coincidentes de la colección anterior.
+. Se filtran las dependencias que pertenecen a determinados `groupId'.
+. Se consultan las versiones de la colección de dependencias final.
+. Se obtiene una colección de resultados que contiene la dependencia _local_ y la dependencia _remota_.
+
 == Links
 
 - ZIO Error Management: https://www.youtube.com/watch?v=mGxcaQs3JWI

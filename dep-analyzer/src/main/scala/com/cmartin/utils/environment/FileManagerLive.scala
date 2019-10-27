@@ -3,7 +3,7 @@ package com.cmartin.utils.environment
 import java.io.{File, FileInputStream}
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
+import com.cmartin.learn.common.Utils.colourRed
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.Gav
 import zio.{Task, UIO, ZIO}

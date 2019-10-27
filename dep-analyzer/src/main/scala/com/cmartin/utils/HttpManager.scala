@@ -24,7 +24,8 @@ final class HttpManager extends ComponentLogging {
   def getDependency(dep: Gav): UIO[RepoResult[GavPair]] = {
     (for {
       response <- sttp.get(buildUri(dep)).send()
-      remote   <- parseResponse(response)(dep)
+
+      remote <- parseResponse(response)(dep)
     } yield GavPair(dep, remote)).either
   }
 
@@ -54,6 +55,13 @@ final class HttpManager extends ComponentLogging {
 
     opsResult
   }
+
+  def shutdown(): UIO[Unit] =
+    UIO.effectTotal(backend.close())
+
+  /*
+      H E L P E R S
+   */
 
   private def buildUri(dep: Gav): Uri = {
     val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
