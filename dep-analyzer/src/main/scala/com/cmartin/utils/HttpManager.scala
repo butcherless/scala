@@ -15,7 +15,7 @@ final class HttpManager extends ComponentLogging {
 
   import HttpManager._
 
-  implicit val backend = AsyncHttpClientZioBackend()
+  implicit val backend: SttpBackend[Task, Nothing] = AsyncHttpClientZioBackend()
 
   def checkDependencies(deps: List[Gav]): UIO[List[RepoResult[GavPair]]] = {
     ZIO.foreachParN(2)(deps)(getDependency)
