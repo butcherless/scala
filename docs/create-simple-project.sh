@@ -74,17 +74,18 @@ lazy val templateProject = (project in file("."))
 # create logback XML config file
 echo '<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
-        </filter>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date %-5level [%10thread] %-40logger:%line{15} - %msg%n</pattern>
+            <pattern>%d{ISO8601} %-5level [%thread] %logger{50} - %msg%n</pattern>
         </encoder>
     </appender>
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT"/>
+    </appender>
+
 
     <root level="DEBUG">
-        <appender-ref ref="stdout"/>
+        <appender-ref ref="ASYNC"/>
     </root>
 </configuration>' > src/main/resources/logback.xml
 
