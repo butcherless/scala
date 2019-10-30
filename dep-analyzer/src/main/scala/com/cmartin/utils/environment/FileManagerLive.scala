@@ -94,12 +94,3 @@ trait FileManagerLive extends FileManager with ComponentLogging {
 }
 
 object FileManagerLive extends FileManagerLive
-
-object FileManagerHelper {
-  def getLinesFromFile(filename: String): ZIO[FileManager, Throwable, List[String]] =
-    ZIO.accessM(_.manager getLinesFromFile filename)
-
-  def parseLines(lines: List[String]): ZIO[FileManager, Nothing, List[Either[String, Gav]]] =
-    ZIO.accessM(_.manager parseLines lines)
-
-}
