@@ -70,6 +70,12 @@ lazy val templateProject = (project in file("."))
       name := "project-template",
   )' > build.sbt
 
+echo '-server
+-Xms512M
+-Xmx3G
+-Xss1M
+-XX:NewRatio=8' > .jvmopts
+
 
 # create logback XML config file
 echo '<?xml version="1.0" encoding="UTF-8"?>
