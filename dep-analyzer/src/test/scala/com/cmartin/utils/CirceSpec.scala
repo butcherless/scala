@@ -28,15 +28,13 @@ class CirceSpec extends FlatSpec with Matchers {
     // given a json response without a dependency
 
     // when
-    val depEither = parseResponse(searchKoResponse)
+    val depEither: Either[circe.Error, Dep] = parseResponse(searchKoResponse)
 
     // then
-    val result = depEither match {
-      case Left(value) => value.isInstanceOf[DecodingFailure]
-      case Right(_)    => false
+    depEither should be(Symbol("left"))
+    depEither.swap.map { error =>
+      assert(error.isInstanceOf[DecodingFailure])
     }
-
-    result shouldBe true
   }
 
 }
