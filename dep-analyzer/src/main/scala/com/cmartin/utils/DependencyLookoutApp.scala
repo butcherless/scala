@@ -2,7 +2,7 @@ package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
-import com.cmartin.utils.Domain.{GavPair, RepoResult, Results}
+import com.cmartin.utils.Domain.{ComparationResult, GavPair, RepoResult, Results, Same}
 import zio.{App, UIO, ZIO}
 
 /*
@@ -39,6 +39,15 @@ object DependencyLookoutApp extends App with ComponentLogging {
     logEitherCollection(results.pairs)
 
     UIO(0) //TODO exit code
+  }
+
+  //TODO move to common object
+
+  //TODO identificar patrones de dependencias
+  // comprobar si ambas pertenecen al mismo patrón
+  def compareVersions(local: String, remote: String): ComparationResult = {
+    if (local == remote) Same
+    else ???
   }
 
   def formatChanges(pair: Domain.GavPair): String =

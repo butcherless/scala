@@ -10,6 +10,17 @@ object Domain {
 
   case class NetworkError(message: String) extends DomainError
 
+  /*
+   Version comparator
+   */
+  sealed trait ComparationResult
+
+  case object Older extends ComparationResult
+
+  case object Same extends ComparationResult
+
+  case object Newer extends ComparationResult
+
   case class GavPair(local: Gav, remote: Gav) {
     def hasNewVersion(): Boolean =
       local.version != remote.version
