@@ -6,8 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import zio.{DefaultRuntime, FiberFailure, IO, Task, ZIO}
 
 class ZioLearnSpec extends FlatSpec with Matchers with DefaultRuntime {
-
-  "A Task" should "throw a FiberFailure" in {
+  "A Task" should "throw a FiberFailure when an exception occurs" in {
     val program = for {
       a <- Task(1)
       b <- Task(1 / 0)
@@ -23,25 +22,9 @@ class ZioLearnSpec extends FlatSpec with Matchers with DefaultRuntime {
     } yield b
 
     val result = unsafeRun(program.either)
-    result.isLeft shouldBe true
-    result.swap.map(e => assert(e.isInstanceOf[ArithmeticException] == true))
+    result shouldBe Symbol("left")
+    result.swap.map(e => assert(e.isInstanceOf[ArithmeticException]))
   }
-
-  //  "A Task" should "DELETE-ME refine a failure" in {
-  //    val program = for {
-  //      a <- Task(1)
-  //      b <- Task(1 / 0).refineOrDie {
-  //        //case e: java.lang.ArithmeticException => e
-  //        case _: Throwable => 0
-  //      }
-  //    } yield b
-  //
-  //
-  //    val result = unsafeRun(program)
-  //    val stop = 0
-  //  }
-
-  // catch some exceptions or die,
 
   it should "refine a failure" in {
     import com.cmartin.utils.ZioLearn.refineError
@@ -78,7 +61,7 @@ class ZioLearnSpec extends FlatSpec with Matchers with DefaultRuntime {
     result shouldBe Left("mapped error")
   }
 
-  it should "todo" in {
+  it should "exclude a sequence of groups" in {
     import ZioLearnSpec._
 
     val exclusionList = List("group-2", "group-4")
