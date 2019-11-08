@@ -27,7 +27,7 @@ object ServiceActor {
 }
 
 class ServiceActor(context: ActorContext[ServiceActor.ServiceActorCommand], serviceId: String)
-  extends AbstractBehavior[ServiceActor.ServiceActorCommand] {
+  extends AbstractBehavior[ServiceActor.ServiceActorCommand](context) {
 
   import ServiceActor._
 

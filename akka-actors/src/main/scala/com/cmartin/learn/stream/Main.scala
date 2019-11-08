@@ -2,17 +2,15 @@ package com.cmartin.learn.stream
 
 import akka.NotUsed
 import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 
 import scala.collection.immutable
 import scala.concurrent.duration._
 
-object Main {//extends App {
+object Main { //extends App {
   println("Main streams")
 
   implicit val system = ActorSystem("QuickStart")
-  implicit val materializer = ActorMaterializer()
   implicit val ec = system.dispatcher
 
   val sources = immutable.Seq(Source(List(1, 2, 3)), Source(List(10, 20, 30)))

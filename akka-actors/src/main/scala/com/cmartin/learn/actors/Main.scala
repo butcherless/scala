@@ -14,7 +14,6 @@ import scala.concurrent.{Await, Future}
 
 object Main extends App {
   implicit val system = ActorSystem("IntegerCalc")
-  implicit val materializer = ActorMaterializer()
 
   // ask timeout
   implicit val askTimeout = Timeout(2.seconds)

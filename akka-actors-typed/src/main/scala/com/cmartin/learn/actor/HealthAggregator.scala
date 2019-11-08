@@ -27,7 +27,7 @@ object HealthAggregator {
 }
 
 class HealthAggregator(context: ActorContext[AggregatorMessage])
-  extends AbstractBehavior[AggregatorMessage] {
+  extends AbstractBehavior[AggregatorMessage](context) {
 
   import DummyInfrastructureManager._
 

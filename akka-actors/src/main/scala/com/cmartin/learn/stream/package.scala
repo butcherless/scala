@@ -22,6 +22,7 @@ package object stream {
 
   /**
     * Generates a Stream of positive integers
+    *
     * @return the stream
     */
   def buildRandomPositiveIntSource(): Source[Int, NotUsed] = {
