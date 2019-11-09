@@ -62,5 +62,4 @@ object Dependencies {
   lazy val scalaTest    = "org.scalatest"     %% "scalatest"                % scalatestVersion % Test
   lazy val specs2       = "org.specs2"        %% "specs2-core"              % specs2Version    % Test
   lazy val uTest        = "com.lihaoyi"       %% "utest"                    % uTestVersion     % Test
-
 }

@@ -3,7 +3,7 @@ package com.cmartin.utils
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
 import com.cmartin.utils.Domain.{ComparationResult, GavPair, RepoResult, Results, Same}
-import com.cmartin.utils.environment.{FileManager, FileManagerLive}
+import com.cmartin.utils.environment.{FileManager, FileManagerLive, LogicManager, LogicManagerLive}
 import zio.{App, UIO, ZIO}
 
 /*
@@ -12,6 +12,7 @@ import zio.{App, UIO, ZIO}
 
 object DependencyLookoutApp extends App with ComponentLogging {
   import environment.FileManagerHelper._
+  import environment.LogicManagerHelper._
 
   val httpManager = HttpManager()
 
@@ -22,12 +23,14 @@ object DependencyLookoutApp extends App with ComponentLogging {
       R = MyApp : ConfigManger : LogManager : FileManager : HttpManager :  Helper : ...
    */
 
-  val program: ZIO[FileManager, Throwable, Results] = for {
+  object AppModules extends FileManagerLive with LogicManagerLive
+
+  val program: ZIO[FileManager with LogicManager, Throwable, Results] = for {
     lines        <- getLinesFromFile("dep-analyzer/src/main/resources/deps2.log")
     dependencies <- parseLines(lines)
     _            <- logDepCollection(dependencies)
     validDeps    <- filterValid(dependencies)
-    validRate    <- UIO.succeed(100.toDouble * validDeps.size / dependencies.size)
+    validRate    <- calculateValidRate(dependencies.size, validDeps.size)
     finalDeps    <- excludeList(validDeps, exclusionList)
     remoteDeps   <- httpManager.checkDependencies(finalDeps)
     _            <- httpManager.shutdown()
@@ -37,7 +40,7 @@ object DependencyLookoutApp extends App with ComponentLogging {
      E X E C U T I O N
    */
   override def run(args: List[String]): UIO[Int] = {
-    val results: Results = unsafeRun(program.provide(FileManagerLive))
+    val results: Results = unsafeRun(program.provide(AppModules))
 
     log.info(s"Valid rate of dependencies in the file: ${results.validRate} %")
 

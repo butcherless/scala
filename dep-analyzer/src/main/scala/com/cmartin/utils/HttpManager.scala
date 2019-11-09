@@ -21,7 +21,7 @@ final class HttpManager extends ComponentLogging {
     // factor paralelización
     // lista de elementos a procesar
     // funcion de procesamiento
-    ZIO.foreachParN(2)(deps)(getDependency)
+    ZIO.foreachParN(1)(deps)(getDependency)
   }
 
   def getDependency(dep: Gav): UIO[RepoResult[GavPair]] = {
