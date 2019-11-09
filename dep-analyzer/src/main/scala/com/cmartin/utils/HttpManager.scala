@@ -18,13 +18,15 @@ final class HttpManager extends ComponentLogging {
   implicit val backend: SttpBackend[Task, Nothing] = AsyncHttpClientZioBackend()
 
   def checkDependencies(deps: List[Gav]): UIO[List[RepoResult[GavPair]]] = {
+    // factor paralelización
+    // lista de elementos a procesar
+    // funcion de procesamiento
     ZIO.foreachParN(2)(deps)(getDependency)
   }
 
   def getDependency(dep: Gav): UIO[RepoResult[GavPair]] = {
     (for {
       response <- sttp.get(buildUri(dep)).send()
-
       remote <- parseResponse(response)(dep)
     } yield GavPair(dep, remote)).either
   }
@@ -54,6 +56,7 @@ final class HttpManager extends ComponentLogging {
     } yield Gav(doc.g, doc.a, doc.latestVersion)
 
     opsResult
+
   }
 
   def shutdown(): UIO[Unit] =

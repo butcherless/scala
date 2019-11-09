@@ -14,7 +14,12 @@ object DependencyLookoutApp extends App with ComponentLogging {
 
   val httpManager = HttpManager()
 
-  val exclusionList = List("com.globalavl.hiber.services")
+  val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
+
+  /*
+      ZIO[R, E, A]
+      R = MyApp : ConfigManger : LogManager : FileManager : HttpManager :  Helper : ...
+   */
 
   val program: ZIO[FileManager, Throwable, Results] = for {
     lines        <- getLinesFromFile("dep-analyzer/src/main/resources/deps2.log")
