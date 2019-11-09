@@ -3,6 +3,7 @@ package com.cmartin.utils
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
 import com.cmartin.utils.Domain.{ComparationResult, GavPair, RepoResult, Results, Same}
+import com.cmartin.utils.environment.{FileManager, FileManagerLive}
 import zio.{App, UIO, ZIO}
 
 /*
@@ -10,7 +11,7 @@ import zio.{App, UIO, ZIO}
  */
 
 object DependencyLookoutApp extends App with ComponentLogging {
-  import environment._
+  import environment.FileManagerHelper._
 
   val httpManager = HttpManager()
 
@@ -36,7 +37,6 @@ object DependencyLookoutApp extends App with ComponentLogging {
      E X E C U T I O N
    */
   override def run(args: List[String]): UIO[Int] = {
-
     val results: Results = unsafeRun(program.provide(FileManagerLive))
 
     log.info(s"Valid rate of dependencies in the file: ${results.validRate} %")
@@ -66,5 +66,4 @@ object DependencyLookoutApp extends App with ComponentLogging {
       case Left(error) => log.info(s"${colourRed(error.toString)}")
       case Right(pair) => if (pair.hasNewVersion()) log.info(formatChanges(pair))
     }
-
 }

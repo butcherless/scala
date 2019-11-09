@@ -16,6 +16,13 @@ Carlos Martin Garcia
 
 == Estudio
 
+The App has the following modules:
+
+- FileManager: access to filesystem
+- LogicManager: collection processing, filtering, statistics, regex, etc.
+- HttpManager: HTTP client
+- LoggingManager: logging app operations
+
 Obtener dependencias mediante comandos bash
 
  gw dep | \

@@ -6,16 +6,15 @@ import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.learn.common.Utils.colourRed
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.Gav
-import zio.{Task, UIO, ZIO}
+import zio.{Task, UIO}
 
 import scala.io.BufferedSource
 import scala.util.matching.Regex
 
 trait FileManagerLive extends FileManager with ComponentLogging {
-
   val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
-  val manager = new FileManager.Service {
+  val manager = new FileManager.Service[Any] {
     override def getLinesFromFile(filename: String): Task[List[String]] =
       for {
         fis   <- openFile(filename)
@@ -48,7 +47,6 @@ trait FileManagerLive extends FileManager with ComponentLogging {
         }
       )
     }
-
   }
 
   /*
@@ -90,7 +88,6 @@ trait FileManagerLive extends FileManager with ComponentLogging {
       Left(line)
     }
   }
-
 }
 
 object FileManagerLive extends FileManagerLive
