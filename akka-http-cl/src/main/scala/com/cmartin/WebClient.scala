@@ -5,7 +5,6 @@ import java.io.File
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
-import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{FileIO, Framing}
 import akka.util.ByteString
 
@@ -14,8 +13,7 @@ import scala.util.{Failure, Success}
 
 object WebClient extends Greeting {
   def main(args: Array[String]): Unit = {
-    implicit val system       = ActorSystem()
-    implicit val materializer = ActorMaterializer()
+    implicit val system = ActorSystem()
     // needed for the future flatMap/onComplete in the end
     implicit val executionContext = system.dispatcher
 
@@ -39,7 +37,6 @@ object WebClient extends Greeting {
     Thread.sleep(4000)
 
     println(s"isCompleted: ${responseFuture.isCompleted}")
-    materializer.shutdown()
     system.terminate()
   }
 }
