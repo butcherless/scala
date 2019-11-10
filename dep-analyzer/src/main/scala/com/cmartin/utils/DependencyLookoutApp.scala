@@ -3,7 +3,7 @@ package com.cmartin.utils
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
 import com.cmartin.utils.Domain.{ComparationResult, GavPair, RepoResult, Results, Same}
-import com.cmartin.utils.environment.{FileManager, FileManagerLive, LogicManager, LogicManagerLive}
+import com.cmartin.utils.environment.{FileManager, FileManagerLive, HttpManager, HttpManagerLive, LogicManager, LogicManagerLive}
 import zio.{App, UIO, ZIO}
 
 /*
@@ -13,27 +13,30 @@ import zio.{App, UIO, ZIO}
 object DependencyLookoutApp extends App with ComponentLogging {
   import environment.FileManagerHelper._
   import environment.LogicManagerHelper._
-
-  val httpManager = HttpManager()
+  import environment.HttpManagerHelper._
 
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
 
   /*
       ZIO[R, E, A]
-      R = MyApp : ConfigManger : LogManager : FileManager : HttpManager :  Helper : ...
+      - R: modules sequence
+      - E: Error in case of failure
+      - A: Value returned
+
+      R = ConfigManger :: FileManager :: LogicManager :: HttpManager :: ...
    */
 
-  object AppModules extends FileManagerLive with LogicManagerLive
+  object AppModules extends FileManagerLive with LogicManagerLive with HttpManagerLive
 
-  val program: ZIO[FileManager with LogicManager, Throwable, Results] = for {
+  val program: ZIO[FileManager with LogicManager with HttpManager, Throwable, Results] = for {
     lines        <- getLinesFromFile("dep-analyzer/src/main/resources/deps2.log")
     dependencies <- parseLines(lines)
     _            <- logDepCollection(dependencies)
     validDeps    <- filterValid(dependencies)
     validRate    <- calculateValidRate(dependencies.size, validDeps.size)
     finalDeps    <- excludeList(validDeps, exclusionList)
-    remoteDeps   <- httpManager.checkDependencies(finalDeps)
-    _            <- httpManager.shutdown()
+    remoteDeps   <- checkDependencies(finalDeps)
+    _            <- shutdown() //TODO remove after implement ZManaged
   } yield Results(remoteDeps, validRate)
 
   /*
@@ -53,6 +56,7 @@ object DependencyLookoutApp extends App with ComponentLogging {
 
   //TODO identificar patrones de dependencias
   // comprobar si ambas pertenecen al mismo patrón
+  // TODO VersionManager
   def compareVersions(local: String, remote: String): ComparationResult = {
     if (local == remote) Same
     else ???

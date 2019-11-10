@@ -10,7 +10,6 @@ import zio.{Task, UIO}
 import scala.io.BufferedSource
 
 trait FileManagerLive extends FileManager with ComponentLogging {
-
   val fileManager = new FileManager.Service[Any] {
     override def getLinesFromFile(filename: String): Task[List[String]] =
       for {

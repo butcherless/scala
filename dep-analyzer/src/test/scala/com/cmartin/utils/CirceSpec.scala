@@ -1,7 +1,7 @@
 package com.cmartin.utils
 
-import com.cmartin.utils.HttpManager.Document
 import com.cmartin.utils.Logic.Dep
+import com.cmartin.utils.environment.HttpManager.Document
 import io.circe
 import io.circe.CursorOp.DownField
 import io.circe.DecodingFailure
