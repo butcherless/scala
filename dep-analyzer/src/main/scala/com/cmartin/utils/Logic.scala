@@ -4,7 +4,6 @@ import scala.collection.SortedSet
 import scala.util.matching.Regex
 
 object Logic {
-
   import scala.Console.{MAGENTA, RED, RESET, YELLOW}
   import scala.collection.SortedSet
 
@@ -49,7 +48,6 @@ object Logic {
     */
   object Dep {
     implicit val ord = new Ordering[Dep] {
-
       /**
         * Comparator for dependencies classes
         *
@@ -87,7 +85,6 @@ object Logic {
         Some(Dep(gs.group(GAV_GROUP_POS), gs.group(GAV_ARTIFACT_POS), gs.group(GAV_VERSION_POS)))
       }
       case None => None
-
     }
   }
 
@@ -121,11 +118,9 @@ object Logic {
   def mkErrorString(s: String): String = {
     s"dependency format error => $RESET$RED$s$RESET"
   }
-
 }
 
 object DependencyRepository {
-
   import com.cmartin.utils.Logic.Dep
 
   var depList = scala.collection.mutable.SortedSet[Dep]()
@@ -160,7 +155,6 @@ object DependencyRepository {
   def size = {
     depList.size
   }
-
 }
 
 // TODO imprimir el artefacto que usa la dependencia, entrantes

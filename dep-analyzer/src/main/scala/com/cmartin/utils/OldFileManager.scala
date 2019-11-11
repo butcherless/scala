@@ -11,7 +11,6 @@ import scala.io.BufferedSource
 import scala.util.matching.Regex
 
 final object OldFileManager extends ComponentLogging {
-
   val pattern = raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
   def formatChanges(tuple: (Gav, Gav)): String = {
@@ -83,5 +82,4 @@ final object OldFileManager extends ComponentLogging {
       source
         .getLines()
     )
-
 }

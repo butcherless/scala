@@ -5,7 +5,6 @@ import io.circe.Json
 import io.circe.parser._
 
 object ZioLearn {
-
   sealed trait MyDomainException extends Exception
 
   case class MyExceptionOne(m: String) extends MyDomainException

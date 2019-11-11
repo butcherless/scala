@@ -3,8 +3,9 @@ package com.cmartin.utils.environment
 import java.io.{File, FileInputStream}
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.learn.common.Utils.colourRed
-import com.cmartin.utils.Domain.Gav
+import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
+import com.cmartin.utils.Domain
+import com.cmartin.utils.Domain.{Gav, RepoResult}
 import zio.{Task, UIO}
 
 import scala.io.BufferedSource
@@ -26,11 +27,25 @@ trait FileManagerLive extends FileManager with ComponentLogging {
         }
       )
     }
+
+    override def logMessage(message: String): Task[Unit] = {
+      Task.effectTotal(log.info(message))
+    }
+
+    override def logPairCollection(collection: List[RepoResult[Domain.GavPair]]): Task[Unit] = {
+      Task.effectTotal {
+        collection.foreach(
+          _.fold(error => log.info(error.toString), pair => if (pair.hasNewVersion()) log.info(formatChanges(pair)))
+        )
+      }
+    }
   }
 
   /*
   H E L P E R S
    */
+  def formatChanges(pair: Domain.GavPair): String =
+    s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"
 
   private def openFile(filename: String): Task[FileInputStream] =
     Task(

@@ -10,4 +10,8 @@ object HttpManagerHelper extends HttpManager.Service[HttpManager] {
 
   override def shutdown(): ZIO[HttpManager, Nothing, Unit] =
     ZIO.accessM(_.httpManager.shutdown())
+
+  def getEnvironment(): ZIO[HttpManager, Nothing, Unit] = {
+    ZIO.unit
+  }
 }

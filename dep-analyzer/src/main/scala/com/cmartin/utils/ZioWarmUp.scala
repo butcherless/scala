@@ -31,7 +31,6 @@ object ZioWarmUp {
     UIO.succeed(a + b)
 
   def simulateParseJson(message: String): UIO[Either[Throwable, Json]] = {
-
     def parse(message: String): Json = {
       if (message.isEmpty) throw new RuntimeException("parsing exception")
       else Json(jsonKeys)
@@ -43,7 +42,6 @@ object ZioWarmUp {
   }
 
   def simulateJsonMapping(message: String): UIO[Either[JsonError, Action]] = {
-
     def extract(message: String): Action = {
       if (message.isEmpty) throw MappingException("invalid type")
       else Action(message, 0)
@@ -73,7 +71,6 @@ object ZioWarmUp {
   }
 
   def checkDependencies(artifactList: List[Gav]): List[Gav] = {
-
     //ZIO.collectAllParN(4)(Iterable.from(actions))
 
     List.empty[Gav] // TODO

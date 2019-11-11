@@ -2,20 +2,16 @@ package com.cmartin.utils.environment
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
-import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
-import com.softwaremill.sttp.{Response, SttpBackend, Uri, sttp, _}
+import com.softwaremill.sttp.{Response, Uri, sttp, _}
 import io.circe
 import io.circe.CursorOp.DownField
 import io.circe.DecodingFailure
 import zio.{Task, UIO, ZIO}
 
-trait HttpManagerLive extends HttpManager with ComponentLogging {
+trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentLogging {
   import HttpManager._
   import io.circe.generic.auto._
   import io.circe.parser._
-
-  //TODO Dep Injection
-  implicit val backend: SttpBackend[Task, Nothing] = AsyncHttpClientZioBackend()
 
   val httpManager: Service[Any] = new HttpManager.Service[Any] {
     override def checkDependencies(deps: List[Domain.Gav]): UIO[List[RepoResult[Domain.GavPair]]] = {
@@ -28,8 +24,11 @@ trait HttpManagerLive extends HttpManager with ComponentLogging {
     override def shutdown(): UIO[Unit] =
       UIO.effectTotal(backend.close())
 
+    override def getEnvironment(): UIO[Unit] = {
+      UIO.unit
+    }
     /*
-    H E L P E R S
+      H E L P E R S
      */
 
     private def buildUri(dep: Gav): Uri = {
@@ -73,5 +72,3 @@ trait HttpManagerLive extends HttpManager with ComponentLogging {
     }
   }
 }
-
-object HttpManagerLive extends HttpManagerLive

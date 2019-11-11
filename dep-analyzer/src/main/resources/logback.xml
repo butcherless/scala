@@ -15,7 +15,7 @@
 
     <!-- infrastructure loggers -->
     <logger name="io.netty" level="ERROR"/>
-    <logger name="org.asynchttpclient" level="ERROR"/>
+    <logger name="org.asynchttpclient.netty" level="ERROR"/>
 
     <root level="INFO">
         <appender-ref ref="ASYNC"/>

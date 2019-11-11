@@ -1,7 +1,6 @@
 package com.cmartin.utils
 
 object Domain {
-
   type RepoResult[GavPair] = Either[Throwable, GavPair]
 
   sealed trait DomainError
@@ -46,7 +45,6 @@ object Domain {
     */
   object Gav {
     implicit val ord = new Ordering[Gav] {
-
       /**
         * Comparator for dependencies classes
         *
@@ -59,5 +57,4 @@ object Domain {
       }
     }
   }
-
 }
