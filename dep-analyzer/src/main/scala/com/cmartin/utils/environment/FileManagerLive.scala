@@ -14,22 +14,22 @@ trait FileManagerLive extends FileManager with ComponentLogging {
   val fileManager = new FileManager.Service[Any] {
     override def getLinesFromFile(filename: String): Task[List[String]] =
       for {
-        fis   <- openFile(filename)
-        lines <- Task(new BufferedSource(fis)).bracket(closeSource)(getLines)
+        fis <- openFile(filename)
+        lines <- createFileSource(fis).bracket(closeSource)(getLines)
       } yield lines.toList
 
     override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
-      Task(
-        dependencies.foreach {
-          case Left(line) =>
-            log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}") //TODO create printRed helper function
-          case Right(dep) => log.info(dep.toString)
+      Task.effect(
+        dependencies.foreach { dep =>
+          dep.fold(line => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}"), (dep => log.info(dep.toString)))
         }
       )
     }
 
     override def logMessage(message: String): Task[Unit] = {
-      Task.effectTotal(log.info(message))
+      Task.effectTotal(
+        log.info(message)
+      )
     }
 
     override def logPairCollection(collection: List[RepoResult[Domain.GavPair]]): Task[Unit] = {
@@ -48,12 +48,18 @@ trait FileManagerLive extends FileManager with ComponentLogging {
     s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"
 
   private def openFile(filename: String): Task[FileInputStream] =
-    Task(
+    Task.effect(
       new FileInputStream(new File(filename))
     )
 
+  private def createFileSource(fis: FileInputStream): Task[BufferedSource] = {
+    Task.effect(
+      new BufferedSource(fis)
+    )
+  }
+
   private def closeSource(source: BufferedSource): UIO[Unit] = {
-    UIO(
+    UIO.effectTotal(
       source
         .close()
     )

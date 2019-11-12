@@ -2,7 +2,7 @@ package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.Domain.{ComparationResult, Same}
-import com.cmartin.utils.environment.{FileManager, FileManagerLive, HttpManager, HttpManagerLive, LogicManager, LogicManagerLive}
+import com.cmartin.utils.environment._
 import com.softwaremill.sttp.SttpBackend
 import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
 import zio.{App, Task, UIO, ZIO}
@@ -12,44 +12,46 @@ import zio.{App, Task, UIO, ZIO}
  */
 
 object DependencyLookoutApp extends App with ComponentLogging {
+
   import environment.FileManagerHelper._
   import environment.HttpManagerHelper._
   import environment.LogicManagerHelper._
 
-  val filename      = "dep-analyzer/src/main/resources/deps2.log"
+  val filename = "dep-analyzer/src/main/resources/deps2.log"
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
 
   //val depsManaged: ZManaged[HttpManager, Nothing, Unit] = ZManaged.make(getEnvironment())(_ => shutdown())
 
   /*
-      ZIO[R, E, A]
-      - R: modules sequence
-      - E: Error in case of failure
-      - A: Value returned
+    ZIO[R, E, A]
+      - R: application module/s
+      - E: error in case of failure
+      - A: returned value
 
-      R = ConfigManger :: FileManager :: LogicManager :: HttpManager :: ...
+    Examples:
+      - R = { ConfigManger, FileManager, LogicManager, HttpManager }
+      - E: ConnectionError (ADT)
+      - A: Either[Exception, Results]
    */
 
-//  object AppModules extends FileManagerLive with LogicManagerLive with HttpManagerLive {
-//    implicit val backend: SttpBackend[Task, Nothing] = AsyncHttpClientZioBackend()
-//  }
+  type Environments = FileManager with LogicManager with HttpManager //TODO  with ConfigManager
 
-  trait Environments extends FileManager with LogicManager with HttpManager
-  trait AppModules   extends FileManagerLive with LogicManagerLive with HttpManagerLive
+  trait AppModules extends FileManagerLive with LogicManagerLive with HttpManagerLive
+
   val modules = new AppModules {
     override implicit val backend: SttpBackend[Task, Nothing] = AsyncHttpClientZioBackend()
   }
 
-  val program: ZIO[FileManager with LogicManager with HttpManager, Throwable, Unit] = for {
-    lines        <- getLinesFromFile(filename)
+  val program: ZIO[Environments, Throwable, Unit] = for {
+    lines <- getLinesFromFile(filename)
     dependencies <- parseLines(lines)
-    _            <- logDepCollection(dependencies)
-    validDeps    <- filterValid(dependencies)
-    validRate    <- calculateValidRate(dependencies.size, validDeps.size)
-    finalDeps    <- excludeList(validDeps, exclusionList)
-    remoteDeps   <- getEnvironment().bracket(_ => shutdown())(_ => checkDependencies(finalDeps))
-    _            <- logMessage(s"Valid rate of dependencies in the file: $validRate %")
-    _            <- logPairCollection(remoteDeps)
+    _ <- logDepCollection(dependencies)
+    validDeps <- filterValid(dependencies)
+    validRate <- calculateValidRate(dependencies.size, validDeps.size)
+    finalDeps <- excludeList(validDeps, exclusionList)
+    remoteDeps <- getEnvironment().bracket(_ => shutdown())(_ => checkDependencies(finalDeps))
+    _ <- logMessage(s"Valid rate of dependencies in the file: $validRate %")
+    _ <- logPairCollection(remoteDeps)
   } yield ()
 
   /*
@@ -59,8 +61,6 @@ object DependencyLookoutApp extends App with ComponentLogging {
     unsafeRun(program.provide(modules).either)
       .fold(_ => UIO(1), _ => UIO(0))
   }
-
-  //TODO move to common object
 
   //TODO identificar patrones de dependencias
   // comprobar si ambas pertenecen al mismo patrón
