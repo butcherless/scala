@@ -23,6 +23,12 @@ The App has the following modules:
 - HttpManager: HTTP client
 - LoggingManager: logging app operations
 
+
+ZManaged example:
+
+ val depsManaged: ZManaged[HttpManager, Nothing, Unit] = ZManaged.make(getEnvironment())(_ => shutdown())
+
+
 Obtener dependencias mediante comandos bash
 
  gw dep | \

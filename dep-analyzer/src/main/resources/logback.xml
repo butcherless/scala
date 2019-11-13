@@ -14,8 +14,8 @@
     <logger name="com.cmartin.utils" level="INFO"/>
 
     <!-- infrastructure loggers -->
-    <logger name="io.netty" level="ERROR"/>
-    <logger name="org.asynchttpclient.netty" level="ERROR"/>
+    <logger name="io.netty" level="INFO"/>
+    <logger name="org.asynchttpclient.netty" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="ASYNC"/>

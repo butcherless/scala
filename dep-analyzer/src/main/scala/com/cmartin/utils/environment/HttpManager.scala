@@ -8,20 +8,14 @@ trait HttpManager {
   val httpManager: HttpManager.Service[Any]
 }
 
+/**
+  * HttpClient infrastructure, connection pool.
+  */
 trait HttpClientBackend {
   implicit val backend: SttpBackend[Task, Nothing]
 }
 
 object HttpManager {
-
-  case class Document(
-                       id: String,
-                       g: String,
-                       a: String,
-                       latestVersion: String,
-                       p: String,
-                       timestamp: Long
-                     )
 
   trait Service[R] {
     def checkDependencies(deps: List[Gav]): ZIO[R, Nothing, List[RepoResult[GavPair]]]
@@ -30,5 +24,14 @@ object HttpManager {
 
     def getEnvironment(): ZIO[R, Nothing, Unit]
   }
+
+  final case class Document(
+                             id: String,
+                             g: String,
+                             a: String,
+                             latestVersion: String,
+                             p: String,
+                             timestamp: Long
+                           )
 
 }

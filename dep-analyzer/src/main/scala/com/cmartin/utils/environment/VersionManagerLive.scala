@@ -3,6 +3,9 @@ package com.cmartin.utils.environment
 import com.cmartin.utils.Domain
 import zio.UIO
 
+/**
+  * Service implementation and collaborators
+  */
 trait VersionManagerLive {
 
   val versionManager: VersionManager.Service[Any] = new VersionManager.Service[Any] {

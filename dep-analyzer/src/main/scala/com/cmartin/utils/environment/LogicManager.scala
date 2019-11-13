@@ -8,6 +8,7 @@ trait LogicManager {
 }
 
 object LogicManager {
+
   trait Service[R] {
     def parseLines(lines: List[String]): ZIO[R, Nothing, List[Either[String, Gav]]]
 
@@ -17,4 +18,5 @@ object LogicManager {
 
     def calculateValidRate(dependencyCount: Int, validCount: Int): ZIO[R, Nothing, Double]
   }
+
 }

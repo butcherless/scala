@@ -19,6 +19,11 @@ trait VersionManager {
 
 object VersionManager {
 
+  /**
+    * Service operations
+    *
+    * @tparam R the environment
+    */
   trait Service[R] {
     def compare(local: Gav, remote: Gav): ZIO[R, Nothing, ComparationResult]
   }

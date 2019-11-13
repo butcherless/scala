@@ -1,5 +1,7 @@
 package com.cmartin.utils
 
+import scala.util.matching.Regex
+
 object Domain {
   type RepoResult[GavPair] = Either[Throwable, GavPair]
 
@@ -56,5 +58,14 @@ object Domain {
         d1.version.compareTo(d2.version)
       }
     }
+
+    def fromRegexMatch(regexMatch: Regex.Match): Gav = {
+      Gav(
+        regexMatch.group(1), // group
+        regexMatch.group(2), // artifact
+        regexMatch.group(3) // version
+      )
+    }
   }
+
 }

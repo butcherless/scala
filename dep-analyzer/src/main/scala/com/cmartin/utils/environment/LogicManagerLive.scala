@@ -44,13 +44,7 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
 
     if (matches) {
       val regexMatch: Regex.Match = pattern.findAllMatchIn(line).next()
-      Right(
-        Gav(
-          regexMatch.group(1), // group
-          regexMatch.group(2), // artifact
-          regexMatch.group(3) // version
-        )
-      )
+      Right(Gav.fromRegexMatch(regexMatch))
     } else {
       Left(line)
     }
