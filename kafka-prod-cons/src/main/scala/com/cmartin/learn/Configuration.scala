@@ -2,20 +2,20 @@ package com.cmartin.learn
 
 import java.util.{Properties, UUID}
 
+import com.cmartin.learn.Domain.DummyMessage
 import com.typesafe.config.ConfigFactory
 import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
-import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
+import org.apache.kafka.common.serialization.{IntegerSerializer, StringDeserializer, StringSerializer}
 
 object Configuration {
-
   trait KafkaConf {
     // config object
     val conf = ConfigFactory.load("kafka.conf")
 
     // kafka config
-    lazy val kafkaHost = conf.getString("kafka.host")
-    lazy val kafkaPort = conf.getInt("kafka.port")
+    lazy val kafkaHost  = conf.getString("kafka.host")
+    lazy val kafkaPort  = conf.getInt("kafka.port")
     lazy val kafkaTopic = conf.getString("kafka.topic")
   }
 
@@ -24,7 +24,8 @@ object Configuration {
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, s"$kafkaHost:$kafkaPort")
     props.put(
       ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-      classOf[StringSerializer].getCanonicalName
+      //classOf[StringSerializer].getCanonicalName
+      classOf[IntegerSerializer].getCanonicalName
     )
     props.put(
       ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
@@ -32,7 +33,8 @@ object Configuration {
     )
     //props.put(ProducerConfig.RETRIES_CONFIG, "5")
 
-    lazy val producer = new KafkaProducer[String, String](props)
+    lazy val producer  = new KafkaProducer[Int, String](props)
+    lazy val producer2 = new KafkaProducer[Int, String](props)
   }
 
   trait SimpleConsumer extends KafkaConf {
@@ -54,6 +56,4 @@ object Configuration {
 
     lazy val consumer = new KafkaConsumer[String, String](props)
   }
-
-
 }
