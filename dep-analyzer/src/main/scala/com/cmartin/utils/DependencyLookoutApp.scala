@@ -1,8 +1,9 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.utils.Domain.{ComparationResult, Same}
-import com.cmartin.utils.environment._
+import com.cmartin.utils.file.{FileManager, FileManagerLive}
+import com.cmartin.utils.http.{HttpManager, HttpManagerLive}
+import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import com.softwaremill.sttp.SttpBackend
 import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
 import zio.{App, Task, UIO, ZIO}
@@ -13,9 +14,9 @@ import zio.{App, Task, UIO, ZIO}
 
 object DependencyLookoutApp extends App with ComponentLogging {
 
-  import environment.FileManagerHelper._
-  import environment.HttpManagerHelper._
-  import environment.LogicManagerHelper._
+  import file.FileManagerHelper._
+  import http.HttpManagerHelper._
+  import logic.LogicManagerHelper._
 
   val filename = "dep-analyzer/src/main/resources/deps2.log"
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
@@ -60,13 +61,5 @@ object DependencyLookoutApp extends App with ComponentLogging {
   override def run(args: List[String]): UIO[Int] = {
     unsafeRun(program.provide(modules).either)
       .fold(_ => UIO(1), _ => UIO(0))
-  }
-
-  //TODO identificar patrones de dependencias
-  // comprobar si ambas pertenecen al mismo patrón
-  // TODO VersionManager
-  def compareVersions(local: String, remote: String): ComparationResult = {
-    if (local == remote) Same
-    else ???
   }
 }

@@ -1,4 +1,4 @@
-package com.cmartin.utils.environment
+package com.cmartin.utils.version
 
 import com.cmartin.utils.Domain
 import zio.UIO

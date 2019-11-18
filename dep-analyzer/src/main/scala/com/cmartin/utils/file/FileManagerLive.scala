@@ -1,4 +1,4 @@
-package com.cmartin.utils.environment
+package com.cmartin.utils.file
 
 import java.io.{File, FileInputStream}
 

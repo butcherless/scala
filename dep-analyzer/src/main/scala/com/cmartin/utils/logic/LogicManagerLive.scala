@@ -1,4 +1,4 @@
-package com.cmartin.utils.environment
+package com.cmartin.utils.logic
 
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.Domain

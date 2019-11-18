@@ -30,13 +30,14 @@
 - Json support: https://doc.akka.io/docs/akka-http/current/common/json-support.html
 
 ## Create basic project script
-- bash script @ ${PROJECT_ROOT}/docs directory
-- bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/create-simple-project.sh)
+```.env
+bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/create-simple-project.sh)
+```
  
 ## Test & Coverage report
 - testOnly TestSuite -- -z CURRENT
-- command: sbt ";clean;coverage;test;coverageReport"
-- report: target/scala-2.12/scoverage-report/index.html
+- command: sbt clean coverage test coverageReport
+- report: target/scala-2.13/scoverage-report/index.html
 
 ## Plugins
 - https://github.com/jrudolph/sbt-dependency-graph

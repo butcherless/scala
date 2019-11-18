@@ -1,14 +1,14 @@
-package com.cmartin.utils.environment
+package com.cmartin.utils.http
 
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
-import com.softwaremill.sttp.{Response, Uri, sttp, _}
+import com.softwaremill.sttp._
 import io.circe
 import io.circe.CursorOp.DownField
 import io.circe.DecodingFailure
 import io.circe.generic.auto._
-import io.circe.parser._
+import io.circe.parser.parse
 import zio.{Task, UIO, ZIO}
 
 trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentLogging {
@@ -62,6 +62,7 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
     }
 
     private def parseResponse(response: String): Either[circe.Error, Gav] = {
+
       val numFoundKey = "numFound"
       val responseKey = "response"
       val docsKey = "docs"

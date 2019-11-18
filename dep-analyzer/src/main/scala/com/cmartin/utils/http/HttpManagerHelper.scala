@@ -1,4 +1,4 @@
-package com.cmartin.utils.environment
+package com.cmartin.utils.http
 
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.RepoResult

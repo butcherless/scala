@@ -1,4 +1,4 @@
-package com.cmartin.utils.environment
+package com.cmartin.utils.http
 
 import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
 import com.softwaremill.sttp.SttpBackend
