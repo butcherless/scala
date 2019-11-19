@@ -12,6 +12,6 @@ object HttpManagerHelper extends HttpManager.Service[HttpManager] {
     ZIO.accessM(_.httpManager.shutdown())
 
   def getEnvironment(): ZIO[HttpManager, Nothing, Unit] = {
-    ZIO.unit
+    ZIO.environment[HttpManager].flatMap(_ => ZIO.unit)
   }
 }
