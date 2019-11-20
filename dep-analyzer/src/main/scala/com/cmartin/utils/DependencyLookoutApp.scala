@@ -14,9 +14,9 @@ import zio.{App, Task, UIO, ZIO}
 
 object DependencyLookoutApp extends App with ComponentLogging {
 
-  import file.FileManagerHelper._
+  import file.FileManager.Helper._
   import http.HttpManagerHelper._
-  import logic.LogicManagerHelper._
+  import logic.LogicManager.Helper._
 
   val filename = "dep-analyzer/src/main/resources/deps2.log"
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
