@@ -92,8 +92,6 @@ https://zio.dev/docs/howto/howto_use_module_pattern
 . create an instance of `VersionManager.Service[Any]` trait and implement its definition.
 . create `VersionManagerHelper` object which extends `VersionManager.Service[VersionManager]`.
 
-
-
 == Links
 
 - ZIO Error Management: https://www.youtube.com/watch?v=mGxcaQs3JWI

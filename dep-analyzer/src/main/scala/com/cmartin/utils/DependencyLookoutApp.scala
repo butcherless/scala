@@ -21,8 +21,6 @@ object DependencyLookoutApp extends App with ComponentLogging {
   val filename = "dep-analyzer/src/main/resources/deps2.log"
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
 
-  //val depsManaged: ZManaged[HttpManager, Nothing, Unit] = ZManaged.make(getEnvironment())(_ => shutdown())
-
   /*
     ZIO[R, E, A]
       - R: application module/s

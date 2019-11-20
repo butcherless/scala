@@ -39,7 +39,6 @@ object HttpManager {
   }
 
 
-
   final case class Document(
                              id: String,
                              g: String,
