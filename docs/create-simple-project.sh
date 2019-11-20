@@ -135,4 +135,4 @@ class LibrarySpec extends FlatSpec with Matchers {
   }
 }' > src/test/scala/${PKG_DIR}/LibrarySpec.scala
 
-sbt "++ 2.13.0" clean coverage test coverageReport dependencyUpdates assembly run
+sbt clean coverage test coverageReport dependencyUpdates assembly run
