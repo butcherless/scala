@@ -9,7 +9,7 @@ DEP_GRAPH_VER="0.10.0-RC1"
 DEP_UP_VER="1.2.1"
 LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.0.8"
-SCOVERAGE_VER="1.6.0"
+SCOVERAGE_VER="1.6.1"
 
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
