@@ -15,7 +15,7 @@ import zio.{App, Task, UIO, ZIO}
 object DependencyLookoutApp extends App with ComponentLogging {
 
   import file.FileManager.Helper._
-  import http.HttpManagerHelper._
+  import http.HttpManager.Helper._
   import logic.LogicManager.Helper._
 
   val filename = "dep-analyzer/src/main/resources/deps2.log"
