@@ -3,18 +3,12 @@ package com.cmartin.learn
 import java.time.Duration
 import java.util
 
-import com.cmartin.learn.Configuration.SimpleConsumer
+import com.cmartin.learn.Configuration.UuidConsumer
 import com.cmartin.learn.common.ComponentLogging
 
 import scala.jdk.CollectionConverters._
 
-object UuidConsumer
-  extends SimpleConsumer
-
-object ConsumerApp
-  extends App
-    with ComponentLogging {
-
+object ConsumerApp extends App with ComponentLogging {
   val loopCount = 10
 
   UuidConsumer.consumer.subscribe(util.Collections.singletonList(UuidConsumer.kafkaTopic))

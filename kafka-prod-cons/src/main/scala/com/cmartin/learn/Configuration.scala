@@ -2,7 +2,6 @@ package com.cmartin.learn
 
 import java.util.{Properties, UUID}
 
-import com.cmartin.learn.Domain.DummyMessage
 import com.typesafe.config.ConfigFactory
 import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
@@ -37,6 +36,8 @@ object Configuration {
     lazy val producer2 = new KafkaProducer[Int, String](props)
   }
 
+  object UuidProducer extends SimpleProducer
+
   trait SimpleConsumer extends KafkaConf {
     lazy val props = new Properties()
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, s"$kafkaHost:$kafkaPort")
@@ -56,4 +57,6 @@ object Configuration {
 
     lazy val consumer = new KafkaConsumer[String, String](props)
   }
+
+  object UuidConsumer extends SimpleConsumer
 }

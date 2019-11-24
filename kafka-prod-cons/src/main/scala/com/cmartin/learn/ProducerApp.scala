@@ -3,14 +3,12 @@ package com.cmartin.learn
 import java.util.{Date, UUID}
 
 import com.cmartin.learn.AppHelper._
-import com.cmartin.learn.Configuration.SimpleProducer
+import com.cmartin.learn.Configuration.UuidProducer
 import com.cmartin.learn.Domain.DummyMessage
 import com.cmartin.learn.common.ComponentLogging
 import org.apache.kafka.clients.producer.ProducerRecord
 
 import scala.util.Random
-
-object UuidProducer extends SimpleProducer
 
 object ProducerApp extends App with ComponentLogging {
   def buildRecord(id: Int, m: String): ProducerRecord[Int, String] = {

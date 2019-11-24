@@ -10,41 +10,56 @@ Imagen alternativa
 
 ## Commands
 
-start services
+start the services
 
 ```.bash
 - docker-compose -f ./single-broker.yml up -d
 ```
 
-stop services
+stop the services
 
 ```.bash
 - docker-compose -f ./single-broker.yml stop
 ```
 
-show logs
+show the logs
 
-```.bash
+```shell
 - docker-compose -f ./single-broker.yml logs -f
 ```
 
-list topic
+list a topic
 
-```.bash
+```shell
 docker exec -it kafka-prod-cons_kafka_1 /bin/bash
-/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --list --bootstrap-server localhost:909
+/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 ```
 
-create topic
+create a topic
 
-```.bash
-/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 8 --topic test1
+```shell
+/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 8 --topic json
 ```
 
-delete topic
+delete a topic
 
-```.bash
+```shell
 /opt/kafka_2.12-2.3.0/bin/kafka-topics.sh  --bootstrap-server localhost:9092 --delete --topic test1
+```
+
+describe a topic
+```shell
+/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --describe --bootstrap-server localhost:9092 --topic json
+```
+
+consume messages from the beginning
+```shell
+/opt/kafka_2.12-2.3.0/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic json
+```
+
+consume messages of a partition from the beginning
+```shell
+/opt/kafka_2.12-2.3.0/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092  --topic json --offset earliest --partition 1 
 ```
 
 ## Docker Images

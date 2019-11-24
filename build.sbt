@@ -120,7 +120,14 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
   .settings(
     commonSettings,
     name := "kafka-producer-consumer",
-    libraryDependencies ++= Seq(circeParser, circeGeneric, typesafeConfig, kafkaClient, logback, scalaLogging)
+    libraryDependencies ++= Seq(
+      circeParser,
+      circeGeneric,
+      typesafeConfig,
+      kafkaClient,
+      logback,
+      scalaLogging
+    )
   )
   .dependsOn(common)
 

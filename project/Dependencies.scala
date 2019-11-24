@@ -20,6 +20,7 @@ object Dependencies {
   lazy val sttpVersion         = "1.7.2"
   lazy val uTestVersion        = "0.7.1"
   lazy val zioVersion          = "1.0.0-RC16"
+  lazy val zioKafkaVersion     = "0.4.1"
 
   // production code
   lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
@@ -51,7 +52,10 @@ object Dependencies {
   lazy val sttpCore    = "com.softwaremill.sttp" %% "core"                          % sttpVersion
   lazy val sttpZio     = "com.softwaremill.sttp" %% "async-http-client-backend-zio" % sttpVersion
 
+  // Z I O  a n d  E C O S Y S T E M
   lazy val zio = "dev.zio" %% "zio" % zioVersion
+  //lazy val zioStreams = "dev.zio" %% "zio-streams" % zioVersion
+  //lazy val zioKafka = "dev.zio" %% "zio-kafka"  % zioKafkaVersion
 
   // testing code
   lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit"        % akkaHttpVersion  % Test
