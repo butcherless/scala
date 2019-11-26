@@ -31,8 +31,8 @@ show the logs
 list a topic
 
 ```shell
-docker exec -it kafka-prod-cons_kafka_1 /bin/bash
-/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+docker exec -it kafka-prod-cons_kafka_1 /bin/bash 
+/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 
 create a topic

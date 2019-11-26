@@ -4,8 +4,9 @@ import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.file.{FileManager, FileManagerLive}
 import com.cmartin.utils.http.{HttpManager, HttpManagerLive}
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
-import com.softwaremill.sttp.SttpBackend
-import com.softwaremill.sttp.asynchttpclient.zio.AsyncHttpClientZioBackend
+import sttp.client.SttpBackend
+import sttp.client.asynchttpclient.WebSocketHandler
+import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
 import zio.{App, Task, UIO, ZIO}
 
 /*
@@ -13,12 +14,11 @@ import zio.{App, Task, UIO, ZIO}
  */
 
 object DependencyLookoutApp extends App with ComponentLogging {
-
   import file.FileManager.Helper._
   import http.HttpManager.Helper._
   import logic.LogicManager.Helper._
 
-  val filename = "dep-analyzer/src/main/resources/deps2.log"
+  val filename      = "dep-analyzer/src/main/resources/deps2.log"
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
 
   /*
@@ -38,19 +38,20 @@ object DependencyLookoutApp extends App with ComponentLogging {
   trait AppModules extends FileManagerLive with LogicManagerLive with HttpManagerLive
 
   val modules = new AppModules {
-    override implicit val backend: SttpBackend[Task, Nothing] = AsyncHttpClientZioBackend()
+    override implicit val backend: SttpBackend[Task, Nothing, WebSocketHandler] =
+      unsafeRun(AsyncHttpClientZioBackend())
   }
 
   val program: ZIO[Environments, Throwable, Unit] = for {
-    lines <- getLinesFromFile(filename)
+    lines        <- getLinesFromFile(filename)
     dependencies <- parseLines(lines)
-    _ <- logDepCollection(dependencies)
-    validDeps <- filterValid(dependencies)
-    validRate <- calculateValidRate(dependencies.size, validDeps.size)
-    finalDeps <- excludeList(validDeps, exclusionList)
-    remoteDeps <- getEnvironment().bracket(_ => shutdown())(_ => checkDependencies(finalDeps))
-    _ <- logMessage(s"Valid rate of dependencies in the file: $validRate %")
-    _ <- logPairCollection(remoteDeps)
+    _            <- logDepCollection(dependencies)
+    validDeps    <- filterValid(dependencies)
+    validRate    <- calculateValidRate(dependencies.size, validDeps.size)
+    finalDeps    <- excludeList(validDeps, exclusionList)
+    remoteDeps   <- getEnvironment().bracket(_ => shutdown())(_ => checkDependencies(finalDeps))
+    _            <- logMessage(s"Valid rate of dependencies in the file: $validRate %")
+    _            <- logPairCollection(remoteDeps)
   } yield ()
 
   /*
