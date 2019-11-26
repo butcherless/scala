@@ -27,7 +27,7 @@ trait FileManagerLive extends FileManager with ComponentLogging {
     }
 
     override def logMessage(message: String): Task[Unit] = {
-      Task.effectTotal(
+      Task.effect(
         log.info(message)
       )
     }
