@@ -14,10 +14,6 @@ import zio.{App, Task, UIO, ZIO}
  */
 
 object DependencyLookoutApp extends App with ComponentLogging {
-  import file.FileManager.Helper._
-  import http.HttpManager.Helper._
-  import logic.LogicManager.Helper._
-
   val filename      = "dep-analyzer/src/main/resources/deps2.log"
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
 
@@ -43,15 +39,16 @@ object DependencyLookoutApp extends App with ComponentLogging {
   }
 
   val program: ZIO[Environments, Throwable, Unit] = for {
-    lines        <- getLinesFromFile(filename)
-    dependencies <- parseLines(lines)
-    _            <- logDepCollection(dependencies)
-    validDeps    <- filterValid(dependencies)
-    validRate    <- calculateValidRate(dependencies.size, validDeps.size)
-    finalDeps    <- excludeList(validDeps, exclusionList)
-    remoteDeps   <- getEnvironment().bracket(_ => shutdown())(_ => checkDependencies(finalDeps))
-    _            <- logMessage(s"Valid rate of dependencies in the file: $validRate %")
-    _            <- logPairCollection(remoteDeps)
+    lines        <- FileManager.>.getLinesFromFile(filename)
+    dependencies <- LogicManager.>.parseLines(lines)
+    _            <- FileManager.>.logDepCollection(dependencies)
+    validDeps    <- LogicManager.>.filterValid(dependencies)
+    validRate    <- LogicManager.>.calculateValidRate(dependencies.size, validDeps.size)
+    finalDeps    <- LogicManager.>.excludeList(validDeps, exclusionList)
+    remoteDeps <- HttpManager.>.checkDependencies(finalDeps)
+    _ <- HttpManager.>.shutdown()
+    _ <- FileManager.>.logMessage(s"Valid rate of dependencies in the file: $validRate %")
+    _ <- FileManager.>.logPairCollection(remoteDeps)
   } yield ()
 
   /*

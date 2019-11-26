@@ -24,7 +24,7 @@ object HttpManager {
     implicit val backend: SttpBackend[Task, Nothing, NothingT]
   }
 
-  object Helper extends HttpManager.Service[HttpManager] {
+  object > extends HttpManager.Service[HttpManager] {
     override def checkDependencies(
         deps: List[Domain.Gav]
     ): ZIO[HttpManager, Nothing, List[RepoResult[Domain.GavPair]]] =

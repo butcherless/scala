@@ -20,7 +20,7 @@ object FileManager {
     def logPairCollection(collection: List[RepoResult[GavPair]]): ZIO[R, Throwable, Unit]
   }
 
-  object Helper extends FileManager.Service[FileManager] {
+  object > extends FileManager.Service[FileManager] {
     override def getLinesFromFile(filename: String): ZIO[FileManager, Throwable, List[String]] =
       ZIO.accessM(_.fileManager getLinesFromFile filename)
 

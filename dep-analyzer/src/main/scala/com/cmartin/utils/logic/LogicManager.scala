@@ -20,7 +20,7 @@ object LogicManager {
     def calculateValidRate(dependencyCount: Int, validCount: Int): ZIO[R, Nothing, Double]
   }
 
-  object Helper extends LogicManager.Service[LogicManager] {
+  object > extends LogicManager.Service[LogicManager] {
     override def parseLines(
                              lines: List[String]
                            ): ZIO[LogicManager, Nothing, List[Either[String, Domain.Gav]]] =
