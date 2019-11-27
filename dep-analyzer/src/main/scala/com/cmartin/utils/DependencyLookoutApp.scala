@@ -46,8 +46,8 @@ object DependencyLookoutApp extends App with ComponentLogging {
      E X E C U T I O N
    */
   override def run(args: List[String]): UIO[Int] = {
-    unsafeRun(program.provide(modules).either)
-      .fold(
+    program.provide(modules)
+      .foldM(
         e => Task(log.info(e.getMessage)).catchAll(_ => UIO.unit) *> UIO(1), // KO
         _ => UIO(0)) // OK
   }
