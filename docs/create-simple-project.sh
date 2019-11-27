@@ -8,7 +8,7 @@ ASSEMBLY_VER="0.14.10"
 DEP_GRAPH_VER="0.10.0-RC1"
 DEP_UP_VER="1.2.1"
 LOGBACK_VER="1.2.3"
-SCALATEST_VER="3.0.8"
+SCALATEST_VER="3.1.0-RC3"
 SCOVERAGE_VER="1.6.1"
 
 # create filesystem
@@ -125,9 +125,10 @@ object SimpleApp extends App {
 echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class LibrarySpec extends FlatSpec with Matchers {
+class LibrarySpec extends AnyFlatSpec with Matchers {
   "LibrarySpec echo" should "return the same text" in {
     val result = echo(TEXT)
 
