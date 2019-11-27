@@ -4,7 +4,7 @@ import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.file.FileManager
 import com.cmartin.utils.http.HttpManager
 import com.cmartin.utils.logic.LogicManager
-import zio.{App, UIO, ZIO}
+import zio.{App, Task, UIO, ZIO}
 
 /*
   http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
@@ -47,6 +47,8 @@ object DependencyLookoutApp extends App with ComponentLogging {
    */
   override def run(args: List[String]): UIO[Int] = {
     unsafeRun(program.provide(modules).either)
-      .fold(_ => UIO(1), _ => UIO(0))
+      .fold(
+        e => Task(log.info(e.getMessage)).catchAll(_ => UIO.unit) *> UIO(1), // KO
+        _ => UIO(0)) // OK
   }
 }

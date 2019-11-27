@@ -25,6 +25,19 @@ class FileManagerSpec extends FlatSpec with Matchers with DefaultRuntime {
   }
 
   "SUT" should "do something more" in {
+    trait DomainError
+    case class DomainErrorOne(msg: String) extends DomainError
+
+    val r: Task[Int] =
+      Task
+        .effect(1 / 2)
+
+    val de: IO[DomainError, Int] =
+      Task
+        .effect(1 / 0)
+        .mapError(_ => DomainErrorOne("arithmetic error"))
+
+
     // GIVEN
 
     // WHEN
