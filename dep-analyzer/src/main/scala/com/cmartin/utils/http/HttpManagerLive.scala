@@ -14,6 +14,7 @@ import sttp.model.Uri
 import zio.{Task, UIO, ZIO}
 
 trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentLogging {
+
   import HttpManager._
 
   val httpManager: Service[Any] = new HttpManager.Service[Any] {
@@ -26,8 +27,16 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
       ZIO.foreachParN(1)(deps)(getDependency)
     }
 
-    override def shutdown(): UIO[Unit] =
-      UIO.effectTotal(backend.close())
+    override def shutdown(): UIO[Unit] = {
+      for {
+        _ <- UIO.effectTotal(log.info("shutting down http resources"))
+        _ <- UIO.effectTotal({
+          backend.close().catchAll {
+            case _ => UIO.unit // TODO manage errors?
+          }
+        })
+      } yield ()
+    }
 
     /*
       H E L P E R S
@@ -42,8 +51,9 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
     private def getDependency(dep: Gav): UIO[RepoResult[GavPair]] = {
       (for {
         response <- basicRequest.get(buildUri(dep)).send()
-        remote   <- parseResponse(response)(dep)
-      } yield GavPair(dep, remote)).either
+        remote <- parseResponse(response)(dep)
+      } yield GavPair(dep, remote))
+        .either
     }
 
     private def parseResponse(response: Response[Either[String, String]])(dep: Gav): Task[Gav] = {
@@ -60,7 +70,7 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
     private def parseResponse(response: String): Either[circe.Error, Gav] = {
       val numFoundKey = "numFound"
       val responseKey = "response"
-      val docsKey     = "docs"
+      val docsKey = "docs"
       val opsResult: Either[circe.Error, Gav] = for {
         json <- parse(response)
         cursor = json.hcursor

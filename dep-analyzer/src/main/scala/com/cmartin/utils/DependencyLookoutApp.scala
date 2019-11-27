@@ -1,21 +1,21 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.utils.file.{FileManager, FileManagerLive}
-import com.cmartin.utils.http.{HttpManager, HttpManagerLive}
-import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
-import sttp.client.SttpBackend
-import sttp.client.asynchttpclient.WebSocketHandler
-import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
-import zio.{App, Task, UIO, ZIO}
+import com.cmartin.utils.file.FileManager
+import com.cmartin.utils.http.HttpManager
+import com.cmartin.utils.logic.LogicManager
+import zio.{App, UIO, ZIO}
 
 /*
   http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
  */
 
 object DependencyLookoutApp extends App with ComponentLogging {
-  val filename      = "dep-analyzer/src/main/resources/deps2.log"
-  val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services")
+
+  import ApplicationHelper._
+
+  val filename = "dep-analyzer/src/main/resources/deps3.log" // TODO property
+  val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
 
   /*
     ZIO[R, E, A]
@@ -29,24 +29,15 @@ object DependencyLookoutApp extends App with ComponentLogging {
       - A: Either[Exception, Results]
    */
 
-  type Environments = FileManager with LogicManager with HttpManager //TODO  with ConfigManager
-
-  trait AppModules extends FileManagerLive with LogicManagerLive with HttpManagerLive
-
-  val modules = new AppModules {
-    override implicit val backend: SttpBackend[Task, Nothing, WebSocketHandler] =
-      unsafeRun(AsyncHttpClientZioBackend())
-  }
 
   val program: ZIO[Environments, Throwable, Unit] = for {
-    lines        <- FileManager.>.getLinesFromFile(filename)
+    lines <- FileManager.>.getLinesFromFile(filename)
     dependencies <- LogicManager.>.parseLines(lines)
-    _            <- FileManager.>.logDepCollection(dependencies)
-    validDeps    <- LogicManager.>.filterValid(dependencies)
-    validRate    <- LogicManager.>.calculateValidRate(dependencies.size, validDeps.size)
-    finalDeps    <- LogicManager.>.excludeList(validDeps, exclusionList)
-    remoteDeps <- HttpManager.>.checkDependencies(finalDeps)
-    _ <- HttpManager.>.shutdown()
+    _ <- FileManager.>.logDepCollection(dependencies)
+    validDeps <- LogicManager.>.filterValid(dependencies)
+    validRate <- LogicManager.>.calculateValidRate(dependencies.size, validDeps.size)
+    finalDeps <- LogicManager.>.excludeList(validDeps, exclusionList)
+    remoteDeps <- HttpManager.managed().use(_.httpManager.checkDependencies(finalDeps))
     _ <- FileManager.>.logMessage(s"Valid rate of dependencies in the file: $validRate %")
     _ <- FileManager.>.logPairCollection(remoteDeps)
   } yield ()
