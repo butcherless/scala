@@ -3,6 +3,7 @@ package com.cmartin.zio
 import com.cmartin.utils.file.{FileManager, FileManagerLive}
 import org.scalatest.{FlatSpec, Matchers}
 import zio._
+import zio.clock.Clock
 
 class FileManagerSpec extends FlatSpec with Matchers with DefaultRuntime {
 
@@ -46,5 +47,15 @@ class FileManagerSpec extends FlatSpec with Matchers with DefaultRuntime {
 
   }
 
+  "SUT" should "repeat a message" in {
+    import zio.duration._
+    val policy1 = Schedule.exponential(10.milliseconds).tapOutput(o => UIO(println(o))) >>> (Schedule.doWhile(_ < 2.second))
+
+    val policy2 = Schedule.recurs(5) || Schedule.recurs(10)
+    val program =
+      Task.effect(println("zio schedule test")) repeat   policy1
+
+    unsafeRun(program)
+  }
 
 }
