@@ -6,16 +6,13 @@ import com.cmartin.learn.actor.HealthAgent.{RequestStatus, RespondStatus}
 import com.cmartin.learn.actor.HealthAggregator.{AggregatorMessage, WrappedAgentResponse}
 
 object HealthAggregator {
-
   /*
     M E S S A G E S
    */
   sealed trait AggregatorMessage
 
   // Agregator incoming message from external protocol
-  case class WrappedAgentResponse(response: HealthAgent.AgentResponse)
-    extends AggregatorMessage
-
+  case class WrappedAgentResponse(response: HealthAgent.AgentResponse) extends AggregatorMessage
 
   /*
     R E S P O N S E S
@@ -26,20 +23,20 @@ object HealthAggregator {
     Behaviors.setup[AggregatorMessage](context => new HealthAggregator(context))
 }
 
-class HealthAggregator(context: ActorContext[AggregatorMessage])
-  extends AbstractBehavior[AggregatorMessage](context) {
-
+class HealthAggregator(context: ActorContext[AggregatorMessage]) extends AbstractBehavior[AggregatorMessage](context) {
   import DummyInfrastructureManager._
 
   var agentCount = 3
   context.log.info("HealthAggregator actor created")
 
   val agentResponseAdapter: ActorRef[HealthAgent.AgentResponse] =
-    context.messageAdapter { response => WrappedAgentResponse(response) }
+    context.messageAdapter { response =>
+      WrappedAgentResponse(response)
+    }
 
   val kafkaAgent: ActorRef[HealthAgent.HealthMessage] = context.spawn(HealthAgent(KAFKA_AGENT), "kafka-agent")
-  val postgresDbAgent = context.spawn(HealthAgent(POSTGRESQL_AGENT), "postgres-agent")
-  val systemAgent = context.spawn(HealthAgent(SYSTEM_AGENT), "system-agent")
+  val postgresDbAgent                                 = context.spawn(HealthAgent(POSTGRESQL_AGENT), "postgres-agent")
+  val systemAgent                                     = context.spawn(HealthAgent(SYSTEM_AGENT), "system-agent")
 
   kafkaAgent ! RequestStatus(getRequestId(), agentResponseAdapter)
   postgresDbAgent ! RequestStatus(getRequestId(), agentResponseAdapter)
@@ -58,8 +55,7 @@ class HealthAggregator(context: ActorContext[AggregatorMessage])
             if (agentCount == 0) {
               context.log.debug(s"agent count=$agentCount")
               Behaviors.stopped
-            }
-            else {
+            } else {
               Behaviors.same
             }
           case _ =>

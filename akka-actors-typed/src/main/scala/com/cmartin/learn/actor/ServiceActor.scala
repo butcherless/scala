@@ -17,25 +17,21 @@ object ServiceActor {
 
   case object Stop extends ServiceActorCommand
 
-
   sealed trait ServiceActorResponse
 
   case class ServiceEvenResponse(message: String) extends ServiceActorResponse
 
   case class ServiceOddResponse(message: String) extends ServiceActorResponse
-
 }
 
 class ServiceActor(context: ActorContext[ServiceActor.ServiceActorCommand], serviceId: String)
-  extends AbstractBehavior[ServiceActor.ServiceActorCommand](context) {
-
+    extends AbstractBehavior[ServiceActor.ServiceActorCommand](context) {
   import ServiceActor._
 
   context.log.info("Service Actor {} created", serviceId)
 
   override def onMessage(message: ServiceActorCommand): Behavior[ServiceActorCommand] = {
     message match {
-
       case ServiceTellCommand(id) =>
         context.log.info(s"service command tell received with id: $id")
         Behaviors.same
@@ -59,4 +55,3 @@ class ServiceActor(context: ActorContext[ServiceActor.ServiceActorCommand], serv
       this
   }
 }
-

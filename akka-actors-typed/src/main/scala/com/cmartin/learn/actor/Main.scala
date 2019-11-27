@@ -4,9 +4,8 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorSystem, Behavior}
 
 object Main extends App {
-
   def delay(delay: Int) = {
-    var count = 0
+    var count   = 0
     val timeout = System.currentTimeMillis() + delay
 
     while (System.currentTimeMillis() < timeout) {
