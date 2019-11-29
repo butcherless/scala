@@ -1,20 +1,18 @@
 package com.cmartin.learn.traverse
 
-import org.scalatest.AsyncFlatSpec
 import org.scalatest.concurrent.TimeLimits
+import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
 class FutureTraverseSpec extends AsyncFlatSpec with TimeLimits {
-
   behavior of "Future Traverse function"
 
   it should "retrieve a list with a sequenced service responses" in {
     // simulates an arbitrary list of services
     val serviceList = List(Ko, Ok, Ok, Ko, Ok)
     failAfter(2 * delayMax milliseconds) {
-
       val result: Future[Seq[ServiceResponse]] = composeServiceResponses(serviceList)
 
       result map { responses =>
@@ -24,5 +22,4 @@ class FutureTraverseSpec extends AsyncFlatSpec with TimeLimits {
       }
     }
   }
-
 }

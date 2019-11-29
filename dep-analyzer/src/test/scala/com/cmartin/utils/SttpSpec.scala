@@ -1,12 +1,13 @@
 package com.cmartin.utils
 
 import com.cmartin.utils.DependencyLookoutApp.unsafeRun
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import sttp.client._
 import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
 import zio.{DefaultRuntime, Task, URIO}
 
-class SttpSpec extends FlatSpec with Matchers {
+class SttpSpec extends AnyFlatSpec with Matchers {
   val runtime          = new DefaultRuntime {}
   implicit val backend = unsafeRun(AsyncHttpClientZioBackend())
 

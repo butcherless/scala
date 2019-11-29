@@ -1,9 +1,9 @@
 package com.cmartin.learn.util
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class UtilSpec extends FlatSpec with Matchers {
-
+class UtilSpec extends AnyFlatSpec with Matchers {
   behavior of "copy map function"
 
   it should "copy the empty map " in {

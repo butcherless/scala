@@ -4,20 +4,21 @@ import java.time.LocalDate
 
 import com.cmartin.PersonalCalendar._
 import com.cmartin.model._
-import org.scalatest._
+import org.scalatest.GivenWhenThen
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
 
 /**
   * Created by cmartin on 02/02/2017.
   */
-class DayFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
+class DayFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
   val weekenddate_2017_01_01 = LocalDate.ofYearDay(2017, 1)
   val workdate_2017_01_02    = LocalDate.ofYearDay(2017, 2)
 
   info("As a Day class user")
 
-  feature("Day object") {
-
-    scenario("create a work day with valid date") {
+  Feature("Day object") {
+    Scenario("create a work day with valid date") {
       Given("work day instance")
       val myWorkDay = WorkDay(workdate_2017_01_02)
 
@@ -31,7 +32,7 @@ class DayFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
       negativePredicates.forall(_(myWorkDay)) should be(false)
     }
 
-    scenario("create a weekend day with valid date") {
+    Scenario("create a weekend day with valid date") {
       Given("weekend day instance")
       val weekendDay = WeekendDay(weekenddate_2017_01_01)
 
@@ -52,7 +53,7 @@ class DayFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
       negativePredicates.forall(_(weekendDay)) should be(false)
     }
 
-    scenario("create a holiday day with dummy date") {
+    Scenario("create a holiday day with dummy date") {
       Given("holiday day instance")
       val holidayDay = HolidayDay(LocalDate.now())
 
@@ -66,7 +67,7 @@ class DayFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
       negativePredicates.forall(_(holidayDay)) should be(false)
     }
 
-    scenario("create a country holiday day with dummy date") {
+    Scenario("create a country holiday day with dummy date") {
       Given("country holiday day instance")
       val countryHolidayDay = CountryHolidayDay(LocalDate.now())
 
@@ -80,7 +81,7 @@ class DayFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
       negativePredicates.forall(_(countryHolidayDay)) should be(false)
     }
 
-    scenario("create an absence day with dummy date") {
+    Scenario("create an absence day with dummy date") {
       Given("absence day instance")
       val absenceDay = AbsenceDay(LocalDate.now)
 

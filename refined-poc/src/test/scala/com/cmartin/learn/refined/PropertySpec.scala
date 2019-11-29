@@ -1,6 +1,7 @@
 package com.cmartin.learn.refined
 
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.{Matchers, PropSpec}
+import org.scalatest.propspec.AnyPropSpec
 
-class PropertySpec extends PropSpec with TableDrivenPropertyChecks with Matchers {}
+class PropertySpec extends AnyPropSpec with TableDrivenPropertyChecks with Matchers {}

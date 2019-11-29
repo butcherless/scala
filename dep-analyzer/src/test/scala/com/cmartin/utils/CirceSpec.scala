@@ -7,10 +7,10 @@ import io.circe.CursorOp.DownField
 import io.circe.DecodingFailure
 import io.circe.generic.auto._
 import io.circe.parser._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class CirceSpec extends FlatSpec with Matchers {
-
+class CirceSpec extends AnyFlatSpec with Matchers {
   import CirceSpec._
 
   "Parser response" should "return a dependency" in {
@@ -36,11 +36,9 @@ class CirceSpec extends FlatSpec with Matchers {
       assert(error.isInstanceOf[DecodingFailure])
     }
   }
-
 }
 
 object CirceSpec {
-
   def parseResponse(response: String): Either[circe.Error, Dep] = {
     val opsResult: Either[circe.Error, Dep] = for {
       json <- parse(response)

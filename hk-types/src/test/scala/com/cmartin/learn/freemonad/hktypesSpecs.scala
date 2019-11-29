@@ -1,21 +1,19 @@
 package com.cmartin.learn.freemonad
 
 import com.cmartin.learn.freemonad.functions._
+import org.scalatest.GivenWhenThen
 import org.scalatest.OptionValues._
-import org.scalatest._
+import org.scalatest.featurespec.AnyFeatureSpec
 
-class hktypesSpecs extends FeatureSpec with GivenWhenThen {
-
+class hktypesSpecs extends AnyFeatureSpec with GivenWhenThen {
   val BITCOIN_NAME = "Bitcoin"
 
   val service = new OptionCoinMarketService(new CrytoCurrencyRepository())
 
   info("Coin Martket Cap Service Tests")
 
-  feature("Create cryto currency") {
-
-    scenario("create crypto coin success") {
-
+  Feature("Create cryto currency") {
+    Scenario("create crypto coin success") {
       Given("coin market service and valid crypto currency")
       val cc = CryptoCurrency(buildUuid, BITCOIN_NAME, BigDecimal(5000), BigDecimal(10))
 
@@ -31,8 +29,7 @@ class hktypesSpecs extends FeatureSpec with GivenWhenThen {
       assert(currency.change == cc.change)
     }
 
-    scenario("create crypto coin failure") {
-
+    Scenario("create crypto coin failure") {
       Given("coin market service and invalid crypto currency")
       val cc = CryptoCurrency(buildUuid, "", BigDecimal(10), BigDecimal(10))
 
@@ -44,8 +41,8 @@ class hktypesSpecs extends FeatureSpec with GivenWhenThen {
     }
   }
 
-  feature("Read cryto currency") {
-    scenario("read crypto coin by name success") {
+  Feature("Read cryto currency") {
+    Scenario("read crypto coin by name success") {
       Given("coin market service and an existing crypto currency name")
 
       When("call read by name operation")

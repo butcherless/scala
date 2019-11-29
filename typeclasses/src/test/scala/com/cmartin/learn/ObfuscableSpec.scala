@@ -2,12 +2,12 @@ package com.cmartin.learn
 
 import com.cmartin.learn.model.Constants._
 import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-object ObfuscableSpec extends FlatSpec with Matchers {
-
+object ObfuscableSpec extends AnyFlatSpec with Matchers {
   "Obfuscable" should "obfuscate a String" in {
-    val text = "chiquito"
+    val text   = "chiquito"
     val result = ObfuscatedString(text).toString
 
     result.nonEmpty shouldBe true
@@ -25,8 +25,8 @@ object ObfuscableSpec extends FlatSpec with Matchers {
   it should "obfuscate a Person" in {
     val person = Person(name, firstName, ObfuscatedInt(age), id, ObfuscatedString(password))
 
-    val result = person.toString
-    val ageResult = person.age.toString
+    val result         = person.toString
+    val ageResult      = person.age.toString
     val passwordResult = person.password.toString
 
     result.nonEmpty shouldBe true

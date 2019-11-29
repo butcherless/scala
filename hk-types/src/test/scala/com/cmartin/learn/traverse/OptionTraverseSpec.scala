@@ -1,9 +1,8 @@
 package com.cmartin.learn.traverse
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
-class OptionTraverseSpec extends FlatSpec {
-
+class OptionTraverseSpec extends AnyFlatSpec {
   behavior of "Option Traverse function"
 
   it should "retrieve a list with a sequenced service responses" in {
@@ -18,5 +17,4 @@ class OptionTraverseSpec extends FlatSpec {
 
     assert(result.contains(None))
   }
-
 }

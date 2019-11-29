@@ -3,10 +3,10 @@ package com.cmartin.learn
 import com.cmartin.learn.MyTypeClasses.Show._
 import com.cmartin.learn.model.Constants._
 import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class TypeClassSpec extends FlatSpec with Matchers {
-
+class TypeClassSpec extends AnyFlatSpec with Matchers {
   "Type class" should "show a Person" in {
     val person = Person(name, firstName, ObfuscatedInt(age), id, ObfuscatedString(password))
     val result = show(person)
@@ -19,7 +19,7 @@ class TypeClassSpec extends FlatSpec with Matchers {
   }
 
   it should "show an Int" in {
-    val int = 1234
+    val int    = 1234
     val result = show(int)
 
     result.nonEmpty shouldBe true
@@ -29,7 +29,7 @@ class TypeClassSpec extends FlatSpec with Matchers {
 
   it should "show a Long" in {
     val long: Long = 1234
-    val result = show(long)
+    val result     = show(long)
 
     result.nonEmpty shouldBe true
     result.contains(getNameToLower(long)) shouldBe true
@@ -38,13 +38,11 @@ class TypeClassSpec extends FlatSpec with Matchers {
 
   it should "show a BigDecimal" in {
     val bd: BigDecimal = BigDecimal(1234.56)
-    val result = show(bd)
+    val result         = show(bd)
 
     result.nonEmpty shouldBe true
     result.contains(String.valueOf(bd)) shouldBe true
-
   }
-
 
   def getNameToLower(c: Any) = c.getClass.getSimpleName.toLowerCase
 }

@@ -1,19 +1,20 @@
 package com.cmartin
 
 import com.cmartin.PersonalCalendar._
-import org.scalatest._
+import org.scalatest.GivenWhenThen
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
 
 /**
   * Created by cmartin on 02/02/2017.
   */
-class PersonalCalendarFeatureSpec extends FeatureSpec with GivenWhenThen with Matchers {
+class PersonalCalendarFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
   info("As a PersonalCalendar class user")
 
   val YEAR = 2017
 
-  feature("Constructor validation") {
-
-    scenario("valid year value") {
+  Feature("Constructor validation") {
+    Scenario("valid year value") {
       Given("personal calendar instance")
       val year = new LocalDateCalendar(YEAR)
 
@@ -22,13 +23,13 @@ class PersonalCalendarFeatureSpec extends FeatureSpec with GivenWhenThen with Ma
       dayCount should (be(365) or be(366))
     }
 
-    scenario("invalid year value") {
+    Scenario("invalid year value") {
       Given("personal calendar instance")
       an[IllegalArgumentException] should be thrownBy new LocalDateCalendar(-1)
     }
   }
 
-  scenario("retrieving day collections") {
+  Scenario("retrieving day collections") {
     Given("a year calendar")
     val year = new LocalDateCalendar(YEAR)
 

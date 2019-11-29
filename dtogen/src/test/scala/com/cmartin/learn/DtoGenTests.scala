@@ -1,12 +1,9 @@
 package com.cmartin.learn
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
-class DtoGenSpec extends FlatSpec {
-
+class DtoGenSpec extends AnyFlatSpec {
   "DtoGenSpec" should "pass a dummy test" in {
-
     assert(1 == 1)
   }
-
 }

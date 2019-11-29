@@ -3,12 +3,13 @@ package com.cmartin
 import java.time.LocalDate
 
 import com.cmartin.data.{Aircraft, AircraftRepository}
+import org.scalatest.BeforeAndAfter
 import org.scalatest.OptionValues._
 import org.scalatest.TryValues._
-import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class AircraftRepositorySpec extends FlatSpec with Matchers with BeforeAndAfter {
-
+class AircraftRepositorySpec extends AnyFlatSpec with Matchers with BeforeAndAfter {
   private val AIRCRAFT_ID        = "EC-MXV"
   private val AIR_EUROPA_AIRLINE = "Air Europa"
   private val IBERIA_AIRLINE     = "Iberia"

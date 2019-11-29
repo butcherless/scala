@@ -3,10 +3,10 @@ package com.cmartin.learn
 import com.cmartin.learn.TestSamples._
 import org.json4s.native.JsonMethods
 import org.scalatest.OptionValues._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class MapFlatBlupSpec extends FlatSpec with Matchers {
-
+class MapFlatBlupSpec extends AnyFlatSpec with Matchers {
   behavior of "MapFlatBlup"
 
   /*
@@ -14,7 +14,6 @@ class MapFlatBlupSpec extends FlatSpec with Matchers {
    */
 
   it should "flatten json keys in a Json Object" in {
-
     val resultMap: Map[String, Any] = MapFlatBlup.flatten(nestedJson).value
 
     val expectedMap: Map[String, Any] = JsonMethods.parse(flattenedJson).extract[Map[String, Any]]
@@ -39,7 +38,6 @@ class MapFlatBlupSpec extends FlatSpec with Matchers {
    */
 
   ignore should "blow up json keys in a flattened Json Object" in {
-
     val resultMap: Map[String, Any] = MapFlatBlup.blowup(flattenedJson).value
 
     val expectedMap: Map[String, Any] = JsonMethods.parse(nestedJson).extract[Map[String, Any]]
@@ -52,5 +50,4 @@ class MapFlatBlupSpec extends FlatSpec with Matchers {
 
     result shouldBe None
   }
-
 }

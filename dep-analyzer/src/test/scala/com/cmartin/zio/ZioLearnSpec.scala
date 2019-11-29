@@ -2,10 +2,11 @@ package com.cmartin.zio
 
 import com.cmartin.utils.Domain.Gav
 import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import zio._
 
-class ZioLearnSpec extends FlatSpec with Matchers with DefaultRuntime {
+class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
   "A Task" should "throw a FiberFailure when an exception occurs" in {
     val program = for {

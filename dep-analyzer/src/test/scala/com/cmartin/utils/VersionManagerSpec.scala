@@ -1,6 +1,7 @@
 package com.cmartin.utils
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.util.matching.Regex
 
@@ -11,7 +12,7 @@ import scala.util.matching.Regex
   2. local and remote versions should match the same regex type
   3. compare valid local and remote versions
  */
-class VersionManagerSpec extends FlatSpec with Matchers {
+class VersionManagerSpec extends AnyFlatSpec with Matchers {
   import VersionManagerSpec._
 
   "Regex type release X.Y.Z" should "match the collection of versions" in {

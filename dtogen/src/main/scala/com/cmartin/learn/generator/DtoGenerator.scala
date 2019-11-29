@@ -27,7 +27,6 @@ object TryDtoGenerator extends DtoGenerator[Try] {
 
   override def addToString(builder: ToStringBuilder) = ???
  */
-
 }
 
 object OptionDtoGenerator extends DtoGenerator[Option] {

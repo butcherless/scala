@@ -18,7 +18,6 @@ object MainApp extends App {
   typeRep match {
     case Success(s) => println(s"TypeRepresentation[type: ${s.t}, file: ${s.f}]")
     case Failure(f) => println(s"function create type " + f.toString)
-
   }
 
   val sb = CommonsLang3

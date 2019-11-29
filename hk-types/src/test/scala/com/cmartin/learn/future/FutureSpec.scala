@@ -2,14 +2,13 @@ package com.cmartin.learn.future
 
 import cats.data._
 import cats.implicits._
-import org.scalatest.AsyncFlatSpec
+import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.concurrent.Future
 import scala.util.Random
 
 // https://gist.github.com/rtitle/f73d35e79a2f95871bca27d24be3a805
 class FutureSpec extends AsyncFlatSpec {
-
   import FutureSpec._
 
   "Future fold" should "sum the results" in {
@@ -27,10 +26,8 @@ class FutureSpec extends AsyncFlatSpec {
   }
 
   "Future list execution" should "return a full valid response list" in {
-    val resultList: List[Future[String]] = List(
-      buildOkResponseFuture(1),
-      buildOkResponseFuture(2),
-      buildOkResponseFuture(3))
+    val resultList: List[Future[String]] =
+      List(buildOkResponseFuture(1), buildOkResponseFuture(2), buildOkResponseFuture(3))
 
     val result: Future[List[ValidatedNel[Throwable, String]]] = resultList.traverse(res => res.toValidatedNel)
 
@@ -40,11 +37,8 @@ class FutureSpec extends AsyncFlatSpec {
   }
 
   it should "return a response list with valid and invalid responses" in {
-    val resultList: List[Future[String]] = List(
-      buildOkResponseFuture(1),
-      buildOkResponseFuture(2),
-      buildKoResponseFuture(101),
-      buildKoResponseFuture(102))
+    val resultList: List[Future[String]] =
+      List(buildOkResponseFuture(1), buildOkResponseFuture(2), buildKoResponseFuture(101), buildKoResponseFuture(102))
 
     val result: Future[List[ValidatedNel[Throwable, String]]] = resultList.traverse(res => res.toValidatedNel)
 
@@ -53,7 +47,6 @@ class FutureSpec extends AsyncFlatSpec {
       assert(list.count(_.isInvalid) == 2)
     }
   }
-
 
   it should "return a full invalid response list" in {
     val resultList: List[Future[String]] = List(
@@ -77,16 +70,16 @@ class FutureSpec extends AsyncFlatSpec {
       val f3 = buildOkResponseFuture(3)
 
       val results = for {
-        repo <- f1
+        repo    <- f1
         flatten <- f2
-        shadow <- f3
+        shadow  <- f3
       } yield Results(repo, flatten, shadow)
 
       results
     }
 
     val result = for {
-      r3 <- f3() // parallel tasks
+      r3 <- f3()                                     // parallel tasks
       r4 <- Future(r3.repo + r3.flatten + r3.shadow) // task waiting for 3 previous tasks
     } yield r4
 
@@ -108,16 +101,16 @@ class FutureSpec extends AsyncFlatSpec {
       val f3 = buildOkResponseFuture(3)
 
       val results = for {
-        repo <- f1
+        repo    <- f1
         flatten <- f2
-        shadow <- f3
+        shadow  <- f3
       } yield Results(repo, flatten, shadow)
 
       results
     }
 
     val result4 = for {
-      r3 <- f3() // parallel tasks
+      r3 <- f3()                                     // parallel tasks
       r4 <- Future(r3.repo + r3.flatten + r3.shadow) // task waiting for 3 previous tasks
     } yield r4
 
@@ -140,15 +133,16 @@ object FutureSpec {
 
   implicit class EnrichedFuture[A](future: Future[A]) {
     def toValidatedNel: Future[ValidatedNel[Throwable, A]] = {
-      future.map(Validated.valid).recover { case e =>
-        Validated.invalidNel(e)
+      future.map(Validated.valid).recover {
+        case e =>
+          Validated.invalidNel(e)
       }
     }
   }
 
   /*
     returns a delay between 5 and maxDelay
- */
+   */
   def getDelay(maxDelay: Int): Int = {
     val minDelay = 5
     if (maxDelay < minDelay) minDelay
@@ -176,5 +170,4 @@ object FutureSpec {
       throw new RuntimeException(s"Service result F[$number] failed")
     }
   }
-
 }

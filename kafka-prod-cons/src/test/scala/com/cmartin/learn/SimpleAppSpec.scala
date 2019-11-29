@@ -3,11 +3,12 @@ package com.cmartin.learn
 import java.util.Date
 
 import com.cmartin.learn.Domain.DummyMessage
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.util.Random
 
-class SimpleAppSpec extends FlatSpec with Matchers {
+class SimpleAppSpec extends AnyFlatSpec with Matchers {
   "Application Helper" should "build a JSON DummyMessage" in {
     val timestamp: Long = new Date().getTime()
     val dummyMessage    = DummyMessage(1, "dummy", timestamp, 7)
