@@ -70,6 +70,28 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     result shouldBe filteredArtifacts
   }
+
+  it should "WIP work" in {
+    import zio.console._
+    import zio.clock._
+    import zio.duration._
+
+    val policy =
+      Schedule.exponential(10.milliseconds) &&
+      //Schedule.spaced(3.seconds)
+    Schedule.recurs(5)
+
+    val program: ZIO[Clock with Console, Nothing, (Duration, Int)] = (for {
+    _ <- putStrLn("zio console message")
+    //_ <- sleep(1.second)
+    } yield ()) repeat policy
+
+
+    val result: (Duration, Int) = unsafeRun(program)
+
+    info(result._1.toMillis.toString)
+
+  }
 }
 
 object ZioLearnSpec {
