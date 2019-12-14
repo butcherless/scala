@@ -30,7 +30,7 @@ object DependencyLookoutApp extends App with ComponentLogging {
    */
 
 
-  val program: ZIO[Environments, Throwable, Unit] = for {
+  val program: ZIO[Definitions, Throwable, Unit] = for {
     lines <- FileManager.>.getLinesFromFile(filename)
     dependencies <- LogicManager.>.parseLines(lines)
     _ <- FileManager.>.logDepCollection(dependencies)

@@ -11,11 +11,11 @@ import zio.Task
 
 object ApplicationHelper {
 
-  type Environments = FileManager with LogicManager with HttpManager //TODO  with ConfigManager
+  type Definitions = FileManager with LogicManager with HttpManager //TODO  with ConfigManager
 
-  trait AppModules extends FileManagerLive with LogicManagerLive with HttpManagerLive
+  trait Modules extends FileManagerLive with LogicManagerLive with HttpManagerLive
 
-  val modules = new AppModules {
+  val modules = new Modules {
     override implicit val backend: SttpBackend[Task, Nothing, WebSocketHandler] =
       unsafeRun(AsyncHttpClientZioBackend())
   }
