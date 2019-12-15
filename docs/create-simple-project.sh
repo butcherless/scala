@@ -10,6 +10,7 @@ DEP_UP_VER="1.2.1"
 LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.1.0"
 SCOVERAGE_VER="1.6.1"
+ZIO_VER="1.0.0-RC17"
 
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
@@ -29,13 +30,19 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "'${SCOVERAGE_VER}'")' > projec
 echo 'import sbt._
 
 object Dependencies {
-  lazy val scalatestVersion = "'${SCALATEST_VER}'"
   lazy val logbackVersion = "'${LOGBACK_VER}'"
+  lazy val zioVersion = "'${ZIO_VER}'"
+
+  lazy val scalatestVersion = "'${SCALATEST_VER}'"
 
   val mainAndTest = Seq(
     "ch.qos.logback" % "logback-classic" % logbackVersion,
+    "dev.zio" %% "zio" % zioVersion,
 
-    "org.scalatest" %% "scalatest" % scalatestVersion % Test
+    "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+
+    "dev.zio" %% "zio-test" % zioVersion % "test",
+    "dev.zio" %% "zio-test-sbt" % zioVersion % "test"
   )
 }' > project/Dependencies.scala
 
@@ -68,6 +75,7 @@ lazy val templateProject = (project in file("."))
   .settings(
       commonSettings,
       name := "project-template",
+      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )' > build.sbt
 
 echo '-server
@@ -100,11 +108,19 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 echo 'package '${SOURCE_PKG}'
 
 object Library {
+
+  import zio.UIO
+
   val TEXT = "simple-application-hello"
 
   def echo(message: String): String = {
     message
   }
+
+  def sum(a: Int, b: Int): UIO[Int] = {
+    UIO.effectTotal(a + b)
+  }
+
 }' > src/main/scala/${PKG_DIR}/Library.scala
 
 
@@ -113,12 +129,25 @@ echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
 import org.slf4j.LoggerFactory
+import zio.{App, Task, ZIO}
 
 object SimpleApp extends App {
 
     private val log = LoggerFactory.getLogger(classOf[App])
 
-    log.debug(echo(TEXT))
+  override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, Int] = {
+    val program = for {
+      _ <- Task.effect(log.debug(echo(TEXT)))
+      result <- sum(2, 3)
+      _ <- Task.effect(log.debug(s"sum result: $result"))
+    } yield ()
+
+    program.fold(e => {
+      println(e)
+      1
+    },
+      _ => 0)
+  }
 }' > src/main/scala/${PKG_DIR}/SimpleApp.scala
 
 
@@ -135,5 +164,29 @@ class LibrarySpec extends AnyFlatSpec with Matchers {
     result shouldBe TEXT
   }
 }' > src/test/scala/${PKG_DIR}/LibrarySpec.scala
+
+echo 'package '${SOURCE_PKG}'
+
+import '${SOURCE_PKG}'.Library._
+import zio.test.Assertion._
+import zio.test._
+
+object ZioSpec
+  extends DefaultRunnableSpec(
+    suite("Check test")(
+      test("Echo function return the same text") {
+        val result = echo(TEXT)
+        assert(result, equalTo(TEXT))
+      },
+      testM("Zio effect sum 2 + 3") {
+        for {
+          r <- sum(2, 3)
+        } yield assert(r, equalTo(5))
+      }
+    )
+  )
+' > src/test/scala/${PKG_DIR}/ZioSpec.scala
+
+
 
 sbt clean coverage test coverageReport dependencyUpdates assembly run
