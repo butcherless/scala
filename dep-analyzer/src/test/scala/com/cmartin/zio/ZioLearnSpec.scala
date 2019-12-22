@@ -118,7 +118,26 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
   }
 
-  it should "compile" in {
+  it should "return a domain error inside fiber failure" in {
+    trait DomainError
+    case class ErrorOne(m: String) extends DomainError
+    case class ErrorTwo(m: String) extends DomainError
+
+    val program: ZIO[Any, DomainError, Int] =
+      for {
+        _      <- Task(1 / 1).mapError(_ => ErrorOne("error-one"))
+        result <- Task(1 / 0).mapError(_ => ErrorTwo("error-two"))
+      } yield result
+
+    val failure = the[FiberFailure] thrownBy unsafeRun(program)
+
+    failure.cause.failureOption.map { ex =>
+      ex shouldBe ErrorTwo("error-two")
+    }
+
+  }
+
+  it should "return a domain error inside Left (either)" in {
     trait DomainError
     case class ErrorOne(m: String) extends DomainError
     case class ErrorTwo(m: String) extends DomainError
