@@ -3,6 +3,13 @@ package com.cmartin.utils
 import scala.util.matching.Regex
 
 object Domain {
+  /*
+    CONSTANT MESSAGES
+   */
+
+  val OPEN_FILE_ERROR = "Error while opening the file"
+  val FILE_BUFFER_ERROR = "Error while creating the file buffer"
+
   type RepoResult[GavPair] = Either[Throwable, GavPair]
 
   sealed trait DomainError
@@ -10,6 +17,8 @@ object Domain {
   case class FileIOError(message: String) extends DomainError
 
   case class NetworkError(message: String) extends DomainError
+
+  case class UnknownError(m: String) extends DomainError
 
   /*
    Version comparator

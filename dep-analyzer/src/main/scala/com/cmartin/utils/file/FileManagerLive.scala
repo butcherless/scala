@@ -42,7 +42,7 @@ trait FileManagerLive extends FileManager with ComponentLogging {
   }
 
   /*
-  H E L P E R S
+    H E L P E R S
    */
   def formatChanges(pair: Domain.GavPair): String =
     s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"

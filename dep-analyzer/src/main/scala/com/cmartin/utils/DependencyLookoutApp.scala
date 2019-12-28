@@ -14,7 +14,7 @@ object DependencyLookoutApp extends App with ComponentLogging {
 
   import ApplicationHelper._
 
-  val filename = "dep-analyzer/src/main/resources/deps3.log" // TODO property
+  val filename      = "dep-analyzer/src/main/resources/deps3.log"                // TODO property
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
 
   /*
@@ -29,26 +29,31 @@ object DependencyLookoutApp extends App with ComponentLogging {
       - A: Either[Exception, Results]
    */
 
-
   val program: ZIO[Definitions, Throwable, Unit] = for {
-    lines <- FileManager.>.getLinesFromFile(filename)
+    lines        <- FileManager.>.getLinesFromFile(filename)
     dependencies <- LogicManager.>.parseLines(lines)
-    _ <- FileManager.>.logDepCollection(dependencies)
-    validDeps <- LogicManager.>.filterValid(dependencies)
-    validRate <- LogicManager.>.calculateValidRate(dependencies.size, validDeps.size)
-    finalDeps <- LogicManager.>.excludeList(validDeps, exclusionList)
-    remoteDeps <- HttpManager.managed().use(_.httpManager.checkDependencies(finalDeps))
-    _ <- FileManager.>.logMessage(s"Valid rate of dependencies in the file: $validRate %")
-    _ <- FileManager.>.logPairCollection(remoteDeps)
+    _            <- FileManager.>.logDepCollection(dependencies)
+    validDeps    <- LogicManager.>.filterValid(dependencies)
+    validRate    <- LogicManager.>.calculateValidRate(dependencies.size, validDeps.size)
+    finalDeps    <- LogicManager.>.excludeList(validDeps, exclusionList)
+    remoteDeps   <- HttpManager.managed().use(_.httpManager.checkDependencies(finalDeps))
+    _            <- FileManager.>.logMessage(s"Valid rate of dependencies in the file: $validRate %")
+    _            <- FileManager.>.logPairCollection(remoteDeps)
   } yield ()
 
   /*
      E X E C U T I O N
    */
   override def run(args: List[String]): UIO[Int] = {
-    program.provide(modules)
+    /*
+     This is similar to dependency injection, and the `provide` function can be
+     thought of as `inject`.
+     */
+    program
+      .provide(modules)
       .foldM(
         e => Task(log.info(e.getMessage)).catchAll(_ => UIO.unit) *> UIO(1), // KO
-        _ => UIO(0)) // OK
+        _ => UIO(0)
+      ) // OK
   }
 }
