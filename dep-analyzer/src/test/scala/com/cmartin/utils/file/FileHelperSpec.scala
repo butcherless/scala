@@ -1,7 +1,7 @@
 package com.cmartin.utils.file
 
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{FileIOError, UnknownError}
+import com.cmartin.utils.Domain.{FileIOError, Gav, UnknownError}
 import com.cmartin.utils.file.FileHelper.FileLines
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -50,6 +50,16 @@ class FileHelperSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
     failure.cause.failureOption.map { message =>
       message shouldBe UnknownError(UNKNOWN_ERROR_MESSAGE)
     }
+  }
+
+  it should "write two lines in the log destination" in{
+    //TODO https://gist.github.com/jdegoes/dd66656382247dc5b7228fb0f2cb97c8
+    // add a logger dependency, via constructor or via module pattern
+    val deps = Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
+    val program = FileHelper.>.logDepCollection(deps)
+
+    info ("TODO: refactor log module")
+    unsafeRun(program.provide(FileHelperLive))
   }
 
 }

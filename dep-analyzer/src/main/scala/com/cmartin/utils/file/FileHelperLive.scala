@@ -2,6 +2,7 @@ package com.cmartin.utils.file
 import java.io.{File, FileInputStream}
 
 import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.learn.common.Utils.colourRed
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.{DomainError, FileIOError}
 import com.cmartin.utils.file.FileHelper.FileLines
@@ -19,6 +20,20 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
         lines <- createFileSource(fis)
           .bracket(closeSource)(getLines)
       } yield lines.toSeq
+    }
+
+    override def logDepCollection(dependencies: Seq[Either[String, Domain.Gav]]): IO[DomainError, Unit] = {
+      Task
+        .effect(
+          dependencies
+            .foreach { dep =>
+              dep.fold(
+                line => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}"),
+                dep => log.info(dep.toString) // OK case
+              )
+            }
+        )
+        .mapError(_ => FileIOError("Error writing a log message"))
     }
   }
 
