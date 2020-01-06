@@ -38,6 +38,7 @@ bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/c
 - testOnly TestSuite -- -z CURRENT
 - command: sbt clean coverage test coverageReport
 - report: target/scala-2.13/scoverage-report/index.html
+- check dependencies: sbt dependencyBrowseTree
 
 ## Plugins
 - https://github.com/jrudolph/sbt-dependency-graph
