@@ -189,4 +189,4 @@ object ZioSpec
 
 
 
-sbt clean coverage test coverageReport dependencyUpdates assembly run
+sbt clean coverage test coverageReport dependencyUpdates assembly sbtVersion run
