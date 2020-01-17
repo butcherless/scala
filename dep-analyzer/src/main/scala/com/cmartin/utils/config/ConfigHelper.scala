@@ -8,19 +8,14 @@ object ConfigHelper {
 
   final case class AppConfig(filename: String, exclusions: String)
 
-  def getAppConfigFromMap(): IO[ReadErrorsVector[String, String], AppConfig] = {
-    // source
-    val mapSource = Map(
-      "FILENAME"   -> "dependencies.data",
-      "EXCLUSIONS" -> "dep-exclusion-1"
-    )
+  def getAppConfigFromMap(map: Map[String, String]): IO[ReadErrorsVector[String, String], AppConfig] = {
 
     // config descriptor
     val appConfig: ConfigDescriptor[String, String, AppConfig] =
       (string("FILENAME") |@| string("EXCLUSIONS"))(AppConfig.apply, AppConfig.unapply)
 
     // IO effect
-    read(appConfig from ConfigSource.fromMap(mapSource))
+    read(appConfig from ConfigSource.fromMap(map))
   }
 
 }

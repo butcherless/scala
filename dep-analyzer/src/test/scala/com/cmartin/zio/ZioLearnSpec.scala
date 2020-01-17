@@ -5,7 +5,6 @@ import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
-import zio.config.Config
 
 class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
@@ -154,18 +153,36 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
     result shouldBe Left(ErrorOne("error-one"))
   }
 
+  import com.cmartin.utils.config.ConfigHelper._
   "Zio Config" should "read the configuration from a Map" in {
-    import com.cmartin.utils.config.ConfigHelper._
+
+    val mapSource = Map(
+      "FILENAME"   -> "dependencies.data",
+      "EXCLUSIONS" -> "dep-exclusion-1"
+    )
 
     val expectedConfig = AppConfig("dependencies.data", "dep-exclusion-1")
 
-    val io = getAppConfigFromMap()
+    val io = getAppConfigFromMap(mapSource)
 
     val config = unsafeRun(io)
 
     info(s"zio config result: $config")
 
     config shouldBe expectedConfig
+  }
+
+  it should "fail when trying to retrieve a missing property" in {
+    val mapSource = Map(
+      "FILENAME" -> "dependencies.data"
+    )
+
+    val io = getAppConfigFromMap(mapSource)
+
+    val failure = the[FiberFailure] thrownBy unsafeRun(io)
+
+    failure.cause.failures.nonEmpty shouldBe true
+
   }
 }
 
