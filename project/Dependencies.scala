@@ -20,6 +20,7 @@ object Dependencies {
   lazy val sttpVersion         = "2.0.0-RC6"
   lazy val uTestVersion        = "0.7.3"
   lazy val zioVersion          = "1.0.0-RC17"
+  lazy val zioConfigVersion    = "1.0.0-RC10"
   lazy val zioKafkaVersion     = "0.4.1"
 
   // production code
@@ -49,11 +50,12 @@ object Dependencies {
   lazy val scalaz       = "org.scalaz"                 %% "scalaz-core"   % scalazVersion
   lazy val zinc         = "org.scala-sbt"              %% "zinc"          % "1.3.0-M6"
 
-  lazy val sttpCore    = "com.softwaremill.sttp.client" %% "core"                          % sttpVersion
-  lazy val sttpZio     = "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % sttpVersion
+  lazy val sttpCore = "com.softwaremill.sttp.client" %% "core"                          % sttpVersion
+  lazy val sttpZio  = "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % sttpVersion
 
   // Z I O  a n d  E C O S Y S T E M
-  lazy val zio = "dev.zio" %% "zio" % zioVersion
+  lazy val zio       = "dev.zio" %% "zio"        % zioVersion
+  lazy val zioConfig = "dev.zio" %% "zio-config" % zioConfigVersion
   //lazy val zioStreams = "dev.zio" %% "zio-streams" % zioVersion
   //lazy val zioKafka = "dev.zio" %% "zio-kafka"  % zioKafkaVersion
 

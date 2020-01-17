@@ -50,6 +50,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       sttpZio,
       logback,
       zio,
+      zioConfig,
       specs2
     )
   )
