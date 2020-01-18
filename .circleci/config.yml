@@ -21,8 +21,9 @@ jobs:
       - run:
           name: compile, test
           command: |
-                   sbt -mem 2048 ";clean ;test ;dependencyUpdates"
-                   bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
+            sbt -mem 2048 xcoverage
+            sbt -mem 2048 xdup
+            bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
 
 
   build_template:
@@ -42,9 +43,9 @@ jobs:
       - run:
           name: create, compile, test, run
           command: |
-                   cd docs
-                   chmod u+x create-simple-project.sh
-                   ./create-simple-project.sh
+            cd docs
+            chmod u+x create-simple-project.sh
+            ./create-simple-project.sh
 
 workflows:
   version: 2

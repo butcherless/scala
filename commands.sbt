@@ -1,20 +1,25 @@
-val ReleaseCommand = Command.command("release") { state =>
+val CoverageCommand = Command.command("xcoverage") { state =>
+  "clean" :: "coverage" :: "test" :: "coverageReport" :: "coverageAggregate" :: state
+}
+
+val ReleaseCommand = Command.command("xrelease") { state =>
   "clean" :: "coverage" :: "test" :: "coverageReport" :: "coverageAggregate" :: "assembly" :: "doc" :: state
 }
 
-val ReloadCompileCommand = Command.command("reload-compile") { state =>
-  "reload" :: "clean" :: "compile" :: state
+val ReloadCompileCommand = Command.command("xrecompile") { state =>
+  "clean" :: "reload" :: "compile" :: state
 }
 
-val ReloadTestCommand = Command.command("reload-test") { state =>
-  "reload" :: "clean" :: "test" :: state
+val ReloadTestCommand = Command.command("xretest") { state =>
+  "clean" :: "reload" :: "test" :: state
 }
 
-val DependencyUpdatesCommand = Command.command("dup") { state =>
+val DependencyUpdatesCommand = Command.command("xdup") { state =>
   "dependencyUpdates" :: state
 }
 
 commands ++= Seq(
+  CoverageCommand,
   DependencyUpdatesCommand,
   ReleaseCommand,
   ReloadCompileCommand,

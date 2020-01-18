@@ -8,8 +8,8 @@ addons:
     update: true
 
 script:
-  - sbt clean test
-  - sbt dependencyUpdates
+  - sbt xcoverage
+  - sbt xdup
 after_success:
   - sbt coveralls
 
