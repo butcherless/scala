@@ -20,7 +20,7 @@ object Dependencies {
   lazy val sttpVersion         = "2.0.0-RC6"
   lazy val uTestVersion        = "0.7.3"
   lazy val zioVersion          = "1.0.0-RC17"
-  lazy val zioConfigVersion    = "1.0.0-RC10"
+  lazy val zioConfigVersion    = "1.0.0-RC11"
   lazy val zioKafkaVersion     = "0.4.1"
 
   // production code
