@@ -2,7 +2,7 @@
 
 PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
-SBT_VER=1.3.7
+SBT_VER=1.3.8
 SCALA_VER="2.13.1"
 ASSEMBLY_VER="0.14.10"
 DEP_GRAPH_VER="0.10.0-RC1"
@@ -133,7 +133,7 @@ import zio.{App, Task, ZIO}
 
 object SimpleApp extends App {
 
-    private val log = LoggerFactory.getLogger(classOf[App])
+  private val log = LoggerFactory.getLogger(classOf[App])
 
   override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, Int] = {
     val program = for {
