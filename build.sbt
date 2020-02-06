@@ -20,6 +20,8 @@ lazy val commonSettings = Seq(
   scalaVersion := scalaCompiler,
   libraryDependencies ++= Seq(scalaTest),
   scalacOptions ++= basicScalacOptions,
+  resolvers += // temporal for ZIO snapshots
+    "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   test in assembly := {}
 )
 
@@ -134,3 +136,4 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
 
 lazy val json4sUtils = (project in file("json4s-utils"))
   .settings(commonSettings, name := "json4s-utils", libraryDependencies ++= Seq(json4s, logback, scalaLogging))
+
