@@ -69,24 +69,21 @@ lazy val typeclasses = (project in file("typeclasses"))
   .settings(
     commonSettings,
     name := "typeclasses",
-    libraryDependencies ++= Seq(scalaLogging, logback),
-    testFrameworks += new TestFramework("utest.runner.Framework")
+    libraryDependencies ++= Seq(scalaLogging, logback)
   )
 
 lazy val dtogen = (project in file("dtogen"))
   .settings(
     commonSettings,
     name := "dtogen",
-    libraryDependencies ++= Seq(scalaLogging, logback),
-    testFrameworks += new TestFramework("utest.runner.Framework")
+    libraryDependencies ++= Seq(scalaLogging, logback)
   )
 
 lazy val scalazlearn = (project in file("scalaz"))
   .settings(
     commonSettings,
     name := "scalazlearn",
-    libraryDependencies ++= Seq(scalaz, uTest),
-    testFrameworks += new TestFramework("utest.runner.Framework")
+    libraryDependencies ++= Seq(scalaz)
   )
 
 lazy val akkaActors = (project in file("akka-actors"))
