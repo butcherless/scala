@@ -5,7 +5,7 @@ object Dependencies {
   lazy val akkaVersion         = "2.6.3"
   lazy val akkaTypedVersion    = "2.6.3"
   lazy val catsVersion         = "2.1.0"
-  lazy val circeVersion        = "0.12.3"
+  lazy val circeVersion        = "0.13.0"
   lazy val configVersion       = "1.4.0"
   lazy val json4sVersion       = "3.6.7"
   lazy val kafkaClientVersion  = "2.4.0"
