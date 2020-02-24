@@ -93,6 +93,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
             <pattern>%d{ISO8601} %-5level [%thread] %logger{50} - %msg%n</pattern>
         </encoder>
     </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>target/template-application.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date{ISO8601} %-5level [%thread] %logger{40}:%line - %msg%n%rEx</pattern>
+        </encoder>
+    </appender>
+
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="STDOUT"/>
     </appender>
