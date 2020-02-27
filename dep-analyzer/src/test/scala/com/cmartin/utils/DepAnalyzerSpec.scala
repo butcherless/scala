@@ -7,8 +7,8 @@ import scala.collection.SortedSet
 
 class DepAnalyzerSpec extends Specification {
 
-  val dep1 = Dep("dep.group", "dep-artifact", "dep-version-1")
-  val dep2 = Dep("dep.group", "dep-artifact", "dep-version-2")
+  val dep1: Dep = Dep("dep.group", "dep-artifact", "dep-version-1")
+  val dep2: Dep = Dep("dep.group", "dep-artifact", "dep-version-2")
 
   "get dependency empty string" >> {
     val s      = "non-dependency-line"

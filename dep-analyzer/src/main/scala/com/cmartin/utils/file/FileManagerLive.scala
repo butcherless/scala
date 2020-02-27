@@ -11,17 +11,20 @@ import zio.{Task, UIO}
 import scala.io.BufferedSource
 
 trait FileManagerLive extends FileManager with ComponentLogging {
-  val fileManager = new FileManager.Service[Any] {
+  val fileManager: FileManager.Service[Any] = new FileManager.Service[Any] {
     override def getLinesFromFile(filename: String): Task[List[String]] =
       for {
-        fis <- openFile(filename)
+        fis   <- openFile(filename)
         lines <- createFileSource(fis).bracket(closeSource)(getLines)
       } yield lines.toList
 
     override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
       Task.effect(
         dependencies.foreach { dep =>
-          dep.fold(line => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}"), (dep => log.info(dep.toString)))
+          dep.fold(
+            line => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}"),
+            dep => log.info(dep.toString)
+          )
         }
       )
     }

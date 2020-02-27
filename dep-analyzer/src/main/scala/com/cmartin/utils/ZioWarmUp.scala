@@ -76,7 +76,7 @@ object ZioWarmUp {
     List.empty[Gav] // TODO
   }
 
-  val validMessage =
+  val validMessage: String =
     """
       |{
       |  "id": "abc-123-efg-456-xyz",

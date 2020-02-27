@@ -15,7 +15,7 @@ object ApplicationHelper {
 
   trait Modules extends FileManagerLive with LogicManagerLive with HttpManagerLive
 
-  val modules = new Modules {
+  val modules: Modules = new Modules {
     override implicit val backend: SttpBackend[Task, Nothing, WebSocketHandler] =
       unsafeRun(AsyncHttpClientZioBackend())
   }

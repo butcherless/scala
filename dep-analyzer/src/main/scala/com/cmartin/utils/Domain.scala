@@ -7,7 +7,7 @@ object Domain {
     CONSTANT MESSAGES
    */
 
-  val OPEN_FILE_ERROR = "Error while opening the file"
+  val OPEN_FILE_ERROR   = "Error while opening the file"
   val FILE_BUFFER_ERROR = "Error while creating the file buffer"
 
   type RepoResult[GavPair] = Either[Throwable, GavPair]
@@ -55,7 +55,8 @@ object Domain {
     * Companion Object for Gav case class
     */
   object Gav {
-    implicit val ord = new Ordering[Gav] {
+    implicit val ord: Ordering[Gav] = new Ordering[Gav] {
+
       /**
         * Comparator for dependencies classes
         *
@@ -72,7 +73,7 @@ object Domain {
       Gav(
         regexMatch.group(1), // group
         regexMatch.group(2), // artifact
-        regexMatch.group(3) // version
+        regexMatch.group(3)  // version
       )
     }
   }

@@ -32,14 +32,12 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
     val expectedMessage = "error-message"
     val program = for {
       r1     <- UIO(0)
-      result <- Task(r1 / r1).mapError(_ => expectedMessage)
+      result <- Task(r1 / r1).asError(expectedMessage)
     } yield result
 
     val failure = the[FiberFailure] thrownBy unsafeRun(program)
 
-    failure.cause.failureOption.map { message =>
-      message shouldBe expectedMessage
-    }
+    failure.cause.failureOption.map { message => message shouldBe expectedMessage }
   }
 
   /* probes the function 'ZIO.either' */
@@ -73,7 +71,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
   it should "map None to a String into the error channel" in {
     val none: Option[Int]        = None
     val noneZio: IO[Unit, Int]   = ZIO.fromOption(none)
-    val program: IO[String, Int] = noneZio.mapError(_ => "mapped error")
+    val program: IO[String, Int] = noneZio.asError("mapped error")
 
     a[FiberFailure] should be thrownBy unsafeRun(program)
   }
@@ -125,15 +123,13 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task(1 / 1).mapError(_ => ErrorOne("error-one"))
-        result <- Task(1 / 0).mapError(_ => ErrorTwo("error-two"))
+        _      <- Task(1 / 1).asError(ErrorOne("error-one"))
+        result <- Task(1 / 0).asError(ErrorTwo("error-two"))
       } yield result
 
     val failure = the[FiberFailure] thrownBy unsafeRun(program)
 
-    failure.cause.failureOption.map { ex =>
-      ex shouldBe ErrorTwo("error-two")
-    }
+    failure.cause.failureOption.map { ex => ex shouldBe ErrorTwo("error-two") }
 
   }
 
@@ -144,8 +140,8 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task(1 / 0).mapError(_ => ErrorOne("error-one"))
-        result <- Task(1 / 0).mapError(_ => ErrorTwo("error-two"))
+        _      <- Task(1 / 0).asError(ErrorOne("error-one"))
+        result <- Task(1 / 0).asError(ErrorTwo("error-two"))
       } yield result
 
     val result = unsafeRun(program.either)

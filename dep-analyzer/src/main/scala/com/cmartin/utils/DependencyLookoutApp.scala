@@ -52,7 +52,7 @@ object DependencyLookoutApp extends App with ComponentLogging {
     program
       .provide(modules)
       .foldM(
-        e => Task(log.info(e.getMessage)).catchAll(_ => UIO.unit) *> UIO(1), // KO
+        e => Task(log.info(e.getMessage)).ignore *> UIO(1), // KO
         _ => UIO(0)
       ) // OK
   }

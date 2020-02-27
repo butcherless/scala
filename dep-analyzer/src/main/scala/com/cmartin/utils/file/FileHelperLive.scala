@@ -33,7 +33,7 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
               )
             }
         )
-        .mapError(_ => FileIOError("Error writing a log message"))
+        .asError(FileIOError("Error writing a log message"))
     }
   }
 
@@ -46,14 +46,14 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
       .effect(
         new FileInputStream(new File(filename))
       )
-      .mapError(_ => FileIOError(Domain.OPEN_FILE_ERROR))
+      .asError(FileIOError(Domain.OPEN_FILE_ERROR))
 
   private def createFileSource(fis: FileInputStream): IO[DomainError, BufferedSource] = {
     Task
       .effect(
         new BufferedSource(fis)
       )
-      .mapError(_ => FileIOError(Domain.FILE_BUFFER_ERROR))
+      .asError(FileIOError(Domain.FILE_BUFFER_ERROR))
   }
 
   private def closeSource(source: BufferedSource): UIO[Unit] = {
@@ -67,7 +67,7 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
     Task(
       source
         .getLines()
-    ).mapError(_ => FileIOError("Error while accessing the file contents"))
+    ).asError(FileIOError("Error while accessing the file contents"))
 
 }
 

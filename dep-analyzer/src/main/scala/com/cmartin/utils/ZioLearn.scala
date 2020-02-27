@@ -1,6 +1,7 @@
 package com.cmartin.utils
 
 import io.circe
+import io.circe.Decoder.Result
 import io.circe.Json
 import io.circe.parser._
 
@@ -20,5 +21,5 @@ object ZioLearn {
 
   def parseMessage(message: String): Either[circe.Error, Json] = parse(message)
 
-  def getValue(json: Json, key: String) = json.hcursor.downField(key).as[Json]
+  def getValue(json: Json, key: String): Result[Json] = json.hcursor.downField(key).as[Json]
 }
