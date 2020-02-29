@@ -7,20 +7,7 @@ import org.scalatest.matchers.should.Matchers
 import zio._
 
 class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
-
-
-  "xyz" should "123" in {
-    val program: ZIO[Any, Nothing, Unit] = for {
-      a <- UIO(false)
-      b <- UIO.when(a)(UIO(false))
-    } yield b
-    val x: UIO[Unit] = UIO.when(true)(UIO(false))
-
-    val result = unsafeRun(program)
-
-    result shouldBe "jarl"
-  }
-
+  
   "An unfailling UIO effect" should "return a computation" in {
     val program = for {
       r1     <- UIO.effectTotal(0)
