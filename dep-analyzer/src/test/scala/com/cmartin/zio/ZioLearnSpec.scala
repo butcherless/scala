@@ -6,15 +6,17 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
 
-class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
-  
+class ZioLearnSpec extends AnyFlatSpec with Matchers {
+
+  val runtime = Runtime.default
+
   "An unfailling UIO effect" should "return a computation" in {
     val program = for {
       r1     <- UIO.effectTotal(0)
       result <- UIO.effectTotal(r1 + 1)
     } yield result
 
-    val result = unsafeRun(program)
+    val result = runtime.unsafeRun(program)
 
     result shouldBe 1
   }
@@ -25,17 +27,17 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
       result <- Task(r1 / r1)
     } yield result
 
-    an[FiberFailure] should be thrownBy unsafeRun(program)
+    an[FiberFailure] should be thrownBy runtime.unsafeRun(program)
   }
 
   it should "throw a FiberFailure containing a String when a exception occurs" in {
     val expectedMessage = "error-message"
     val program = for {
       r1     <- UIO(0)
-      result <- Task(r1 / r1).asError(expectedMessage)
+      result <- Task(r1 / r1).orElseFail(expectedMessage)
     } yield result
 
-    val failure = the[FiberFailure] thrownBy unsafeRun(program)
+    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
 
     failure.cause.failureOption.map { message => message shouldBe expectedMessage }
   }
@@ -47,7 +49,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
       b <- Task(a / 0)
     } yield b
 
-    val result = unsafeRun(program.either)
+    val result = runtime.unsafeRun(program.either)
     result shouldBe Symbol("left")
     result.swap.map(_ shouldBe an[ArithmeticException])
   }
@@ -63,7 +65,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     val programRefined: IO[MyDomainException, Int] = program.refineOrDie(refineError())
 
-    val result = unsafeRun(programRefined.either)
+    val result = runtime.unsafeRun(programRefined.either)
 
     result.swap.map(_ shouldBe a[MyExceptionTwo])
   }
@@ -71,9 +73,9 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
   it should "map None to a String into the error channel" in {
     val none: Option[Int]        = None
     val noneZio: IO[Unit, Int]   = ZIO.fromOption(none)
-    val program: IO[String, Int] = noneZio.asError("mapped error")
+    val program: IO[String, Int] = noneZio.orElseFail("mapped error")
 
-    a[FiberFailure] should be thrownBy unsafeRun(program)
+    a[FiberFailure] should be thrownBy runtime.unsafeRun(program)
   }
 
   it should "return a Left with an string error" in {
@@ -81,7 +83,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
     val noneZio: IO[Unit, Int]   = ZIO.fromOption(none)
     val program: IO[String, Int] = noneZio.mapError(_ => "mapped error")
 
-    val result: Either[String, Int] = unsafeRun(program.either)
+    val result: Either[String, Int] = runtime.unsafeRun(program.either)
 
     result shouldBe Left("mapped error")
   }
@@ -110,9 +112,10 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
       //_ <- sleep(1.second)
     } yield ()) repeat policy
 
-    val result: (Duration, Int) = unsafeRun(program)
+    // TODO
+    //val result: (Duration, Int) = runtime.unsafeRun(program)
 
-    info(result._1.toMillis.toString)
+    //info(result._1.toMillis.toString)
 
   }
 
@@ -123,11 +126,11 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task(1 / 1).asError(ErrorOne("error-one"))
-        result <- Task(1 / 0).asError(ErrorTwo("error-two"))
+        _      <- Task(1 / 1).orElseFail(ErrorOne("error-one"))
+        result <- Task(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
-    val failure = the[FiberFailure] thrownBy unsafeRun(program)
+    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
 
     failure.cause.failureOption.map { ex => ex shouldBe ErrorTwo("error-two") }
 
@@ -140,11 +143,11 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task(1 / 0).asError(ErrorOne("error-one"))
-        result <- Task(1 / 0).asError(ErrorTwo("error-two"))
+        _      <- Task(1 / 0).orElseFail(ErrorOne("error-one"))
+        result <- Task(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
-    val result = unsafeRun(program.either)
+    val result = runtime.unsafeRun(program.either)
 
     result shouldBe Left(ErrorOne("error-one"))
   }
@@ -161,7 +164,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     val io = getAppConfigFromMap(mapSource)
 
-    val config = unsafeRun(io)
+    val config = runtime.unsafeRun(io)
 
     info(s"zio config result: $config")
 
@@ -175,7 +178,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
 
     val io = getAppConfigFromMap(mapSource)
 
-    val failure = the[FiberFailure] thrownBy unsafeRun(io)
+    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(io)
 
     failure.cause.failures.nonEmpty shouldBe true
 

@@ -5,11 +5,13 @@ import com.cmartin.utils.Domain.{FileIOError, Gav, UnknownError}
 import com.cmartin.utils.file.FileHelper.FileLines
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import zio.{DefaultRuntime, FiberFailure, ZIO}
+import zio.{Runtime, FiberFailure, ZIO}
 
-class FileHelperSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
+class FileHelperSpec extends AnyFlatSpec with Matchers {
 
   import FileHelperSpec._
+
+  val runtime = Runtime.default
 
   behavior of "FileHelper"
 
@@ -21,7 +23,7 @@ class FileHelperSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
     } yield lines
 
     // provide ~ dependency injection
-    val result: FileLines = unsafeRun(program.provide(FileHelperLive))
+    val result: FileLines = runtime.unsafeRun(program.provide(FileHelperLive))
     result shouldBe expectedLines
   }
 
@@ -32,11 +34,9 @@ class FileHelperSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
       lines <- FileHelper.>.getLinesFromFile(filename)
     } yield lines
 
-    val failure = the[FiberFailure] thrownBy unsafeRun(program.provide(FileHelperLive))
+    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program.provide(FileHelperLive))
 
-    failure.cause.failureOption.map { message =>
-      message shouldBe FileIOError(Domain.OPEN_FILE_ERROR)
-    }
+    failure.cause.failureOption.map { message => message shouldBe FileIOError(Domain.OPEN_FILE_ERROR) }
   }
 
   it should "return an unknown domain error" in {
@@ -45,21 +45,19 @@ class FileHelperSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
       result <- FileHelperTest.fileHelper.getLinesFromFile(filename)
     } yield result
 
-    val failure = the[FiberFailure] thrownBy unsafeRun(program)
+    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
 
-    failure.cause.failureOption.map { message =>
-      message shouldBe UnknownError(UNKNOWN_ERROR_MESSAGE)
-    }
+    failure.cause.failureOption.map { message => message shouldBe UnknownError(UNKNOWN_ERROR_MESSAGE) }
   }
 
-  it should "write two lines in the log destination" in{
+  it should "write two lines in the log destination" in {
     //TODO https://gist.github.com/jdegoes/dd66656382247dc5b7228fb0f2cb97c8
     // add a logger dependency, via constructor or via module pattern
-    val deps = Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
+    val deps    = Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
     val program = FileHelper.>.logDepCollection(deps)
 
-    info ("TODO: refactor log module")
-    unsafeRun(program.provide(FileHelperLive))
+    info("TODO: refactor log module")
+    runtime.unsafeRun(program.provide(FileHelperLive))
   }
 
 }

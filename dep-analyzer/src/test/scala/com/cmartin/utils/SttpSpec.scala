@@ -5,13 +5,25 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import sttp.client._
 import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
-import zio.{DefaultRuntime, Task, URIO}
+import zio.{Runtime, Task, URIO}
 
 class SttpSpec extends AnyFlatSpec with Matchers {
-  val runtime          = new DefaultRuntime {}
+  val runtime          = Runtime.default
   implicit val backend = unsafeRun(AsyncHttpClientZioBackend())
 
-  "Sttp client" should "make a post request" in {
+  "Raw interpolator" should "build an encoded string" in {
+    val group    = "dev.zio"
+    val artifact = "zio_2.13"
+
+    val filter = s"q=g:$group+AND+a:$artifact+AND+p:jar&rows=1&wt=json"
+    val uri    = raw"https://search.maven.org/solrsearch/select?$filter"
+
+    info(uri)
+  }
+
+  behavior of "Sttp client"
+
+  ignore should "make a post request" in {
     val postRequest = basicRequest
       .post(uri"http://httpbin.org/post")
       .body("dummy post body")
@@ -37,17 +49,7 @@ class SttpSpec extends AnyFlatSpec with Matchers {
     }
   }
 
-  "Raw interpolator" should "build an encoded string" in {
-    val group    = "dev.zio"
-    val artifact = "zio_2.13"
-
-    val filter = s"q=g:$group+AND+a:$artifact+AND+p:jar&rows=1&wt=json"
-    val uri    = raw"https://search.maven.org/solrsearch/select?$filter"
-
-    info(uri)
-  }
-
-  "Sttp client" should "make a GET request" in {
+  ignore should "make a GET request" in {
     val group    = "dev.zio"
     val artifact = "zio_2.13"
 

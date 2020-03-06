@@ -5,19 +5,20 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
 
-class FileManagerSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
+class FileManagerSpec extends AnyFlatSpec with Matchers {
+
+  val runtime = Runtime.default
+
   "SUT" should "provide the env" in {
     // GIVEN
     val program: ZIO[FileManager, Throwable, Unit] = for {
       _ <- FileManager.>.logMessage(">>> message <<<")
     } yield ()
 
-    val io = program.provideSome[Any] { f =>
-      FileManagerLive
-    }
+    val io = program.provideSome[Any] { f => FileManagerLive }
 
     // WHEN
-    val r = unsafeRun(io)
+    val r = runtime.unsafeRun(io)
 
     // THEN
     r shouldBe ()
@@ -52,6 +53,6 @@ class FileManagerSpec extends AnyFlatSpec with Matchers with DefaultRuntime {
     val program =
       Task.effect(println("zio schedule test")) repeat policy1
 
-    unsafeRun(program)
+    //TODO runtime.unsafeRun(program)
   }
 }
