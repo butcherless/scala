@@ -1,14 +1,13 @@
 package com.cmartin.utils.config
 
-import zio.IO
 import zio.config.ConfigDescriptor._
-import zio.config._
+import zio.config.{ConfigDescriptor, ConfigSource, read}
 
 object ConfigHelper {
 
   final case class AppConfig(filename: String, exclusions: String)
 
-  def getAppConfigFromMap(map: Map[String, String]): IO[ReadErrorsVector[String, String], AppConfig] = {
+  def getAppConfigFromMap(map: Map[String, String]) = {
 
     // config descriptor
     val appConfig: ConfigDescriptor[String, String, AppConfig] =
