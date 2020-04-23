@@ -1,6 +1,6 @@
 import Dependencies._
 
-val scalaCompiler = "2.13.1"
+val scalaCompiler = "2.13.2"
 
 scalaVersion := scalaCompiler
 
