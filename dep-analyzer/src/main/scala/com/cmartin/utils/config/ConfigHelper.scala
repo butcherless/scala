@@ -1,7 +1,7 @@
 package com.cmartin.utils.config
 
 import zio.config.ConfigDescriptor._
-import zio.config.{ConfigDescriptor, ConfigSource, read}
+import zio.config.{ConfigSource, ReadError, read}
 
 object ConfigHelper {
 
@@ -10,11 +10,11 @@ object ConfigHelper {
   def getAppConfigFromMap(map: Map[String, String]) = {
 
     // config descriptor
-    val appConfig: ConfigDescriptor[String, String, AppConfig] =
+    val appConfig =
       (string("FILENAME") |@| string("EXCLUSIONS"))(AppConfig.apply, AppConfig.unapply)
 
     // IO effect
-    read(appConfig from ConfigSource.fromMap(map))
+    val io: Either[ReadError[String], AppConfig] = read(appConfig from ConfigSource.fromMap(map))
   }
 
 }
