@@ -13,7 +13,7 @@ object Dependencies {
   lazy val pegdownVersion      = "1.6.0"
   lazy val refinedVersion      = "0.9.14"
   lazy val scalaLoggingVersion = "3.9.2"
-  lazy val scalazVersion       = "7.3.0"
+  lazy val scalazVersion       = "7.3.1"
   lazy val scalatestVersion    = "3.1.2"
   lazy val slf4jVersion        = "1.7.26"
   lazy val specs2Version       = "4.9.4"
