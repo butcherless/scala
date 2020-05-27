@@ -4,7 +4,7 @@ import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.file.FileManager
 import com.cmartin.utils.http.HttpManager
 import com.cmartin.utils.logic.LogicManager
-import zio.{App, Task, UIO, ZIO}
+import zio.{App, ExitCode, Task, UIO, ZIO}
 
 /*
   http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
@@ -44,7 +44,7 @@ object DependencyLookoutApp extends App with ComponentLogging {
   /*
      E X E C U T I O N
    */
-  override def run(args: List[String]): UIO[Int] = {
+  override def run(args: List[String]): UIO[ExitCode] = {
     /*
      This is similar to dependency injection, and the `provide` function can be
      thought of as `inject`.
@@ -52,8 +52,8 @@ object DependencyLookoutApp extends App with ComponentLogging {
     program
       .provide(modules)
       .foldM(
-        e => Task(log.info(e.getMessage)).ignore *> UIO(1), // KO
-        _ => UIO(0)
+        e => Task(log.info(e.getMessage)).ignore *> UIO(ExitCode.failure), // KO
+        _ => UIO(ExitCode.success)
       ) // OK
   }
 }
