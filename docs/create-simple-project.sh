@@ -10,7 +10,7 @@ DEP_UP_VER="1.2.2"
 LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.1.2"
 SCOVERAGE_VER="1.6.1"
-ZIO_VER="1.0.0-RC19-1"
+ZIO_VER="1.0.0-RC20"
 
 # create filesystem
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
@@ -138,13 +138,13 @@ echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
 import org.slf4j.LoggerFactory
-import zio.{App, Task, ZIO}
+import zio.{App, ExitCode, Task, ZIO}
 
 object SimpleApp extends App {
 
   private val log = LoggerFactory.getLogger(classOf[App])
 
-  override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, Int] = {
+  override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, ExitCode] = {
     val program = for {
       _ <- Task.effect(log.debug(echo(TEXT)))
       result <- sum(2, 3)
@@ -153,9 +153,9 @@ object SimpleApp extends App {
 
     program.fold(e => {
       println(e)
-      1
+      ExitCode.failure
     },
-      _ => 0)
+      _ => ExitCode.success)
   }
 }' > src/main/scala/${PKG_DIR}/SimpleApp.scala
 
