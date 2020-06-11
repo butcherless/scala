@@ -1,6 +1,6 @@
 package com.cmartin.learn
 
-import org.json4s.JsonAST.JNothing
+import org.json4s.JsonAST.{JArray, JNothing, JObject}
 import org.json4s.native.JsonMethods
 import org.json4s.{DefaultFormats, JValue}
 
@@ -13,7 +13,7 @@ object Json4sResearch {
   val XPATH_REGEX = """([a-z][a-z0-9]*)+([.][a-z][a-z0-9]*)*""".r
 
   def isXpath(path: String): Boolean =
-    !path.isBlank && XPATH_REGEX.matches(path)
+    XPATH_REGEX.matches(path)
 
   def parse(jsonString: String): JValue =
     JsonMethods.parse(jsonString)
@@ -30,10 +30,44 @@ object Json4sResearch {
         go(keys.tail, json \ keys.head)
     }
 
-    if (isXpath(path))
+    if (path.isBlank()) json
+    else if (isXpath(path))
       go(splitPath(path), json)
     else
       throw new RuntimeException(s"invalid xpath: $path")
-
   }
+
+  def flatten(json: JValue): JValue = {
+    def _flatten(json: JValue, path: String = ""): JValue = {
+      json match {
+        case JObject(tuples) =>
+          tuples
+            .map {
+              case (k, v) => _flatten(v, buildPath(path, k))
+            }
+            .fold(JNothing)(_ merge _)
+
+        case JArray(jValues) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
+          jValues.zipWithIndex
+            .map {
+              case (v, i) =>
+                _flatten(v, buildPath(path, s"$i"))
+            }
+            .fold(JNothing)(_ merge _)
+
+        case _ => JObject((path, json) :: Nil)
+      }
+
+    }
+
+    _flatten(json)
+  }
+
+  case class ArrayNotSupportedException(message: String) extends Exception(message)
+
+  object ExceptionMessages {
+    val ARRAY_NOT_SUPPORTED = "The parser doesn't support array type"
+    val UNEXPECTED_TYPE     = "The type was not expected at this position of the document."
+  }
+
 }
