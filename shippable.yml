@@ -1,13 +1,13 @@
 language: scala
 
+jdk:
+  - oraclejdk11
+
 scala:
-  - 2.13.1
+  - 2.13.2
 
 build:
   ci:
     - sbt clean test dependencyUpdates
-#    - cp target/scala-2.13/coverage-report/cobertura.xml shippable/codecoverage
+    #    - cp target/scala-2.13/coverage-report/cobertura.xml shippable/codecoverage
     - ls -lRt shippable
-
-jdk:
-  - openjdk11

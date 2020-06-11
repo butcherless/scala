@@ -30,7 +30,7 @@ object Json4sResearch {
         go(keys.tail, json \ keys.head)
     }
 
-    if (path.isBlank()) json
+    if (path.isBlank) json
     else if (isXpath(path))
       go(splitPath(path), json)
     else
