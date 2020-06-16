@@ -152,7 +152,7 @@ object SimpleApp extends App {
     } yield ()
 
     program.fold(e => {
-      println(e)
+      log.error("program error:", e)
       ExitCode.failure
     },
       _ => ExitCode.success)
