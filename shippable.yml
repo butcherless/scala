@@ -8,6 +8,6 @@ scala:
 
 build:
   ci:
-    - sbt clean test dependencyUpdates
+    - sbt clean compile dependencyUpdates
     #    - cp target/scala-2.13/coverage-report/cobertura.xml shippable/codecoverage
     - ls -lRt shippable
