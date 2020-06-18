@@ -1,6 +1,10 @@
 package com.cmartin.learn
 
+import java.time.format.DateTimeFormatter
+import java.time.{ZoneId, ZonedDateTime}
+
 import com.cmartin.learn.Json4sResearch._
+import org.json4s.Diff
 import org.json4s.JsonAST.{JDouble, JNothing, JObject, JValue}
 import org.json4s.native.JsonMethods
 import org.scalatest.flatspec.AnyFlatSpec
@@ -75,24 +79,132 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "flatten a json document containing an array" in {
-    import JsonMethods._ // pretty, render, etc.
     val json      = parse(arrayDocumentJson)
     val flattened = parse(flattenedArrayDocumentJson)
     val result    = flatten(json)
-    info(pretty(render(result)))
+    info(jValueToString(result))
 
     result shouldBe flattened
   }
 
-  it should "should fail when trying to retrieve invalid xpath key TODO" in {
+  it should "fail when trying to retrieve invalid xpath key" in {
     val json = parse(inputMessageJson)
 
     a[RuntimeException] shouldBe thrownBy(getKey("invalid$path", json))
   }
 
+  it should "return an ISO8601 representation for a date" in {
+    val expectedDateText = "2020-06-10T04:21:13Z"
+
+    info(dateText)
+
+    val zdt = ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT)
+    info(zdt)
+
+    dateText shouldBe expectedDateText
+  }
+
+  it should "return a flattened and ISO dated message, UC-1-1" in {
+    val payload                       = parse(inputMessage_UC_1_1) \ "payload"
+    val expectedOutputMessage: JValue = parse(outputMessage_UC_1_1)
+
+    val metadata = createMetadata(payload, dateText)
+
+    val outputMessage = createOutputMessage(payload, metadata)
+
+    outputMessage shouldBe expectedOutputMessage
+  }
+
+  it should "... " in {
+    val previousPayload  = parse(inputMessage_UC_1_1) \ "payload"
+    val previousMetadata = createMetadata(previousPayload, dateText)
+    info("previous:\n" + jValueToString(previousMetadata))
+
+    val payload  = parse(inputMessage_UC_1_2) \ "payload"
+    val metadata = createMetadata(payload, dateText2)
+    info("current:\n" + jValueToString(metadata))
+
+    val diff: Diff = previousMetadata diff metadata
+
+    info(diff.toString)
+//    info("added:\n" + jValueToCompactString(diff.added))
+    info("changed:\n" + jValueToCompactString(diff.changed))
+//    info(jValueToCompactString(diff.deleted))
+
+    val r = previousMetadata merge diff.changed
+
+    info("result:\n" + jValueToString(r))
+
+  }
+
+  it should "TODO..." in {
+    val j1 = parse(json1String)
+    val j2 = parse(json2String)
+
+    val diff12 = j1 diff j2
+    val diff21 = j2 diff j1
+
+    info(diff12.toString)
+    info(diff21.toString)
+  }
+
 }
 
 object Json4sResearchSpec {
+  import JsonMethods._ // pretty, render, etc.
+
+  val dateText =
+    ZonedDateTime
+      .of(2020, 6, 10, 4, 21, 13, 0, ZoneId.of("UTC"))
+      .format(Json4sResearch.dateTimeFormater)
+
+  val dateText2 =
+    ZonedDateTime
+      .of(2020, 6, 10, 4, 22, 15, 0, ZoneId.of("UTC"))
+      .format(Json4sResearch.dateTimeFormater)
+
+  def jValueToCompactString(json: JValue): String =
+    compact(render(json))
+
+  def jValueToString(json: JValue): String =
+    pretty(render(json))
+
+  val inputMessage_UC_1_1 =
+    """
+      |{
+      |  "payload": {
+      |    "providerId": 879970290359074800,
+      |    "deviceIdentifier": "[R]357666050866893"
+      |  }
+      |}
+      |""".stripMargin
+
+  val outputMessage_UC_1_1 =
+    """
+      |{
+      |  "state": {
+      |    "providerId": 879970290359074800,
+      |    "deviceIdentifier": "[R]357666050866893"
+      |  },
+      |  "metadata": {
+      |    "providerId": {
+      |      "timestamp": "2020-06-10T04:21:13Z"
+      |    },
+      |    "deviceIdentifier": {
+      |      "timestamp": "2020-06-10T04:21:13Z"
+      |    }
+      |  }
+      |}
+      |""".stripMargin
+
+  val inputMessage_UC_1_2 =
+    """
+      |{
+      |  "payload": {
+      |    "providerId": 879970290359074800
+      |  }
+      |}
+      |""".stripMargin
 
   val arrayDocumentJson =
     """
@@ -178,6 +290,24 @@ object Json4sResearchSpec {
       |  "features.location.speed": 38,
       |  "features.location.course": 240,
       |  "features.vehicle.ignition.status": true
+      |}
+      |""".stripMargin
+
+  val json1String =
+    """
+      |{
+      |  "id": 1234,
+      |  "value1": "alfa",
+      |  "value3": "charlie",
+      |}
+      |""".stripMargin
+
+  val json2String =
+    """
+      |{
+      |  "id": 1234,
+      |  "value1": "alfa",
+      |  "value2": "bravo"
       |}
       |""".stripMargin
 

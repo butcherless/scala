@@ -1,6 +1,9 @@
 package com.cmartin.learn
 
-import org.json4s.JsonAST.{JArray, JNothing, JObject}
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
+import org.json4s.JsonAST.{JArray, JNothing, JObject, JString}
 import org.json4s.native.JsonMethods
 import org.json4s.{DefaultFormats, JValue}
 
@@ -11,6 +14,8 @@ object Json4sResearch {
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
   val XPATH_REGEX = """([a-z][a-z0-9]*)+([.][a-z][a-z0-9]*)*""".r
+
+  val dateTimeFormater = DateTimeFormatter.ISO_INSTANT
 
   def isXpath(path: String): Boolean =
     XPATH_REGEX.matches(path)
@@ -55,13 +60,56 @@ object Json4sResearch {
             }
             .fold(JNothing)(_ merge _)
 
-        case _ => JObject((path, json) :: Nil)
+        case _ => JObject((path, json))
       }
 
     }
 
     _flatten(json)
   }
+
+  def createMetadata(json: JValue, dateText: String): JValue = {
+
+    def go(json: JValue, path: String = ""): JValue = {
+      json match {
+        case JObject(tuples) =>
+          tuples
+            .map {
+              case (k, v) => go(v, buildPath(path, k))
+            }
+            .fold(JNothing)(_ merge _)
+
+        case JArray(jValues) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
+          jValues.zipWithIndex
+            .map {
+              case (v, i) =>
+                go(v, buildPath(path, s"$i"))
+            }
+            .fold(JNothing)(_ merge _)
+
+        case _ =>
+          JObject(
+            (
+              path,
+              JObject(
+                ("timestamp", JString(dateText))
+              )
+            )
+          )
+      }
+
+    }
+
+    go(json)
+  }
+
+  def createOutputMessage(state: JValue, metadata: JValue): JValue =
+    JObject(("state", state) :: ("metadata", metadata) :: Nil)
+
+  def getNowDateText(): String =
+    ZonedDateTime
+      .now()
+      .format(DateTimeFormatter.ISO_INSTANT)
 
   case class ArrayNotSupportedException(message: String) extends Exception(message)
 
