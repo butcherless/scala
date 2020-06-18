@@ -4,7 +4,6 @@ import java.time.format.DateTimeFormatter
 import java.time.{ZoneId, ZonedDateTime}
 
 import com.cmartin.learn.Json4sResearch._
-import org.json4s.Diff
 import org.json4s.JsonAST.{JDouble, JNothing, JObject, JValue}
 import org.json4s.native.JsonMethods
 import org.scalatest.flatspec.AnyFlatSpec
@@ -82,7 +81,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     val json      = parse(arrayDocumentJson)
     val flattened = parse(flattenedArrayDocumentJson)
     val result    = flatten(json)
-    info(jValueToString(result))
+    //info(jValueToString(result))
 
     result shouldBe flattened
   }
@@ -96,7 +95,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   it should "return an ISO8601 representation for a date" in {
     val expectedDateText = "2020-06-10T04:21:13Z"
 
-    info(dateText)
+    //info(dateText)
 
     val zdt = ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT)
     info(zdt)
@@ -115,37 +114,41 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     outputMessage shouldBe expectedOutputMessage
   }
 
-  it should "... " in {
-    val previousPayload  = parse(inputMessage_UC_1_1) \ "payload"
-    val previousMetadata = createMetadata(previousPayload, dateText)
-    info("previous:\n" + jValueToString(previousMetadata))
+  it should "add new contents to the entity state" in {
+    val j1 = parse(json3String)
+    // j2 is the new state, add contents
+    val j2 = parse(json4String)
 
-    val payload  = parse(inputMessage_UC_1_2) \ "payload"
-    val metadata = createMetadata(payload, dateText2)
-    info("current:\n" + jValueToString(metadata))
+    // j1 was the previous state in the repository
+    val diff   = j1 diff j2
+    val merged = j1 merge diff.added
 
-    val diff: Diff = previousMetadata diff metadata
-
-    info(diff.toString)
-//    info("added:\n" + jValueToCompactString(diff.added))
-    info("changed:\n" + jValueToCompactString(diff.changed))
-//    info(jValueToCompactString(diff.deleted))
-
-    val r = previousMetadata merge diff.changed
-
-    info("result:\n" + jValueToString(r))
-
+    merged shouldBe j2
   }
 
-  it should "TODO..." in {
+  it should "update contents to the entity state" in {
+    val j1 = parse(json3String)
+    // j2 is the new state, change contents
+    val j2 = parse(json5String)
+
+    // j1 was the previous state in the repository
+    val diff   = j1 diff j2
+    val merged = j1 merge diff.changed
+
+    merged shouldBe j2
+  }
+
+  it should "add and update contents to the entity state" in {
     val j1 = parse(json1String)
-    val j2 = parse(json2String)
+    // j2 is the new state, add and change contents
+    val j2       = parse(json6String)
+    val expected = parse(json1_6String) // added and changed
 
-    val diff12 = j1 diff j2
-    val diff21 = j2 diff j1
+    // j1 was the previous state in the repository
+    val diff   = j1 diff j2
+    val merged = j1 merge diff.changed merge diff.added
 
-    info(diff12.toString)
-    info(diff21.toString)
+    merged shouldBe expected
   }
 
 }
@@ -308,6 +311,47 @@ object Json4sResearchSpec {
       |  "id": 1234,
       |  "value1": "alfa",
       |  "value2": "bravo"
+      |}
+      |""".stripMargin
+
+  val json3String =
+    """
+    |{
+    |  "id": 1234
+    |}
+    |""".stripMargin
+
+  val json4String =
+    """
+      |{
+      |  "id": 1234,
+      |  "value1": "alfa"
+      |}
+      |""".stripMargin
+
+  val json5String =
+    """
+      |{
+      |  "id": 5678
+      |}
+      |""".stripMargin
+
+  val json6String =
+    """
+      |{
+      |  "id": 1234,
+      |  "value1": "tango",
+      |  "value4": "x-ray"
+      |}
+      |""".stripMargin
+
+  val json1_6String =
+    """
+      |{
+      |  "id": 1234,
+      |  "value1": "tango",
+      |  "value4": "x-ray",
+      |  "value3": "charlie"
       |}
       |""".stripMargin
 
