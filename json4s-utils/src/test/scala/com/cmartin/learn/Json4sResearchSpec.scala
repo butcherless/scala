@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{ZoneId, ZonedDateTime}
 
 import com.cmartin.learn.Json4sResearch._
+import org.json4s.JsonAST
 import org.json4s.JsonAST.{JDouble, JNothing, JObject, JValue}
 import org.json4s.native.JsonMethods
 import org.scalatest.flatspec.AnyFlatSpec
@@ -149,6 +150,39 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     val merged = j1 merge diff.changed merge diff.added
 
     merged shouldBe expected
+  }
+
+  it should "TODO ..." in {
+    val tskey = "@timestamp"
+    // parse doc
+    val j1 = parse(datedJsonString)
+    info(jValueToString(j1))
+    // get timestamp value
+    val timestamp: JValue = j1 \ "payload" \ tskey
+    info(s"timestamp: $timestamp")
+    // extract timestamp text
+    val timestampText = timestamp match {
+      case JsonAST.JString(text) =>
+        ZonedDateTime.parse(text)
+        text
+
+      case JNothing =>
+        ZonedDateTime
+          .now()
+          .format(Json4sResearch.dateTimeFormater)
+
+      case _ =>
+        throw new IllegalArgumentException("invalid date")
+    }
+
+    // validate text, contains valid date
+    info(s"date: $timestampText")
+
+    /* TODO for comprehension
+            manage exception
+            case missing date, JNothing
+     */
+
   }
 
 }
@@ -352,6 +386,17 @@ object Json4sResearchSpec {
       |  "value1": "tango",
       |  "value4": "x-ray",
       |  "value3": "charlie"
+      |}
+      |""".stripMargin
+
+  val datedJsonString =
+    """
+      |{
+      |  "payload": {
+      |    "@timestamp": "2020-06-10T04:21:13Z",
+      |    "providerId": 879970290359074800,
+      |    "deviceIdentifier": "[R]357666050866893"
+      |  }
       |}
       |""".stripMargin
 

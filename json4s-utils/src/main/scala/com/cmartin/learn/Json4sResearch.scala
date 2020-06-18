@@ -68,6 +68,12 @@ object Json4sResearch {
     _flatten(json)
   }
 
+  /*
+    The timestamp is taken from the input message or in its absence
+    the time in which the service processes the request.
+   */
+  def resolveTimestamp(json:JValue) : String = ???
+
   def createMetadata(json: JValue, dateText: String): JValue = {
 
     def go(json: JValue, path: String = ""): JValue = {
