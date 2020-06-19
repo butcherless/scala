@@ -1,17 +1,16 @@
 package com.cmartin.learn
 
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.{ZoneId, ZonedDateTime}
 
 import com.cmartin.learn.Json4sResearch._
 import org.json4s.JsonAST
 import org.json4s.JsonAST.{JDouble, JNothing, JObject, JValue}
-import org.json4s.native.JsonMethods
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 class Json4sResearchSpec extends AnyFlatSpec with Matchers {
-
   import Json4sResearchSpec._
+  import Json4sResearchTestUtils._
 
   behavior of "Json4sResearch"
 
@@ -34,7 +33,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   it should "parse a json document" in {
     val result: JValue = parse(inputMessageJson)
 
-    result shouldBe an[JValue]
+    result shouldBe a[JValue]
   }
 
   it should "get an existing key in a json document with a simple type value" in {
@@ -96,28 +95,14 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   it should "return an ISO8601 representation for a date" in {
     val expectedDateText = "2020-06-10T04:21:13Z"
 
-    //info(dateText)
-
     val zdt = ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT)
     info(zdt)
 
     dateText shouldBe expectedDateText
   }
 
-  it should "return a flattened and ISO dated message, UC-1-1" in {
-    val payload                       = parse(inputMessage_UC_1_1) \ "payload"
-    val expectedOutputMessage: JValue = parse(outputMessage_UC_1_1)
-
-    val metadata = createMetadata(payload, dateText)
-
-    val outputMessage = createOutputMessage(payload, metadata)
-
-    outputMessage shouldBe expectedOutputMessage
-  }
-
   it should "add new contents to the entity state" in {
     val j1 = parse(json3String)
-    // j2 is the new state, add contents
     val j2 = parse(json4String)
 
     // j1 was the previous state in the repository
@@ -140,14 +125,13 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "add and update contents to the entity state" in {
-    val j1 = parse(json1String)
-    // j2 is the new state, add and change contents
-    val j2       = parse(json6String)
+    val current  = parse(json1String)
     val expected = parse(json1_6String) // added and changed
+    // the incoming state, add and change contents
+    val incoming = parse(json6String)
 
     // j1 was the previous state in the repository
-    val diff   = j1 diff j2
-    val merged = j1 merge diff.changed merge diff.added
+    val merged = mergeShadows(current, incoming)
 
     merged shouldBe expected
   }
@@ -188,60 +172,6 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
 }
 
 object Json4sResearchSpec {
-  import JsonMethods._ // pretty, render, etc.
-
-  val dateText =
-    ZonedDateTime
-      .of(2020, 6, 10, 4, 21, 13, 0, ZoneId.of("UTC"))
-      .format(Json4sResearch.dateTimeFormater)
-
-  val dateText2 =
-    ZonedDateTime
-      .of(2020, 6, 10, 4, 22, 15, 0, ZoneId.of("UTC"))
-      .format(Json4sResearch.dateTimeFormater)
-
-  def jValueToCompactString(json: JValue): String =
-    compact(render(json))
-
-  def jValueToString(json: JValue): String =
-    pretty(render(json))
-
-  val inputMessage_UC_1_1 =
-    """
-      |{
-      |  "payload": {
-      |    "providerId": 879970290359074800,
-      |    "deviceIdentifier": "[R]357666050866893"
-      |  }
-      |}
-      |""".stripMargin
-
-  val outputMessage_UC_1_1 =
-    """
-      |{
-      |  "state": {
-      |    "providerId": 879970290359074800,
-      |    "deviceIdentifier": "[R]357666050866893"
-      |  },
-      |  "metadata": {
-      |    "providerId": {
-      |      "timestamp": "2020-06-10T04:21:13Z"
-      |    },
-      |    "deviceIdentifier": {
-      |      "timestamp": "2020-06-10T04:21:13Z"
-      |    }
-      |  }
-      |}
-      |""".stripMargin
-
-  val inputMessage_UC_1_2 =
-    """
-      |{
-      |  "payload": {
-      |    "providerId": 879970290359074800
-      |  }
-      |}
-      |""".stripMargin
 
   val arrayDocumentJson =
     """

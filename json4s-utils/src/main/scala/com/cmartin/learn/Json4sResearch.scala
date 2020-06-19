@@ -109,7 +109,17 @@ object Json4sResearch {
     go(json)
   }
 
-  def createOutputMessage(state: JValue, metadata: JValue): JValue =
+  /*
+    - gets the diff (changed, added, deleted) between current and incoming
+    -
+   */
+  def mergeShadows(current: JValue, incoming: JValue): JValue = {
+    val diff = current diff incoming
+    current merge diff.changed merge diff.added
+  }
+
+
+  def createShadow(state: JValue, metadata: JValue): JValue =
     JObject(("state", state) :: ("metadata", metadata) :: Nil)
 
   def getNowDateText(): String =
