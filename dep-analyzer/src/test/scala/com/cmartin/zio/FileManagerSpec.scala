@@ -9,7 +9,9 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
 
   val runtime = Runtime.default
 
-  "SUT" should "provide the env" in {
+  behavior of "FileManager"
+
+  it should "provide the env" in {
     // GIVEN
     val program: ZIO[FileManager, Throwable, Unit] = for {
       _ <- FileManager.>.logMessage(">>> message <<<")
@@ -24,7 +26,7 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
     r shouldBe ()
   }
 
-  "SUT" should "do something more" in {
+  it should "do something more" in {
     trait DomainError
     case class DomainErrorOne(msg: String) extends DomainError
 
@@ -43,7 +45,7 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
     // THEN
   }
 
-  "SUT" should "repeat a message" in {
+  it should "repeat a message" in {
     import zio.duration._
     val policy1 = Schedule.exponential(10.milliseconds).tapOutput(o => UIO(println(o))) >>> (Schedule.doWhile(
       _ < 2.second
