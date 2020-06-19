@@ -12,16 +12,16 @@ class Json4sResearchUc1Spec extends AnyFlatSpec with Matchers {
   behavior of "Json4sResearch Use Case 1"
 
   /*
-     - no t_field
-     - no @timestamp
+   - no @timestamp
+   - no t_field
    */
 
-  it should "return a new flattened and ISO dated message, UC-1-1" in {
-    // simulates find at Repository
+  it should "return a new shadow message with now() date, UC-1-1" in {
+    // simulates searching the repository
     val currentShadow                = JNothing
-    val expectedMergedShadow: JValue = parse(shadowMessage_UC_1_1)
+    val expectedMergedShadow: JValue = shadowMessage_UC_1_1
 
-    val payload = parse(inputMessage_UC_1_1) \ payloadKey
+    val payload = inputMessage_UC_1_1 \ payloadKey
     // date: no timestamp => now()
     val metadata       = createMetadata(payload, dateText)
     val incomingShadow = createShadow(payload, metadata)
@@ -30,10 +30,10 @@ class Json4sResearchUc1Spec extends AnyFlatSpec with Matchers {
     mergedShadow shouldBe expectedMergedShadow
   }
 
-  it should "return an updated, flattened and ISO dated message, UC-1-2" in {
-    // simulates find at Repository
-    val currentShadow                = parse(shadowMessage_UC_1_1)
-    val expectedMergedShadow: JValue = parse(outputMessage_UC_1_2)
+  it should "return an updated shadow message with now() date, UC-1-2" in {
+    // simulates searching the repository
+    val currentShadow                = shadowMessage_UC_1_1
+    val expectedMergedShadow: JValue = shadowMessage_UC_1_2
 
     val payload = parse(inputMessage_UC_1_2) \ payloadKey
     // date: no timestamp => now()

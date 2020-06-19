@@ -3,17 +3,22 @@ package com.cmartin.learn
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-import org.json4s.JsonAST.{JArray, JNothing, JObject, JString}
+import org.json4s.JsonAST.{JArray, JField, JNothing, JObject, JString}
 import org.json4s.native.JsonMethods
 import org.json4s.{DefaultFormats, JValue}
 
 import scala.annotation.tailrec
+import scala.util.Try
 
 object Json4sResearch {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
-  val XPATH_REGEX = """([a-z][a-z0-9]*)+([.][a-z][a-z0-9]*)*""".r
+  val payloadKey: String   = "payload"
+  val stateKey: String   = "state"
+  val timestampKey: String = "@timestamp"
+
+  private val XPATH_REGEX = """([a-z][a-z0-9]*)+([.][a-z][a-z0-9]*)*""".r
 
   val dateTimeFormater = DateTimeFormatter.ISO_INSTANT
 
@@ -69,10 +74,38 @@ object Json4sResearch {
   }
 
   /*
+    validated date strings
+   */
+  def isNewer(current: String, last: String) = {
+    ZonedDateTime.parse(current).compareTo(ZonedDateTime.parse(last)) > 0
+  }
+
+  def selectStringValue(key: String, json: JValue): List[String] = {
+    for {
+      JObject(fields)            <- json
+      JField(`key`, JString(ts)) <- fields
+    } yield ts
+  }
+
+  def getShadowTimestamp(json:JValue) : Either[Throwable, String] = {
+    val seq = selectStringValue(timestampKey, json \ stateKey)
+    if (seq.nonEmpty) Right(seq.head)
+    else Left(new RuntimeException(s"missing key: $timestampKey"))
+  }
+
+  /*
     The timestamp is taken from the input message or in its absence
     the time in which the service processes the request.
    */
-  def resolveTimestamp(json:JValue) : String = ???
+  def resolveTimestamp(json: JValue): Either[Throwable, String] = {
+    val tsList = selectStringValue(timestampKey, json)
+    if (tsList.isEmpty) Right(getNowDateText())
+    else
+      Try {
+        ZonedDateTime.parse(tsList.head) // validate or fail
+        tsList.head                      // is a valid date
+      }.toEither
+  }
 
   def createMetadata(json: JValue, dateText: String): JValue = {
 
@@ -103,7 +136,6 @@ object Json4sResearch {
             )
           )
       }
-
     }
 
     go(json)
@@ -117,7 +149,6 @@ object Json4sResearch {
     val diff = current diff incoming
     current merge diff.changed merge diff.added
   }
-
 
   def createShadow(state: JValue, metadata: JValue): JValue =
     JObject(("state", state) :: ("metadata", metadata) :: Nil)

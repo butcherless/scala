@@ -8,20 +8,18 @@ import org.json4s.native.JsonMethods
 object Json4sResearchTestUtils {
   import JsonMethods._ // pretty, render, etc.
 
-  val payloadKey = "payload"
-
-  val inputMessage_UC_1_1 =
-    """
+  val inputMessage_UC_1_1: JValue =
+    parse("""
       |{
       |  "payload": {
       |    "providerId": 879970290359074800,
       |    "deviceIdentifier": "[R]357666050866893"
       |  }
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val shadowMessage_UC_1_1 =
-    """
+  val shadowMessage_UC_1_1: JValue =
+    parse("""
       |{
       |  "state": {
       |    "providerId": 879970290359074800,
@@ -36,9 +34,9 @@ object Json4sResearchTestUtils {
       |    }
       |  }
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val inputMessage_UC_1_2 =
+  val inputMessage_UC_1_2: String =
     """
       |{
       |  "payload": {
@@ -47,8 +45,8 @@ object Json4sResearchTestUtils {
       |}
       |""".stripMargin
 
-  val outputMessage_UC_1_2 =
-    """
+  val shadowMessage_UC_1_2: JValue =
+    parse("""
       |{
       |  "state": {
       |    "providerId": 879970290359074800,
@@ -63,14 +61,79 @@ object Json4sResearchTestUtils {
       |    }
       |  }
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val dateText =
+  val inputMessage_UC_2_1: JValue =
+    parse("""
+      |{
+      |  "payload": {
+      |    "@timestamp": "2020-06-10T04:21:13Z",
+      |    "providerId": 879970290359074800,
+      |    "deviceIdentifier": "[R]357666050866893"
+      |  }
+      |}
+      |""".stripMargin)
+
+  val shadowMessage_UC_2_1: JValue =
+    parse("""
+      |{
+      |  "state": {
+      |    "@timestamp": "2020-06-10T04:21:13Z",
+      |    "providerId": 879970290359074800,
+      |    "deviceIdentifier": "[R]357666050866893"
+      |  },
+      |  "metadata": {
+      |    "@timestamp": {
+      |      "timestamp": "2020-06-10T04:21:13Z"
+      |    },
+      |    "providerId": {
+      |      "timestamp": "2020-06-10T04:21:13Z"
+      |    },
+      |    "deviceIdentifier": {
+      |      "timestamp": "2020-06-10T04:21:13Z"
+      |    }
+      |  }
+      |}
+      |""".stripMargin)
+
+  val inputMessage_UC_2_2: JValue =
+    parse("""
+        |{
+        |  "payload": {
+        |    "@timestamp": "2020-06-10T03:30:10Z",
+        |    "providerId": 1
+        |  }
+        |}
+        |""".stripMargin)
+
+  val shadowMessage_UC_2_2: JValue =
+    parse("""
+        |{
+        |  "state": {
+        |    "@timestamp": "2020-06-10T04:21:13Z",
+        |    "providerId": 879970290359074800,
+        |    "deviceIdentifier": "[R]357666050866893"
+        |  },
+        |  "metadata": {
+        |    "@timestamp": {
+        |      "timestamp": "2020-06-10T04:21:13Z"
+        |    },
+        |    "providerId": {
+        |      "timestamp": "2020-06-10T04:21:13Z"
+        |    },
+        |    "deviceIdentifier": {
+        |      "timestamp": "2020-06-10T04:21:13Z"
+        |    }
+        |  }
+        |}
+        |""".stripMargin)
+
+  val dateText: String =
     ZonedDateTime
       .of(2020, 6, 10, 4, 21, 13, 0, ZoneId.of("UTC"))
       .format(Json4sResearch.dateTimeFormater)
 
-  val dateText2 =
+  val dateText2: String =
     ZonedDateTime
       .of(2020, 6, 10, 4, 22, 15, 0, ZoneId.of("UTC"))
       .format(Json4sResearch.dateTimeFormater)
