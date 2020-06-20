@@ -71,17 +71,17 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "map None to a String into the error channel" in {
-    val none: Option[Int]        = None
-    val noneZio: IO[Unit, Int]   = ZIO.fromOption(none)
-    val program: IO[String, Int] = noneZio.orElseFail("mapped error")
+    val none: Option[Int]                 = None
+    val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
+    val program: IO[String, Int]          = noneZio.orElseFail("mapped error")
 
     a[FiberFailure] should be thrownBy runtime.unsafeRun(program)
   }
 
   it should "return a Left with an string error" in {
-    val none: Option[Int]        = None
-    val noneZio: IO[Unit, Int]   = ZIO.fromOption(none)
-    val program: IO[String, Int] = noneZio.mapError(_ => "mapped error")
+    val none: Option[Int]                 = None
+    val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
+    val program: IO[String, Int]          = noneZio.mapError(_ => "mapped error")
 
     val result: Either[String, Int] = runtime.unsafeRun(program.either)
 
