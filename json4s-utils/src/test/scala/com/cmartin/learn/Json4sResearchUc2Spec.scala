@@ -1,10 +1,7 @@
 package com.cmartin.learn
 
-import java.time.{ZoneId, ZonedDateTime}
-
 import com.cmartin.learn.Json4sResearch.{createMetadata, createShadow, mergeShadows, _}
-import org.json4s.{JValue, JsonAST}
-import org.json4s.JsonAST.{JField, JNothing, JObject, JString, JValue}
+import org.json4s.JsonAST.{JNothing, JValue}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
