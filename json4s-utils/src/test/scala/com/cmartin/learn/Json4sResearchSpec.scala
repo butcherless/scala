@@ -29,21 +29,15 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     result shouldBe true
   }
 
-  it should "parse a json document" in {
-    val result: JValue = parse(inputMessageJson)
-
-    result shouldBe a[JValue]
-  }
-
   it should "get an existing key in a json document with a simple type value" in {
-    val json           = parse(inputMessageJson)
+    val json           = inputMessageJson
     val result: JValue = getKey("features.location.coordinate.lat", json)
 
     result shouldBe JDouble(-12.21099)
   }
 
   it should "get an existing key in a json document with an object value" in {
-    val json           = parse(inputMessageJson)
+    val json           = inputMessageJson
     val result: JValue = getKey("features.location.coordinate", json)
 
     result shouldBe JObject(
@@ -52,14 +46,14 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return the JNothing value for a non-existing key in a json document" in {
-    val json           = parse(inputMessageJson)
+    val json           = inputMessageJson
     val result: JValue = getKey("features.xxx.lat", json)
 
     result shouldBe JNothing
   }
 
   it should "return the input document for an empty path" in {
-    val json           = parse(inputMessageJson)
+    val json           = inputMessageJson
     val result: JValue = getKey("", json)
 
     result shouldBe json
@@ -67,8 +61,8 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "flatten a json document" in {
-    val json      = parse(inputMessageJson)
-    val flattened = parse(flattenedInputMessageJson)
+    val json      = inputMessageJson
+    val flattened = flattenedInputMessageJson
     val result    = flatten(json)
 
     //info(pretty(render(result)))
@@ -77,8 +71,8 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "flatten a json document containing an array" in {
-    val json      = parse(arrayDocumentJson)
-    val flattened = parse(flattenedArrayDocumentJson)
+    val json      = arrayDocumentJson
+    val flattened = flattenedArrayDocumentJson
     val result    = flatten(json)
     //info(jValueToString(result))
 
@@ -86,7 +80,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "fail when trying to retrieve invalid xpath key" in {
-    val json = parse(inputMessageJson)
+    val json = inputMessageJson
 
     a[RuntimeException] shouldBe thrownBy(getKey("invalid$path", json))
   }
@@ -101,8 +95,8 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "add new contents to the entity state" in {
-    val j1 = parse(json3String)
-    val j2 = parse(json4String)
+    val j1 = json3String
+    val j2 = json4String
 
     // j1 was the previous state in the repository
     val diff   = j1 diff j2
@@ -112,9 +106,9 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "update contents to the entity state" in {
-    val j1 = parse(json3String)
+    val j1 = json3String
     // j2 is the new state, change contents
-    val j2 = parse(json5String)
+    val j2 = json5String
 
     // j1 was the previous state in the repository
     val diff   = j1 diff j2
@@ -124,10 +118,10 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "add and update contents to the entity state" in {
-    val current  = parse(json1String)
-    val expected = parse(json1_6String) // added and changed
+    val current  = json1String
+    val expected = json1_6String // added and changed
     // the incoming state, add and change contents
-    val incoming = parse(json6String)
+    val incoming = json6String
 
     // j1 was the previous state in the repository
     val merged = mergeShadows(current, incoming)
@@ -139,8 +133,8 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
 
 object Json4sResearchSpec {
 
-  val arrayDocumentJson: String =
-    """
+  val arrayDocumentJson: JValue =
+    parse("""
       |{
       |  "myArray": [
       |    1,
@@ -151,10 +145,10 @@ object Json4sResearchSpec {
       |    11
       |  ]
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val flattenedArrayDocumentJson: String =
-    """
+  val flattenedArrayDocumentJson: JValue =
+    parse("""
       |{
       |  "myArray.0":1,
       |  "myArray.1":2,
@@ -164,10 +158,10 @@ object Json4sResearchSpec {
       |  "myArray.5":11
       |} 
       |
-      |""".stripMargin
+      |""".stripMargin)
 
-  val inputMessageJson: String =
-    """
+  val inputMessageJson: JValue =
+    parse("""
       |{
       |  "id":1234453722394796032,
       |  "timestamp":"2020-03-02T12:21:15.000Z",
@@ -204,10 +198,10 @@ object Json4sResearchSpec {
       |    }
       |  }
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val flattenedInputMessageJson: String =
-    """
+  val flattenedInputMessageJson: JValue =
+    parse("""
       |{
       |  "id": 1234453722394796032,
       |  "timestamp": "2020-03-02T12:21:15.000Z",
@@ -224,16 +218,16 @@ object Json4sResearchSpec {
       |  "features.location.course": 240,
       |  "features.vehicle.ignition.status": true
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val json1String =
-    """
+  val json1String: JValue =
+    parse("""
       |{
       |  "id": 1234,
       |  "value1": "alfa",
       |  "value3": "charlie",
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
   val json2String =
     """
@@ -244,45 +238,45 @@ object Json4sResearchSpec {
       |}
       |""".stripMargin
 
-  val json3String =
-    """
+  val json3String: JValue =
+    parse("""
     |{
     |  "id": 1234
     |}
-    |""".stripMargin
+    |""".stripMargin)
 
-  val json4String =
-    """
+  val json4String: JValue =
+    parse("""
       |{
       |  "id": 1234,
       |  "value1": "alfa"
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val json5String =
-    """
+  val json5String: JValue =
+    parse("""
       |{
       |  "id": 5678
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val json6String =
-    """
+  val json6String: JValue =
+    parse("""
       |{
       |  "id": 1234,
       |  "value1": "tango",
       |  "value4": "x-ray"
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
-  val json1_6String: String =
-    """
+  val json1_6String: JValue =
+    parse("""
       |{
       |  "id": 1234,
       |  "value1": "tango",
       |  "value4": "x-ray",
       |  "value3": "charlie"
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
 }

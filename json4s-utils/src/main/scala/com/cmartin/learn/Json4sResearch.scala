@@ -15,12 +15,13 @@ object Json4sResearch {
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
   val payloadKey: String   = "payload"
-  val stateKey: String   = "state"
+  val stateKey: String     = "state"
+  val tFieldKey: String    = "t_field"
   val timestampKey: String = "@timestamp"
 
   private val XPATH_REGEX = """([a-z][a-z0-9]*)+([.][a-z][a-z0-9]*)*""".r
 
-  val dateTimeFormater = DateTimeFormatter.ISO_INSTANT
+  val dateTimeFormater: DateTimeFormatter = DateTimeFormatter.ISO_INSTANT
 
   def isXpath(path: String): Boolean =
     XPATH_REGEX.matches(path)
@@ -76,7 +77,7 @@ object Json4sResearch {
   /*
     validated date strings
    */
-  def isNewer(current: String, last: String) = {
+  def isNewer(current: String, last: String): Boolean = {
     ZonedDateTime.parse(current).compareTo(ZonedDateTime.parse(last)) > 0
   }
 
@@ -87,7 +88,7 @@ object Json4sResearch {
     } yield ts
   }
 
-  def getShadowTimestamp(json:JValue) : Either[Throwable, String] = {
+  def getShadowTimestamp(json: JValue): Either[Throwable, String] = {
     val seq = selectStringValue(timestampKey, json \ stateKey)
     if (seq.nonEmpty) Right(seq.head)
     else Left(new RuntimeException(s"missing key: $timestampKey"))
@@ -96,15 +97,36 @@ object Json4sResearch {
   /*
     The timestamp is taken from the input message or in its absence
     the time in which the service processes the request.
+    - 1. payload.@timestamp
+    - 2. metadata.t_field and then payload.t_field_value
+    - 3. now()
+    - errors ...
    */
   def resolveTimestamp(json: JValue): Either[Throwable, String] = {
-    val tsList = selectStringValue(timestampKey, json)
-    if (tsList.isEmpty) Right(getNowDateText())
-    else
+    // validation function
+    def dateTextToEither(dateText: String): Either[Throwable, String] = {
       Try {
-        ZonedDateTime.parse(tsList.head) // validate or fail
-        tsList.head                      // is a valid date
+        ZonedDateTime.parse(dateText) // validate or fail
+        dateText                      // is a valid date
       }.toEither
+    }
+
+    val tStampList = selectStringValue(timestampKey, json)
+    if (tStampList.nonEmpty) {
+      dateTextToEither(tStampList.head) // @timestamp
+    } else {
+      val tFieldList = selectStringValue(tFieldKey, json) // t_field
+      if (tFieldList.nonEmpty) {
+        val timestampList = selectStringValue(tFieldList.head, json \ payloadKey)
+        if (timestampList.nonEmpty) {
+          dateTextToEither(timestampList.head)
+        } else {
+          Right(formatNowDateText()) // now(), no t_field value
+        }
+      } else {
+        Right(formatNowDateText()) // now(), no t_field key
+      }
+    }
   }
 
   def createMetadata(json: JValue, dateText: String): JValue = {
@@ -153,7 +175,7 @@ object Json4sResearch {
   def createShadow(state: JValue, metadata: JValue): JValue =
     JObject(("state", state) :: ("metadata", metadata) :: Nil)
 
-  def getNowDateText(): String =
+  private def formatNowDateText(): String =
     ZonedDateTime
       .now()
       .format(DateTimeFormatter.ISO_INSTANT)

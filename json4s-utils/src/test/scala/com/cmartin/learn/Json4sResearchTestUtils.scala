@@ -128,6 +128,21 @@ object Json4sResearchTestUtils {
         |}
         |""".stripMargin)
 
+  val inputMessage_UC_3_1: JValue =
+    parse("""
+            |{
+            |  "metadata": {
+            |    "t_field": "cts_ts"
+            |  },
+            |  "payload": {
+            |    "cts_ts": "2020-06-10T04:21:13Z",
+            |    "providerId": 879970290359074800,
+            |    "deviceIdentifier": "[R]357666050866893"
+            |  }
+            |}
+            |""".stripMargin)
+
+
   val dateText: String =
     ZonedDateTime
       .of(2020, 6, 10, 4, 21, 13, 0, ZoneId.of("UTC"))
