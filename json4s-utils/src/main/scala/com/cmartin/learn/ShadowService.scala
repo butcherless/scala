@@ -1,0 +1,41 @@
+package com.cmartin.learn
+
+import com.cmartin.learn.Json4sResearch._
+import org.json4s.JsonAST.JValue
+class ShadowService(shadowRepository: ShadowRepository) {
+
+  import ShadowService._
+
+  def create(dto: CreateDto): Either[Throwable, JValue] = {
+    val currentShadow: JValue = shadowRepository.findShadow(dto.id)
+    val payload: JValue       = dto.entity \ payloadKey
+
+    for {
+      timestamp       <- resolveTimestamp(payload)
+      shadowTimestamp <- getShadowTimestamp(currentShadow)
+      shadow          <- buildShadow(timestamp, shadowTimestamp, payload, currentShadow)
+    } yield shadow
+  }
+
+  private def buildShadow(data: (String, String, JValue, JValue)): Either[Throwable, JValue] = {
+    Right {
+      val (timestamp, shadowTimestamp, payload, currentShadow) = data
+      if (isNewer(timestamp, shadowTimestamp)) {
+        val incomingShadow = createShadow(payload, createMetadata(payload, timestamp))
+        mergeShadows(currentShadow, incomingShadow)
+      } else currentShadow
+    }
+  }
+
+}
+
+object ShadowService {
+
+  def apply(shadowRepository: ShadowRepository): ShadowService =
+    new ShadowService(shadowRepository)
+
+  case class CreateDto(id: Long, entity: JValue)
+
+  def log[T](t: T): Unit = println(s"debug: $t")
+
+}

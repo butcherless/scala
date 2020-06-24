@@ -99,7 +99,7 @@ object Json4sResearch {
   def getShadowTimestamp(json: JValue): Either[Throwable, String] = {
     val seq = selectStringValue(timestampKey, json \ stateKey)
     if (seq.nonEmpty) Right(seq.head)
-    else Left(new RuntimeException(s"missing key: $timestampKey"))
+    else Right("1970-01-01T00:00:00Z")
   }
 
   /*
@@ -181,7 +181,12 @@ object Json4sResearch {
   }
 
   def createShadow(state: JValue, metadata: JValue): JValue =
-    JObject(("state", state) :: ("metadata", metadata) :: Nil)
+    JObject(
+      List(
+        ("state", state),
+        ("metadata", metadata)
+      )
+    )
 
   private def formatNowDateText(): String =
     ZonedDateTime
