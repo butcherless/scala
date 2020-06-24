@@ -129,6 +129,46 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     merged shouldBe expected
   }
 
+  it should "exclude a key from the document, single value TODO" in {
+    val json = jsonForExcluding
+    val result: JValue =
+      json
+        .replace(splitPath("k1"), JNothing)
+        .remove(_ == JNothing) // removed when rendering
+
+    result shouldBe excludedK1Json
+  }
+
+  it should "exclude a nested key from the document, single value TODO" in {
+    val json = jsonForExcluding
+    val result: JValue =
+      json
+        .replace(splitPath("k2.k21"), JNothing)
+        .remove(_ == JNothing) // removed when rendering
+
+    result shouldBe excludedK21Json
+  }
+
+  it should "exclude a nested key from the document, object value TODO" in {
+    val json = jsonForExcluding
+    val result: JValue =
+      json
+        .replace(splitPath("k2.k23"), JNothing)
+        .remove(_ == JNothing) // removed when rendering
+
+    result shouldBe excludedK23Json
+  }
+
+  it should "exclude a list of keys from the document TODO" in {
+    val keys = List("k1", "k2.k21", "k2.k23")
+    val json = jsonForExcluding
+    val result: JValue =
+      excludeKeys(keys, json)
+        .remove(_ == JNothing) // removed when rendering
+
+    result shouldBe excludedKyeListJson
+  }
+
 }
 
 object Json4sResearchSpec {
@@ -225,11 +265,11 @@ object Json4sResearchSpec {
       |{
       |  "id": 1234,
       |  "value1": "alfa",
-      |  "value3": "charlie",
+      |  "value3": "charlie"
       |}
       |""".stripMargin)
 
-  val json2String =
+  val json2String: String =
     """
       |{
       |  "id": 1234,
@@ -278,5 +318,73 @@ object Json4sResearchSpec {
       |  "value3": "charlie"
       |}
       |""".stripMargin)
+
+  val jsonForExcluding: JValue =
+    parse("""
+        |{
+        |  "k1": 1,
+        |  "k2": {
+        |    "k21": 21,
+        |    "k22": 22,
+        |    "k23": {
+        |      "k231": 231,
+        |      "k232": 232
+        |    }
+        |  },
+        |  "k3": 3
+        |}
+        |""".stripMargin)
+
+  val excludedK1Json: JValue =
+    parse("""
+        |{
+        |  "k2": {
+        |    "k21": 21,
+        |    "k22": 22,
+        |    "k23": {
+        |      "k231": 231,
+        |      "k232": 232
+        |    }
+        |  },
+        |  "k3": 3
+        |}
+        |""".stripMargin)
+
+  val excludedK21Json: JValue =
+    parse("""
+        |{
+        |  "k1": 1,
+        |  "k2": {
+        |    "k22": 22,
+        |    "k23": {
+        |      "k231": 231,
+        |      "k232": 232
+        |    }
+        |  },
+        |  "k3": 3
+        |}
+        |""".stripMargin)
+
+  val excludedK23Json: JValue =
+    parse("""
+        |{
+        |  "k1": 1,
+        |  "k2": {
+        |    "k21": 21,
+        |    "k22": 22
+        |  },
+        |  "k3": 3
+        |}
+        |""".stripMargin)
+
+  val excludedKyeListJson: JValue =
+    parse("""
+        |{
+        |  "k2": {
+        |    "k22": 22
+        |  },
+        |  "k3": 3
+        |}
+        |""".stripMargin)
 
 }

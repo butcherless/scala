@@ -29,7 +29,7 @@ object Json4sResearch {
   def parse(jsonString: String): JValue =
     JsonMethods.parse(jsonString)
 
-  def splitPath(path: String): Seq[String] = path.split('.').toList
+  def splitPath(path: String): List[String] = path.split('.').toList
 
   def getKey(path: String, json: JValue): JValue = {
     // loop function
@@ -47,6 +47,14 @@ object Json4sResearch {
     else
       throw new RuntimeException(s"invalid xpath: $path")
   }
+
+  def excludeKeys(keys: List[String], json: JValue): JValue =
+    keys match {
+      case head :: tail =>
+        excludeKeys(tail, json.replace(splitPath(head), JNothing))
+
+      case Nil => json
+    }
 
   def flatten(json: JValue): JValue = {
     def _flatten(json: JValue, path: String = ""): JValue = {
