@@ -12,21 +12,30 @@ SCALATEST_VER="3.1.2"
 SCOVERAGE_VER="1.6.1"
 ZIO_VER="1.0.0-RC21"
 
+#
 # create filesystem
+#
 mkdir -p project src/{main,test}/{resources,scala} src/main/scala/${PKG_DIR} src/test/scala/${PKG_DIR}
 
 
+#
 # create project properties file
+#
 echo "sbt.version=${SBT_VER}" > project/build.properties
 
 
+#
 # create sbt plugins file
+#
 echo 'addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "'${ASSEMBLY_VER}'")
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "'${DEP_GRAPH_VER}'")
 addSbtPlugin("org.jmotor.sbt" % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "'${SCOVERAGE_VER}'")' > project/plugins.sbt
 
+
+#
 # create dependencies file
+#
 echo 'import sbt._
 
 object Dependencies {
@@ -47,7 +56,9 @@ object Dependencies {
 }' > project/Dependencies.scala
 
 
+#
 # create sbt build file
+#
 echo 'import Dependencies._
 
 lazy val basicScalacOptions = Seq(       // some of the Rob Norris tpolecat options
@@ -78,6 +89,9 @@ lazy val templateProject = (project in file("."))
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )' > build.sbt
 
+#
+# server runtime options
+#
 echo '-server
 -Xms512M
 -Xmx3G
@@ -85,7 +99,9 @@ echo '-server
 -XX:NewRatio=8' > .jvmopts
 
 
+#
 # create logback XML config file
+#
 echo '<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -113,7 +129,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 </configuration>' > src/main/resources/logback.xml
 
 
+#
 # create common library object
+#
 echo 'package '${SOURCE_PKG}'
 
 object Library {
@@ -133,7 +151,9 @@ object Library {
 }' > src/main/scala/${PKG_DIR}/Library.scala
 
 
+#
 # create main application
+#
 echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
@@ -160,6 +180,9 @@ object SimpleApp extends App {
 }' > src/main/scala/${PKG_DIR}/SimpleApp.scala
 
 
+#
+# scalatest template
+#
 echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
@@ -174,6 +197,9 @@ class LibrarySpec extends AnyFlatSpec with Matchers {
   }
 }' > src/test/scala/${PKG_DIR}/LibrarySpec.scala
 
+#
+# ziotest template
+#
 echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
@@ -208,5 +234,7 @@ object ZioSpec
 ' > src/test/scala/${PKG_DIR}/ZioSpec.scala
 
 
-
+#
+# run this script
+#
 sbt clean coverage test coverageReport dependencyUpdates assembly sbtVersion run
