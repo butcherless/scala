@@ -14,13 +14,14 @@ class Json4sResearchUc2Spec extends AnyFlatSpec with Matchers {
   val shadowService: ShadowService       = ShadowService(shadowRepository)
 
   /*
-   - with @timestamp
+   - inDto.payload
+   - with @timestamp, dated and outdated
    - no t_field
    */
 
   it should "return a new shadow document with @timestamp date, UC-2-1" in {
     // g i v e n
-    val dto                    = CreateDto(1L, inputMessage_UC_2_1)
+    val dto                    = CreateDto(0L, inputMessage_UC_2_1)
     val expectedShadow: JValue = shadowMessage_UC_2_1
 
     // w h e n
@@ -32,7 +33,7 @@ class Json4sResearchUc2Spec extends AnyFlatSpec with Matchers {
 
   it should "return untouched shadow document, outdated request, UC-2-2" in {
     // g i v e n
-    val dto                    = CreateDto(2L, inputMessage_UC_2_2)
+    val dto                    = CreateDto(21L, inputMessage_UC_2_2)
     val expectedShadow: JValue = shadowMessage_UC_2_1
 
     // w h e n
@@ -45,6 +46,18 @@ class Json4sResearchUc2Spec extends AnyFlatSpec with Matchers {
             createShadow operation , whole operation
             createShadowEntity (structure)
      */
+  }
+
+  it should "return an updated shadow document with @timestamp date, UC-2-3" in {
+    // g i v e n
+    val dto                    = CreateDto(21L, inputMessage_UC_2_3)
+    val expectedShadow: JValue = shadowMessage_UC_2_3
+
+    // w h e n
+    val updatedShadow: Either[Throwable, JValue] = shadowService.create(dto)
+
+    // t h e n
+    updatedShadow shouldBe Right(expectedShadow)
   }
 
 }

@@ -128,6 +128,38 @@ object Json4sResearchTestUtils {
         |}
         |""".stripMargin)
 
+  val inputMessage_UC_2_3: JValue =
+    parse("""
+            |{
+            |  "payload": {
+            |    "@timestamp": "2020-06-11T03:30:10Z",
+            |    "providerId": 1
+            |  }
+            |}
+            |""".stripMargin)
+
+  val shadowMessage_UC_2_3: JValue =
+    parse("""
+            |{
+            |  "state": {
+            |    "@timestamp": "2020-06-11T03:30:10Z",
+            |    "providerId": 1,
+            |    "deviceIdentifier": "[R]357666050866893"
+            |  },
+            |  "metadata": {
+            |    "@timestamp": {
+            |      "timestamp": "2020-06-11T03:30:10Z"
+            |    },
+            |    "providerId": {
+            |      "timestamp": "2020-06-11T03:30:10Z"
+            |    },
+            |    "deviceIdentifier": {
+            |      "timestamp": "2020-06-10T04:21:13Z"
+            |    }
+            |  }
+            |}
+            |""".stripMargin)
+
   val inputMessage_UC_3_1: JValue =
     parse("""
             |{

@@ -137,6 +137,11 @@ object Json4sResearch {
     }
   }
 
+  /*
+    Traverses the tree to the leaf nodes (recursive)
+    building the flatten path with the visited keys (k1.k2.k3...)
+    and adding the timestamp attribute on the leaf (k1.k2.k3: timestamp)
+   */
   def createMetadata(json: JValue, dateText: String): JValue = {
 
     def go(json: JValue, path: String = ""): JValue = {
@@ -173,7 +178,7 @@ object Json4sResearch {
 
   /*
     - gets the diff (changed, added, deleted) between current and incoming
-    -
+    - merges the current with the changes and the additions from the incoming
    */
   def mergeShadows(current: JValue, incoming: JValue): JValue = {
     val diff = current diff incoming

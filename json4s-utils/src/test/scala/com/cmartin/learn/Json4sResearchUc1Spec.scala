@@ -12,6 +12,7 @@ class Json4sResearchUc1Spec extends AnyFlatSpec with Matchers {
   behavior of "Json4sResearch Use Case 1"
 
   /*
+   - inDto.payload
    - no @timestamp
    - no t_field
    */
