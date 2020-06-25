@@ -21,7 +21,8 @@ class ShadowService(shadowRepository: ShadowRepository) {
     Right {
       val (timestamp, shadowTimestamp, payload, currentShadow) = data
       if (isNewer(timestamp, shadowTimestamp)) {
-        val incomingShadow = createShadow(payload, createMetadata(payload, timestamp))
+        val metadata       = createMetadata(payload, timestamp)
+        val incomingShadow = createShadow(payload, metadata)
         mergeShadows(currentShadow, incomingShadow)
       } else currentShadow
     }

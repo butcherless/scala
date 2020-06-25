@@ -30,7 +30,7 @@ class Json4sResearchUc2Spec extends AnyFlatSpec with Matchers {
     updatedShadow shouldBe Right(expectedShadow)
   }
 
-  it should "TODO return untouched shadow document, outdated request, UC-2-2" in {
+  it should "return untouched shadow document, outdated request, UC-2-2" in {
     // g i v e n
     val dto                    = CreateDto(2L, inputMessage_UC_2_2)
     val expectedShadow: JValue = shadowMessage_UC_2_1

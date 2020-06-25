@@ -111,7 +111,7 @@ object Json4sResearch {
     - errors ...
    */
   def resolveTimestamp(json: JValue): Either[Throwable, String] = {
-    // validation function
+    // validation function, parse date or fail
     def dateTextToEither(dateText: String): Either[Throwable, String] = {
       Try {
         ZonedDateTime.parse(dateText) // validate or fail
