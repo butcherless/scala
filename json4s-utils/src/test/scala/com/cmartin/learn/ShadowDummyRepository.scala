@@ -6,6 +6,7 @@ class ShadowDummyRepository extends ShadowRepository {
   override def findShadow(id: Long): JValue = {
     id match {
       case 0L => JNothing
+      case 11L => Json4sResearchTestUtils.shadowMessage_UC_1_1
       case 21L => Json4sResearchTestUtils.shadowMessage_UC_2_1
       case _  => JNothing
     }

@@ -36,14 +36,14 @@ object Json4sResearchTestUtils {
       |}
       |""".stripMargin)
 
-  val inputMessage_UC_1_2: String =
-    """
+  val inputMessage_UC_1_2: JValue =
+    parse("""
       |{
       |  "payload": {
       |    "providerId": 879970290359074800
       |  }
       |}
-      |""".stripMargin
+      |""".stripMargin)
 
   val shadowMessage_UC_1_2: JValue =
     parse("""

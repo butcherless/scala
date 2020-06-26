@@ -2,16 +2,11 @@ package com.cmartin.learn
 
 import com.cmartin.learn.ShadowService.CreateDto
 import org.json4s.JsonAST.JValue
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 
-class Json4sResearchUc2Spec extends AnyFlatSpec with Matchers {
+class Json4sResearchUc2Spec extends Json4sResearchBaseSpec {
   import Json4sResearchTestUtils._
 
   behavior of "Json4sResearch Use Case 2"
-
-  val shadowRepository: ShadowRepository = ShadowDummyRepository()
-  val shadowService: ShadowService       = ShadowService(shadowRepository)
 
   /*
    - inDto.payload

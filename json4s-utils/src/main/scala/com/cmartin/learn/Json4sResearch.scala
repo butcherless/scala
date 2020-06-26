@@ -14,6 +14,7 @@ object Json4sResearch {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
+  val metadataKey: String   = "metadata"
   val payloadKey: String   = "payload"
   val stateKey: String     = "state"
   val tFieldKey: String    = "t_field"
