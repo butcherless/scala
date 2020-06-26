@@ -11,7 +11,7 @@ class ShadowService(shadowRepository: ShadowRepository) {
     val payload: JValue       = dto.entity \ payloadKey
 
     for {
-      timestamp       <- resolveTimestamp(payload)
+      timestamp       <- resolveTimestamp(dto.entity)
       shadowTimestamp <- getShadowTimestamp(currentShadow)
       shadow          <- buildShadow(timestamp, shadowTimestamp, payload, currentShadow)
     } yield shadow

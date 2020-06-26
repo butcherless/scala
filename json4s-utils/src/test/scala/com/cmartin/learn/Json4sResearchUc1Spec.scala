@@ -40,7 +40,6 @@ class Json4sResearchUc1Spec extends Json4sResearchBaseSpec {
     // t h e n
     updatedShadow shouldBe Symbol("right")
     updatedShadow.map { json =>
-      info(json.toString)
       (json \ metadataKey).children.size shouldBe (shadowMessage_UC_1_2 \ metadataKey).children.size
       (json \ stateKey) shouldBe (shadowMessage_UC_1_1 \ stateKey)
     }

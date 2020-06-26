@@ -44,7 +44,7 @@ class Json4sResearchUc2Spec extends Json4sResearchBaseSpec {
   }
 
   it should "return an updated shadow document with @timestamp date, UC-2-3" in {
-    // g i v e n
+    // g i v e n , 21L retrieves current state shadowMessage_UC_2_1
     val dto                    = CreateDto(21L, inputMessage_UC_2_3)
     val expectedShadow: JValue = shadowMessage_UC_2_3
 

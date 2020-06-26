@@ -14,7 +14,7 @@ object Json4sResearch {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
-  val metadataKey: String   = "metadata"
+  val metadataKey: String  = "metadata"
   val payloadKey: String   = "payload"
   val stateKey: String     = "state"
   val tFieldKey: String    = "t_field"
@@ -120,11 +120,11 @@ object Json4sResearch {
       }.toEither
     }
 
-    val tStampList = selectStringValue(timestampKey, json)
+    val tStampList = selectStringValue(timestampKey, json \ payloadKey) // @timestamp
     if (tStampList.nonEmpty) {
       dateTextToEither(tStampList.head) // @timestamp
     } else {
-      val tFieldList = selectStringValue(tFieldKey, json) // t_field
+      val tFieldList = selectStringValue(tFieldKey, json \ metadataKey) // t_field
       if (tFieldList.nonEmpty) {
         val timestampList = selectStringValue(tFieldList.head, json \ payloadKey)
         if (timestampList.nonEmpty) {
