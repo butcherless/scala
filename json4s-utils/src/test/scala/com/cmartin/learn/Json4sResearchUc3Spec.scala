@@ -37,11 +37,8 @@ class Json4sResearchUc3Spec extends Json4sResearchBaseSpec {
     // w h e n
     val updatedShadow: Either[Throwable, JValue] = shadowService.create(dto)
 
-    info("3_1" + jValueToString( shadowMessage_UC_3_1))
-    info("updated" +  jValueToString(updatedShadow.getOrElse(JNothing)))
-
     // t h e n
     updatedShadow shouldBe Right(expectedShadow)
 
   }
-  }
+}

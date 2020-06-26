@@ -232,7 +232,6 @@ object Json4sResearchTestUtils {
             |}
             |""".stripMargin)
 
-
   val dateText: String =
     ZonedDateTime
       .of(2020, 6, 10, 4, 21, 13, 0, ZoneId.of("UTC"))
