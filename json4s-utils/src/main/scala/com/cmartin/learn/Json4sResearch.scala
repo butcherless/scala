@@ -90,7 +90,7 @@ object Json4sResearch {
     ZonedDateTime.parse(current).compareTo(ZonedDateTime.parse(last)) > 0
   }
 
-  def selectStringValue(key: String, json: JValue): List[String] = {
+  private def selectStringValue(key: String, json: JValue): List[String] = {
     for {
       JObject(fields)            <- json
       JField(`key`, JString(ts)) <- fields
@@ -120,20 +120,20 @@ object Json4sResearch {
       }.toEither
     }
 
-    val tStampList = selectStringValue(timestampKey, json \ payloadKey) // @timestamp
-    if (tStampList.nonEmpty) {
-      dateTextToEither(tStampList.head) // @timestamp
-    } else {
-      val tFieldList = selectStringValue(tFieldKey, json \ metadataKey) // t_field
-      if (tFieldList.nonEmpty) {
-        val timestampList = selectStringValue(tFieldList.head, json \ payloadKey)
-        if (timestampList.nonEmpty) {
-          dateTextToEither(timestampList.head)
-        } else {
-          Right(formatNowDateText()) // now(), no t_field value
-        }
+    val tFieldList = selectStringValue(tFieldKey, json \ metadataKey) // t_field
+    if (tFieldList.nonEmpty) {
+      val timestampList = selectStringValue(tFieldList.head, json \ payloadKey) // t_filed.value
+      if (timestampList.nonEmpty) {
+        dateTextToEither(timestampList.head) // t_field.value
       } else {
-        Right(formatNowDateText()) // now(), no t_field key
+        Left(new RuntimeException("t_field not found")) //TODO define error
+      }
+    } else { // no metadata.t_field key
+      val timestampList = selectStringValue(timestampKey, json \ payloadKey) // @timestamp
+      if (timestampList.nonEmpty) {
+        dateTextToEither(timestampList.head) // @timestamp
+      } else {
+        Right(formatNowDateText()) // now(), no @timestamp value
       }
     }
   }

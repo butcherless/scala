@@ -7,6 +7,8 @@ import com.cmartin.learn.Json4sResearch._
 import org.json4s.JsonAST.{JDouble, JNothing, JObject, JValue}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+
+import scala.concurrent.Future
 class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   import Json4sResearchSpec._
   import Json4sResearchTestUtils._
@@ -169,6 +171,20 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     result shouldBe excludedKyeListJson
   }
 
+  it should "" in {
+    import scala.concurrent.ExecutionContext.Implicits.global
+    def save(s: String): Future[Int] = Future(1)
+    val r: Future[Int] = for {
+      x1 <- save("abc")
+      x2 <- Future.successful(x1 + 2)
+    } yield x2
+
+    val f2 = save("abc")
+    f2.map{ a =>
+      a
+    }
+
+  }
 }
 
 object Json4sResearchSpec {

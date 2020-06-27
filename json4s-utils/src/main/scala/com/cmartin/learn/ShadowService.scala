@@ -2,6 +2,7 @@ package com.cmartin.learn
 
 import com.cmartin.learn.Json4sResearch._
 import org.json4s.JsonAST.JValue
+
 class ShadowService(shadowRepository: ShadowRepository) {
 
   import ShadowService._
@@ -14,6 +15,7 @@ class ShadowService(shadowRepository: ShadowRepository) {
       timestamp       <- resolveTimestamp(dto.entity)
       shadowTimestamp <- getShadowTimestamp(currentShadow)
       shadow          <- buildShadow(timestamp, shadowTimestamp, payload, currentShadow)
+      //_ <- shadowRepository.save(ShadowDbo(dto.id,JNothing))
     } yield shadow
   }
 

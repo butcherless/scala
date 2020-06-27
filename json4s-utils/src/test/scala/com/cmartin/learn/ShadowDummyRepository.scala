@@ -12,6 +12,8 @@ class ShadowDummyRepository extends ShadowRepository {
       case _   => JNothing
     }
   }
+
+  override def save(dbo: ShadowDbo): Long = 0L
 }
 object ShadowDummyRepository {
   def apply(): ShadowDummyRepository = new ShadowDummyRepository()
