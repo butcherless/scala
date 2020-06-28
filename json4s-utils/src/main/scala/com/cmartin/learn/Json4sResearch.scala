@@ -90,17 +90,16 @@ object Json4sResearch {
     ZonedDateTime.parse(current).compareTo(ZonedDateTime.parse(last)) > 0
   }
 
-  private def selectStringValue(key: String, json: JValue): List[String] = {
-    for {
-      JObject(fields)            <- json
-      JField(`key`, JString(ts)) <- fields
-    } yield ts
+  def getExclusionKeys(metatdata: JValue): List[String] = {
+    val keys = metatdata \ "exclude" // array type, do unit test for extraction, type, empty, etc
+    List.empty
   }
 
   def getShadowTimestamp(json: JValue): Either[Throwable, String] = {
-    val seq = selectStringValue(timestampKey, json \ stateKey)
-    if (seq.nonEmpty) Right(seq.head)
-    else Right("1970-01-01T00:00:00Z")
+    getStringValue(timestampKey, json \ stateKey) match {
+      case Some(ts) => Right(ts)
+      case None     => Right("1970-01-01T00:00:00Z")
+    }
   }
 
   /*
@@ -120,22 +119,30 @@ object Json4sResearch {
       }.toEither
     }
 
-    val tFieldList = selectStringValue(tFieldKey, json \ metadataKey) // t_field
-    if (tFieldList.nonEmpty) {
-      val timestampList = selectStringValue(tFieldList.head, json \ payloadKey) // t_filed.value
-      if (timestampList.nonEmpty) {
-        dateTextToEither(timestampList.head) // t_field.value
-      } else {
-        Left(new RuntimeException("t_field not found")) //TODO define error
-      }
-    } else { // no metadata.t_field key
-      val timestampList = selectStringValue(timestampKey, json \ payloadKey) // @timestamp
-      if (timestampList.nonEmpty) {
-        dateTextToEither(timestampList.head) // @timestamp
-      } else {
-        Right(formatNowDateText()) // now(), no @timestamp value
-      }
+    // new
+    getStringValue(tFieldKey, json \ metadataKey) match {
+      case Some(tfValue) =>
+        getStringValue(tfValue, json \ payloadKey) match {
+          case Some(tsvalue) => dateTextToEither(tsvalue)                       // payload.${t_field}
+          case None          => Left(new RuntimeException("t_field not found")) //TODO define error
+        }
+
+      case None => // no t_field
+        getStringValue(timestampKey, json \ payloadKey) match {
+          case Some(value) => dateTextToEither(value)    // payload.@timestamp
+          case None        => Right(formatNowDateText()) // no @timestamp => now()
+        }
     }
+  }
+
+  def filterPayload(payload: JValue, keys: List[String]): Either[Throwable, JValue] = {
+    Right(
+      if (keys.isEmpty) {
+        payload
+      } else {
+        excludeKeys(keys, payload)
+      }
+    )
   }
 
   /*
@@ -193,6 +200,15 @@ object Json4sResearch {
         ("metadata", metadata)
       )
     )
+
+  private def getStringValue(key: String, json: JValue): Option[String] = {
+    val fields = for {
+      JObject(fields)            <- json
+      JField(`key`, JString(ts)) <- fields
+    } yield ts
+
+    fields.headOption
+  }
 
   private def formatNowDateText(): String =
     ZonedDateTime

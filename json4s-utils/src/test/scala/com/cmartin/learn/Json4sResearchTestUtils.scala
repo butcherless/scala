@@ -2,6 +2,7 @@ package com.cmartin.learn
 
 import java.time.{ZoneId, ZonedDateTime}
 
+import org.json4s
 import org.json4s.JsonAST.JValue
 import org.json4s.native.JsonMethods
 
@@ -232,6 +233,45 @@ object Json4sResearchTestUtils {
             |}
             |""".stripMargin)
 
+  val inputMessage_UC_4_1: json4s.JValue =
+    parse("""
+        |{
+        |  "metadata": {
+        |    "t_field": "cts_ts",
+        |    "exclude": [
+        |      "cts_ts",
+        |      "aux"
+        |    ]
+        |  },
+        |  "payload": {
+        |    "cts_ts": "2020-06-10T04:21:13Z",
+        |    "providerId": 879970290359074800,
+        |    "deviceIdentifier": "[R]357666050866893",
+        |    "aux": "VALOR"
+        |  }
+        |}
+        |""".stripMargin)
+
+  val shadowMessage_UC_4_1: JValue =
+    parse("""
+            |{
+            |  "state": {
+            |    "providerId": 879970290359074800,
+            |    "deviceIdentifier": "[R]357666050866893"
+            |  },
+            |  "metadata": {
+            |    "providerId": {
+            |      "timestamp": "2020-06-10T04:21:13Z"
+            |    },
+            |    "deviceIdentifier": {
+            |      "timestamp": "2020-06-10T04:21:13Z"
+            |    }
+            |  }
+            |}
+            |""".stripMargin)
+
+  /*
+   */
   val dateText: String =
     ZonedDateTime
       .of(2020, 6, 10, 4, 21, 13, 0, ZoneId.of("UTC"))

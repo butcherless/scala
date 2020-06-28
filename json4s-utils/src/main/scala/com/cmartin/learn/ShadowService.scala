@@ -9,12 +9,13 @@ class ShadowService(shadowRepository: ShadowRepository) {
 
   def create(dto: CreateDto): Either[Throwable, JValue] = {
     val currentShadow: JValue = shadowRepository.findShadow(dto.id)
-    val payload: JValue       = dto.entity \ payloadKey
+    val keys: List[String]    = getExclusionKeys(dto.entity \ metadataKey)
 
     for {
       timestamp       <- resolveTimestamp(dto.entity)
+      filteredPayload <- filterPayload(dto.entity \ payloadKey, keys)
       shadowTimestamp <- getShadowTimestamp(currentShadow)
-      shadow          <- buildShadow(timestamp, shadowTimestamp, payload, currentShadow)
+      shadow          <- buildShadow(timestamp, shadowTimestamp, filteredPayload, currentShadow)
       //_ <- shadowRepository.save(ShadowDbo(dto.id,JNothing))
     } yield shadow
   }
