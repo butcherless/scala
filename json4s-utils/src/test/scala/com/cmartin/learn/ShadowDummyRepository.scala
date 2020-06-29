@@ -9,6 +9,8 @@ class ShadowDummyRepository extends ShadowRepository {
       case 11L => Json4sResearchTestUtils.shadowMessage_UC_1_1
       case 21L => Json4sResearchTestUtils.shadowMessage_UC_2_1
       case 31L => Json4sResearchTestUtils.shadowMessage_UC_3_1
+      case 41L => Json4sResearchTestUtils.shadowMessage_UC_4_1
+      case 42L => Json4sResearchTestUtils.shadowMessage_UC_4_2
       case _   => JNothing
     }
   }

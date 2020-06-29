@@ -180,7 +180,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     } yield x2
 
     val f2 = save("abc")
-    f2.map{ a =>
+    f2.map { a =>
       a
     }
 

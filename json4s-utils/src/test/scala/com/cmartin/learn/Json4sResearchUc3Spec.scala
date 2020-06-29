@@ -1,7 +1,7 @@
 package com.cmartin.learn
 
 import com.cmartin.learn.ShadowService.CreateDto
-import org.json4s.JsonAST.{JNothing, JValue}
+import org.json4s.JsonAST.JValue
 
 class Json4sResearchUc3Spec extends Json4sResearchBaseSpec {
   import Json4sResearchTestUtils._
@@ -21,9 +21,6 @@ class Json4sResearchUc3Spec extends Json4sResearchBaseSpec {
 
     // w h e n
     val updatedShadow: Either[Throwable, JValue] = shadowService.create(dto)
-
-    info(s"actual: " + jValueToString(updatedShadow.getOrElse(JNothing)))
-    info(s"expected: " + jValueToString(expectedShadow))
 
     // t h e n
     updatedShadow shouldBe Right(expectedShadow)

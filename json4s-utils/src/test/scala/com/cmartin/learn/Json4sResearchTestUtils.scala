@@ -2,7 +2,6 @@ package com.cmartin.learn
 
 import java.time.{ZoneId, ZonedDateTime}
 
-import org.json4s
 import org.json4s.JsonAST.JValue
 import org.json4s.native.JsonMethods
 
@@ -233,7 +232,7 @@ object Json4sResearchTestUtils {
             |}
             |""".stripMargin)
 
-  val inputMessage_UC_4_1: json4s.JValue =
+  val inputMessage_UC_4_1: JValue =
     parse("""
         |{
         |  "metadata": {
@@ -269,6 +268,73 @@ object Json4sResearchTestUtils {
             |  }
             |}
             |""".stripMargin)
+
+  val inputMessage_UC_4_2: JValue =
+    parse("""
+        |{
+        |  "metadata": {
+        |    "exclude": [
+        |      "@timestamp"
+        |    ]
+        |  },
+        |  "payload": {
+        |    "@timestamp": "2020-06-12T03:30:10Z",
+        |    "providerId": 1
+        |  }
+        |}
+        |""".stripMargin)
+
+  val shadowMessage_UC_4_2: JValue =
+    parse("""
+        |{
+        |  "state": {
+        |    "providerId": 1,
+        |    "deviceIdentifier": "[R]357666050866893"
+        |  },
+        |  "metadata": {
+        |    "providerId": {
+        |      "timestamp": "2020-06-12T03:30:10Z"
+        |    },
+        |    "deviceIdentifier": {
+        |      "timestamp": "2020-06-10T04:21:13Z"
+        |    }
+        |  }
+        |}
+        |""".stripMargin)
+
+  val inputMessage_UC_4_3: JValue =
+    parse("""
+        |{
+        |  "metadata": {
+        |    "exclude": [
+        |      "@timestamp",
+        |      "deviceIdentifier"
+        |    ]
+        |  },
+        |  "payload": {
+        |    "@timestamp": "2020-06-14T03:30:10Z",
+        |    "providerId": 2
+        |  }
+        |}
+        |""".stripMargin)
+
+  val shadowMessage_UC_4_3: JValue =
+    parse("""
+        |{
+        |  "state": {
+        |    "providerId": 2,
+        |    "deviceIdentifier": "[R]357666050866893"
+        |  },
+        |  "metadata": {
+        |    "providerId": {
+        |      "timestamp": "2020-06-14T03:30:10Z"
+        |    },
+        |    "deviceIdentifier": {
+        |      "timestamp": "2020-06-10T04:21:13Z"
+        |    }
+        |  }
+        |}
+        |""".stripMargin)
 
   /*
    */

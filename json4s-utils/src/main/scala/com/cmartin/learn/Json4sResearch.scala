@@ -14,6 +14,8 @@ object Json4sResearch {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
+  val EPOCH_TEXT           = "1970-01-01T00:00:00Z"
+  val excludeKey: String   = "exclude"
   val metadataKey: String  = "metadata"
   val payloadKey: String   = "payload"
   val stateKey: String     = "state"
@@ -49,12 +51,13 @@ object Json4sResearch {
       throw new RuntimeException(s"invalid xpath: $path")
   }
 
+  @tailrec
   def excludeKeys(keys: List[String], json: JValue): JValue =
     keys match {
       case head :: tail =>
         excludeKeys(tail, json.replace(splitPath(head), JNothing))
 
-      case Nil => json
+      case Nil => json.remove(_ == JNothing)
     }
 
   def flatten(json: JValue): JValue = {
@@ -90,15 +93,20 @@ object Json4sResearch {
     ZonedDateTime.parse(current).compareTo(ZonedDateTime.parse(last)) > 0
   }
 
-  def getExclusionKeys(metatdata: JValue): List[String] = {
-    val keys = metatdata \ "exclude" // array type, do unit test for extraction, type, empty, etc
-    List.empty
+  def getExclusionKeys(metadata: JValue): List[String] = {
+    metadata \ excludeKey match {
+      case JArray(as) =>
+        as.collect { // ignores JValue types except JString
+          case JString(text) => text
+        }
+      case _ => List.empty
+    }
   }
 
   def getShadowTimestamp(json: JValue): Either[Throwable, String] = {
     getStringValue(timestampKey, json \ stateKey) match {
       case Some(ts) => Right(ts)
-      case None     => Right("1970-01-01T00:00:00Z")
+      case None     => Right(EPOCH_TEXT)
     }
   }
 
@@ -123,14 +131,14 @@ object Json4sResearch {
     getStringValue(tFieldKey, json \ metadataKey) match {
       case Some(tfValue) =>
         getStringValue(tfValue, json \ payloadKey) match {
-          case Some(tsvalue) => dateTextToEither(tsvalue)                       // payload.${t_field}
+          case Some(tsValue) => dateTextToEither(tsValue)                       // payload.${t_field}
           case None          => Left(new RuntimeException("t_field not found")) //TODO define error
         }
 
       case None => // no t_field
         getStringValue(timestampKey, json \ payloadKey) match {
-          case Some(value) => dateTextToEither(value)    // payload.@timestamp
-          case None        => Right(formatNowDateText()) // no @timestamp => now()
+          case Some(tsValue) => dateTextToEither(tsValue)  // payload.@timestamp
+          case None          => Right(formatNowDateText()) // no @timestamp => now()
         }
     }
   }
