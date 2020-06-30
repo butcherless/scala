@@ -36,11 +36,6 @@ class Json4sResearchUc2Spec extends Json4sResearchBaseSpec {
 
     // t h e n
     updatedShadow shouldBe Right(expectedShadow)
-
-    /* TODO case missing date, JNothing
-            createShadow operation , whole operation
-            createShadowEntity (structure)
-     */
   }
 
   it should "return an updated shadow document with @timestamp date, UC-2-3" in {
