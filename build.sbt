@@ -28,6 +28,7 @@ lazy val commonSettings = Seq(
 lazy val common = (project in file("common"))
   .settings(
     commonSettings,
+    Defaults.itSettings,
     name := "common",
     libraryDependencies ++= Seq(logback, scalaTest)
   )
