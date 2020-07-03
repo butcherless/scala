@@ -33,7 +33,7 @@ object VersionManager {
   object Helper extends VersionManager.Service[VersionManager] {
 
     override def compare(local: Domain.Gav, remote: Domain.Gav): ZIO[VersionManager, Nothing, Domain.ComparationResult] = {
-      ZIO.accessM(_.versionManager compare(local, remote))
+      ZIO.accessM(_.versionManager.compare(local, remote))
     }
 
   }

@@ -86,15 +86,15 @@ object Definition {
         log.debug(s"processing number: $number")
         if (number % 10 == modulo) {
           delayUpTo(32)
-          sender ! Accepted(number, id)
+          sender() ! Accepted(number, id)
         }
         else {
           delayUpTo(8)
-          sender ! Rejected(number, id)
+          sender() ! Rejected(number, id)
         }
       case message =>
         log.info(s"unable to process $message")
-        sender ! Unknown
+        sender() ! Unknown
     }
   }
 

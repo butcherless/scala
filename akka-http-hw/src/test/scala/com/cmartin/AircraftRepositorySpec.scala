@@ -17,7 +17,7 @@ class AircraftRepositorySpec extends AnyFlatSpec with Matchers with BeforeAndAft
   val repo = new AircraftRepository()
 
   before {
-    repo.removeAll
+    repo.removeAll()
   }
 
   "The aircraft repo" should "be empty" in {

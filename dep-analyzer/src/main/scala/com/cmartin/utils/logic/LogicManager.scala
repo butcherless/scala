@@ -35,10 +35,10 @@ object LogicManager {
                               dependencies: List[Domain.Gav],
                               exclusionList: List[String]
                             ): ZIO[LogicManager, Nothing, List[Domain.Gav]] =
-      ZIO.accessM(_.logicManager excludeList(dependencies, exclusionList))
+      ZIO.accessM(_.logicManager.excludeList(dependencies, exclusionList))
 
     override def calculateValidRate(dependencyCount: Int, validCount: Int): ZIO[LogicManager, Nothing, Double] =
-      ZIO.accessM(_.logicManager calculateValidRate(dependencyCount, validCount))
+      ZIO.accessM(_.logicManager.calculateValidRate(dependencyCount, validCount))
   }
 
 }

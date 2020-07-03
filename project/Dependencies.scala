@@ -20,7 +20,7 @@ object Dependencies {
   lazy val sttpVersion         = "2.2.1"
   lazy val zioVersion          = "1.0.0-RC21-2"
   lazy val zioConfigVersion    = "1.0.0-RC23-1"
-  lazy val zioKafkaVersion     = "0.4.1"
+  lazy val zioKafkaVersion     = "0.11.0"
 
   // production code
   lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
