@@ -5,8 +5,7 @@ ThisBuild / organization := "com.cmartin.learn"
 
 lazy val basicScalacOptions = Seq(
   "-deprecation",
-  "-encoding",
-  "UTF-8",
+  "-encoding", "utf-8",
   "-feature",
   "-unchecked",
   "-language:postfixOps",
