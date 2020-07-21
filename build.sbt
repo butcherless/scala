@@ -1,8 +1,7 @@
 import Dependencies._
 
-val scalaCompiler = "2.13.3"
-
-scalaVersion := scalaCompiler
+ThisBuild / scalaVersion := "2.13.3"
+ThisBuild / organization := "com.cmartin.learn"
 
 lazy val basicScalacOptions = Seq(
   "-deprecation",
@@ -15,9 +14,6 @@ lazy val basicScalacOptions = Seq(
 )
 
 lazy val commonSettings = Seq(
-  organization := "com.cmartin.learn",
-  version := "1.0.0-SNAPSHOT",
-  scalaVersion := scalaCompiler,
   libraryDependencies ++= Seq(scalaTest),
   scalacOptions ++= basicScalacOptions,
   resolvers += // temporal for ZIO snapshots
