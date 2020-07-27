@@ -16,7 +16,7 @@ object Dependencies {
   lazy val scalazVersion       = "7.3.2"
   lazy val scalatestVersion    = "3.2.0"
   lazy val slf4jVersion        = "1.7.26"
-  lazy val specs2Version       = "4.10.0"
+  lazy val specs2Version       = "4.10.1"
   lazy val sttpVersion         = "2.2.3"
   lazy val zioVersion          = "1.0.0-RC21-2"
   lazy val zioConfigVersion    = "1.0.0-RC24"
