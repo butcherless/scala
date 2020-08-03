@@ -47,7 +47,7 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
 
   it should "repeat a message" in {
     import zio.duration._
-    val policy1 = Schedule.exponential(10.milliseconds).tapOutput(o => UIO(println(o))) >>> (Schedule.doWhile(
+    val policy1 = Schedule.exponential(10.milliseconds).tapOutput(o => UIO(println(o))) >>> (Schedule.recurWhile(
       _ < 2.second
     ))
 

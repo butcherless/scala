@@ -107,7 +107,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
         //Schedule.spaced(3.seconds)
         Schedule.recurs(5)
 
-    val program: ZIO[Clock with Console, Nothing, (Duration, Int)] = (for {
+    val program: ZIO[Console with Clock, Nothing, (Duration, Long)] = (for {
       _ <- putStrLn("zio console message")
       //_ <- sleep(1.second)
     } yield ()) repeat policy
