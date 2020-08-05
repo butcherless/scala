@@ -1,1 +1,0 @@
-scalacOptions in Test ++= Seq("-Yrangepos")

@@ -1,37 +1,38 @@
 package com.cmartin.service
-
 import com.cmartin.service.Services.nextFruitHash
-import org.specs2.mutable.Specification
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ServicesSpec extends Specification {
+class ServicesSpec extends AnyFlatSpec with Matchers {
 
   val RED           = "red"
   val LIGHT_RED     = "light-red"
   val COLOR_CODE_OK = 4
   val COLOR_CODE_KO = 2
 
-  "hash function should generate an Int between 1 and 10 for Color class" >> {
+  it should "hash function should generate an Int between 1 and 10 for Color class" in {
     val color = Color("red", 1)
     val res   = Services.calcHashId(color)
-    res must beGreaterThanOrEqualTo(1) and beLessThanOrEqualTo(10)
+    res shouldBe >(1)
+    res shouldBe <=(10)
   }
 
-  "color repository should not be empty" >> {
+  it should "color repository should not be empty" in {
     val repo = new ColorRepository
-    repo.isEmpty() must beFalse
+    repo.isEmpty() shouldBe false
   }
 
-  "color with value 1 should exist in the repository" >> {
+  it should "color with value 1 should exist in the repository" in {
     val repo = new ColorRepository
-    repo.getById(1).isDefined must beTrue
+    repo.getById(1).isDefined shouldBe true
   }
 
-  "color with value 100 should not exist in the repository" >> {
+  it should "color with value 100 should not exist in the repository" in {
     val repo = new ColorRepository
-    repo.getById(100).isDefined must beFalse
+    repo.getById(100).isDefined shouldBe false
   }
 
-  s"service compositior color -> $COLOR_CODE_OK should be Some" >> {
+  it should s"service compositior color -> $COLOR_CODE_OK should be Some" in {
     val colorService: SimpleService[Color] = new ColorServiceImpl(new ColorRepository)
     val shapeService: SimpleService[Shape] = new ShapeServiceImpl(new ShapeRepository)
     val fruitService: SimpleService[Fruit] = new FruitServiceImpl(new FruitRepository)
@@ -44,10 +45,10 @@ class ServicesSpec extends Specification {
       fruit <- fruitService.getByHash(nextFruitHash(shape.name))
     } yield fruit
 
-    fruit must beSome
+    fruit.isDefined shouldBe true
   }
 
-  s"service compositior color -> $COLOR_CODE_KO should be None" >> {
+  it should s"service compositior color -> $COLOR_CODE_KO should be None" in {
     val colorService: SimpleService[Color] = new ColorServiceImpl(new ColorRepository)
     val shapeService: SimpleService[Shape] = new ShapeServiceImpl(new ShapeRepository)
     val fruitService: SimpleService[Fruit] = new FruitServiceImpl(new FruitRepository)
@@ -60,6 +61,6 @@ class ServicesSpec extends Specification {
       fruit <- fruitService.getByHash(nextFruitHash(shape.name)) //TODO
     } yield fruit
 
-    fruit must beNone
+    fruit shouldBe None
   }
 }

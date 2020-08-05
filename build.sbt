@@ -32,7 +32,7 @@ lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
     commonSettings,
     name := "fp-in-scala",
-    libraryDependencies ++= Seq(scalaz, cats, specs2)
+    libraryDependencies ++= Seq(scalaz, cats)
   )
 
 lazy val depAnalyzer = (project in file("dep-analyzer"))
@@ -48,8 +48,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       sttpZio,
       logback,
       zio,
-      zioConfig,
-      specs2
+      zioConfig
     )
   )
   .dependsOn(common)

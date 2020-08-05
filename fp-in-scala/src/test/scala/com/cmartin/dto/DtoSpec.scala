@@ -1,58 +1,59 @@
 package com.cmartin.dto
 
 import com.cmartin.dto.Plane.buildPlane
-import org.specs2.mutable.Specification
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.immutable.HashSet
 
-class DtoSpec extends Specification {
+class DtoSpec extends AnyFlatSpec with Matchers {
   val ID           = 1234
   val REGISTRATION = "EC-LXM"
   val MODEL        = "350-800"
   val EMPTY_STRING = ""
 
-  def plane2Tuple(p: Plane) = Plane.unapply(p).get
+  def plane2Tuple(p: Plane): (Long, String, String, String) = Plane.unapply(p).get
 
-  "mandatory constructor arguments" >> {
+  it should "mandatory constructor arguments" in {
     val tuple    = plane2Tuple(Plane(ID, REGISTRATION))
     val resTuple = (ID, REGISTRATION, EMPTY_STRING, EMPTY_STRING)
-    resTuple must beEqualTo(tuple)
+    resTuple shouldBe tuple
   }
 
-  "named constructor arguments" >> {
+  it should "named constructor arguments" in {
     val tuple    = plane2Tuple(Plane(ID, REGISTRATION, model = MODEL))
     val resTuple = (ID, REGISTRATION, EMPTY_STRING, MODEL)
-    resTuple must beEqualTo(tuple)
+    resTuple shouldBe tuple
   }
 
-  "should return a valid Plane" >> {
+  it should "should return a valid Plane" in {
     val res = buildPlane(ID, REGISTRATION)
-    res.isDefined must beTrue
+    res.isDefined shouldBe true
   }
 
-  "should return None" >> {
+  it should "should return None for an invalid id" in {
     val res = buildPlane(-1, REGISTRATION)
-    res.isDefined must beFalse
+    res.isDefined shouldBe false
   }
 
-  "should return None" >> {
+  it should "should return None for an invalid registration" in {
     val res = buildPlane(ID, "")
-    res.isDefined must beFalse
+    res.isDefined shouldBe false
   }
 
-  "should be empty collection" >> {
+  it should "should be empty collection" in {
     val res = Parent(ID, "parent description", HashSet())
-    res.id must beEqualTo(ID)
-    res.desc.isEmpty must beFalse
-    res.children.isEmpty must beTrue
+    res.id shouldBe ID
+    res.desc.isEmpty shouldBe false
+    res.children.isEmpty shouldBe true
   }
 
-  "should be non empty collection" >> {
+  it should "should be non empty collection" in {
     val child = Child(ID, "child description")
     val res   = Parent(ID, "parent description", HashSet(child))
-    res.id must beEqualTo(ID)
-    res.desc.isEmpty must beFalse
-    res.children.isEmpty must beFalse
-    res.children.size must beEqualTo(1)
+    res.id shouldBe ID
+    res.desc.isEmpty shouldBe false
+    res.children.isEmpty shouldBe false
+    res.children.size shouldBe 1
   }
 }

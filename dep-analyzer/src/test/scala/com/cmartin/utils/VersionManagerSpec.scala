@@ -20,7 +20,7 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
 
     val versions = Seq("1.2.3", "10.11.12", "1.2.10", "1.13.1", "10.1.0")
 
-    versions.map(v => info(s"$v: ${pattern.matches(v)}"))
+    versions.foreach(v => info(s"$v: ${pattern.matches(v)}"))
 
     val result = versions.forall(version => pattern.matches(version))
 
@@ -32,7 +32,7 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
 
     val versions = Seq("1.2.3.Final", "10.11.12.Final", "1.2.10.Final", "1.13.1.Final", "10.1.0.Final")
 
-    versions.map(v => info(s"$v: ${pattern.matches(v)}"))
+    versions.foreach(v => info(s"$v: ${pattern.matches(v)}"))
 
     val result = versions.forall(version => pattern.matches(version))
 
