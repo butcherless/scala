@@ -28,7 +28,6 @@ package object data {
   trait SimpleRepository[T] {
 
     /**
-      *
       * @param id entity identifier
       * @return
       */
@@ -45,13 +44,11 @@ package object data {
     def save(t: T): Try[Boolean]
 
     /**
-      *
       * @return
       */
     def count(): Try[Int]
 
     /**
-      *
       * @return
       */
     def isEmpty(): Try[Boolean]

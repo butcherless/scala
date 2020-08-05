@@ -107,13 +107,15 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
     val holidays        = readHolidays()
     val absences        = readAbsences()
 
-    for (i <- 1 to dayCount;
-         date = LocalDate.ofYearDay(2017, i);
-         day = getWeekendDay(date)
-           .orElse(getCountryHolidaysDay(date, countryHolidays))
-           .orElse(getHolidaysDay(date, holidays))
-           .orElse(getAbsenceDay(date, absences))
-           .orElse(getWorkDay(date))) yield day.get
+    for (
+      i <- 1 to dayCount;
+      date = LocalDate.ofYearDay(2017, i);
+      day = getWeekendDay(date)
+        .orElse(getCountryHolidaysDay(date, countryHolidays))
+        .orElse(getHolidaysDay(date, holidays))
+        .orElse(getAbsenceDay(date, absences))
+        .orElse(getWorkDay(date))
+    ) yield day.get
   }
 
   def getYearDays = {
@@ -140,8 +142,10 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
   def buildCountryHolidayDate = {
     val countryHolidays = buildCountryHolidays
 
-    for (i <- 1 to dayCount;
-         d = LocalDate.ofYearDay(2017, i) if (countryHolidays contains d)) yield HolidayDay(d)
+    for (
+      i <- 1 to dayCount;
+      d = LocalDate.ofYearDay(2017, i) if (countryHolidays contains d)
+    ) yield HolidayDay(d)
   }
 
   def getWeekendDay(date: LocalDate): Option[MyDay] = {

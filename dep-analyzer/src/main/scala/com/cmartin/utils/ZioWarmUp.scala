@@ -48,14 +48,12 @@ object ZioWarmUp {
     }
 
     IO.effect {
-        extract(message)
-      }
-      .mapError {
-        case e: ParsingException => ParsingError("invalid format")
-        case e: MappingException => MappingError("invalid type")
-        case e: Throwable        => UnknownError("error while processing json message")
-      }
-      .either
+      extract(message)
+    }.mapError {
+      case e: ParsingException => ParsingError("invalid format")
+      case e: MappingException => MappingError("invalid type")
+      case e: Throwable        => UnknownError("error while processing json message")
+    }.either
   }
 
   case class Gav(group: String, artifact: String, version: String)

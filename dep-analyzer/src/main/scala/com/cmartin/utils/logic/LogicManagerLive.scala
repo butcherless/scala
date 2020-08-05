@@ -24,9 +24,9 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
       )
 
     override def excludeList(
-                              dependencies: List[Domain.Gav],
-                              exclusionList: List[String]
-                            ): ZIO[Any, Nothing, List[Domain.Gav]] =
+        dependencies: List[Domain.Gav],
+        exclusionList: List[String]
+    ): ZIO[Any, Nothing, List[Domain.Gav]] =
       UIO.effectTotal(
         dependencies.filterNot(dep => exclusionList.contains(dep.group))
       )

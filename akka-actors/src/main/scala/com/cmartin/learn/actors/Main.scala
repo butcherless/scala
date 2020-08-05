@@ -1,7 +1,6 @@
 package com.cmartin.learn.actors
 
 import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Sink, Source}
 import akka.util.Timeout
 import akka.{Done, NotUsed}
@@ -21,8 +20,9 @@ object Main extends App {
   val numbers: Source[Int, NotUsed] = Source[Int](1 to 20)
 
   // create the workers
-  val workers = for (i <- 1 to 10)
-    yield system.actorOf(IntegerProcessor.props(i - 1), s"worker-${i - 1}")
+  val workers =
+    for (i <- 1 to 10)
+      yield system.actorOf(IntegerProcessor.props(i - 1), s"worker-${i - 1}")
 
   val dispatcherActor = system.actorOf(DispatcherActor.props(workers), "dispatcher")
 
@@ -30,7 +30,6 @@ object Main extends App {
     .take(100)
     .ask[Int](5)(dispatcherActor)
     .runWith(Sink.ignore) // discard response, only for back-pressure
-
 
   import akka.pattern.ask
 

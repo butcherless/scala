@@ -103,13 +103,25 @@ lazy val akkahttphw = (project in file("akka-http-hw"))
   )
 
 lazy val akkahttpcl = (project in file("akka-http-cl"))
-  .settings(commonSettings, name := "akka-http-webclient", libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream))
+  .settings(
+    commonSettings,
+    name := "akka-http-webclient",
+    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream)
+  )
 
 lazy val calendar = (project in file("calendar"))
-  .settings(commonSettings, name := "personal-calendar", libraryDependencies ++= Seq(scalaz, specs2))
+  .settings(
+    commonSettings,
+    name := "personal-calendar",
+    libraryDependencies ++= Seq(scalaz)
+  )
 
 lazy val refinedPoc = (project in file("refined-poc"))
-  .settings(commonSettings, name := "refined-proof-of-concept", libraryDependencies ++= Seq(refined))
+  .settings(
+    commonSettings,
+    name := "refined-proof-of-concept",
+    libraryDependencies ++= Seq(refined)
+  )
 
 lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
   .settings(
@@ -127,5 +139,9 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
   .dependsOn(common)
 
 lazy val json4sUtils = (project in file("json4s-utils"))
-  .settings(commonSettings, name := "json4s-utils", libraryDependencies ++= Seq(json4s, logback, scalaLogging))
+  .settings(
+    commonSettings,
+    name := "json4s-utils",
+    libraryDependencies ++= Seq(json4s, logback, scalaLogging)
+  )
 

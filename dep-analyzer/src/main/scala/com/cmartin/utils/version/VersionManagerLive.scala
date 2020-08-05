@@ -12,9 +12,9 @@ trait VersionManagerLive {
     override def compare(local: Domain.Gav, remote: Domain.Gav): UIO[Domain.ComparationResult] = {
       //TODO naive implementation
       local.version.compareTo(remote.version) match {
-        case 0 => UIO.succeed(Domain.Same)
+        case 0  => UIO.succeed(Domain.Same)
         case -1 => UIO.succeed(Domain.Newer)
-        case 1 => UIO.succeed(Domain.Older)
+        case 1  => UIO.succeed(Domain.Older)
       }
     }
   }

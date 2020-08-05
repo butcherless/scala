@@ -51,9 +51,8 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
     private def getDependency(dep: Gav): UIO[RepoResult[GavPair]] = {
       (for {
         response <- basicRequest.get(buildUri(dep)).send()
-        remote <- parseResponse(response)(dep)
-      } yield GavPair(dep, remote))
-        .either
+        remote   <- parseResponse(response)(dep)
+      } yield GavPair(dep, remote)).either
     }
 
     private def parseResponse(response: Response[Either[String, String]])(dep: Gav): Task[Gav] = {
@@ -70,7 +69,7 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
     private def parseResponse(response: String): Either[circe.Error, Gav] = {
       val numFoundKey = "numFound"
       val responseKey = "response"
-      val docsKey = "docs"
+      val docsKey     = "docs"
       val opsResult: Either[circe.Error, Gav] = for {
         json <- parse(response)
         cursor = json.hcursor

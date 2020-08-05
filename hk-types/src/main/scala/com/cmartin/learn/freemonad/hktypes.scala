@@ -35,7 +35,7 @@ object main {
 
   // try implementation
   val tryService: CoinMarketService[Try] = new TryCoinMarketService(new CrytoCurrencyRepository)
-  val resultFailure = tryService.readByName("Dummy")
+  val resultFailure                      = tryService.readByName("Dummy")
   printTry(resultFailure)
 
   val resultSuccess = tryService.readByName(("TRON"))
@@ -52,10 +52,11 @@ trait Api[T[String]] {
 }
 
 object ApiImpl extends Api[Option] {
-  def read(n: Long): Option[String] = (n > 0) match {
-    case true => Option(n.toString)
-    case _ => None
-  }
+  def read(n: Long): Option[String] =
+    (n > 0) match {
+      case true => Option(n.toString)
+      case _    => None
+    }
 }
 
 trait HktApi[F[_]] {
@@ -121,10 +122,11 @@ class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketServ
 
   override def readById(id: UUID): Try[CryptoCurrency] = ???
 
-  override def readByName(name: String): Try[CryptoCurrency] = repo.getByName(name) match {
-    case Some(cc) => Success(cc)
-    case None => Failure(ServiceException(s"Currency not found [${name}]"))
-  }
+  override def readByName(name: String): Try[CryptoCurrency] =
+    repo.getByName(name) match {
+      case Some(cc) => Success(cc)
+      case None     => Failure(ServiceException(s"Currency not found [${name}]"))
+    }
 
   override def readAll(): Try[List[CryptoCurrency]] = ???
 }

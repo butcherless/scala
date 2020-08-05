@@ -1,61 +1,62 @@
 package com.cmartin.utils
 
 import com.cmartin.utils.Logic._
-import org.specs2.mutable.Specification
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.SortedSet
 
-class DepAnalyzerSpec extends Specification {
+class DepAnalyzerSpec extends AnyFlatSpec with Matchers {
 
   val dep1: Dep = Dep("dep.group", "dep-artifact", "dep-version-1")
   val dep2: Dep = Dep("dep.group", "dep-artifact", "dep-version-2")
 
-  "get dependency empty string" >> {
+  it should "get dependency empty string" in {
     val s      = "non-dependency-line"
     val result = getDependency(s)
-    result must beNone
+    result shouldBe None
   }
 
-  "get dependency string  match" >> {
+  it should "get dependency string  match" in {
     val s      = "+--- org.springframework.boot:spring-boot-starter-web -> 1.5.10.RELEASE (*)"
     val result = getDependency(s)
-    result must beSome
+    result.isDefined shouldBe true
   }
 
-  "dependency key must be group:artifact" >> {
+  it should "dependency key must be group:artifact" in {
     val group    = "org.springframework.boot"
     val artifact = "spring-boot-starter-web"
     val version  = "1.5.10.RELEASE"
     val result   = Dep(group, artifact, version).key
-    result must beEqualTo(s"$group:$artifact")
+    result shouldBe s"$group:$artifact"
   }
 
-  "Dependency comparator less than" >> {
+  it should "Dependency comparator less than" in {
     val result = Dep.ord.compare(dep1, dep2)
-    result must beLessThan(0)
+    result shouldBe <(0)
   }
 
-  "Dependency comparator greater than" >> {
+  it should "Dependency comparator greater than" in {
     val result = Dep.ord.compare(dep2, dep1)
-    result must beGreaterThan(0)
+    result shouldBe >(0)
   }
 
-  "Dependency comparator equals to" >> {
+  it should "Dependency comparator equals to" in {
     val result = Dep.ord.compare(dep1, dep1)
-    result must beEqualTo(0)
+    result shouldBe 0
   }
 
-  "mkString formatter string should contain dependency key" >> {
+  it should "mkString formatter string should contain dependency key" in {
     val key                 = "dependency-key"
     val set: SortedSet[Dep] = SortedSet[Dep]()
     val result              = mkString(key, set)
-    result must contain(key)
+    result should include(key)
   }
 
-  "mkErrorString formatter string should contain parameter" >> {
+  it should "mkErrorString formatter string should contain parameter" in {
     val message = "error-message"
     val result  = mkErrorString(message)
-    result must contain(message)
+    result should include(message)
   }
 
 }

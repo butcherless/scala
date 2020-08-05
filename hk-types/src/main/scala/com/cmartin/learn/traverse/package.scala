@@ -20,7 +20,6 @@ package object traverse {
 
   def delay: Int = Random.nextDouble() * delayMax toInt
 
-
   def callRemoteServiceOption(expected: ServiceResult): Option[Int] = {
     expected match {
       case Ok => Some(200)
@@ -34,21 +33,23 @@ package object traverse {
 
   def callRemoteService(index: ServiceResult): Future[ServiceResponse] = {
     index match {
-      case Ok => Future {
-        val d = delay
-        Thread.sleep(d)
-        println(s"delay Ok: $d")
-        Right(200)
-      }
+      case Ok =>
+        Future {
+          val d = delay
+          Thread.sleep(d)
+          println(s"delay Ok: $d")
+          Right(200)
+        }
 
-      case Ko => Future { // comes from .recover {...}
-        val d = delay
-        Thread.sleep(d)
-        println(s"delay Ko: $d")
-        throw new RuntimeException("Crash!!!")
-      }.recoverWith {
-        case _ => Future.successful(Left(SERVICE_ERROR_MESSAGE))
-      }
+      case Ko =>
+        Future { // comes from .recover {...}
+          val d = delay
+          Thread.sleep(d)
+          println(s"delay Ko: $d")
+          throw new RuntimeException("Crash!!!")
+        }.recoverWith {
+          case _ => Future.successful(Left(SERVICE_ERROR_MESSAGE))
+        }
     }
   }
 

@@ -48,6 +48,7 @@ object Logic {
     */
   object Dep {
     implicit val ord = new Ordering[Dep] {
+
       /**
         * Comparator for dependencies classes
         *

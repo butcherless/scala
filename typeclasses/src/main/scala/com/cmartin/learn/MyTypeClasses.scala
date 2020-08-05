@@ -29,11 +29,12 @@ object MyTypeClasses {
       }
     }
 
-    implicit def doubleInstance = new Jsonable[Double] {
-      override def serialize(x: Double): String = {
-        "{ \"value\":" + x.toString + "}"
+    implicit def doubleInstance =
+      new Jsonable[Double] {
+        override def serialize(x: Double): String = {
+          "{ \"value\":" + x.toString + "}"
+        }
       }
-    }
 
   }
 

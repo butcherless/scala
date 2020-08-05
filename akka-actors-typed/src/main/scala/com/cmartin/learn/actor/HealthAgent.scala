@@ -53,10 +53,11 @@ class HealthAgent(context: ActorContext[HealthAgent.HealthMessage], agentId: Str
       this
   }
 
-  private def getStatus(agentId: String) = agentId match {
-    case KAFKA_AGENT      => getKafkaStatus()
-    case POSTGRESQL_AGENT => getPostgresqlStatus()
-    case SYSTEM_AGENT     => getSystemStatus()
-    case _                => ""
-  }
+  private def getStatus(agentId: String) =
+    agentId match {
+      case KAFKA_AGENT      => getKafkaStatus()
+      case POSTGRESQL_AGENT => getPostgresqlStatus()
+      case SYSTEM_AGENT     => getSystemStatus()
+      case _                => ""
+    }
 }

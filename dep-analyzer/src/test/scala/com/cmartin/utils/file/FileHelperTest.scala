@@ -18,7 +18,8 @@ trait FileHelperTest extends FileHelper {
       }
     }
 
-    override def logDepCollection(dependencies: Seq[Either[String, Domain.Gav]]): ZIO[Any, Domain.DomainError, Unit] = ???
+    override def logDepCollection(dependencies: Seq[Either[String, Domain.Gav]]): ZIO[Any, Domain.DomainError, Unit] =
+      ???
 
   }
 }

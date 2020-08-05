@@ -5,7 +5,7 @@ import com.cmartin.utils.Domain.{FileIOError, Gav, UnknownError}
 import com.cmartin.utils.file.FileHelper.FileLines
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import zio.{Runtime, FiberFailure, ZIO}
+import zio.{FiberFailure, Runtime, ZIO}
 
 class FileHelperSpec extends AnyFlatSpec with Matchers {
 

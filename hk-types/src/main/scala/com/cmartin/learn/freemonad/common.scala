@@ -10,9 +10,9 @@ import scalaz.{NonEmptyList, ValidationNel}
 import scala.util.{Failure, Success, Try}
 
 object constants {
-  val notFoundUuid = buildUuid
-  val foundUuid = buildUuid
-  val notFoundName = "name-not-found"
+  val notFoundUuid          = buildUuid
+  val foundUuid             = buildUuid
+  val notFoundName          = "name-not-found"
   val operationErrorMessage = "operation-error-message"
 
 }
@@ -26,15 +26,17 @@ object functions {
     el.foreach(println(_))
   }
 
-  def printOption(o: Option[CryptoCurrency]) = o match {
-    case Some(cc) => println(cc)
-    case None => println("no currency found")
-  }
+  def printOption(o: Option[CryptoCurrency]) =
+    o match {
+      case Some(cc) => println(cc)
+      case None     => println("no currency found")
+    }
 
-  def printTry(t: Try[CryptoCurrency]) = t match {
-    case Success(cc) => println(cc)
-    case Failure(e) => println(e.getMessage)
-  }
+  def printTry(t: Try[CryptoCurrency]) =
+    t match {
+      case Success(cc) => println(cc)
+      case Failure(e)  => println(e.getMessage)
+    }
 
   // H E L P E R
   def buildCryptoCurrency(name: String) =
@@ -43,12 +45,12 @@ object functions {
 }
 
 case class CryptoCurrency(
-                           id: UUID,
-                           name: String,
-                           marketCap: BigDecimal,
-                           price: BigDecimal,
-                           change: Double = 0.0
-                         )
+    id: UUID,
+    name: String,
+    marketCap: BigDecimal,
+    price: BigDecimal,
+    change: Double = 0.0
+)
 
 object CryptoCurrency {
   implicit val ord = new Ordering[CryptoCurrency] {
@@ -74,10 +76,10 @@ object CryptoCurrency {
     else value.success
 
   def validate(
-                name: String,
-                marketCap: BigDecimal,
-                price: BigDecimal
-              ): ValidationNel[ValidationError, CryptoCurrency] =
+      name: String,
+      marketCap: BigDecimal,
+      price: BigDecimal
+  ): ValidationNel[ValidationError, CryptoCurrency] =
     (checkName(name) |@|
       checkNegativeValue(marketCap) |@|
       checkNegativeValue(price)) { (name, cap, price) =>
@@ -88,10 +90,10 @@ object CryptoCurrency {
 object Factory {
 
   def newOptionCrytoCurrency(
-                              name: String,
-                              marketCap: BigDecimal,
-                              price: BigDecimal
-                            ): Option[CryptoCurrency] = {
+      name: String,
+      marketCap: BigDecimal,
+      price: BigDecimal
+  ): Option[CryptoCurrency] = {
     CryptoCurrency.validate(name, marketCap, price) match {
       case scalaz.Success(s) => Some(s)
       case scalaz.Failure(el) => {
@@ -102,10 +104,10 @@ object Factory {
   }
 
   def newTryCrytoCurrency(
-                           name: String,
-                           marketCap: BigDecimal,
-                           price: BigDecimal
-                         ): Try[CryptoCurrency] = {
+      name: String,
+      marketCap: BigDecimal,
+      price: BigDecimal
+  ): Try[CryptoCurrency] = {
     // TODO validation NEL
     // TODO declare business exception
     if (name.isEmpty) Failure(new RuntimeException("empty name"))

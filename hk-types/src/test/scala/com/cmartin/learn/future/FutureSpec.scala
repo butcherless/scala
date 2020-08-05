@@ -79,7 +79,7 @@ class FutureSpec extends AsyncFlatSpec {
     }
 
     val result = for {
-      r3 <- f3()                                     // parallel tasks
+      r3 <- f3() // parallel tasks
       r4 <- Future(r3.repo + r3.flatten + r3.shadow) // task waiting for 3 previous tasks
     } yield r4
 
@@ -110,7 +110,7 @@ class FutureSpec extends AsyncFlatSpec {
     }
 
     val result4 = for {
-      r3 <- f3()                                     // parallel tasks
+      r3 <- f3() // parallel tasks
       r4 <- Future(r3.repo + r3.flatten + r3.shadow) // task waiting for 3 previous tasks
     } yield r4
 

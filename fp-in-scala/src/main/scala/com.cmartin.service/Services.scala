@@ -12,7 +12,6 @@ case class Fruit(id: Int, name: String, color: Color)
 trait SimpleService[T] {
 
   /**
-    *
     * @param h entity code
     * @return
     */
@@ -22,20 +21,17 @@ trait SimpleService[T] {
 trait SimpleRepository[T] {
 
   /**
-    *
     * @param id entity identifier
     * @return
     */
   def getById(id: Int): Option[T]
 
   /**
-    *
     * @return
     */
   def count(): Int
 
   /**
-    *
     * @return
     */
   def isEmpty(): Boolean
@@ -68,28 +64,24 @@ class FruitServiceImpl(repo: SimpleRepository[Fruit]) extends SimpleService[Frui
 object Services {
 
   /**
-    *
     * @param t color entity
     * @return calculated code
     */
   def calcHashId(t: Color): Int = math.abs(t.hashCode() % 10 + 1)
 
   /**
-    *
     * @param i an integer
     * @return integer double
     */
   def getEven(i: Int): Int = 2 * i
 
   /**
-    *
     * @param i an integer
     * @return an even from i
     */
   def getOdd(i: Int): Int = getEven(i) - 1
 
   /**
-    *
     * @param s a name
     * @return
     */

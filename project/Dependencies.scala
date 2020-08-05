@@ -16,7 +16,6 @@ object Dependencies {
   lazy val scalazVersion       = "7.3.2"
   lazy val scalatestVersion    = "3.2.0"
   lazy val slf4jVersion        = "1.7.26"
-  lazy val specs2Version       = "4.10.2"
   lazy val sttpVersion         = "2.2.3"
   lazy val zioVersion          = "1.0.0"
   lazy val zioConfigVersion    = "1.0.0-RC26"
@@ -39,7 +38,7 @@ object Dependencies {
   lazy val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
 
   lazy val typesafeConfig = "com.typesafe"     % "config"          % configVersion
-  lazy val json4s         = "org.json4s"       %% "json4s-native"  % json4sVersion
+  lazy val json4s         = "org.json4s"      %% "json4s-native"   % json4sVersion
   lazy val kafkaClient    = "org.apache.kafka" % "kafka-clients"   % kafkaClientVersion
   lazy val logback        = "ch.qos.logback"   % "logback-classic" % logbackVersion //exclude("org.slf4j", "slf4j-api")
   //lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion
@@ -61,7 +60,6 @@ object Dependencies {
   // testing code
   lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit"        % akkaHttpVersion  % Test
   lazy val akkaTest     = "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion      % Test
-  lazy val pegdown      = "org.pegdown"       % "pegdown"                   % pegdownVersion   % Test
+  lazy val pegdown      = "org.pegdown"        % "pegdown"                  % pegdownVersion   % Test
   lazy val scalaTest    = "org.scalatest"     %% "scalatest"                % scalatestVersion % Test
-  lazy val specs2       = "org.specs2"        %% "specs2-core"              % specs2Version    % Test
 }

@@ -12,7 +12,7 @@ import zio.ZIO
   - create VersionManagerLive object which extends VersionManagerLive trait
   - create an instance of VersionManager.Service[Any] trait and implement its definition.
   - create VersionManagerHelper object which extends VersionManager.Service[VersionManager].
-*/
+ */
 
 trait VersionManager {
   val versionManager: VersionManager.Service[Any]
@@ -29,10 +29,12 @@ object VersionManager {
     def compare(local: Gav, remote: Gav): ZIO[R, Nothing, ComparationResult]
   }
 
-
   object Helper extends VersionManager.Service[VersionManager] {
 
-    override def compare(local: Domain.Gav, remote: Domain.Gav): ZIO[VersionManager, Nothing, Domain.ComparationResult] = {
+    override def compare(
+        local: Domain.Gav,
+        remote: Domain.Gav
+    ): ZIO[VersionManager, Nothing, Domain.ComparationResult] = {
       ZIO.accessM(_.versionManager.compare(local, remote))
     }
 

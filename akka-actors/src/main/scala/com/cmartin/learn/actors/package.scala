@@ -24,7 +24,7 @@ package object actors {
     */
   def delayUpTo(ms: Long): Long = {
     val random = Random.nextLong(ms)
-    val delay = if (random < 5) 5L else random
+    val delay  = if (random < 5) 5L else random
     Thread.sleep(delay)
 
     delay

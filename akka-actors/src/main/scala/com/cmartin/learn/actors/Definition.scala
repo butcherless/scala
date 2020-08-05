@@ -9,17 +9,17 @@ object Definition {
 
     import DispatcherActor._
 
-    var map = Map.empty[String, RequestInfo]
-    var received: Int = 0
+    var map            = Map.empty[String, RequestInfo]
+    var received: Int  = 0
     var processed: Int = 0
-    var rejected: Int = 0
+    var rejected: Int  = 0
 
     override def receive: Receive = {
 
       case number: Int =>
         received += 1
-        val id = generateId() // generates id for message
-        val worker = randomBetween0And9() // picks a random worker
+        val id      = generateId()         // generates id for message
+        val worker  = randomBetween0And9() // picks a random worker
         val reqInfo = RequestInfo(sender(), id, number, worker)
         map += (id -> reqInfo) // add to pending message collection
         workers(worker) ! Request(number, id) // sends the message to the worker
@@ -40,7 +40,7 @@ object Definition {
           map += (id -> reqInfo.copy(worker = worker, hops = reqInfo.hops + 1))
           workers(worker) ! Request(number, id) // sends the message to the worker
           log.debug(s"${Rejected(number, id)} => new worker[$worker]")
-        } else { // self
+        } else {    // self
           map -= id // remove message
           rejected += 1
           reqInfo.sender ! number // stream back-pressure
@@ -48,17 +48,18 @@ object Definition {
         }
 
       case Stats =>
-        val total = processed + rejected
+        val total  = processed + rejected
         val okRate = 100.toDouble * processed / total
         val koRate = 100.toDouble * rejected / total
-        val resultString = s"Stats=[received=$received, processed=$processed ($okRate), rejected=$rejected ($koRate), total=$total]"
+        val resultString =
+          s"Stats=[received=$received, processed=$processed ($okRate), rejected=$rejected ($koRate), total=$total]"
         log.info(resultString)
         sender() ! resultString
 
       case Unknown =>
         log.warning("dispatcher: message unknown")
 
-      case x@_ =>
+      case x @ _ =>
         log.error(s"Non-Int received $x")
     }
   }
@@ -87,8 +88,7 @@ object Definition {
         if (number % 10 == modulo) {
           delayUpTo(32)
           sender() ! Accepted(number, id)
-        }
-        else {
+        } else {
           delayUpTo(8)
           sender() ! Rejected(number, id)
         }
