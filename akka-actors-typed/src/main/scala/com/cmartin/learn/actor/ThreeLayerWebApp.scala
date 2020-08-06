@@ -21,11 +21,12 @@ object ThreeLayerWebApp extends App with ComponentLogging with ApiConfiguration 
 
       lazy val routes: Route = new ApiRoutes(context).routes
 
-      val serverBinding: Future[Http.ServerBinding] =
+      val bindingFuture: Future[Http.ServerBinding] =
         Http()(untypedSystem)
-          .bindAndHandle(routes, serverConfig.interface, serverConfig.port)
+          .newServerAt(serverConfig.interface, serverConfig.port)
+          .bind(routes)
 
-      serverBinding.onComplete {
+      bindingFuture.onComplete {
         case Success(bound) =>
           log.info(s"Server online at http://${bound.localAddress.getHostString}:${bound.localAddress.getPort}/")
         case Failure(e) =>
