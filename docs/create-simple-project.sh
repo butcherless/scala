@@ -10,7 +10,7 @@ DEP_UP_VER="1.2.2"
 LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.2.1"
 SCOVERAGE_VER="1.6.1"
-ZIO_VER="1.0.0-RC21-1"
+ZIO_VER="1.0.0"
 
 #
 # create filesystem
