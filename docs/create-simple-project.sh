@@ -10,6 +10,7 @@ DEP_UP_VER="1.2.2"
 LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.2.1"
 SCOVERAGE_VER="1.6.1"
+SLF4ZIO_VER="1.0.0"
 ZIO_VER="1.0.1"
 
 #
@@ -40,12 +41,14 @@ echo 'import sbt._
 
 object Dependencies {
   lazy val logbackVersion = "'${LOGBACK_VER}'"
+  lazy val slf4zioVersion = "'${SLF4ZIO_VER}'"
   lazy val zioVersion = "'${ZIO_VER}'"
 
   lazy val scalatestVersion = "'${SCALATEST_VER}'"
 
   val mainAndTest = Seq(
     "ch.qos.logback" % "logback-classic" % logbackVersion,
+    "com.github.mlangc" %% "slf4zio" % slf4zioVersion,
     "dev.zio" %% "zio" % zioVersion,
 
     "org.scalatest" %% "scalatest" % scalatestVersion % Test,
@@ -134,9 +137,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 #
 echo 'package '${SOURCE_PKG}'
 
-object Library {
+import zio.Task
 
-  import zio.UIO
+object Library {
 
   val TEXT = "simple-application-hello"
 
@@ -144,8 +147,8 @@ object Library {
     message
   }
 
-  def sum(a: Int, b: Int): UIO[Int] = {
-    UIO.effectTotal(a + b)
+  def sum(a: Int, b: Int): Task[Int] = {
+    Task.effectTotal(a + b)
   }
 
 }' > src/main/scala/${PKG_DIR}/Library.scala
@@ -157,22 +160,22 @@ object Library {
 echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
-import org.slf4j.LoggerFactory
-import zio.{App, ExitCode, Task, ZIO}
+import com.github.mlangc.slf4zio.api._
+import zio.{App, ExitCode, ZIO}
 
-object SimpleApp extends App {
-
-  private val log = LoggerFactory.getLogger(classOf[App])
+object SimpleApp
+  extends App
+    with LoggingSupport {
 
   override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, ExitCode] = {
     val program = for {
-      _ <- Task.effect(log.debug(echo(TEXT)))
+      _ <- logger.debugIO(echo(TEXT))
       result <- sum(2, 3)
-      _ <- Task.effect(log.debug(s"sum result: $result"))
+      _ <- logger.debugIO(s"sum result: $result")
     } yield ()
 
     program.fold(e => {
-      log.error("program error:", e)
+      logger.errorIO("program error:", e)
       ExitCode.failure
     },
       _ => ExitCode.success)
