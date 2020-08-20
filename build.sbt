@@ -15,8 +15,8 @@ lazy val basicScalacOptions = Seq(
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(scalaTest),
   scalacOptions ++= basicScalacOptions,
-  resolvers += // temporal for ZIO snapshots
-    "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+  // resolvers += // temporal for ZIO snapshots
+  //  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   test in assembly := {}
 )
 
