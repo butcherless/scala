@@ -10,6 +10,7 @@ addons:
 script:
   - sbt xcoverage
   - sbt xdup
+  - sbt assembly
 after_success:
   - sbt coveralls
 

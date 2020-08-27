@@ -14,4 +14,4 @@ jobs:
       with:
         java-version: 11
     - name: Run tests
-      run: sbt clean test dependencyUpdates
+      run: sbt clean test dependencyUpdates assembly

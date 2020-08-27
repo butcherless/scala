@@ -1,4 +1,6 @@
 import Dependencies._
+import sbtassembly.AssemblyKeys.{assembly, assemblyMergeStrategy}
+import sbtassembly.MergeStrategy
 
 ThisBuild / scalaVersion := "2.13.3"
 ThisBuild / organization := "com.cmartin.learn"
@@ -49,7 +51,13 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       logback,
       zio,
       zioConfig
-    )
+    ),
+    assemblyMergeStrategy in assembly := {
+      case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
+      case x =>
+        val oldStrategy = (assemblyMergeStrategy in assembly).value
+        oldStrategy(x)
+    }
   )
   .dependsOn(common)
 
@@ -144,4 +152,3 @@ lazy val json4sUtils = (project in file("json4s-utils"))
     name := "json4s-utils",
     libraryDependencies ++= Seq(json4s, logback, scalaLogging)
   )
-
