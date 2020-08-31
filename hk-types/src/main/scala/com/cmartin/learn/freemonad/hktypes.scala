@@ -53,10 +53,7 @@ trait Api[T[String]] {
 
 object ApiImpl extends Api[Option] {
   def read(n: Long): Option[String] =
-    (n > 0) match {
-      case true => Option(n.toString)
-      case _    => None
-    }
+    Option.when(n > 0)(n.toString)
 }
 
 trait HktApi[F[_]] {
@@ -123,10 +120,13 @@ class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketServ
   override def readById(id: UUID): Try[CryptoCurrency] = ???
 
   override def readByName(name: String): Try[CryptoCurrency] =
-    repo.getByName(name) match {
-      case Some(cc) => Success(cc)
-      case None     => Failure(ServiceException(s"Currency not found [${name}]"))
-    }
+    repo
+      .getByName(name)
+      .fold[Try[CryptoCurrency]](
+        Failure(ServiceException(s"Currency not found [$name]"))
+      )(
+        Success(_)
+      )
 
   override def readAll(): Try[List[CryptoCurrency]] = ???
 }

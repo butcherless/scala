@@ -2,7 +2,7 @@ package com.cmartin
 
 import java.time.LocalDate
 
-import scala.collection.mutable.TreeSet
+import scala.collection.mutable
 import scala.util.Try
 
 package object data {
@@ -10,13 +10,13 @@ package object data {
   case class Aircraft(id: String, typeCode: String, airline: String, desc: String, date: LocalDate)
 
   object Aircraft {
-    implicit val ord = new Ordering[Aircraft] {
+    implicit val ord: Ordering[Aircraft] = new Ordering[Aircraft] {
 
       /**
         * Comparator for dependencies classes
         *
-        * @param c1 one dependency
-        * @param c2 another one dependency
+        * @param a1 one dependency
+        * @param a2 another one dependency
         * @return 0 if equals, -1 if less than, +1 if greater than
         */
       def compare(a1: Aircraft, a2: Aircraft): Int = {
@@ -33,9 +33,9 @@ package object data {
       */
     def getById(id: String): Try[Option[T]]
 
-    def getAll(): Try[List[T]]
+    def getAll: Try[List[T]]
 
-    def getAll(f: (T) => Boolean): Try[List[T]]
+    def getAll(f: T => Boolean): Try[List[T]]
 
     def remove(t: T): Try[Boolean]
 
@@ -51,16 +51,16 @@ package object data {
     /**
       * @return
       */
-    def isEmpty(): Try[Boolean]
+    def isEmpty: Try[Boolean]
   }
 
   class AircraftRepository extends SimpleRepository[Aircraft] {
 
-    private val repo = TreeSet[Aircraft]()
+    private val repo = mutable.TreeSet[Aircraft]()
 
     override def getById(id: String): Try[Option[Aircraft]] = Try(repo.find(_.id == id))
 
-    override def getAll(): Try[List[Aircraft]] = Try(repo.toList)
+    override def getAll: Try[List[Aircraft]] = Try(repo.toList)
 
     override def getAll(f: Aircraft => Boolean): Try[List[Aircraft]] = Try(repo.filter(f).toList)
 
@@ -70,17 +70,17 @@ package object data {
 
     override def save(ac: Aircraft): Try[Boolean] = {
       //TODO Try[Aircraft)
-      repo.find(_.id == ac.id) match {
-        case Some(a) => repo.remove(ac) // remove before update
-        case None    => true
-      }
+      repo
+        .find(_.id == ac.id)
+        .fold(true)(ac => repo.remove(ac))
+
       repo += ac
       Try(true) // save or update
     }
 
     override def count(): Try[Int] = Try(repo.size)
 
-    override def isEmpty(): Try[Boolean] = Try(repo.isEmpty)
+    override def isEmpty: Try[Boolean] = Try(repo.isEmpty)
 
   }
 

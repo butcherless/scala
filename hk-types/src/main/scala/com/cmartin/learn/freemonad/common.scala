@@ -7,7 +7,7 @@ import scalaz.syntax.apply._
 import scalaz.syntax.validation._
 import scalaz.{NonEmptyList, ValidationNel}
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 object constants {
   val notFoundUuid          = buildUuid
@@ -26,17 +26,24 @@ object functions {
     el.foreach(println(_))
   }
 
-  def printOption(o: Option[CryptoCurrency]) =
-    o match {
-      case Some(cc) => println(cc)
-      case None     => println("no currency found")
-    }
+  def printOption(o: Option[CryptoCurrency]): Unit =
+    o.fold(
+      println("no currency found")
+    )(
+      println(_)
+    )
 
-  def printTry(t: Try[CryptoCurrency]) =
+  def printTry(t: Try[CryptoCurrency]): Unit =
+    t.fold(
+      e => println(e.getMessage),
+      println(_)
+    )
+  /*
     t match {
       case Success(cc) => println(cc)
       case Failure(e)  => println(e.getMessage)
     }
+   */
 
   // H E L P E R
   def buildCryptoCurrency(name: String) =

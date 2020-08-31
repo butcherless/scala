@@ -39,20 +39,16 @@ object interpreter {
         fa match {
           case Create(cc) =>
             println(s"create crypto currency Option: $cc")
-            if (cc.id == constants.foundUuid) None
-            else Some(cc.name)
+            Option.unless(cc.id == constants.foundUuid)(cc.name)
           case Read(name) =>
             println(s"read name Option: $name")
-            if (name == constants.notFoundName) None
-            else Some(buildCryptoCurrency(name))
+            Option.unless(name == constants.notFoundName)(buildCryptoCurrency(name))
           case Update(cc) =>
             println(s"update crypto currency Option: ${cc}")
-            if (cc.id == constants.notFoundUuid) None
-            else Some(cc)
+            Option.unless(cc.id == constants.notFoundUuid)(cc)
           case Delete(cc) =>
             println(s"delete crypto currency Option: ${cc.id}")
-            if (cc.id == constants.notFoundUuid) None
-            else Some(cc.id)
+            Option.unless(cc.id == constants.notFoundUuid)(cc.id)
         }
     }
 

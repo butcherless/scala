@@ -149,23 +149,23 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
   }
 
   def getWeekendDay(date: LocalDate): Option[MyDay] = {
-    if (PersonalCalendar.isWeekendDate(date)) Option(WeekendDay(date))
-    else None
+    Option
+      .when(PersonalCalendar.isWeekendDate(date))(WeekendDay(date))
   }
 
   def getHolidaysDay(date: LocalDate, holidays: List[LocalDate]): Option[MyDay] = {
-    if (holidays.contains(date)) Option(HolidayDay(date))
-    else None
+    Option
+      .when(holidays.contains(date))(HolidayDay(date))
   }
 
   def getCountryHolidaysDay(date: LocalDate, holidays: List[LocalDate]): Option[MyDay] = {
-    if (holidays.contains(date)) Option(CountryHolidayDay(date))
-    else None
+    Option
+      .when(holidays.contains(date))(CountryHolidayDay(date))
   }
 
   def getAbsenceDay(date: LocalDate, absences: List[LocalDate]): Option[MyDay] = {
-    if (absences.contains(date)) Option(AbsenceDay(date))
-    else None
+    Option
+      .when(absences.contains(date))(AbsenceDay(date))
   }
 
   def getWorkDay(date: LocalDate): Option[MyDay] = Option(WorkDay(date))

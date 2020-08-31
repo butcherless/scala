@@ -133,13 +133,10 @@ object DependencyRepository {
     * @return true if Some(dep)
     */
   def addDependency(dep: Option[Dep]): Boolean = {
-    dep match {
-      case None => false
-      case Some(d) => {
-        depList += d
-        true
-      }
-    }
+    dep.fold(false)(d => {
+      depList += d;
+      true
+    })
   }
 
   def getSetByVersionCountGreaterThan(counter: Int): Map[String, SortedSet[Dep]] = {

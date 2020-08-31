@@ -21,7 +21,7 @@ class AircraftRepositorySpec extends AnyFlatSpec with Matchers with BeforeAndAft
   }
 
   "The aircraft repo" should "be empty" in {
-    val result = repo.isEmpty()
+    val result = repo.isEmpty
     result.success.value shouldBe true
   }
 
@@ -32,7 +32,7 @@ class AircraftRepositorySpec extends AnyFlatSpec with Matchers with BeforeAndAft
   }
 
   "The getAll function" should "return an empty list" in {
-    val result = repo.getAll()
+    val result = repo.getAll
     result.isSuccess shouldBe true
     result.get.isEmpty shouldBe true
   }

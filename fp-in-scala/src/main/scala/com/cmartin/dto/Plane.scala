@@ -6,7 +6,6 @@ case class Plane(id: Long, registration: String, brand: String = "", model: Stri
 object Plane {
   def buildPlane(id: Long, registration: String): Option[Plane] = {
     if (id < 1) None
-    else if (registration.isEmpty) None
-    else Some(Plane(id, registration))
+    else Option.unless(registration.isEmpty)(Plane(id, registration))
   }
 }

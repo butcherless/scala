@@ -104,10 +104,8 @@ object Json4sResearch {
   }
 
   def getShadowTimestamp(json: JValue): Either[Throwable, String] = {
-    getStringValue(timestampKey, json \ stateKey) match {
-      case Some(ts) => Right(ts)
-      case None     => Right(EPOCH_TEXT)
-    }
+    getStringValue(timestampKey, json \ stateKey)
+      .fold(Right(EPOCH_TEXT))(Right(_))
   }
 
   /*
@@ -130,16 +128,16 @@ object Json4sResearch {
     // new
     getStringValue(tFieldKey, json \ metadataKey) match {
       case Some(tfValue) =>
-        getStringValue(tfValue, json \ payloadKey) match {
-          case Some(tsValue) => dateTextToEither(tsValue)                       // payload.${t_field}
-          case None          => Left(new RuntimeException("t_field not found")) //TODO define error
-        }
+        getStringValue(tfValue, json \ payloadKey)
+          .fold[Either[Throwable, String]](
+            Left(new RuntimeException("t_field not found"))
+          )(tsValue => dateTextToEither(tsValue))
 
       case None => // no t_field
-        getStringValue(timestampKey, json \ payloadKey) match {
-          case Some(tsValue) => dateTextToEither(tsValue)  // payload.@timestamp
-          case None          => Right(formatNowDateText()) // no @timestamp => now()
-        }
+        getStringValue(timestampKey, json \ payloadKey)
+          .fold[Either[Throwable, String]](
+            Right(formatNowDateText())
+          )(tsValue => dateTextToEither(tsValue))
     }
   }
 
