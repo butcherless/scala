@@ -1,8 +1,6 @@
 /**
   * Created by cmartin on 24/04/16.
   */
-import xml.XML.loadFile
-import scala.xml.Node
 
 val xmlFilePath = "resources/ea-classes.xml"
 

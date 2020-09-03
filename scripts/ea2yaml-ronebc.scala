@@ -1,9 +1,6 @@
 /**
   * Created by cmartin on 24/04/16.
   */
-import xml.XML.loadFile
-import scala.xml.Node
-import scala.xml.NodeSeq
 
 //val filename = "resolverOperacionesNoEjecutadasBandejaCliente"
 val filename = "ea-posicion-global-crearVista"

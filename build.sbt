@@ -7,7 +7,8 @@ ThisBuild / organization := "com.cmartin.learn"
 
 lazy val basicScalacOptions = Seq(
   "-deprecation",
-  "-encoding", "utf-8",
+  "-encoding",
+  "utf-8",
   "-feature",
   "-unchecked",
   "-language:postfixOps",
@@ -100,7 +101,7 @@ lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
   .settings(
     commonSettings,
     name := "akka-actors-typed-poc",
-    libraryDependencies ++= Seq(akkaHttp, akkaActorTyped, akkaStreamTyped, logback,zio, akkaTest)
+    libraryDependencies ++= Seq(akkaHttp, akkaActorTyped, akkaStreamTyped, logback, zio, akkaTest)
   )
 
 lazy val akkahttphw = (project in file("akka-http-hw"))

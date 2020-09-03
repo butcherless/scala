@@ -19,7 +19,6 @@ object program {
   object Application extends App {
 
     import scala.concurrent.Await
-    import scala.concurrent.ExecutionContext.Implicits.global
     import scala.concurrent.duration._
 
     // 6. Run the program, fold the sentence list

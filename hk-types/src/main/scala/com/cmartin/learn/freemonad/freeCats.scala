@@ -145,8 +145,6 @@ object freecats {
 object MainCats extends App {
   import freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
 
-  import scala.concurrent.ExecutionContext.Implicits.global
-
   // 6. Run the program, fold the sentence list
   println("\nRunning Id[A] program interpreter")
   val idResult = myAwesomeProgram("BitCoin", BigDecimal(0.077123)).foldMap(compiler)
