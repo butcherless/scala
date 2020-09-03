@@ -143,10 +143,6 @@ object freecats {
 }
 
 object MainCats extends App {
-
-  import cats.instances.either.catsStdInstancesForEither
-  import cats.instances.future.catsStdInstancesForFuture
-  import cats.instances.option.catsStdInstancesForOption
   import freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
 
   import scala.concurrent.ExecutionContext.Implicits.global
