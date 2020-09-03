@@ -18,10 +18,6 @@ object program {
 
   object Application extends App {
 
-    import cats.instances.either.catsStdInstancesForEither
-    import cats.instances.future.catsStdInstancesForFuture
-    import cats.instances.option.catsStdInstancesForOption
-
     import scala.concurrent.Await
     import scala.concurrent.ExecutionContext.Implicits.global
     import scala.concurrent.duration._

@@ -1,8 +1,6 @@
 package com.cmartin.learn.freemonad
 
 import java.util.UUID
-
-import cats.instances.future.catsStdInstancesForFuture
 import cats.~>
 import com.cmartin.learn.freemonad.algebra.{create, delete, read, update}
 import com.cmartin.learn.freemonad.interpreter.futureCompiler

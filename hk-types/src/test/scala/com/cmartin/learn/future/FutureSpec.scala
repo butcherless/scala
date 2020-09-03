@@ -1,7 +1,7 @@
 package com.cmartin.learn.future
 
 import cats.data._
-import cats.implicits._
+import cats.syntax.all._
 import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.concurrent.Future
