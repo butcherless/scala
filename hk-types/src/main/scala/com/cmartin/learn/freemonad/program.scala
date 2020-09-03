@@ -1,7 +1,10 @@
 package com.cmartin.learn.freemonad
 
+import cats.instances.all._
 import com.cmartin.learn.freemonad.algebra._
 import com.cmartin.learn.freemonad.interpreter._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object program {
 
@@ -34,7 +37,7 @@ object program {
     val eitherResult = myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(eitherCompiler)
     println(s"Either Interpreter result: $eitherResult")
 
-    println("\nRunning Future[A] program interpreter")
+    //TODO println("\nRunning Future[A] program interpreter")
     val futureResult = myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(futureCompiler)
 
     Await.result(futureResult, 250 millis)

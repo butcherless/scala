@@ -24,6 +24,7 @@ class FutureSpec extends AsyncFlatSpec {
     }
   }
 
+  /*
   "Future list execution" should "return a full valid response list" in {
     val resultList: List[Future[String]] =
       List(buildOkResponseFuture(1), buildOkResponseFuture(2), buildOkResponseFuture(3))
@@ -46,7 +47,6 @@ class FutureSpec extends AsyncFlatSpec {
       assert(list.count(_.isInvalid) == 2)
     }
   }
-
   it should "return a full invalid response list" in {
     val resultList: List[Future[String]] = List(
       buildKoResponseFuture(101),
@@ -59,6 +59,7 @@ class FutureSpec extends AsyncFlatSpec {
       assert(list.forall(_.isInvalid))
     }
   }
+*/
 
   "Future Use Case simulator" should "run 3 parallel tasks + 1 task depending on the 3 previous ones" in {
     case class Results(repo: String, flatten: String, shadow: String)

@@ -4,12 +4,14 @@ import java.util.UUID
 
 import cats.free.Free
 import cats.free.Free.liftF
+import cats.implicits.catsStdInstancesForFuture
+import cats.instances.all._
 import cats.{Id, ~>}
 import com.cmartin.learn.freemonad.functions.buildUuid
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
-
 // https://typelevel.org/cats/datatypes/freemonad.html
 // https://blog.scalac.io/2016/06/02/overview-of-free-monad-in-cats.html
 
@@ -158,7 +160,7 @@ object MainCats extends App {
   val eitherResult = myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(eitherCompiler)
   println(s"Either Interpreter result: $eitherResult")
 
-  println("\nRunning Future[A] program interpreter")
+  // TODO println("\nRunning Future[A] program interpreter")
   val futureResult = myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(futureCompiler)
 
   Await.result(futureResult, 250 millis)

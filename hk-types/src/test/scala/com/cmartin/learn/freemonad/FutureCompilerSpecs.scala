@@ -8,6 +8,7 @@ import com.cmartin.learn.freemonad.interpreter.futureCompiler
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class FutureCompilerSpecs extends AbstractCompilerSpecs with ScalaFutures { //TODO change to AsyncFlatSpec
