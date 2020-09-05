@@ -56,13 +56,13 @@ object ZioLoopDemo extends App {
   /*
    * helper functions
    */
-  def intTypeText(a: Int)                = if (a % 2 == 0) "even" else "odd"
+  def intTypeText(a: Int): String        = if (a % 2 == 0) "even" else "odd"
   def prettyPrint[A](l: List[A]): String = l.mkString("\n\t", "\n\t", "\n")
 
   /*
    * program
    */
-  val program = for {
+  val program: ZIO[Console, Nothing, Unit] = for {
     _             <- putStrLn("zio loop demo:")
     evenOrOddList <- ZIO.loop(initial)(cont, dec)(body)
     _             <- putStrLn(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
@@ -71,7 +71,7 @@ object ZioLoopDemo extends App {
   // main function, needs exit = 0 [OK] or exit > 0 [ERROR]
   // Here the interpreter runs the program and perform side-effects
   override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, ExitCode] = {
-    (program as ExitCode.success)
-      .catchAllCause(cause => putStrLn(s"${cause.prettyPrint}") as ExitCode.failure)
+    program.exitCode
+      .catchAllCause(cause => putStrLn(s"${cause.prettyPrint}").exitCode)
   }
 }

@@ -29,12 +29,12 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
 
     override def shutdown(): UIO[Unit] = {
       for {
-        _ <- UIO.effectTotal(log.info("shutting down http resources"))
-        _ <- UIO.effectTotal({
-          backend.close().catchAll {
-            case _ => UIO.unit // TODO manage errors?
-          }
-        })
+        _ <- UIO.succeed(log.info("shutting down http resources"))
+         _ <- UIO.succeed(
+          backend
+            .close()
+            .catchAll(_ => UIO.unit)
+         )
       } yield ()
     }
 

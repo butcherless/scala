@@ -38,7 +38,7 @@ trait FileManagerLive extends FileManager with ComponentLogging {
     override def logPairCollection(collection: List[RepoResult[Domain.GavPair]]): Task[Unit] = {
       Task.effectTotal {
         collection.foreach(
-          _.fold(error => log.info(error.toString), pair => if (pair.hasNewVersion()) log.info(formatChanges(pair)))
+          _.fold(error => log.info(error.toString), pair => if (pair.hasNewVersion) log.info(formatChanges(pair)))
         )
       }
     }

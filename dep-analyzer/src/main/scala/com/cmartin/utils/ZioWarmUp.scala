@@ -50,9 +50,9 @@ object ZioWarmUp {
     IO.effect {
       extract(message)
     }.mapError {
-      case e: ParsingException => ParsingError("invalid format")
-      case e: MappingException => MappingError("invalid type")
-      case e: Throwable        => UnknownError("error while processing json message")
+      case _: ParsingException => ParsingError("invalid format")
+      case _: MappingException => MappingError("invalid type")
+      case _: Throwable        => UnknownError("error while processing json message")
     }.either
   }
 
@@ -61,14 +61,13 @@ object ZioWarmUp {
   def checkDependency(gav: Gav): Task[Gav] = {
     //println(s"performing action over artifact $gav")
     val delay     = 250 + Random.nextInt(250)
-    val fiberName = Thread.currentThread().getName()
     TimeUtils.doDelay(delay)
     //println(s"fiber($fiberName) took $delay milliseconds")
     if (gav.version == "") IO.fail(new RuntimeException("connection error"))
     else IO.effect(gav.copy(version = s"${gav.version}\u2713"))
   }
 
-  def checkDependencies(artifactList: List[Gav]): List[Gav] = {
+  def checkDependencies(): List[Gav] = {
     //ZIO.collectAllParN(4)(Iterable.from(actions))
 
     List.empty[Gav] // TODO

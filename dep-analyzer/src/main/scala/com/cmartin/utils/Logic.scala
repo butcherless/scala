@@ -1,6 +1,6 @@
 package com.cmartin.utils
 
-import scala.collection.SortedSet
+import scala.collection.{SortedSet, mutable}
 import scala.util.matching.Regex
 
 object Logic {
@@ -25,12 +25,12 @@ object Logic {
   /**
     * Dependency regex root node
     */
-  val DEP_ROOT_PATTERN = raw"([0-9a-z.-]+):([0-9a-z.-]+)\s->\s([0-9A-Za-z.-]+).*".r
+  val DEP_ROOT_PATTERN: Regex = raw"([0-9a-z.-]+):([0-9a-z.-]+)\s->\s([0-9A-Za-z.-]+).*".r
 
   /**
     * Dependency regex non root node
     */
-  val DEP_PATTERN = "([0-9a-z.-]+):([0-9a-z.-]+):([0-9A-Za-z.-]+).*".r
+  val DEP_PATTERN: Regex = "([0-9a-z.-]+):([0-9a-z.-]+):([0-9A-Za-z.-]+).*".r
 
   /**
     * class that represents a dependency
@@ -47,7 +47,7 @@ object Logic {
     * Companion Object for Gav case class
     */
   object Dep {
-    implicit val ord = new Ordering[Dep] {
+    implicit val ord: Ordering[Dep] = new Ordering[Dep] {
 
       /**
         * Comparator for dependencies classes
@@ -69,7 +69,7 @@ object Logic {
     * @return match iterator option
     */
   def findMatches(s: String): Option[Iterator[Regex.Match]] = {
-    List(DEP_PATTERN, DEP_ROOT_PATTERN).map(_.findAllMatchIn(s)).find(!_.isEmpty)
+    List(DEP_PATTERN, DEP_ROOT_PATTERN).map(_.findAllMatchIn(s)).find(_.nonEmpty)
   }
 
   /**
@@ -80,11 +80,10 @@ object Logic {
     */
   def getDependency(s: String): Option[Dep] = {
     findMatches(s) match {
-      case Some(it) => {
+      case Some(it) =>
         val gs = it.next()
         println(s"gs = $gs")
         Some(Dep(gs.group(GAV_GROUP_POS), gs.group(GAV_ARTIFACT_POS), gs.group(GAV_VERSION_POS)))
-      }
       case None => None
     }
   }
@@ -96,7 +95,7 @@ object Logic {
     * @param set version collection backed by a Set
     * @return the string formatted
     */
-  def mkString(key: String, set: SortedSet[Dep]) = {
+  def mkString(key: String, set: SortedSet[Dep]): String = {
     val s = set.map(_.version).mkString(", ")
     s"$RESET$YELLOW$key$RESET ($RESET$MAGENTA${set.size}$RESET) => [$RESET$RED$s$RESET]"
   }
@@ -124,7 +123,7 @@ object Logic {
 object DependencyRepository {
   import com.cmartin.utils.Logic.Dep
 
-  var depList = scala.collection.mutable.SortedSet[Dep]()
+  var depList: mutable.SortedSet[Dep] = scala.collection.mutable.SortedSet[Dep]()
 
   /**
     * Adds a dependency to the repository
@@ -134,7 +133,7 @@ object DependencyRepository {
     */
   def addDependency(dep: Option[Dep]): Boolean = {
     dep.fold(false)(d => {
-      depList += d;
+      depList += d
       true
     })
   }
@@ -150,7 +149,7 @@ object DependencyRepository {
     *
     * @return dependency count
     */
-  def size = {
+  def size: Int = {
     depList.size
   }
 }

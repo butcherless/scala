@@ -36,8 +36,7 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
 
     val de: IO[DomainError, Int] =
       Task
-        .effect(1 / 0)
-        .mapError(_ => DomainErrorOne("arithmetic error"))
+        .effect(1 / 0).orElseFail(DomainErrorOne("arithmetic error"))
     // GIVEN
 
     // WHEN

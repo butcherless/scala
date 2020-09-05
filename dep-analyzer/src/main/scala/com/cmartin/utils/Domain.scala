@@ -32,7 +32,7 @@ object Domain {
   case object Newer extends ComparationResult
 
   case class GavPair(local: Gav, remote: Gav) {
-    def hasNewVersion(): Boolean =
+    def hasNewVersion: Boolean =
       local.version != remote.version
   }
 

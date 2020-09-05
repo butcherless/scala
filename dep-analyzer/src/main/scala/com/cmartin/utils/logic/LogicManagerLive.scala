@@ -13,7 +13,7 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
 
   val logicManager: LogicManager.Service[Any] = new LogicManager.Service[Any] {
     override def parseLines(lines: List[String]): ZIO[Any, Nothing, List[Either[String, Domain.Gav]]] =
-      UIO.foreach(lines)(line => UIO(parseDepLine(line)))
+      UIO.foreach(lines)(line => UIO.succeed(parseDepLine(line)))
 
     override def filterValid(dependencies: List[Either[String, Domain.Gav]]): ZIO[Any, Nothing, List[Domain.Gav]] =
       UIO.effectTotal(
