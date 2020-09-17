@@ -153,3 +153,5 @@ lazy val json4sUtils = (project in file("json4s-utils"))
     name := "json4s-utils",
     libraryDependencies ++= Seq(json4s, logback, scalaLogging)
   )
+
+addCommandAlias("mycc", "clean;coverage;test;coverageReport")
