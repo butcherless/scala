@@ -5,7 +5,7 @@ object Versions {
   val cats         = "2.2.0"
   val circe        = "0.13.0"
   val config       = "1.4.0"
-  val json4s       = "3.6.9"
+  val json4s       = "3.6.10"
   val kafkaClient  = "2.6.0"
   val logback      = "1.2.3"
   val pegdown      = "1.6.0"
