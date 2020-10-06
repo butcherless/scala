@@ -2,7 +2,7 @@
 
 PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
-SBT_VER="1.3.13"
+SBT_VER="1.4.0"
 SCALA_VER="2.13.3"
 ASSEMBLY_VER="0.14.10"
 DEP_GRAPH_VER="0.10.0-RC1"
@@ -11,7 +11,7 @@ LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.2.2"
 SCOVERAGE_VER="1.6.1"
 SLF4ZIO_VER="1.0.0"
-ZIO_VER="1.0.1"
+ZIO_VER="1.0.2"
 
 #
 # create filesystem
