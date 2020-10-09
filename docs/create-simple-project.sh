@@ -11,7 +11,7 @@ LOGBACK_VER="1.2.3"
 SCALATEST_VER="3.2.2"
 SCOVERAGE_VER="1.6.1"
 SLF4ZIO_VER="1.0.0"
-ZIO_VER="1.0.2"
+ZIO_VER="1.0.3"
 
 #
 # create filesystem
