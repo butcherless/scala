@@ -38,6 +38,13 @@ lazy val fpInScala = (project in file("fp-in-scala"))
     libraryDependencies ++= Seq(scalaz, cats)
   )
 
+lazy val `zio-prelude` = (project in file("zio-prelude"))
+  .settings(
+    commonSettings,
+    name := "zio-prelude",
+    libraryDependencies ++= Seq(zioPrelude)
+  )
+
 lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
     commonSettings,
