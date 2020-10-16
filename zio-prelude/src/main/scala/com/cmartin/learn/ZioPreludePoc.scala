@@ -1,4 +1,5 @@
 package com.cmartin.learn
+import zio.console.Console
 import zio.prelude.Validation
 import zio.{App, ExitCode, UIO, URIO}
 
@@ -6,7 +7,7 @@ object ZioPreludePoc extends App {
 
   case class Message(key: String, json: String)
 
-  def printMessage(m: String) = zio.console.putStrLn(m)
+  def printMessage(m: String): URIO[Console, Unit] = zio.console.putStrLn(m)
 
   def validateKey(key: String): Validation[String, String] =
     if (key.nonEmpty) Validation.succeed(key)
@@ -28,13 +29,14 @@ object ZioPreludePoc extends App {
     if (json.forall(_.isLetter)) Validation.succeed(json)
     else Validation.fail("Invalid digit characters")
 
+  /* &> alias for zipParRight */
   def validateMessage(key: String, json: String): Validation[String, Message] =
     Validation.mapParN(
       validateKey(key),
-      validateJson(json)
-        .zipParRight(validateJsonLength(json))
-        .zipParRight(validateJsonLower(json))
-        .zipParRight(validateJsonLetters(json))
+      validateJson(json) &>
+        validateJsonLength(json) &>
+        validateJsonLower(json) &>
+        validateJsonLetters(json)
     )(Message)
 
   override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = {
