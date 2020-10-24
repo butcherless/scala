@@ -42,7 +42,7 @@ lazy val `zio-prelude` = (project in file("zio-prelude"))
   .settings(
     commonSettings,
     name := "zio-prelude",
-    libraryDependencies ++= Seq(zioPrelude)
+    libraryDependencies ++= Seq(zioPrelude, scalaTest)
   )
 
 lazy val depAnalyzer = (project in file("dep-analyzer"))
