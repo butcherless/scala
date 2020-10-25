@@ -20,12 +20,24 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
     result shouldBe Validation(aircraftOne)
   }
 
-  it should "fail when validate empty attributes" in {
+  it should "fail to validate empty attributes" in {
     val result = validate("", "", "", "")
 
     result shouldBe Failure(
       NonEmptyChunk(EmptyModelError, EmptyRegistrationError, EmptyCountryError, EmptyDeliveryError)
     )
+  }
+
+  it should "fail to validate characters in delivery date text" in {
+    val result = validate(modelOne, registrationOne, countryOne, "2013-XY")
+
+    result shouldBe Failure(NonEmptyChunk(InvalidCharactersError))
+  }
+
+  it should "fail to validate characters and length in delivery date text" in {
+    val result = validate(modelOne, registrationOne, countryOne, "2013-XYZ")
+
+    result shouldBe Failure(NonEmptyChunk(InvalidCharactersError, InvalidLengthError))
   }
 
 }

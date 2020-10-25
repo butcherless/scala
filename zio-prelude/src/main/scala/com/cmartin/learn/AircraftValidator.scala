@@ -3,6 +3,11 @@ package com.cmartin.learn
 import com.cmartin.learn.Model._
 import zio.prelude.Validation
 
+/*
+    Note:
+    Validators for demo purpose only
+    Use regex for production code
+ */
 object AircraftValidator {
 
   /** Validates an Aircraft entity.
@@ -38,13 +43,25 @@ object AircraftValidator {
     validateEmptyText(country, EmptyCountryError)
   }
 
-  def validateDelivery(delivery: String): Validation[ValidationError, String] = {
-    validateEmptyText(delivery, EmptyDeliveryError)
+  def validateDelivery(delivery: String): Validation[ValidationError, String] = for {
+    nonEmpty <- validateEmptyText(delivery, EmptyDeliveryError)
+    //TODO missing char '-'
+    result <- validateDeliveryChars(nonEmpty) &> validateDeliveryLength(nonEmpty)
+  } yield result
+
+  def validateDeliveryChars(delivery: String): Validation[ValidationError, String] = {
+    val validChars = "0123456789-"
+    Validation
+      .fromPredicateWith(InvalidCharactersError, delivery)(_.forall(c => validChars.contains(c)))
+  }
+
+  def validateDeliveryLength(delivery: String): Validation[ValidationError, String] = {
+    val x1: Array[String] = delivery.split('-')
+    val result            = (x1.length == 2) && (x1(0).length == 4 && x1(1).length == 2)
+    Validation.fromPredicateWith(InvalidLengthError, delivery)(_ => result)
   }
 
   private def validateEmptyText(text: String, error: ValidationError) = {
-    if (text.isEmpty) Validation.fail(error)
-    else Validation.succeed(text)
-
+    Validation.fromPredicateWith(error, text)(_.nonEmpty)
   }
 }

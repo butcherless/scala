@@ -10,5 +10,6 @@ object Model {
   object EmptyCountryError      extends ValidationError
   object EmptyDeliveryError     extends ValidationError
   object InvalidAgeValue        extends ValidationError
-
+  object InvalidCharactersError extends ValidationError
+  object InvalidLengthError     extends ValidationError
 }
