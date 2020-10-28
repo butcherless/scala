@@ -40,6 +40,12 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
     result shouldBe Failure(NonEmptyChunk(InvalidCharactersError, InvalidLengthError))
   }
 
+  it should "fail to validate a country text code" in {
+    val country = "SPaIN34"
+
+    val result = validateLength(country, 2) &> validateLetterChars(country) &> validateUpperCaseChars(country)
+    result shouldBe Failure(NonEmptyChunk(InvalidLengthError, LowerCaseLetterError, InvalidCharactersError))
+  }
 }
 
 object AircraftValidatorSpec {

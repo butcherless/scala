@@ -12,4 +12,5 @@ object Model {
   object InvalidAgeValue        extends ValidationError
   object InvalidCharactersError extends ValidationError
   object InvalidLengthError     extends ValidationError
+  object LowerCaseLetterError     extends ValidationError
 }
