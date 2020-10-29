@@ -55,6 +55,7 @@ object AircraftValidatorSpec {
   val countryOne      = "B738"
   val deliveryOne     = "2013-04"
 
-  val aircraftOne = Aircraft(modelOne, registrationOne, countryOne, deliveryOne)
+  val aircraftOne: Aircraft =
+    Aircraft(modelOne, registrationOne, countryOne, deliveryOne)
 
 }
