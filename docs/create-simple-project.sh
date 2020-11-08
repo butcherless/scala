@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PROJECT_NAME="project-template"
 PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
 SBT_VER="1.4.2"
@@ -35,26 +36,36 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "'${SCOVERAGE_VER}'")' > projec
 
 
 #
+# create versions file
+#
+echo 'object Versions {
+
+  val logback = "'${LOGBACK_VER}'"
+  val slf4zio = "'${SLF4ZIO_VER}'"
+  val zio = "'${ZIO_VER}'"
+
+  val scalatest = "'${SCALATEST_VER}'"
+
+}' > project/Versions.scala
+
+
+#
 # create dependencies file
 #
 echo 'import sbt._
 
 object Dependencies {
-  lazy val logbackVersion = "'${LOGBACK_VER}'"
-  lazy val slf4zioVersion = "'${SLF4ZIO_VER}'"
-  lazy val zioVersion = "'${ZIO_VER}'"
-
-  lazy val scalatestVersion = "'${SCALATEST_VER}'"
 
   val mainAndTest = Seq(
-    "ch.qos.logback" % "logback-classic" % logbackVersion,
-    "com.github.mlangc" %% "slf4zio" % slf4zioVersion,
-    "dev.zio" %% "zio" % zioVersion,
-
-    "org.scalatest" %% "scalatest" % scalatestVersion % Test,
-
-    "dev.zio" %% "zio-test" % zioVersion % "test",
-    "dev.zio" %% "zio-test-sbt" % zioVersion % "test"
+    "ch.qos.logback" % "logback-classic" % Versions.logback,
+    "com.github.mlangc" %% "slf4zio" % Versions.slf4zio,
+    "dev.zio" %% "zio" % Versions.zio,
+    
+    // TESTING
+    
+    "org.scalatest" %% "scalatest" % Versions.scalatest % Test,
+    "dev.zio" %% "zio-test" % Versions.zio % "test",
+    "dev.zio" %% "zio-test-sbt" % Versions.zio % "test"
   )
 }' > project/Dependencies.scala
 
@@ -88,7 +99,7 @@ lazy val commonSettings = Seq(
 lazy val templateProject = (project in file("."))
   .settings(
       commonSettings,
-      name := "project-template",
+      name := "'${PROJECT_NAME}'",
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )' > build.sbt
 
