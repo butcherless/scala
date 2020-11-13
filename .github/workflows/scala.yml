@@ -14,7 +14,7 @@ jobs:
       with:
         java-version: 11
     - name: compile main
-      run: sbt -v -Dfile.encoding=UTF-8 --client clean compile
+      run: sbt -v -Dfile.encoding=UTF-8 --client compile 
     - name: compile unit tests
       run: sbt -v -Dfile.encoding=UTF-8 --client test:compile
     - name: compile integration tests
