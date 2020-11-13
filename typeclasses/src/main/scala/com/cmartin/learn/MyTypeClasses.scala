@@ -4,8 +4,7 @@ import com.cmartin.learn.model.Person
 
 object MyTypeClasses {
 
-  /**
-    * Created by cmartin on 26/12/2016.
+  /** Created by cmartin on 26/12/2016.
     */
   // Jsonable typeclass
 
@@ -17,24 +16,32 @@ object MyTypeClasses {
 
     def serialize[T](t: T)(implicit ev: Jsonable[T]): String = ev.serialize(t)
 
-    implicit val JsonableInt = new Jsonable[Int] {
-      override def serialize(x: Int): String = {
-        s"""Int={"value":${x.toString}}"""
-      }
-    }
-
-    implicit val JsonablePerson = new Jsonable[Person] {
-      override def serialize(x: Person): String = {
-        s"""Person={"name":"${x.name}", "firstname":"${x.firstName}", "id":"${x.id}"}"""
-      }
-    }
-
-    implicit def doubleInstance =
-      new Jsonable[Double] {
-        override def serialize(x: Double): String = {
-          "{ \"value\":" + x.toString + "}"
+    implicit val intInstance: Jsonable[Int] =
+      new Jsonable[Int] {
+        override def serialize(x: Int): String = {
+          s"""Int={"value":${x.toString}}"""
         }
       }
+
+    implicit val personInstance: Jsonable[Person] =
+      new Jsonable[Person] {
+        override def serialize(x: Person): String = {
+          s"""Person={"name":"${x.name}", "firstname":"${x.firstName}", "id":"${x.id}"}"""
+        }
+      }
+
+    implicit def doubleInstance: Jsonable[Double] =
+      new Jsonable[Double] {
+        override def serialize(x: Double): String = {
+          s"""Double={"value":${x.toString}}"""
+        }
+      }
+
+    object Syntax {
+      implicit class Serializer[T](value: T)(implicit J: Jsonable[T]) {
+        def serialize: String = J.serialize(value)
+      }
+    }
 
   }
 
