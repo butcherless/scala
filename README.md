@@ -1,6 +1,8 @@
-[![Build Status](https://semaphoreci.com/api/v1/butcherless/scala/branches/master/badge.svg)](https://semaphoreci.com/butcherless/scala)
-
 [![CircleCI](https://circleci.com/gh/butcherless/scala.svg?style=svg)](https://circleci.com/gh/butcherless/scala)
+
+![Scala CI](https://github.com/butcherless/scala/workflows/Scala%20CI/badge.svg)
+
+[![Build Status](https://semaphoreci.com/api/v1/butcherless/scala/branches/master/badge.svg)](https://semaphoreci.com/butcherless/scala)
 
 [![Run Status](https://api.shippable.com/projects/5b68c6d5e815be060012a3c5/badge?branch=master)](https://app.shippable.com/github/butcherless/scala)
 
