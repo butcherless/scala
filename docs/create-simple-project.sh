@@ -204,8 +204,13 @@ import '${SOURCE_PKG}'.Library._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class LibrarySpec extends AnyFlatSpec with Matchers {
-  "LibrarySpec echo" should "return the same text" in {
+class LibrarySpec
+  extends AnyFlatSpec
+    with Matchers {
+
+  behavior of "LibrarySpec"
+
+  it should "return the same text" in {
     val result = echo(TEXT)
 
     result shouldBe TEXT
