@@ -1,6 +1,6 @@
 name: Scala CI
 
-on: [ push ]
+on: [push]
 
 jobs:
   build:
@@ -8,10 +8,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - name: Run tests
-        run: sbt clean test dependencyUpdates assembly
+    - uses: actions/checkout@v1
+    - name: Set up JDK 11
+      uses: olafurpg/setup-scala@v10
+      with:
+        java-version: 11
+    - name: compile main
+      run: sbt -v -Dfile.encoding=UTF-8 --client clean compile
+    - name: compile unit tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client test:compile
+    - name: compile integration tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client it:compile
+    - name: tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client test
+    - name: assembly
+      run: sbt -v -Dfile.encoding=UTF-8 --client assembly
+    - name: dependency updates report
+      run: sbt -v -Dfile.encoding=UTF-8 --client dependencyUpdates
