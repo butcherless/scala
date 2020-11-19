@@ -2,7 +2,7 @@ import Dependencies._
 import sbtassembly.AssemblyKeys.{assembly, assemblyMergeStrategy}
 import sbtassembly.MergeStrategy
 
-ThisBuild / scalaVersion := "2.13.3"
+ThisBuild / scalaVersion := "2.13.4"
 ThisBuild / organization := "com.cmartin.learn"
 
 lazy val basicScalacOptions = Seq(
