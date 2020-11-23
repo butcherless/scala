@@ -10,3 +10,5 @@ build/
 out/
 target/
 *.iml
+.bloop
+project/project/
