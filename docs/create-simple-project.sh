@@ -3,7 +3,7 @@
 PROJECT_NAME="project-template"
 PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
-SBT_VER="1.4.2"
+SBT_VER="1.4.4"
 SCALA_VER="2.13.4"
 ASSEMBLY_VER="0.15.0"
 DEP_GRAPH_VER="0.10.0-RC1"
