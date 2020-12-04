@@ -25,3 +25,5 @@ jobs:
       run: sbt -v -Dfile.encoding=UTF-8 --client assembly
     - name: dependency updates report
       run: sbt -v -Dfile.encoding=UTF-8 --client dependencyUpdates
+    - name: create project template
+      run: cd docs && chmod u+x create-simple-project.sh && ./create-simple-project.sh
