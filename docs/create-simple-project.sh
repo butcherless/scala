@@ -35,6 +35,14 @@ addSbtPlugin("org.jmotor.sbt" % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "'${SCOVERAGE_VER}'")' > project/plugins.sbt
 
 
+
+#
+# create project version file
+#
+echo 'ThisBuild / version := "1.0.0-SNAPSHOT"
+' > version.sbt
+
+
 #
 # create versions file
 #
@@ -91,7 +99,6 @@ lazy val basicScalacOptions = Seq(       // some of the Rob Norris tpolecat opti
   )
 
 lazy val commonSettings = Seq(
-    version := "1.0.0-SNAPSHOT",
     libraryDependencies ++= mainAndTest,
     scalacOptions ++= basicScalacOptions,
     test in assembly := {}
