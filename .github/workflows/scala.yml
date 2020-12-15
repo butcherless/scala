@@ -23,7 +23,27 @@ jobs:
       run: sbt -v -Dfile.encoding=UTF-8 --client test
     - name: assembly
       run: sbt -v -Dfile.encoding=UTF-8 --client assembly
+
+  dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: olafurpg/setup-scala@v10
+      with:
+        java-version: adopt@1.11
     - name: dependency updates report
       run: sbt -v -Dfile.encoding=UTF-8 --client dependencyUpdates
+
+  project-template:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: olafurpg/setup-scala@v10
+      with:
+        java-version: adopt@1.11
     - name: create project template
       run: cd docs && chmod u+x create-simple-project.sh && ./create-simple-project.sh
