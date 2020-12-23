@@ -11,4 +11,5 @@ out/
 target/
 *.iml
 .bloop
+project/metals.sbt
 project/project/
