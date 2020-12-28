@@ -127,12 +127,6 @@ lazy val templateProject = (project in file("."))
       testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )' > build.sbt
 
-#
-# jvm enviroment options
-#
-echo '-J-Xmx2G
-' > .jvmopts
-
 
 #
 # create logback XML config file
