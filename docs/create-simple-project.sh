@@ -106,12 +106,12 @@ lazy val basicScalacOptions = Seq(       // some of the Rob Norris tpolecat opti
     "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
     "-encoding", "utf-8",                // Specify character encoding used by source files.
     "-explaintypes",                     // Explain type errors in more detail.
-    "-explaintypes",                     // Explain type errors in more detail.
-    "-unchecked",                        // Enable additional warnings where generated code depends on assumptions.
     "-feature",                          // Emit warning and location for usages of features that should be imported explicitly.
+    "-unchecked",                        // Enable additional warnings where generated code depends on assumptions.
     "-language:higherKinds",             // Allow higher-kinded types
     "-language:implicitConversions",     // Allow definition of implicit functions called views
-    "-language:postfixOps"
+    "-language:postfixOps",
+    "-Xlint:unused"
   )
 
 lazy val commonSettings = Seq(
@@ -128,13 +128,10 @@ lazy val templateProject = (project in file("."))
   )' > build.sbt
 
 #
-# server runtime options
+# jvm enviroment options
 #
-echo '-server
--Xms512M
--Xmx3G
--Xss1M
--XX:NewRatio=8' > .jvmopts
+echo '-J-Xmx2G
+' > .jvmopts
 
 
 #

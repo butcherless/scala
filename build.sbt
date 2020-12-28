@@ -12,7 +12,8 @@ lazy val basicScalacOptions = Seq(
   "-feature",
   "-unchecked",
   "-language:postfixOps",
-  "-language:higherKinds"
+  "-language:higherKinds",
+  "-Xlint:unused"
 )
 
 lazy val commonSettings = Seq(

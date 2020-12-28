@@ -1,6 +1,5 @@
 package com.cmartin.learn.generator
 
-import scala.language.higherKinds
 import scala.util.Try
 
 trait DtoGenerator[P[_]] {
