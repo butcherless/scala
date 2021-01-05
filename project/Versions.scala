@@ -9,7 +9,7 @@ object Versions {
   val kafkaClient  = "2.7.0"
   val logback      = "1.2.3"
   val pegdown      = "1.6.0"
-  val refined      = "0.9.19"
+  val refined      = "0.9.20"
   val scalaLogging = "3.9.2"
   val scalaz       = "7.3.2"
   val scalatest    = "3.2.3"
