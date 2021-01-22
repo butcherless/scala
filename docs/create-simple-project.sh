@@ -15,7 +15,7 @@ SCALAFMT_VER="2.7.5"
 SCALATEST_VER="3.2.3"
 SCOVERAGE_VER="1.6.1"
 SLF4ZIO_VER="1.0.0"
-ZIO_VER="1.0.3"
+ZIO_VER="1.0.4"
 
 #
 # create filesystem
@@ -66,7 +66,7 @@ echo 'object Versions {
 
   val logback = "'${LOGBACK_VER}'"
   val slf4zio = "'${SLF4ZIO_VER}'"
-  val zio = "'${ZIO_VER}'"
+  val zio     = "'${ZIO_VER}'"
 
   val scalatest = "'${SCALATEST_VER}'"
 
