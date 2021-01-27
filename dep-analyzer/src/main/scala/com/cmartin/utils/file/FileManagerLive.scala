@@ -1,14 +1,17 @@
 package com.cmartin.utils.file
 
-import java.io.{File, FileInputStream}
-
-import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.learn.common.Utils.{colourBlue, colourGreen, colourRed}
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{Gav, RepoResult}
-import zio.{Task, UIO}
+import java.io.File
+import java.io.FileInputStream
 
 import scala.io.BufferedSource
+
+import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.learn.common.Utils._
+import com.cmartin.utils.Domain
+import com.cmartin.utils.Domain.Gav
+import com.cmartin.utils.Domain.RepoResult
+import zio.Task
+import zio.UIO
 
 trait FileManagerLive extends FileManager with ComponentLogging {
   val fileManager: FileManager.Service[Any] = new FileManager.Service[Any] {

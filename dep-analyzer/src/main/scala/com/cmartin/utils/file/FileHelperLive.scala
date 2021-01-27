@@ -1,14 +1,18 @@
 package com.cmartin.utils.file
-import java.io.{File, FileInputStream}
-
-import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.learn.common.Utils.colourRed
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{DomainError, FileIOError}
-import com.cmartin.utils.file.FileHelper.FileLines
-import zio.{IO, Task, UIO}
+import java.io.File
+import java.io.FileInputStream
 
 import scala.io.BufferedSource
+
+import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.learn.common.Utils.colourYellow
+import com.cmartin.utils.Domain
+import com.cmartin.utils.Domain.DomainError
+import com.cmartin.utils.Domain.FileIOError
+import com.cmartin.utils.file.FileHelper.FileLines
+import zio.IO
+import zio.Task
+import zio.UIO
 
 trait FileHelperLive extends FileHelper with ComponentLogging {
 
@@ -28,7 +32,7 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
           dependencies
             .foreach { dep =>
               dep.fold(
-                line => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}"),
+                line => log.info(s"${colourYellow("invalid dependency")} => ${colourYellow(line)}"),
                 dep => log.info(dep.toString) // OK case
               )
             }
