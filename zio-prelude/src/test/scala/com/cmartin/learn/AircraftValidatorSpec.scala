@@ -3,9 +3,8 @@ package com.cmartin.learn
 import com.cmartin.learn.Model._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import zio.NonEmptyChunk
+import zio.Chunk
 import zio.prelude.Validation
-import zio.prelude.Validation.Failure
 
 class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
 
@@ -15,37 +14,67 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
   behavior of "Aircraft Validator"
 
   it should "validate an aircraft" in {
-    val result: Validation[ValidationError, Aircraft] = validate(modelOne, registrationOne, countryOne, deliveryOne)
+    val validation: Validation[ValidationError, Aircraft] =
+      AircraftValidator.validate(modelOne, registrationOne, countryOne, deliveryOne)
 
-    result shouldBe Validation(aircraftOne)
+    val result = validation.sandbox.either.run
+    result shouldBe Right(aircraftOne)
   }
 
   it should "fail to validate empty attributes" in {
-    val result = validate("", "", "", "")
+    val validation = AircraftValidator.validate("", "", "", "")
 
-    result shouldBe Failure(
-      NonEmptyChunk(EmptyModelError, EmptyRegistrationError, EmptyCountryError, EmptyDeliveryError)
-    )
+    val result = validation.sandbox.either.run
+    result.isLeft shouldBe true
+    result.swap.map { cause =>
+      cause.toChunk shouldBe Chunk(
+        EmptyModelError,
+        EmptyRegistrationError,
+        EmptyCountryError,
+        EmptyDeliveryError
+      )
+    }
   }
 
   it should "fail to validate characters in delivery date text" in {
-    val result = validate(modelOne, registrationOne, countryOne, "2013-XY")
+    val validation = AircraftValidator.validate(modelOne, registrationOne, countryOne, "2013-XY")
+    val result     = validation.sandbox.either.run
 
-    result shouldBe Failure(NonEmptyChunk(InvalidCharactersError))
+    result.isLeft shouldBe true
+    result.swap.map { cause =>
+      cause.toChunk shouldBe Chunk(InvalidCharactersError)
+    }
   }
 
-  it should "fail to validate characters and length in delivery date text" in {
-    val result = validate(modelOne, registrationOne, countryOne, "2013-XYZ")
+  it should "TODO fail to validate characters and length in delivery date text" in {
+    val validation = validate(modelOne, registrationOne, countryOne, "2013-XYZ")
 
-    result shouldBe Failure(NonEmptyChunk(InvalidCharactersError, InvalidLengthError))
+    val result = validation.sandbox.either.run
+
+    result.isLeft shouldBe true
+    result.swap.map { cause =>
+      cause.toChunk shouldBe Chunk(InvalidCharactersError, InvalidLengthError)
+    }
   }
 
   it should "fail to validate a country text code" in {
     val country = "SPaIN34"
 
-    val result = validateLength(country, 2) &> validateLetterChars(country) &> validateUpperCaseChars(country)
-    result shouldBe Failure(NonEmptyChunk(InvalidLengthError, LowerCaseLetterError, InvalidCharactersError))
+    val validation =
+      Validation.mapParN(
+        validateLength(country, 2),
+        validateLetterChars(country),
+        validateUpperCaseChars(country)
+      )((_, _, _) => country)
+
+    val result = validation.sandbox.either.run
+
+    result.isLeft shouldBe true
+    result.swap.map { cause =>
+      cause.toChunk shouldBe Chunk(InvalidLengthError, InvalidCharactersError, LowerCaseLetterError)
+    }
   }
+
 }
 
 object AircraftValidatorSpec {

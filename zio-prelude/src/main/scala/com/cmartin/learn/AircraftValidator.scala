@@ -46,38 +46,44 @@ object AircraftValidator {
   /* 1. validate empty text first (AND) (1 error), stop validation if fails
      2. validateChars (OR) length, 1 or 2 errors if fails (NEL)
    */
-  def validateDelivery(delivery: String): Validation[ValidationError, String] = for {
-    nonEmpty <- validateEmptyText(delivery, EmptyDeliveryError)
-    //TODO missing char '-'
-    result <- validateDeliveryChars(nonEmpty) &> validateDeliveryLength(nonEmpty)
-  } yield result
+  def validateDelivery(delivery: String): Validation[ValidationError, String] = {
+    validateEmptyText(delivery, EmptyDeliveryError) *>
+      Validation.mapParN(
+        validateDeliveryChars(delivery),
+        validateDeliveryLength(delivery)
+      )((_, _) => delivery)
+  }
 
   def validateDeliveryChars(delivery: String): Validation[ValidationError, String] = {
     val validChars = "0123456789-"
-    Validation
-      .fromPredicateWith(InvalidCharactersError, delivery)(_.forall(c => validChars.contains(c)))
+    if (delivery.forall(c => validChars.contains(c))) Validation.succeed(delivery)
+    else Validation.fail(InvalidCharactersError)
   }
 
   def validateUpperCaseChars(text: String): Validation[ValidationError, String] = {
-    Validation
-      .fromPredicateWith(LowerCaseLetterError, text)(_.forall(_.isUpper))
+    if (text.forall(_.isUpper)) Validation.succeed(text)
+    Validation.fail(LowerCaseLetterError)
   }
 
   def validateLetterChars(text: String): Validation[ValidationError, String] = {
-    Validation
-      .fromPredicateWith(InvalidCharactersError, text)(_.forall(_.isLetter))
+    if (text.forall(_.isUpper)) Validation.succeed(text)
+    Validation.fail(InvalidCharactersError)
   }
 
   def validateDeliveryLength(delivery: String): Validation[ValidationError, String] = {
     val x1: Array[String] = delivery.split('-')
     val result            = (x1.length == 2) && (x1(0).length == 4 && x1(1).length == 2)
-    Validation.fromPredicateWith(InvalidLengthError, delivery)(_ => result)
+    if (result) Validation.succeed(delivery)
+    else Validation.fail(InvalidLengthError)
   }
 
-  def validateLength(text: String, length: Int): Validation[ValidationError, String] =
-    Validation.fromPredicateWith(InvalidLengthError, text)(_.length == length)
+  def validateLength(text: String, length: Int): Validation[ValidationError, String] = {
+    if (text.length == length) Validation.succeed(text)
+    else Validation.fail(InvalidLengthError)
+  }
 
-  private def validateEmptyText(text: String, error: ValidationError) = {
-    Validation.fromPredicateWith(error, text)(_.nonEmpty)
+  private def validateEmptyText(text: String, error: ValidationError): Validation[ValidationError, String] = {
+    if (text.nonEmpty) Validation.succeed(text)
+    else Validation.fail(error)
   }
 }

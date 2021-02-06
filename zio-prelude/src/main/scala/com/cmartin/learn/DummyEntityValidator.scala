@@ -23,37 +23,34 @@ object DummyEntityValidator {
   }
 
   private def validateInRange(number: Int): Validation[ValidationError, Int] = {
-    Validation
-      .fromPredicateWith(OutOfRangeError, number)(validRange.contains)
+    if (validRange.contains(number)) Validation.succeed(number)
+    else Validation.fail(OutOfRangeError)
   }
 
   private def validateOddNumber(number: Int): Validation[ValidationError, Int] = {
-    Validation
-      .fromPredicateWith(EvenNumberError, number)(_ % 2 == 1)
+    if (number % 2 == 1) Validation.succeed(number)
+    else Validation.fail(EvenNumberError)
   }
 
   private def validateText(text: String): Validation[ValidationError, String] = {
-    for {
-      nonEmpty <- validateEmptyText(text)
-      result   <- validateCharacters(nonEmpty) &> validateUpperCase(nonEmpty)
-    } yield result
+    validateEmptyText(text) >>> validateCharacters(text) *> validateUpperCase(text)
   }
 
   private def validateEmptyText(text: String): Validation[ValidationError, String] = {
-    Validation
-      .fromPredicateWith(EmptyTextError, text)(_.nonEmpty)
+    if (text.nonEmpty) Validation.succeed(text)
+    else Validation.fail(EmptyTextError)
   }
 
   private def validateCharacters(text: String): Validation[ValidationError, String] = {
-    Validation
-      .fromPredicateWith(InvalidCharactersError, text)(_.forall(isConsonantLetter))
+    if (text.forall(isConsonantLetter)) Validation.succeed(text)
+    else Validation.fail(InvalidCharactersError)
   }
 
   private def isConsonantLetter(c: Char) =
     c.isLetter && !"aeiouAEIOU".contains(c)
 
   private def validateUpperCase(text: String): Validation[ValidationError, String] = {
-    Validation
-      .fromPredicateWith(UpperCaseLetterError, text)(_.forall(_.isLower))
+    if (text.forall(_.isLower)) Validation.succeed(text)
+    else Validation.fail(UpperCaseLetterError)
   }
 }

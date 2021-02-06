@@ -3,8 +3,9 @@ import zio.console.Console
 import zio.prelude.Validation
 import zio.{App, ExitCode, UIO, URIO}
 
-object ZioPreludePoc extends App {
-
+object ZioPreludePoc //extends App
+ {
+/*
   case class Message(key: String, json: String)
 
   def printMessage(m: String): URIO[Console, Unit] = zio.console.putStrLn(m)
@@ -103,4 +104,5 @@ object ZioPreludePoc extends App {
 
     program.exitCode
   }
+  */
 }
