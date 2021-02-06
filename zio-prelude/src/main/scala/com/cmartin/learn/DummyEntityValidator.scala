@@ -33,7 +33,11 @@ object DummyEntityValidator {
   }
 
   private def validateText(text: String): Validation[ValidationError, String] = {
-    validateEmptyText(text) >>> validateCharacters(text) *> validateUpperCase(text)
+    validateEmptyText(text) *>
+      Validation.mapParN(
+        validateCharacters(text),
+        validateUpperCase(text)
+      )((_, _) => text)
   }
 
   private def validateEmptyText(text: String): Validation[ValidationError, String] = {

@@ -3,11 +3,11 @@ package com.cmartin.learn
 import com.cmartin.learn.Model._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import zio.Chunk
 import zio.prelude.Validation
 
 class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
 
+  import Commons._
   import AircraftValidator._
   import AircraftValidatorSpec._
 
@@ -22,39 +22,25 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "fail to validate empty attributes" in {
-    val validation = AircraftValidator.validate("", "", "", "")
+    val validation = AircraftValidator.validate("", "", "", "").sandbox.either.run
 
-    val result = validation.sandbox.either.run
-    result.isLeft shouldBe true
-    result.swap.map { cause =>
-      cause.toChunk shouldBe Chunk(
-        EmptyModelError,
-        EmptyRegistrationError,
-        EmptyCountryError,
-        EmptyDeliveryError
-      )
-    }
+    val result = causeToErrorList(validation)
+
+    result shouldBe Left(List(EmptyModelError, EmptyRegistrationError, EmptyCountryError, EmptyDeliveryError))
   }
 
   it should "fail to validate characters in delivery date text" in {
-    val validation = AircraftValidator.validate(modelOne, registrationOne, countryOne, "2013-XY")
-    val result     = validation.sandbox.either.run
+    val validation = AircraftValidator.validate(modelOne, registrationOne, countryOne, "2013-XY").sandbox.either.run
+    val result     = causeToErrorList(validation)
 
-    result.isLeft shouldBe true
-    result.swap.map { cause =>
-      cause.toChunk shouldBe Chunk(InvalidCharactersError)
-    }
+    result shouldBe Left(List(InvalidCharactersError))
   }
 
   it should "TODO fail to validate characters and length in delivery date text" in {
-    val validation = validate(modelOne, registrationOne, countryOne, "2013-XYZ")
+    val validation = validate(modelOne, registrationOne, countryOne, "2013-XYZ").sandbox.either.run
+    val result     = causeToErrorList(validation)
 
-    val result = validation.sandbox.either.run
-
-    result.isLeft shouldBe true
-    result.swap.map { cause =>
-      cause.toChunk shouldBe Chunk(InvalidCharactersError, InvalidLengthError)
-    }
+    result shouldBe Left(List(InvalidCharactersError, InvalidLengthError))
   }
 
   it should "fail to validate a country text code" in {
@@ -67,12 +53,9 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
         validateUpperCaseChars(country)
       )((_, _, _) => country)
 
-    val result = validation.sandbox.either.run
+    val result = causeToErrorList(validation.sandbox.either.run)
 
-    result.isLeft shouldBe true
-    result.swap.map { cause =>
-      cause.toChunk shouldBe Chunk(InvalidLengthError, InvalidCharactersError, LowerCaseLetterError)
-    }
+    result shouldBe Left(List(InvalidLengthError, InvalidCharactersError, LowerCaseLetterError))
   }
 
 }
