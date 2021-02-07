@@ -27,7 +27,7 @@ class TimestampLogicSpec extends AnyFlatSpec with Matchers {
     timestamp shouldBe "2020-06-10T04:21:13Z"
   }
 
-  it should "return the inputMessage.payload cts_ts property value TODO" in {
+  it should "return the inputMessage.payload cts_ts property value" in {
     val timestamp: String = resolveTimestamp(inputMessage_UC_3_1).getOrElse("")
     info(timestamp)
 

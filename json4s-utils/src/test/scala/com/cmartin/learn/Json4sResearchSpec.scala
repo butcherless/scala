@@ -133,7 +133,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     merged shouldBe expected
   }
 
-  it should "exclude a key from the document, single value TODO" in {
+  it should "exclude a key from the document, single value" in {
     val json = jsonForExcluding
     val result: JValue =
       json

@@ -36,7 +36,7 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
     result shouldBe Left(List(InvalidCharactersError))
   }
 
-  it should "TODO fail to validate characters and length in delivery date text" in {
+  it should "fail to validate characters and length in delivery date text" in {
     val validation = validate(modelOne, registrationOne, countryOne, "2013-XYZ").sandbox.either.run
     val result     = causeToErrorList(validation)
 
