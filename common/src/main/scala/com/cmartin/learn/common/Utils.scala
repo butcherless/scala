@@ -1,4 +1,3 @@
-__FAIL__
 package com.cmartin.learn.common
 
 import scala.Console.BLUE
