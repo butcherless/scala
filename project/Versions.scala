@@ -18,5 +18,5 @@ object Versions {
   val zio          = "1.0.5"
   val zioConfig    = "1.0.0"
   val zioKafka     = "0.12.0"
-  val zioPrelude   = "1.0.0-RC2"
+  val zioPrelude   = "1.0.0-RC3"
 }
