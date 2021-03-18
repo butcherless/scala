@@ -20,10 +20,11 @@ class DummyEntityValidatorSpec extends AnyFlatSpec with Matchers {
     result shouldBe Right(DummyEntity(number, text))
   }
 
-  it should "fail to validate an empty text" in {
+  it should "TODO fail to validate an empty text" in {
     val validation = validate(number, "").sandbox.either.run
     val result     = causeToErrorList(validation)
 
+    info(s"result: ${result}")
     result shouldBe Left(List(EmptyTextError))
   }
 
