@@ -1,16 +1,14 @@
 language: scala
 group: travis_lts
 scala:
-  - 2.13.3
+  - 2.13.5
 
 addons:
   apt:
     update: true
 
 script:
-  - sbt xcoverage
-  - sbt xdup
-  - sbt assembly
+  - sbt compile
 after_success:
   - sbt coveralls
 
