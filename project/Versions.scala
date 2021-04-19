@@ -6,7 +6,7 @@ object Versions {
   val circe        = "0.13.0"
   val config       = "1.4.1"
   val json4s       = "3.6.11"
-  val kafkaClient  = "2.7.0"
+  val kafkaClient  = "2.8.0"
   val logback      = "1.2.3"
   val pegdown      = "1.6.0"
   val refined      = "0.9.23"
