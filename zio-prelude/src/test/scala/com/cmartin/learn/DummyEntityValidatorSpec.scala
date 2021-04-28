@@ -4,10 +4,9 @@ import com.cmartin.learn.DummyEntityValidator.validate
 import com.cmartin.learn.Model._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import zio.NonEmptyChunk
 
 class DummyEntityValidatorSpec extends AnyFlatSpec with Matchers {
-
-  import Commons._
 
   behavior of "DummyEntity Validator"
 
@@ -15,59 +14,50 @@ class DummyEntityValidatorSpec extends AnyFlatSpec with Matchers {
   val text   = "bcdfghjklmnpqrstvwxyz"
 
   it should "validate a dummy entity" in {
-    val result = validate(number, text).sandbox.either.run
+    val result = validate(number, text).toEither
 
     result shouldBe Right(DummyEntity(number, text))
   }
 
-  it should "TODO fail to validate an empty text" in {
-    val validation = validate(number, "").sandbox.either.run
-    val result     = causeToErrorList(validation)
+  it should "fail to validate an empty text" in {
+    val result = validate(number, "").toEither
 
-    info(s"result: ${result}")
-    result shouldBe Left(List(EmptyTextError))
+    result shouldBe Left(NonEmptyChunk(EmptyTextError))
   }
 
   it should "fail to validate an out of range number" in {
-    val validation = validate(99, text).sandbox.either.run
-    val result     = causeToErrorList(validation)
+    val result = validate(99, text).toEither
 
-    result shouldBe Left(List(OutOfRangeError))
+    result shouldBe Left(NonEmptyChunk(OutOfRangeError))
   }
 
   it should "fail to validate an odd number" in {
-    val validation = validate(2, text).sandbox.either.run
-    val result     = causeToErrorList(validation)
+    val result = validate(2, text).toEither
 
-    result shouldBe Left(List(EvenNumberError))
+    result shouldBe Left(NonEmptyChunk(EvenNumberError))
   }
 
   it should "fail to validate a number out of range and a text empty" in {
-    val validation = validate(-1, "").sandbox.either.run
-    val result     = causeToErrorList(validation)
+    val result = validate(-1, "").toEither
 
-    result shouldBe Left(List(OutOfRangeError, EmptyTextError))
+    result shouldBe Left(NonEmptyChunk(OutOfRangeError, EmptyTextError))
   }
 
   it should "fail to validate a text with invalid characters" in {
-    val validation = validate(number, "xyza").sandbox.either.run
-    val result     = causeToErrorList(validation)
+    val result = validate(number, "xyza").toEither
 
-    result shouldBe Left(List(InvalidCharactersError))
+    result shouldBe Left(NonEmptyChunk(InvalidCharactersError))
   }
 
   it should "fail to validate a text with invalid characters and upper chars" in {
-    val validation = validate(number, "xazY").sandbox.either.run
-    val result     = causeToErrorList(validation)
+    val result = validate(number, "xazY").toEither
 
-    result shouldBe Left(List(InvalidCharactersError, UpperCaseLetterError))
+    result shouldBe Left(NonEmptyChunk(InvalidCharactersError, UpperCaseLetterError))
   }
 
   it should "fail to validate a text with invalid characters and upper chars and number out of range" in {
-    val validation = validate(-1, "xazY").sandbox.either.run
-    val result     = causeToErrorList(validation)
+    val result = validate(-1, "xazY").toEither
 
-    result shouldBe Left(List(OutOfRangeError, InvalidCharactersError, UpperCaseLetterError))
+    result shouldBe Left(NonEmptyChunk(OutOfRangeError, InvalidCharactersError, UpperCaseLetterError))
   }
-
 }
