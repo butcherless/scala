@@ -2,7 +2,6 @@ package com.cmartin.learn
 
 import com.cmartin.learn.Model._
 import zio.prelude.Validation
-import zio.prelude.ZValidation
 
 /*
     Note:
@@ -24,7 +23,7 @@ object AircraftValidator {
       country: String,
       delivery: String
   ): Validation[ValidationError, Aircraft] = {
-    ZValidation.validateWith(
+    Validation.validateWith(
       validateModel(model),
       validateRegistration(registration),
       validateCountry(country),
@@ -49,7 +48,7 @@ object AircraftValidator {
    */
   def validateDelivery(delivery: String): Validation[ValidationError, String] = {
     validateEmptyText(delivery, EmptyDeliveryError) *>
-      ZValidation.validateWith(
+      Validation.validateWith(
         validateDeliveryChars(delivery),
         validateDeliveryLength(delivery)
       )((_, _) => delivery)
