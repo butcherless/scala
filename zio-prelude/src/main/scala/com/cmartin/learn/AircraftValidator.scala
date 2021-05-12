@@ -56,13 +56,13 @@ object AircraftValidator {
 
   def validateDeliveryChars(delivery: String): Validation[ValidationError, String] = {
     val validChars = "0123456789-"
-    if (delivery.forall(c => validChars.contains(c))) Validation.succeed(delivery)
-    else Validation.fail(InvalidCharactersError)
+    Validation
+      .fromPredicateWith(InvalidCharactersError)(delivery)(_.forall(validChars.contains(_)))
   }
 
   def validateUpperCaseChars(text: String): Validation[ValidationError, String] = {
-    if (text.forall(_.isUpper)) Validation.succeed(text)
-    Validation.fail(LowerCaseLetterError)
+    Validation
+      .fromPredicateWith(LowerCaseLetterError)(text)(_.forall(_.isUpper))
   }
 
   def validateLetterChars(text: String): Validation[ValidationError, String] = {
@@ -71,19 +71,23 @@ object AircraftValidator {
   }
 
   def validateDeliveryLength(delivery: String): Validation[ValidationError, String] = {
-    val x1: Array[String] = delivery.split('-')
-    val result            = (x1.length == 2) && (x1(0).length == 4 && x1(1).length == 2)
-    if (result) Validation.succeed(delivery)
-    else Validation.fail(InvalidLengthError)
+    //TODO regex?
+    def validateDate(dateText: String) = {
+      val x1: Array[String] = delivery.split('-')
+      (x1.length == 2) && (x1(0).length == 4 && x1(1).length == 2)
+    }
+
+    Validation
+      .fromPredicateWith(InvalidLengthError)(delivery)(validateDate)
   }
 
   def validateLength(text: String, length: Int): Validation[ValidationError, String] = {
-    if (text.length == length) Validation.succeed(text)
-    else Validation.fail(InvalidLengthError)
+    Validation
+      .fromPredicateWith(InvalidLengthError)(text)(_.length == length)
   }
 
   private def validateEmptyText(text: String, error: ValidationError): Validation[ValidationError, String] = {
-    if (text.nonEmpty) Validation.succeed(text)
-    else Validation.fail(error)
+    Validation
+      .fromPredicateWith(error)(text)(_.nonEmpty)
   }
 }

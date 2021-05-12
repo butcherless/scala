@@ -37,7 +37,7 @@ class DummyEntityValidatorSpec extends AnyFlatSpec with Matchers {
     result shouldBe Left(NonEmptyChunk(EvenNumberError))
   }
 
-  it should "fail to validate a number out of range and a text empty" in {
+  it should "fail to validate a number out of range and an empty text" in {
     val result = validate(-1, "").toEither
 
     result shouldBe Left(NonEmptyChunk(OutOfRangeError, EmptyTextError))
