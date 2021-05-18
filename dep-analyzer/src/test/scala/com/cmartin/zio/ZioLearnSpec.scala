@@ -1,10 +1,13 @@
 package com.cmartin.zio
 
 import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
+import com.cmartin.utils.ZioLearn.MyDomainException
+import com.cmartin.utils.ZioLearn.MyExceptionTwo
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
+
+import java.io.IOException
 
 class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
@@ -107,10 +110,11 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
         //Schedule.spaced(3.seconds)
         Schedule.recurs(5)
 
-    val program: ZIO[Console with Clock, Nothing, (Duration, Long)] = (for {
-      _ <- putStrLn("zio console message")
-      //_ <- sleep(1.second)
-    } yield ()) repeat policy
+    val program: ZIO[Console with Clock, IOException, (Duration, Long)] =
+      (for {
+        _ <- putStrLn("zio console message")
+        //_ <- sleep(1.second)
+      } yield ()) repeat policy
 
     // TODO
     //val result: (Duration, Int) = runtime.unsafeRun(program)

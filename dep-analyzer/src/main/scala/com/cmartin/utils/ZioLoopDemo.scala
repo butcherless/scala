@@ -1,13 +1,17 @@
 package com.cmartin.utils
 
-import zio.{App, ExitCode, UIO, ZIO}
+import zio.App
+import zio.ExitCode
+import zio.UIO
+import zio.ZIO
+
+import java.io.IOException
 
 object ZioLoopDemo extends App {
 
   import zio.console._
 
-  /**
-    * Loops with the specified effectual function, collecting the results into a
+  /** Loops with the specified effectual function, collecting the results into a
     * list. The moral equivalent of:
     *
     * {{{
@@ -62,11 +66,12 @@ object ZioLoopDemo extends App {
   /*
    * program
    */
-  val program: ZIO[Console, Nothing, Unit] = for {
-    _             <- putStrLn("zio loop demo:")
-    evenOrOddList <- ZIO.loop(initial)(cont, dec)(body)
-    _             <- putStrLn(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
-  } yield ()
+  val program: ZIO[Console, IOException, Unit] =
+    for {
+      _             <- putStrLn("zio loop demo:")
+      evenOrOddList <- ZIO.loop(initial)(cont, dec)(body)
+      _             <- putStrLn(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
+    } yield ()
 
   // main function, needs exit = 0 [OK] or exit > 0 [ERROR]
   // Here the interpreter runs the program and perform side-effects
