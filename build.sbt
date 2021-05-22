@@ -162,6 +162,12 @@ lazy val json4sUtils = (project in file("json4s-utils"))
     libraryDependencies ++= Seq(json4s, logback, scalaLogging)
   )
 
+lazy val scala3pills = (project in file("scala3-pills"))
+  .settings(
+    scalaVersion := "3.0.0",
+    libraryDependencies ++= Seq(scalaTest)
+  )
+
 addCommandAlias("xcoverage", "clean;coverage;test;coverageReport")
 addCommandAlias("xreload", "clean;reload")
 addCommandAlias("xstart", "clean;reStart")
