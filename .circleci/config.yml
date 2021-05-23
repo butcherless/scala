@@ -21,7 +21,8 @@ jobs:
       - run:
           name: compile, test
           command: |
-            sbt -mem 2048 xcoverage
+            # sbt -mem 2048 xcoverage
+            sbt clean test
             sbt -mem 2048 xdup
             sbt -mem 2048 assembly
             bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
