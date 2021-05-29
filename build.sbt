@@ -168,7 +168,8 @@ lazy val scala3pills = (project in file("scala3-pills"))
     libraryDependencies ++= Seq(
       zio,
       scalaTest
-    )
+    ),
+    coverageEnabled := false
   )
 
 addCommandAlias("xcoverage", "clean;coverage;test;coverageReport")
