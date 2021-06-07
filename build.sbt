@@ -18,10 +18,9 @@ lazy val basicScalacOptions = Seq(
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(scalaTest),
-  scalacOptions ++= basicScalacOptions,
+  scalacOptions ++= basicScalacOptions
   // resolvers += // temporal for ZIO snapshots
   //  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
-  test in assembly := {}
 )
 
 lazy val common = (project in file("common"))
@@ -61,10 +60,10 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       zio,
       zioConfig
     ),
-    assemblyMergeStrategy in assembly := {
+    assemblyMergeStrategy := {
       case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
       case x =>
-        val oldStrategy = (assemblyMergeStrategy in assembly).value
+        val oldStrategy = assemblyMergeStrategy.value
         oldStrategy(x)
     }
   )
@@ -171,6 +170,8 @@ lazy val scala3pills = (project in file("scala3-pills"))
     ),
     coverageEnabled := false
   )
+
+Global / onChangedBuildSource := ReloadOnSourceChanges
 
 addCommandAlias("xcoverage", "clean;coverage;test;coverageReport")
 addCommandAlias("xreload", "clean;reload")

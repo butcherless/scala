@@ -5,7 +5,7 @@ PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
 SCALA_VER="2.13.6"
 SBT_VER="1.5.3"
-SBT_ASSEMBLY_VER="0.15.0"
+SBT_ASSEMBLY_VER="1.0.0"
 SBT_BLOOP_VER="1.4.8-39-c44bf129"
 SBT_SCALAFMT_VER="2.4.2"
 DEP_GRAPH_VER="0.10.0-RC1"
@@ -102,6 +102,8 @@ echo 'import Dependencies._
 ThisBuild / scalaVersion := "'${SCALA_VER}'"
 ThisBuild / organization := "com.cmartin.learn"
 
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
 lazy val basicScalacOptions = Seq(       // some of the Rob Norris tpolecat options
     "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
     "-encoding", "utf-8",                // Specify character encoding used by source files.
@@ -116,8 +118,7 @@ lazy val basicScalacOptions = Seq(       // some of the Rob Norris tpolecat opti
 
 lazy val commonSettings = Seq(
     libraryDependencies ++= mainAndTest,
-    scalacOptions ++= basicScalacOptions,
-    test in assembly := {}
+    scalacOptions ++= basicScalacOptions
 )
 
 lazy val templateProject = (project in file("."))
