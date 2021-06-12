@@ -1,12 +1,11 @@
 package com.cmartin.learn
 
 object OpaquePill {
-
   import CompanyIdOT._
   import ObjectIdOT._
+  import DeviceNameOT._
 
   object CompanyIdOT {
-
     opaque type CompanyId = Long
 
     object CompanyId {
@@ -30,6 +29,18 @@ object OpaquePill {
     }
   }
 
+  object DeviceNameOT {
+    opaque type DeviceName = String
 
-  case class Device(companyId: CompanyId, objectId: ObjectId)
+    object DeviceName {
+      def apply(name: String): DeviceName = name
+    }
+
+    extension (name: DeviceName) {
+      def toString: String = name
+    }
+  }
+  
+
+  case class Device(companyId: CompanyId, objectId: ObjectId, name: DeviceName)
 }
