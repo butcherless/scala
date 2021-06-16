@@ -25,7 +25,7 @@ jobs:
             sbt clean test
             sbt -mem 2048 xdup
             sbt -mem 2048 assembly
-            bash <(curl -s https://codecov.io/bash) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
+            bash <(curl -s https://uploader.codecov.io/latest/codecov-linux) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
 
 
   build_template:
