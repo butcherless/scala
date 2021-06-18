@@ -25,8 +25,9 @@ jobs:
             sbt clean test
             #sbt -mem 2048 xdup
             sbt -mem 2048 assembly
-            bash <(curl -s https://uploader.codecov.io/latest/codecov-linux) -t 551ffd9e-aac2-4eff-937c-d8bcca72bf38
-
+            curl -Os https://uploader.codecov.io/latest/codecov-linux
+            chmod +x codecov-linux
+            ./codecov-linux -t ${CODECOV_TOKEN}
 
   build_template:
     docker:
