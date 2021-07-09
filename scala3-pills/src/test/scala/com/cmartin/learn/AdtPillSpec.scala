@@ -14,8 +14,8 @@ class AdtPillSpec extends AnyFlatSpec with Matchers {
 
     val result = responseError match {
       case BadRequest(m) => m
-      case NotFound(m) => m
-      case Conflict(m) => m
+      case NotFound(m)   => m
+      case Conflict(m)   => m
     }
 
     result shouldBe message
