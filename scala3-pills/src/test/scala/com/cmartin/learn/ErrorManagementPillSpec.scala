@@ -16,24 +16,41 @@ class ErrorManagementPillSpec extends AnyFlatSpec with Matchers {
 
   "Create" should "create a Task" in {
 
-    val program = taskApi.doPost("1")
+    val program = taskApi.doPost(
+      Map("owner" -> "1", "name" -> "parser", "def" -> "parser-definition")
+    )
 
     val result = runtime.unsafeRun(program)
 
     info(s"result: $result")
 
-    result shouldBe "1"
+    result shouldBe "Task(parser,parser-definition)"
   }
 
-  it should "fail to create a Task" in {
+  it should "fail to create a duplicate Task" in {
 
-    val program = taskApi.doPost("create-error")
+    val program = taskApi.doPost(
+      Map("owner" -> "1", "name" -> "parser", "def" -> "error-duplicate")
+    )
 
     val result = runtime.unsafeRun(program.either)
 
     info(s"result: $result")
 
-    result shouldBe Left(AdapterLayer.AdapterError.Conflict(""))
+    result shouldBe Left(AdapterLayer.AdapterError.Conflict("duplicate-task"))
+  }
+
+  it should "fail to create an invalid Task" in {
+
+    val program = taskApi.doPost(
+      Map("owner" -> "1", "def" -> "error-duplicate")
+    )
+
+    val result = runtime.unsafeRun(program.either)
+
+    info(s"result: $result")
+
+    result shouldBe Left(AdapterLayer.AdapterError.BadRequest("missing name"))
   }
 
 }
