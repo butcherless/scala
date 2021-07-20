@@ -5,7 +5,7 @@ import zio.{IO, ZIO}
 object ErrorManagementPill {
 
   object DomainLayer {
-    case class Task(name:String, definition:String)
+    case class Task(name: String, definition: String)
   }
 
   object AdapterLayer {
@@ -14,21 +14,22 @@ object ErrorManagementPill {
     import AdapterValidator._
     import ServiceLayer.CreateRequest
 
-
     enum AdapterError {
       case BadRequest(message: String)
       case NotFound(message: String)
       case Conflict(message: String)
-      case ServerError(message:String)
+      case ServerError(message: String)
     }
 
     trait TaskApi {
-      def doPost(postReq: Map[String,String]): IO[AdapterError, String]
+      def doPost(postReq: Map[String, String]): IO[AdapterError, String]
     }
 
     class TaskApiImpl(service: ServiceLayer.TaskService) extends TaskApi {
-      override def doPost(postReq: Map[String, String]): IO[AdapterError, String] = {
-        val program: IO[ Any, String] = for {
+      override def doPost(
+          postReq: Map[String, String]
+      ): IO[AdapterError, String] = {
+        val program: IO[Any, String] = for {
           createRequest <- AdapterValidator.validatePost(postReq)
           task <- service.create(createRequest)
         } yield task.toString
@@ -58,11 +59,17 @@ object ErrorManagementPill {
         case InvalidDefinition(message: String)
       }
 
-
-      def validatePost(request: Map[String, String]): IO[ValidationError, CreateRequest] = {
+      def validatePost(
+          request: Map[String, String]
+      ): IO[ValidationError, CreateRequest] = {
         val name = request.getOrElse("name", "")
         if (name.nonEmpty) {
-          IO.succeed(CreateRequest(request("owner"), Task(request("name"), request("def"))))
+          IO.succeed(
+            CreateRequest(
+              request("owner"),
+              Task(request("name"), request("def"))
+            )
+          )
         } else {
           IO.fail(ValidationError.MissingName("missing name"))
         }
@@ -72,7 +79,7 @@ object ErrorManagementPill {
 
   object ServiceLayer {
     import DomainLayer._
-    case class CreateRequest(owner:String, task: Task)
+    case class CreateRequest(owner: String, task: Task)
 
     enum ServiceError {
       case CreateError(message: String)
@@ -89,16 +96,16 @@ object ErrorManagementPill {
     class TaskServiceImpl extends TaskService {
       override def create(createReq: CreateRequest): IO[ServiceError, Task] =
         createReq.task.definition match {
-        case "error-duplicate" => IO.fail(ServiceError.CreateError("duplicate-task"))
-        case _ => IO.succeed(createReq.task)
-      }
+          case "error-duplicate" =>
+            IO.fail(ServiceError.CreateError("duplicate-task"))
+          case _ => IO.succeed(createReq.task)
+        }
     }
 
     object TaskServiceImpl {
       def apply(): TaskServiceImpl =
         new TaskServiceImpl()
     }
-
 
   }
 
@@ -119,5 +126,5 @@ object ErrorManagementPill {
       override def insert[A](a: A): Long = a.hashCode.toLong
     }
   }
-  
+
 }
