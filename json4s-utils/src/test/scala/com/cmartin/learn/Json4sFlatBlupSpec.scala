@@ -20,7 +20,7 @@ class Json4sFlatBlupSpec extends AnyFlatSpec with Matchers {
   it should "flatten json keys in a Json Object" in {
     val result: String = Json4sFlatBlup.flatten(nestedJson).value
 
-    val resultAst: JValue   = JsonMethods.parse(result)
+    val resultAst: JValue = JsonMethods.parse(result)
     val expectedAst: JValue = JsonMethods.parse(flattenedJson)
 
     resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)
@@ -48,7 +48,7 @@ class Json4sFlatBlupSpec extends AnyFlatSpec with Matchers {
     /* el orden de los elementos del json no está garantizado
        por lo que hay que comparar via AST
      */
-    val resultAst: JValue   = JsonMethods.parse(result)
+    val resultAst: JValue = JsonMethods.parse(result)
     val expectedAst: JValue = JsonMethods.parse(nestedJson)
 
     resultAst diff expectedAst shouldBe Diff(JNothing, JNothing, JNothing)

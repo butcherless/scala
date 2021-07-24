@@ -1,7 +1,13 @@
 package com.cmartin.learn.freemonad
 
 import cats.{Id, ~>}
-import com.cmartin.learn.freemonad.algebra.{Create, CrudOperationA, Delete, Read, Update}
+import com.cmartin.learn.freemonad.algebra.{
+  Create,
+  CrudOperationA,
+  Delete,
+  Read,
+  Update
+}
 import com.cmartin.learn.freemonad.functions.buildCryptoCurrency
 
 import scala.concurrent.Future
@@ -42,7 +48,9 @@ object interpreter {
             Option.unless(cc.id == constants.foundUuid)(cc.name)
           case Read(name) =>
             println(s"read name Option: $name")
-            Option.unless(name == constants.notFoundName)(buildCryptoCurrency(name))
+            Option.unless(name == constants.notFoundName)(
+              buildCryptoCurrency(name)
+            )
           case Update(cc) =>
             println(s"update crypto currency Option: ${cc}")
             Option.unless(cc.id == constants.notFoundUuid)(cc)
@@ -61,19 +69,23 @@ object interpreter {
         fa match {
           case Create(cc) =>
             println(s"create crypto currency Either: $cc")
-            if (cc.id == constants.foundUuid) Left(constants.operationErrorMessage)
+            if (cc.id == constants.foundUuid)
+              Left(constants.operationErrorMessage)
             else Right(cc.name)
           case Read(name) =>
             println(s"read name Either: $name")
-            if (name == constants.notFoundName) Left(constants.operationErrorMessage)
+            if (name == constants.notFoundName)
+              Left(constants.operationErrorMessage)
             else Right(buildCryptoCurrency(name))
           case Update(cc) =>
             println(s"update crypto currency Either: ${cc}")
-            if (cc.id == constants.notFoundUuid) Left(constants.operationErrorMessage)
+            if (cc.id == constants.notFoundUuid)
+              Left(constants.operationErrorMessage)
             else Right(cc)
           case Delete(cc) =>
             println(s"delete crypto currency Either: ${cc.id}")
-            if (cc.id == constants.notFoundUuid) Left(constants.operationErrorMessage)
+            if (cc.id == constants.notFoundUuid)
+              Left(constants.operationErrorMessage)
             else Right(cc.id)
         }
     }
@@ -85,22 +97,30 @@ object interpreter {
           case Create(cc) =>
             println(s"create crypto currency Future: ${cc}")
             if (cc.id == constants.foundUuid)
-              Future.failed(new RuntimeException(constants.operationErrorMessage))
+              Future.failed(
+                new RuntimeException(constants.operationErrorMessage)
+              )
             else Future.successful(cc.name)
           case Read(name) =>
             println(s"read name Future: $name")
             if ((name == constants.notFoundName))
-              Future.failed(new RuntimeException(constants.operationErrorMessage))
+              Future.failed(
+                new RuntimeException(constants.operationErrorMessage)
+              )
             else Future.successful(buildCryptoCurrency(name))
           case Update(cc) =>
             println(s"update crypto currency Future: ${cc}")
             if (cc.id == constants.notFoundUuid)
-              Future.failed(new RuntimeException(constants.operationErrorMessage))
+              Future.failed(
+                new RuntimeException(constants.operationErrorMessage)
+              )
             else Future.successful(cc)
           case Delete(cc) =>
             println(s"delete crypto currency Future: ${cc.id}")
             if (cc.id == constants.notFoundUuid)
-              Future.failed(new RuntimeException(constants.operationErrorMessage))
+              Future.failed(
+                new RuntimeException(constants.operationErrorMessage)
+              )
             else Future.successful(cc.id)
         }
     }

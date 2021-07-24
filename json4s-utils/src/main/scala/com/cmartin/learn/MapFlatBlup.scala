@@ -36,17 +36,18 @@ object MapFlatBlup extends FlatBlup[String, Option[Map[String, Any]]] {
         flatten steps: {parse, flatten, toMap}
      */
     for {
-      json: JValue                <- JsonMethods.parseOpt(blownUp)
+      json: JValue <- JsonMethods.parseOpt(blownUp)
       flattened: Map[String, Any] <- Option(_flatten(json))
     } yield flattened
   }
 
-  /**
-    * Convierte la `Key` compuesta en el tipo de entrada en un `Path` contenido
+  /** Convierte la `Key` compuesta en el tipo de entrada en un `Path` contenido
     * en el tipo de salida.
     *
-    * @param flatten tipo de entrada con la `Key`
-    * @return tipo de salida con el `Path`
+    * @param flatten
+    *   tipo de entrada con la `Key`
+    * @return
+    *   tipo de salida con el `Path`
     */
   override def blowup(flatten: String): Option[Map[String, Any]] = ???
 }

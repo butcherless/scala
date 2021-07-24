@@ -16,30 +16,38 @@ import zio.UIO
 
 trait FileHelperLive extends FileHelper with ComponentLogging {
 
-  override val fileHelper: FileHelper.Service[Any] = new FileHelper.Service[Any] {
+  override val fileHelper: FileHelper.Service[Any] =
+    new FileHelper.Service[Any] {
 
-    override def getLinesFromFile(filename: String): IO[DomainError, FileLines] = {
-      for {
-        fis <- openFile(filename)
-        lines <- createFileSource(fis)
-          .bracket(closeSource)(getLines)
-      } yield lines.toSeq
-    }
+      override def getLinesFromFile(
+          filename: String
+      ): IO[DomainError, FileLines] = {
+        for {
+          fis <- openFile(filename)
+          lines <- createFileSource(fis)
+            .bracket(closeSource)(getLines)
+        } yield lines.toSeq
+      }
 
-    override def logDepCollection(dependencies: Seq[Either[String, Domain.Gav]]): IO[DomainError, Unit] = {
-      Task
-        .effect(
-          dependencies
-            .foreach { dep =>
-              dep.fold(
-                line => log.info(s"${colourYellow("invalid dependency")} => ${colourYellow(line)}"),
-                dep => log.info(dep.toString) // OK case
-              )
-            }
-        )
-        .orElseFail(FileIOError("Error writing a log message"))
+      override def logDepCollection(
+          dependencies: Seq[Either[String, Domain.Gav]]
+      ): IO[DomainError, Unit] = {
+        Task
+          .effect(
+            dependencies
+              .foreach { dep =>
+                dep.fold(
+                  line =>
+                    log.info(
+                      s"${colourYellow("invalid dependency")} => ${colourYellow(line)}"
+                    ),
+                  dep => log.info(dep.toString) // OK case
+                )
+              }
+          )
+          .orElseFail(FileIOError("Error writing a log message"))
+      }
     }
-  }
 
   /*
     H E L P E R S
@@ -52,7 +60,9 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
       )
       .orElseFail(FileIOError(Domain.OPEN_FILE_ERROR))
 
-  private def createFileSource(fis: FileInputStream): IO[DomainError, BufferedSource] = {
+  private def createFileSource(
+      fis: FileInputStream
+  ): IO[DomainError, BufferedSource] = {
     Task
       .effect(
         new BufferedSource(fis)
@@ -67,7 +77,9 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
     )
   }
 
-  private def getLines(source: BufferedSource): IO[DomainError, Iterator[String]] =
+  private def getLines(
+      source: BufferedSource
+  ): IO[DomainError, Iterator[String]] =
     Task(
       source
         .getLines()

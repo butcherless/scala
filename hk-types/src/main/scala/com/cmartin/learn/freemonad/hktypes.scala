@@ -34,8 +34,10 @@ object main {
   printOption(resultSome)
 
   // try implementation
-  val tryService: CoinMarketService[Try] = new TryCoinMarketService(new CrytoCurrencyRepository)
-  val resultFailure                      = tryService.readByName("Dummy")
+  val tryService: CoinMarketService[Try] = new TryCoinMarketService(
+    new CrytoCurrencyRepository
+  )
+  val resultFailure = tryService.readByName("Dummy")
   printTry(resultFailure)
 
   val resultSuccess = tryService.readByName(("TRON"))
@@ -92,7 +94,8 @@ trait CoinMarketService[C[_]] {
 
 // S E R V I C E   I M P L E M E N T A T I O N S
 
-class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Option] {
+class OptionCoinMarketService(repo: CrytoCurrencyRepository)
+    extends CoinMarketService[Option] {
   override def create(cc: CryptoCurrency): Option[CryptoCurrency] =
     Factory.newOptionCrytoCurrency(cc.name, cc.marketCap, cc.price)
 
@@ -102,14 +105,16 @@ class OptionCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketS
 
   override def readById(id: UUID): Option[CryptoCurrency] = ???
 
-  override def readByName(name: String): Option[CryptoCurrency] = repo.getByName(name)
+  override def readByName(name: String): Option[CryptoCurrency] =
+    repo.getByName(name)
 
   override def readAll(): Option[List[CryptoCurrency]] = ???
 }
 
 case class ServiceException(message: String) extends RuntimeException(message)
 
-class TryCoinMarketService(repo: CrytoCurrencyRepository) extends CoinMarketService[Try] {
+class TryCoinMarketService(repo: CrytoCurrencyRepository)
+    extends CoinMarketService[Try] {
   override def create(cc: CryptoCurrency): Try[CryptoCurrency] =
     Factory.newTryCrytoCurrency(cc.name, cc.marketCap, cc.price)
 

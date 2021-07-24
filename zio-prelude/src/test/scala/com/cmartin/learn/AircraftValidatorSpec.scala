@@ -29,7 +29,13 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
         .toEither
 
     result shouldBe Left(
-      NonEmptyChunk(EmptyModelError, EmptyRegistrationError, EmptyCountryError, EmptyDeliveryError, InvalidLengthError)
+      NonEmptyChunk(
+        EmptyModelError,
+        EmptyRegistrationError,
+        EmptyCountryError,
+        EmptyDeliveryError,
+        InvalidLengthError
+      )
     )
   }
 
@@ -46,7 +52,9 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
     val result =
       validate(modelOne, registrationOne, countryOne, "2013-XYZ").toEither
 
-    result shouldBe Left(NonEmptyChunk(InvalidCharactersError, InvalidLengthError))
+    result shouldBe Left(
+      NonEmptyChunk(InvalidCharactersError, InvalidLengthError)
+    )
   }
 
   it should "fail to validate a country text code" in {
@@ -61,17 +69,24 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
         )((_, _, _) => country)
         .toEither
 
-    result shouldBe Left(NonEmptyChunk(InvalidLengthError, InvalidCharactersError, LowerCaseLetterError))
+    result shouldBe Left(
+      NonEmptyChunk(
+        InvalidLengthError,
+        InvalidCharactersError,
+        LowerCaseLetterError
+      )
+    )
   }
 }
 
 object AircraftValidatorSpec {
 
-  val modelOne        = "B738"
+  val modelOne = "B738"
   val registrationOne = "EC-LUT"
-  val countryOne      = "B738"
-  val deliveryOne     = "2013-04"
+  val countryOne = "B738"
+  val deliveryOne = "2013-04"
 
-  val aircraftOne: Aircraft = Aircraft(modelOne, registrationOne, countryOne, deliveryOne)
+  val aircraftOne: Aircraft =
+    Aircraft(modelOne, registrationOne, countryOne, deliveryOne)
 
 }

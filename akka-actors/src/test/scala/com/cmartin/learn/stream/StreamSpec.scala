@@ -9,10 +9,10 @@ import scala.concurrent.Future
 
 class StreamSpec extends AsyncFlatSpec {
   implicit val system = ActorSystem("QuickStart")
-  implicit val ec     = system.dispatcher
+  implicit val ec = system.dispatcher
 
   "Stream spec" should "sum a list of integer via fold sink" in {
-    val intSource: Source[Int, NotUsed]  = Source[Int](1 to 5)
+    val intSource: Source[Int, NotUsed] = Source[Int](1 to 5)
     val foldSink: Sink[Int, Future[Int]] = Sink.fold[Int, Int](0)(_ + _)
 
     val result = intSource runWith foldSink
@@ -23,8 +23,8 @@ class StreamSpec extends AsyncFlatSpec {
   }
 
   it should "sum a list of integers via source from future computation" in {
-    val ints                             = List(1, 2, 3, 4, 5)
-    val futureSource                     = Source.future(Future(ints))
+    val ints = List(1, 2, 3, 4, 5)
+    val futureSource = Source.future(Future(ints))
     val foldSink: Sink[Int, Future[Int]] = Sink.fold[Int, Int](0)(_ + _)
 
     val result = futureSource.mapConcat(identity).runWith(foldSink)
@@ -56,7 +56,7 @@ class StreamSpec extends AsyncFlatSpec {
       .map(_ => randomPositiveInt())
       .take(expectedCount)
     val countFlow: Flow[Int, Int, NotUsed] = Flow[Int].map(_ => 1)
-    val sumSink                            = Sink.fold[Int, Int](0)(_ + _)
+    val sumSink = Sink.fold[Int, Int](0)(_ + _)
 
     val result = intSource
       .via(countFlow)

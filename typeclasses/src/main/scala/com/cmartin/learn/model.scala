@@ -2,8 +2,7 @@ package com.cmartin.learn
 
 package object model {
 
-  /**
-    * Created by cmartin on 26/12/2016.
+  /** Created by cmartin on 26/12/2016.
     */
   case class Person(
       name: String,
@@ -22,11 +21,11 @@ package object model {
   }
 
   object Constants {
-    val name      = "Carlos"
+    val name = "Carlos"
     val firstName = "Martin"
-    val age       = 49
-    val id        = "carlos.martin"
-    val password  = "dummy-password"
+    val age = 49
+    val id = "carlos.martin"
+    val password = "dummy-password"
   }
 
 }

@@ -13,17 +13,17 @@ package object stream {
       .throttle(1, 1 second)
   }
 
-  /**
-    * Generates a random number between 0 and MaxValue
+  /** Generates a random number between 0 and MaxValue
     *
-    * @return the random number
+    * @return
+    *   the random number
     */
   def randomPositiveInt(): Int = Math.abs(Random.nextInt())
 
-  /**
-    * Generates a Stream of positive integers
+  /** Generates a Stream of positive integers
     *
-    * @return the stream
+    * @return
+    *   the stream
     */
   def buildRandomPositiveIntSource(): Source[Int, NotUsed] = {
     Source
