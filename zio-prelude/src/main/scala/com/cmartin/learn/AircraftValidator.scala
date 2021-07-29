@@ -11,11 +11,16 @@ import zio.prelude.Validation
 object AircraftValidator {
 
   /** Validates an Aircraft entity.
-    * @param model aircraft type, p.e.: airbus A320, boeing 757-200, etc
-    * @param registration aircraft identifier
-    * @param country country to which the aircraft belongs
-    * @param delivery years since delivery
-    * @return an Aircraft or a non empty list of errors
+    * @param model
+    *   aircraft type, p.e.: airbus A320, boeing 757-200, etc
+    * @param registration
+    *   aircraft identifier
+    * @param country
+    *   country to which the aircraft belongs
+    * @param delivery
+    *   years since delivery
+    * @return
+    *   an Aircraft or a non empty list of errors
     */
   def validate(
       model: String,
@@ -35,7 +40,9 @@ object AircraftValidator {
     validateEmptyText(model, EmptyModelError)
   }
 
-  def validateRegistration(registration: String): Validation[ValidationError, String] = {
+  def validateRegistration(
+      registration: String
+  ): Validation[ValidationError, String] = {
     validateEmptyText(registration, EmptyRegistrationError)
   }
 
@@ -46,21 +53,33 @@ object AircraftValidator {
   /* 1. validate empty text first (AND) (1 error), stop validation if fails
      2. validateChars (OR) length, 1 or 2 errors if fails (NEL)
    */
-  def validateDelivery(delivery: String): Validation[ValidationError, String] = {
-    validateEmptyText(delivery, EmptyDeliveryError) *>
-      Validation.validateWith(
-        validateDeliveryChars(delivery),
-        validateDeliveryLength(delivery)
-      )((_, _) => delivery)
+  def validateDelivery(
+      delivery: String
+  ): Validation[ValidationError, String] = {
+    validateEmptyText(delivery, EmptyDeliveryError)
+      .flatMap(_ =>
+        Validation
+          .validate(
+            validateDeliveryChars(delivery),
+            validateDeliveryLength(delivery)
+          )
+          .map(_ => delivery)
+      )
   }
 
-  def validateDeliveryChars(delivery: String): Validation[ValidationError, String] = {
+  def validateDeliveryChars(
+      delivery: String
+  ): Validation[ValidationError, String] = {
     val validChars = "0123456789-"
     Validation
-      .fromPredicateWith(InvalidCharactersError)(delivery)(_.forall(validChars.contains(_)))
+      .fromPredicateWith(InvalidCharactersError)(delivery)(
+        _.forall(validChars.contains(_))
+      )
   }
 
-  def validateUpperCaseChars(text: String): Validation[ValidationError, String] = {
+  def validateUpperCaseChars(
+      text: String
+  ): Validation[ValidationError, String] = {
     Validation
       .fromPredicateWith(LowerCaseLetterError)(text)(_.forall(_.isUpper))
   }
@@ -70,7 +89,9 @@ object AircraftValidator {
     Validation.fail(InvalidCharactersError)
   }
 
-  def validateDeliveryLength(delivery: String): Validation[ValidationError, String] = {
+  def validateDeliveryLength(
+      delivery: String
+  ): Validation[ValidationError, String] = {
     //TODO regex?
     def validateDate(dateText: String) = {
       val x1: Array[String] = delivery.split('-')
@@ -81,12 +102,18 @@ object AircraftValidator {
       .fromPredicateWith(InvalidLengthError)(delivery)(validateDate)
   }
 
-  def validateLength(text: String, length: Int): Validation[ValidationError, String] = {
+  def validateLength(
+      text: String,
+      length: Int
+  ): Validation[ValidationError, String] = {
     Validation
       .fromPredicateWith(InvalidLengthError)(text)(_.length == length)
   }
 
-  private def validateEmptyText(text: String, error: ValidationError): Validation[ValidationError, String] = {
+  private def validateEmptyText(
+      text: String,
+      error: ValidationError
+  ): Validation[ValidationError, String] = {
     Validation
       .fromPredicateWith(error)(text)(_.nonEmpty)
   }
