@@ -2,14 +2,13 @@ import MyLibrary._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-/**
-  * Created by cmartin on 16/05/16.
+/** Created by cmartin on 16/05/16.
   */
 class MyLibrarySpec extends AnyFlatSpec with Matchers {
 
-  val EMPTY_STRING   = ""
-  val STRING_1       = "A"
-  val STRING_10      = "1234567890"
+  val EMPTY_STRING = ""
+  val STRING_1 = "A"
+  val STRING_10 = "1234567890"
   val STRING_SAUDADE = "saudade"
 
   it should "intToString '0' specification" in {
@@ -108,37 +107,37 @@ class MyLibrarySpec extends AnyFlatSpec with Matchers {
   }
 
   it should "sum result for Nil List is zero" in {
-    val l      = Nil
+    val l = Nil
     val result = sum(l)
     result shouldBe 0
   }
 
   it should "sum result for 1..5 List is 15" in {
-    val l      = List(1, 2, 3, 4, 5)
+    val l = List(1, 2, 3, 4, 5)
     val result = sum(l)
     result shouldBe 15
   }
 
   it should "sumHOF result for Nil List is zero" in {
-    val l      = Nil
+    val l = Nil
     val result = sumHOF(l)
     result shouldBe 0
   }
 
   it should "sumHOF result for 1..5 List is 15" in {
-    val l      = List(1, 2, 3, 4, 5)
+    val l = List(1, 2, 3, 4, 5)
     val result = sumHOF(l)
     result shouldBe 15
   }
 
   it should "prodHOF result for 1..5 List is 120" in {
-    val l      = List(1, 2, 3, 4, 5)
+    val l = List(1, 2, 3, 4, 5)
     val result = prodHOF(l)
     result shouldBe 120
   }
 
   it should "prodHOF result for 0..5 List is 0" in {
-    val l      = List(0, 1, 2, 3, 4, 5)
+    val l = List(0, 1, 2, 3, 4, 5)
     val result = prodHOF(l)
     result shouldBe 0
   }

@@ -11,10 +11,15 @@ object ConfigHelper {
 
     // config descriptor
     val appConfig =
-      (string("FILENAME") |@| string("EXCLUSIONS"))(AppConfig.apply, AppConfig.unapply)
+      (string("FILENAME") |@| string("EXCLUSIONS"))(
+        AppConfig.apply,
+        AppConfig.unapply
+      )
 
     // IO effect
-    val io: Either[ReadError[String], AppConfig] = read(appConfig from ConfigSource.fromMap(map))
+    val io: Either[ReadError[String], AppConfig] = read(
+      appConfig from ConfigSource.fromMap(map)
+    )
   }
 
 }

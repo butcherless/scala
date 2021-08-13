@@ -34,9 +34,13 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
       lines <- FileHelper.>.getLinesFromFile(filename)
     } yield lines
 
-    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program.provide(FileHelperLive))
+    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(
+      program.provide(FileHelperLive)
+    )
 
-    failure.cause.failureOption.map { message => message shouldBe FileIOError(Domain.OPEN_FILE_ERROR) }
+    failure.cause.failureOption.map { message =>
+      message shouldBe FileIOError(Domain.OPEN_FILE_ERROR)
+    }
   }
 
   it should "return an unknown domain error" in {
@@ -47,13 +51,16 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
 
     val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
 
-    failure.cause.failureOption.map { message => message shouldBe UnknownError(UNKNOWN_ERROR_MESSAGE) }
+    failure.cause.failureOption.map { message =>
+      message shouldBe UnknownError(UNKNOWN_ERROR_MESSAGE)
+    }
   }
 
   it should "write two lines in the log destination" in {
     //TODO https://gist.github.com/jdegoes/dd66656382247dc5b7228fb0f2cb97c8
     // add a logger dependency, via constructor or via module pattern
-    val deps    = Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
+    val deps =
+      Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
     val program = FileHelper.>.logDepCollection(deps)
 
     info("TODO: refactor log module")
@@ -64,6 +71,6 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
 
 object FileHelperSpec {
   val expectedLines: Seq[String] = Seq("line-1", "line-2")
-  val FILE_NOT_FOUD_MESSAGE      = "file not found"
-  val UNKNOWN_ERROR_MESSAGE      = "error trying to access a file"
+  val FILE_NOT_FOUD_MESSAGE = "file not found"
+  val UNKNOWN_ERROR_MESSAGE = "error trying to access a file"
 }

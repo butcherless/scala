@@ -59,7 +59,7 @@ class FutureSpec extends AsyncFlatSpec {
       assert(list.forall(_.isInvalid))
     }
   }
-*/
+   */
 
   "Future Use Case simulator" should "run 3 parallel tasks + 1 task depending on the 3 previous ones" in {
     case class Results(repo: String, flatten: String, shadow: String)
@@ -70,9 +70,9 @@ class FutureSpec extends AsyncFlatSpec {
       val f3 = buildOkResponseFuture(3)
 
       val results = for {
-        repo    <- f1
+        repo <- f1
         flatten <- f2
-        shadow  <- f3
+        shadow <- f3
       } yield Results(repo, flatten, shadow)
 
       results
@@ -80,7 +80,9 @@ class FutureSpec extends AsyncFlatSpec {
 
     val result = for {
       r3 <- f3() // parallel tasks
-      r4 <- Future(r3.repo + r3.flatten + r3.shadow) // task waiting for 3 previous tasks
+      r4 <- Future(
+        r3.repo + r3.flatten + r3.shadow
+      ) // task waiting for 3 previous tasks
     } yield r4
 
     val expectedText = "Service result S[X] successful"
@@ -101,9 +103,9 @@ class FutureSpec extends AsyncFlatSpec {
       val f3 = buildOkResponseFuture(3)
 
       val results = for {
-        repo    <- f1
+        repo <- f1
         flatten <- f2
-        shadow  <- f3
+        shadow <- f3
       } yield Results(repo, flatten, shadow)
 
       results
@@ -111,11 +113,13 @@ class FutureSpec extends AsyncFlatSpec {
 
     val result4 = for {
       r3 <- f3() // parallel tasks
-      r4 <- Future(r3.repo + r3.flatten + r3.shadow) // task waiting for 3 previous tasks
+      r4 <- Future(
+        r3.repo + r3.flatten + r3.shadow
+      ) // task waiting for 3 previous tasks
     } yield r4
 
-    val result = result4.recoverWith {
-      case e: RuntimeException => Future(e.getMessage)
+    val result = result4.recoverWith { case e: RuntimeException =>
+      Future(e.getMessage)
     }
 
     val expectedText = "Service result F[102] failed"
@@ -133,9 +137,8 @@ object FutureSpec {
 
   implicit class EnrichedFuture[A](future: Future[A]) {
     def toValidatedNel: Future[ValidatedNel[Throwable, A]] = {
-      future.map(Validated.valid).recover {
-        case e =>
-          Validated.invalidNel(e)
+      future.map(Validated.valid).recover { case e =>
+        Validated.invalidNel(e)
       }
     }
   }
@@ -153,7 +156,9 @@ object FutureSpec {
     }
   }
 
-  def buildOkResponseFuture(number: Int)(implicit maxDelay: Int): Future[String] = {
+  def buildOkResponseFuture(
+      number: Int
+  )(implicit maxDelay: Int): Future[String] = {
     Future {
       val delay = getDelay(maxDelay)
       println(s"Service S[$number] request with delay[$delay]")
@@ -162,7 +167,9 @@ object FutureSpec {
     }
   }
 
-  def buildKoResponseFuture(number: Int)(implicit maxDelay: Int): Future[String] = {
+  def buildKoResponseFuture(
+      number: Int
+  )(implicit maxDelay: Int): Future[String] = {
     Future {
       val delay = getDelay(maxDelay)
       println(s"Service F[$number] request with delay[$delay]")

@@ -11,13 +11,23 @@ trait LogicManager {
 object LogicManager {
 
   trait Service[R] {
-    def parseLines(lines: List[String]): ZIO[R, Nothing, List[Either[String, Gav]]]
+    def parseLines(
+        lines: List[String]
+    ): ZIO[R, Nothing, List[Either[String, Gav]]]
 
-    def filterValid(dependencies: List[Either[String, Gav]]): ZIO[R, Nothing, List[Gav]]
+    def filterValid(
+        dependencies: List[Either[String, Gav]]
+    ): ZIO[R, Nothing, List[Gav]]
 
-    def excludeList(dependencies: List[Gav], exclusionList: List[String]): ZIO[R, Nothing, List[Gav]]
+    def excludeList(
+        dependencies: List[Gav],
+        exclusionList: List[String]
+    ): ZIO[R, Nothing, List[Gav]]
 
-    def calculateValidRate(dependencyCount: Int, validCount: Int): ZIO[R, Nothing, Double]
+    def calculateValidRate(
+        dependencyCount: Int,
+        validCount: Int
+    ): ZIO[R, Nothing, Double]
   }
 
   object > extends LogicManager.Service[LogicManager] {
@@ -37,8 +47,13 @@ object LogicManager {
     ): ZIO[LogicManager, Nothing, List[Domain.Gav]] =
       ZIO.accessM(_.logicManager.excludeList(dependencies, exclusionList))
 
-    override def calculateValidRate(dependencyCount: Int, validCount: Int): ZIO[LogicManager, Nothing, Double] =
-      ZIO.accessM(_.logicManager.calculateValidRate(dependencyCount, validCount))
+    override def calculateValidRate(
+        dependencyCount: Int,
+        validCount: Int
+    ): ZIO[LogicManager, Nothing, Double] =
+      ZIO.accessM(
+        _.logicManager.calculateValidRate(dependencyCount, validCount)
+      )
   }
 
 }

@@ -67,7 +67,8 @@ object MyTypeClasses {
 
     implicit val showPerson: Show[Person] =
       new Show[Person] {
-        override def show(t: Person): String = s"person: ${t.id}, ${t.name}, ${t.firstName}"
+        override def show(t: Person): String =
+          s"person: ${t.id}, ${t.name}, ${t.firstName}"
       }
   }
 

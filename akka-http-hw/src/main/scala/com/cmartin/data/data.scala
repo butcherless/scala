@@ -7,17 +7,25 @@ import scala.util.Try
 
 package object data {
 
-  case class Aircraft(id: String, typeCode: String, airline: String, desc: String, date: LocalDate)
+  case class Aircraft(
+      id: String,
+      typeCode: String,
+      airline: String,
+      desc: String,
+      date: LocalDate
+  )
 
   object Aircraft {
     implicit val ord: Ordering[Aircraft] = new Ordering[Aircraft] {
 
-      /**
-        * Comparator for dependencies classes
+      /** Comparator for dependencies classes
         *
-        * @param a1 one dependency
-        * @param a2 another one dependency
-        * @return 0 if equals, -1 if less than, +1 if greater than
+        * @param a1
+        *   one dependency
+        * @param a2
+        *   another one dependency
+        * @return
+        *   0 if equals, -1 if less than, +1 if greater than
         */
       def compare(a1: Aircraft, a2: Aircraft): Int = {
         a1.id.compareTo(a2.id)
@@ -27,8 +35,8 @@ package object data {
 
   trait SimpleRepository[T] {
 
-    /**
-      * @param id entity identifier
+    /** @param id
+      *   entity identifier
       * @return
       */
     def getById(id: String): Try[Option[T]]
@@ -43,13 +51,11 @@ package object data {
 
     def save(t: T): Try[Boolean]
 
-    /**
-      * @return
+    /** @return
       */
     def count(): Try[Int]
 
-    /**
-      * @return
+    /** @return
       */
     def isEmpty: Try[Boolean]
   }
@@ -58,11 +64,15 @@ package object data {
 
     private val repo = mutable.TreeSet[Aircraft]()
 
-    override def getById(id: String): Try[Option[Aircraft]] = Try(repo.find(_.id == id))
+    override def getById(id: String): Try[Option[Aircraft]] = Try(
+      repo.find(_.id == id)
+    )
 
     override def getAll: Try[List[Aircraft]] = Try(repo.toList)
 
-    override def getAll(f: Aircraft => Boolean): Try[List[Aircraft]] = Try(repo.filter(f).toList)
+    override def getAll(f: Aircraft => Boolean): Try[List[Aircraft]] = Try(
+      repo.filter(f).toList
+    )
 
     override def remove(t: Aircraft): Try[Boolean] = Try(repo.remove(t))
 

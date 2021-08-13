@@ -12,14 +12,15 @@ trait HttpManager {
 object HttpManager {
 
   trait Service[R] {
-    def checkDependencies(deps: List[Gav]): ZIO[R, Nothing, List[RepoResult[GavPair]]]
+    def checkDependencies(
+        deps: List[Gav]
+    ): ZIO[R, Nothing, List[RepoResult[GavPair]]]
 
     def shutdown(): ZIO[R, Nothing, Unit]
 
   }
 
-  /**
-    * HttpClient infrastructure, connection pool.
+  /** HttpClient infrastructure, connection pool.
     */
   trait HttpClientBackend {
     implicit val backend: SttpBackend[Task, Nothing, NothingT]

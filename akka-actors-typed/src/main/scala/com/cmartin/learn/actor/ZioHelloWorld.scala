@@ -6,7 +6,9 @@ import zio._
 object ZioHelloWorld extends App {
   override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, ExitCode] =
     Managed
-      .make(Task(ActorSystem(HelloWorldMain(), "hello")))(system => Task(system.terminate()).ignore)
+      .make(Task(ActorSystem(HelloWorldMain(), "hello")))(system =>
+        Task(system.terminate()).ignore
+      )
       .use(system =>
         for {
           _ <- Task(system ! HelloWorldMain.Start("World"))

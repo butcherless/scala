@@ -17,15 +17,20 @@ trait FileManagerLive extends FileManager with ComponentLogging {
   val fileManager: FileManager.Service[Any] = new FileManager.Service[Any] {
     override def getLinesFromFile(filename: String): Task[List[String]] =
       for {
-        fis   <- openFile(filename)
+        fis <- openFile(filename)
         lines <- createFileSource(fis).bracket(closeSource)(getLines)
       } yield lines.toList
 
-    override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
+    override def logDepCollection(
+        dependencies: List[Either[String, Gav]]
+    ): Task[Unit] = {
       Task.effect(
         dependencies.foreach { dep =>
           dep.fold(
-            line => log.info(s"${colourRed("invalid dependency")} => ${colourRed(line)}"),
+            line =>
+              log.info(
+                s"${colourRed("invalid dependency")} => ${colourRed(line)}"
+              ),
             dep => log.info(dep.toString)
           )
         }
@@ -38,10 +43,15 @@ trait FileManagerLive extends FileManager with ComponentLogging {
       )
     }
 
-    override def logPairCollection(collection: List[RepoResult[Domain.GavPair]]): Task[Unit] = {
+    override def logPairCollection(
+        collection: List[RepoResult[Domain.GavPair]]
+    ): Task[Unit] = {
       Task.effectTotal {
         collection.foreach(
-          _.fold(error => log.info(error.toString), pair => if (pair.hasNewVersion) log.info(formatChanges(pair)))
+          _.fold(
+            error => log.info(error.toString),
+            pair => if (pair.hasNewVersion) log.info(formatChanges(pair))
+          )
         )
       }
     }

@@ -21,5 +21,6 @@ object ZioLearn {
 
   def parseMessage(message: String): Either[circe.Error, Json] = parse(message)
 
-  def getValue(json: Json, key: String): Result[Json] = json.hcursor.downField(key).as[Json]
+  def getValue(json: Json, key: String): Result[Json] =
+    json.hcursor.downField(key).as[Json]
 }

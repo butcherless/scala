@@ -8,7 +8,10 @@ object HelloWorldBot {
     bot(0, max)
   }
 
-  private def bot(greetingCounter: Int, max: Int): Behavior[HelloWorld.Greeted] =
+  private def bot(
+      greetingCounter: Int,
+      max: Int
+  ): Behavior[HelloWorld.Greeted] =
     Behaviors.receive { (context, message) =>
       val n = greetingCounter + 1
       context.log.info("Greeting {} for {}", n, message.whom)

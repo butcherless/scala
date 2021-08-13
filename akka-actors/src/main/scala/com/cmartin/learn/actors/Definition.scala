@@ -1,25 +1,32 @@
 package com.cmartin.learn.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import com.cmartin.learn.actors.Definition.DispatcherActor.{Accepted, Rejected, Request, Unknown}
+import com.cmartin.learn.actors.Definition.DispatcherActor.{
+  Accepted,
+  Rejected,
+  Request,
+  Unknown
+}
 
 object Definition {
 
-  class DispatcherActor(workers: Seq[ActorRef]) extends Actor with ActorLogging {
+  class DispatcherActor(workers: Seq[ActorRef])
+      extends Actor
+      with ActorLogging {
 
     import DispatcherActor._
 
-    var map            = Map.empty[String, RequestInfo]
-    var received: Int  = 0
+    var map = Map.empty[String, RequestInfo]
+    var received: Int = 0
     var processed: Int = 0
-    var rejected: Int  = 0
+    var rejected: Int = 0
 
     override def receive: Receive = {
 
       case number: Int =>
         received += 1
-        val id      = generateId()         // generates id for message
-        val worker  = randomBetween0And9() // picks a random worker
+        val id = generateId() // generates id for message
+        val worker = randomBetween0And9() // picks a random worker
         val reqInfo = RequestInfo(sender(), id, number, worker)
         map += (id -> reqInfo) // add to pending message collection
         workers(worker) ! Request(number, id) // sends the message to the worker
@@ -38,9 +45,12 @@ object Definition {
         if (reqInfo.hops < HOP_MAX_COUNT) {
           val worker = randomBetween0And9() // picks the next worker
           map += (id -> reqInfo.copy(worker = worker, hops = reqInfo.hops + 1))
-          workers(worker) ! Request(number, id) // sends the message to the worker
+          workers(worker) ! Request(
+            number,
+            id
+          ) // sends the message to the worker
           log.debug(s"${Rejected(number, id)} => new worker[$worker]")
-        } else {    // self
+        } else { // self
           map -= id // remove message
           rejected += 1
           reqInfo.sender ! number // stream back-pressure
@@ -48,7 +58,7 @@ object Definition {
         }
 
       case Stats =>
-        val total  = processed + rejected
+        val total = processed + rejected
         val okRate = 100.toDouble * processed / total
         val koRate = 100.toDouble * rejected / total
         val resultString =
@@ -102,7 +112,13 @@ object Definition {
     def props(modulo: Int) = Props(new IntegerProcessor(modulo))
   }
 
-  case class RequestInfo(sender: ActorRef, id: String, number: Int, worker: Int, hops: Int = 1) {
+  case class RequestInfo(
+      sender: ActorRef,
+      id: String,
+      number: Int,
+      worker: Int,
+      hops: Int = 1
+  ) {
     def toShortString(): String = s"RequestInfo($id,$number,$worker,$hops)"
   }
 

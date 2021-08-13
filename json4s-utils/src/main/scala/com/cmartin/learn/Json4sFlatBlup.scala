@@ -4,8 +4,7 @@ import org.json4s.JValue
 import org.json4s.JsonAST.{JArray, JNothing, JObject}
 import org.json4s.native.{JsonMethods, Serialization}
 
-/**
-  * Implementación de la funcionalidad para el tipo
+/** Implementación de la funcionalidad para el tipo
   * [[https://docs.oracle.com/javase/8/docs/api/java/lang/String.html String]]
   *
   * Se utiliza para la interoperabilidad con aplicaciones Java. Utiliza el
@@ -14,13 +13,13 @@ import org.json4s.native.{JsonMethods, Serialization}
   * ==flatten==
   * Recibe como entrada un `JSON`.
   *
-  * Obtiene como salida un `JSON` con la estructura de claves compuestas y de
-  * un solo nivel formadas por cada uno de los path que forman las claves
-  * de la entrada.
+  * Obtiene como salida un `JSON` con la estructura de claves compuestas y de un
+  * solo nivel formadas por cada uno de los path que forman las claves de la
+  * entrada.
   *
   * ==blowup==
-  * Recibe como entrada un `JSON` con la estructura de claves compuestas y de
-  * un solo nivel de anidamiento.
+  * Recibe como entrada un `JSON` con la estructura de claves compuestas y de un
+  * solo nivel de anidamiento.
   *
   * Obtiene como salida un `JSON` con las claves obtenidas de cada una de las
   * claves compuestas de la entrada.
@@ -73,8 +72,8 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
         flatten steps: {parse, flatten, serialize}
      */
     for {
-      json: JValue       <- JsonMethods.parseOpt(blownUp)
-      flattened: JValue  <- _flatten(json).toOption
+      json: JValue <- JsonMethods.parseOpt(blownUp)
+      flattened: JValue <- _flatten(json).toOption
       jsonString: String <- Option(Serialization.write(flattened))
     } yield jsonString
   }
@@ -108,8 +107,8 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
     }
 
     for {
-      parsed: JValue     <- JsonMethods.parseOpt(flatten)
-      blownUp: JValue    <- _blowup(parsed).toOption
+      parsed: JValue <- JsonMethods.parseOpt(flatten)
+      blownUp: JValue <- _blowup(parsed).toOption
       jsonString: String <- Option(Serialization.write(blownUp))
     } yield jsonString
 

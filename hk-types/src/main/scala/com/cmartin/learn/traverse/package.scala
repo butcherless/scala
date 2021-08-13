@@ -27,7 +27,9 @@ package object traverse {
     }
   }
 
-  def combineServiceResponses(serviceList: List[ServiceResult]): List[Option[Int]] = {
+  def combineServiceResponses(
+      serviceList: List[ServiceResult]
+  ): List[Option[Int]] = {
     serviceList.map(callRemoteServiceOption)
   }
 
@@ -47,13 +49,15 @@ package object traverse {
           Thread.sleep(d)
           println(s"delay Ko: $d")
           throw new RuntimeException("Crash!!!")
-        }.recoverWith {
-          case _ => Future.successful(Left(SERVICE_ERROR_MESSAGE))
+        }.recoverWith { case _ =>
+          Future.successful(Left(SERVICE_ERROR_MESSAGE))
         }
     }
   }
 
-  def composeServiceResponses(serviceList: List[ServiceResult]): Future[List[ServiceResponse]] = {
+  def composeServiceResponses(
+      serviceList: List[ServiceResult]
+  ): Future[List[ServiceResponse]] = {
     Future.sequence(serviceList.map(callRemoteService))
   }
 

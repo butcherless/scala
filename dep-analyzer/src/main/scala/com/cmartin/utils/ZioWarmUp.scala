@@ -7,7 +7,7 @@ import scala.util.Random
 
 object ZioWarmUp {
   val jsonKeys: List[String] = List("k1", "k2", "k3")
-  val jsonDoc: Json          = Json(jsonKeys)
+  val jsonDoc: Json = Json(jsonKeys)
 
   sealed trait JsonException extends Exception
 
@@ -52,7 +52,7 @@ object ZioWarmUp {
     }.mapError {
       case _: ParsingException => ParsingError("invalid format")
       case _: MappingException => MappingError("invalid type")
-      case _: Throwable        => UnknownError("error while processing json message")
+      case _: Throwable => UnknownError("error while processing json message")
     }.either
   }
 
@@ -60,7 +60,7 @@ object ZioWarmUp {
 
   def checkDependency(gav: Gav): Task[Gav] = {
     //println(s"performing action over artifact $gav")
-    val delay     = 250 + Random.nextInt(250)
+    val delay = 250 + Random.nextInt(250)
     TimeUtils.doDelay(delay)
     //println(s"fiber($fiberName) took $delay milliseconds")
     if (gav.version == "") IO.fail(new RuntimeException("connection error"))

@@ -16,13 +16,15 @@ class MapFlatBlupSpec extends AnyFlatSpec with Matchers {
   it should "flatten json keys in a Json Object" in {
     val resultMap: Map[String, Any] = MapFlatBlup.flatten(nestedJson).value
 
-    val expectedMap: Map[String, Any] = JsonMethods.parse(flattenedJson).extract[Map[String, Any]]
+    val expectedMap: Map[String, Any] =
+      JsonMethods.parse(flattenedJson).extract[Map[String, Any]]
 
     resultMap shouldBe expectedMap
   }
 
   it should "get a None value for an invalid nested json" in {
-    val result: Option[Map[String, Any]] = MapFlatBlup.flatten(invalidNestedJson)
+    val result: Option[Map[String, Any]] =
+      MapFlatBlup.flatten(invalidNestedJson)
 
     result shouldBe None
   }
@@ -30,7 +32,9 @@ class MapFlatBlupSpec extends AnyFlatSpec with Matchers {
   ignore should "flatten json keys in a Json Array" in {
     val resultMap: Map[String, Any] = MapFlatBlup.flatten(nestedArrayJson).value
 
-    resultMap shouldBe JsonMethods.parse(flattenedArrayJson).extract[Map[String, Any]]
+    resultMap shouldBe JsonMethods
+      .parse(flattenedArrayJson)
+      .extract[Map[String, Any]]
   }
 
   /*
@@ -40,13 +44,15 @@ class MapFlatBlupSpec extends AnyFlatSpec with Matchers {
   ignore should "blow up json keys in a flattened Json Object" in {
     val resultMap: Map[String, Any] = MapFlatBlup.blowup(flattenedJson).value
 
-    val expectedMap: Map[String, Any] = JsonMethods.parse(nestedJson).extract[Map[String, Any]]
+    val expectedMap: Map[String, Any] =
+      JsonMethods.parse(nestedJson).extract[Map[String, Any]]
 
     resultMap shouldBe expectedMap
   }
 
   ignore should "get a None value for an invalid flattened json" in {
-    val result: Option[Map[String, Any]] = MapFlatBlup.blowup(invalidFlattenedJson)
+    val result: Option[Map[String, Any]] =
+      MapFlatBlup.blowup(invalidFlattenedJson)
 
     result shouldBe None
   }

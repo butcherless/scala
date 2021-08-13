@@ -5,7 +5,11 @@ import java.util.{Properties, UUID}
 import com.typesafe.config.ConfigFactory
 import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
-import org.apache.kafka.common.serialization.{IntegerSerializer, StringDeserializer, StringSerializer}
+import org.apache.kafka.common.serialization.{
+  IntegerSerializer,
+  StringDeserializer,
+  StringSerializer
+}
 
 object Configuration {
   trait KafkaConf {
@@ -13,8 +17,8 @@ object Configuration {
     val conf = ConfigFactory.load("kafka.conf")
 
     // kafka config
-    lazy val kafkaHost  = conf.getString("kafka.host")
-    lazy val kafkaPort  = conf.getInt("kafka.port")
+    lazy val kafkaHost = conf.getString("kafka.host")
+    lazy val kafkaPort = conf.getInt("kafka.port")
     lazy val kafkaTopic = conf.getString("kafka.topic")
   }
 
@@ -32,7 +36,7 @@ object Configuration {
     )
     //props.put(ProducerConfig.RETRIES_CONFIG, "5")
 
-    lazy val producer  = new KafkaProducer[Int, String](props)
+    lazy val producer = new KafkaProducer[Int, String](props)
     lazy val producer2 = new KafkaProducer[Int, String](props)
   }
 

@@ -12,14 +12,18 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
     raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
   val logicManager: LogicManager.Service[Any] = new LogicManager.Service[Any] {
-    override def parseLines(lines: List[String]): ZIO[Any, Nothing, List[Either[String, Domain.Gav]]] =
+    override def parseLines(
+        lines: List[String]
+    ): ZIO[Any, Nothing, List[Either[String, Domain.Gav]]] =
       UIO.foreach(lines)(line => UIO.succeed(parseDepLine(line)))
 
-    override def filterValid(dependencies: List[Either[String, Domain.Gav]]): ZIO[Any, Nothing, List[Domain.Gav]] =
+    override def filterValid(
+        dependencies: List[Either[String, Domain.Gav]]
+    ): ZIO[Any, Nothing, List[Domain.Gav]] =
       UIO.effectTotal(
         dependencies
-          .collect {
-            case Right(dep) => dep
+          .collect { case Right(dep) =>
+            dep
           }
       )
 
@@ -31,7 +35,10 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
         dependencies.filterNot(dep => exclusionList.contains(dep.group))
       )
 
-    override def calculateValidRate(dependencyCount: Int, validCount: Int): ZIO[Any, Nothing, Double] =
+    override def calculateValidRate(
+        dependencyCount: Int,
+        validCount: Int
+    ): ZIO[Any, Nothing, Double] =
       UIO.effectTotal(100.toDouble * validCount / dependencyCount)
   }
 

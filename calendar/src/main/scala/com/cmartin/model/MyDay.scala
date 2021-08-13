@@ -2,8 +2,7 @@ package com.cmartin.model
 
 import java.time.LocalDate
 
-/**
-  * Created by cmartin on 29/01/2017.
+/** Created by cmartin on 29/01/2017.
   */
 sealed trait MyDay {
   def localDate: LocalDate

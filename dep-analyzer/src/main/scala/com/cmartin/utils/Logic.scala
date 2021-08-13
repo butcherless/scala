@@ -7,54 +7,53 @@ object Logic {
   import scala.Console.{MAGENTA, RED, RESET, YELLOW}
   import scala.collection.SortedSet
 
-  /**
-    * dependency group capture position at the regex
+  /** dependency group capture position at the regex
     */
   val GAV_GROUP_POS = 1
 
-  /**
-    * dependency artifact capture position at the regex
+  /** dependency artifact capture position at the regex
     */
   val GAV_ARTIFACT_POS = 2
 
-  /**
-    * dependency version capture position at the regex
+  /** dependency version capture position at the regex
     */
   val GAV_VERSION_POS = 3
 
-  /**
-    * Dependency regex root node
+  /** Dependency regex root node
     */
-  val DEP_ROOT_PATTERN: Regex = raw"([0-9a-z.-]+):([0-9a-z.-]+)\s->\s([0-9A-Za-z.-]+).*".r
+  val DEP_ROOT_PATTERN: Regex =
+    raw"([0-9a-z.-]+):([0-9a-z.-]+)\s->\s([0-9A-Za-z.-]+).*".r
 
-  /**
-    * Dependency regex non root node
+  /** Dependency regex non root node
     */
   val DEP_PATTERN: Regex = "([0-9a-z.-]+):([0-9a-z.-]+):([0-9A-Za-z.-]+).*".r
 
-  /**
-    * class that represents a dependency
+  /** class that represents a dependency
     *
-    * @param group    dependency group
-    * @param artifact dependency artifact
-    * @param version  dependency version
+    * @param group
+    *   dependency group
+    * @param artifact
+    *   dependency artifact
+    * @param version
+    *   dependency version
     */
   case class Dep(group: String, artifact: String, version: String) {
     def key = s"$group:$artifact"
   }
 
-  /**
-    * Companion Object for Gav case class
+  /** Companion Object for Gav case class
     */
   object Dep {
     implicit val ord: Ordering[Dep] = new Ordering[Dep] {
 
-      /**
-        * Comparator for dependencies classes
+      /** Comparator for dependencies classes
         *
-        * @param d1 one dependency
-        * @param d2 another one dependency
-        * @return 0 if equals, -1 if less than, +1 if greater than
+        * @param d1
+        *   one dependency
+        * @param d2
+        *   another one dependency
+        * @return
+        *   0 if equals, -1 if less than, +1 if greater than
         */
       def compare(d1: Dep, d2: Dep): Int = {
         d1.version.compareTo(d2.version)
@@ -62,38 +61,50 @@ object Logic {
     }
   }
 
-  /**
-    * Find string matches against regex list
+  /** Find string matches against regex list
     *
-    * @param s string to match
-    * @return match iterator option
+    * @param s
+    *   string to match
+    * @return
+    *   match iterator option
     */
   def findMatches(s: String): Option[Iterator[Regex.Match]] = {
-    List(DEP_PATTERN, DEP_ROOT_PATTERN).map(_.findAllMatchIn(s)).find(_.nonEmpty)
+    List(DEP_PATTERN, DEP_ROOT_PATTERN)
+      .map(_.findAllMatchIn(s))
+      .find(_.nonEmpty)
   }
 
-  /**
-    * Parse a string and returns a dependency if it matches a regex
+  /** Parse a string and returns a dependency if it matches a regex
     *
-    * @param s a string that could contain a dependency
-    * @return a dependency option
+    * @param s
+    *   a string that could contain a dependency
+    * @return
+    *   a dependency option
     */
   def getDependency(s: String): Option[Dep] = {
     findMatches(s) match {
       case Some(it) =>
         val gs = it.next()
         println(s"gs = $gs")
-        Some(Dep(gs.group(GAV_GROUP_POS), gs.group(GAV_ARTIFACT_POS), gs.group(GAV_VERSION_POS)))
+        Some(
+          Dep(
+            gs.group(GAV_GROUP_POS),
+            gs.group(GAV_ARTIFACT_POS),
+            gs.group(GAV_VERSION_POS)
+          )
+        )
       case None => None
     }
   }
 
-  /**
-    * A dependency string formatter
+  /** A dependency string formatter
     *
-    * @param key group and artifact
-    * @param set version collection backed by a Set
-    * @return the string formatted
+    * @param key
+    *   group and artifact
+    * @param set
+    *   version collection backed by a Set
+    * @return
+    *   the string formatted
     */
   def mkString(key: String, set: SortedSet[Dep]): String = {
     val s = set.map(_.version).mkString(", ")
@@ -109,11 +120,12 @@ object Logic {
    * @return dependency map updated just in case
    */
 
-  /**
-    * A string formatter for n invalid dependencies
+  /** A string formatter for n invalid dependencies
     *
-    * @param s string to format
-    * @return string formatted
+    * @param s
+    *   string to format
+    * @return
+    *   string formatted
     */
   def mkErrorString(s: String): String = {
     s"dependency format error => $RESET$RED$s$RESET"
@@ -123,13 +135,15 @@ object Logic {
 object DependencyRepository {
   import com.cmartin.utils.Logic.Dep
 
-  var depList: mutable.SortedSet[Dep] = scala.collection.mutable.SortedSet[Dep]()
+  var depList: mutable.SortedSet[Dep] =
+    scala.collection.mutable.SortedSet[Dep]()
 
-  /**
-    * Adds a dependency to the repository
+  /** Adds a dependency to the repository
     *
-    * @param dep dependency to add
-    * @return true if Some(dep)
+    * @param dep
+    *   dependency to add
+    * @return
+    *   true if Some(dep)
     */
   def addDependency(dep: Option[Dep]): Boolean = {
     dep.fold(false)(d => {
@@ -138,16 +152,18 @@ object DependencyRepository {
     })
   }
 
-  def getSetByVersionCountGreaterThan(counter: Int): Map[String, SortedSet[Dep]] = {
+  def getSetByVersionCountGreaterThan(
+      counter: Int
+  ): Map[String, SortedSet[Dep]] = {
     depList
       .groupBy(_.key)
       .filter(_._2.size > counter)
   }
 
-  /**
-    * Repository number of elements
+  /** Repository number of elements
     *
-    * @return dependency count
+    * @return
+    *   dependency count
     */
   def size: Int = {
     depList.size
