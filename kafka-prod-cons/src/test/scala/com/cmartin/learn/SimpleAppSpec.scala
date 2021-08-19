@@ -11,8 +11,8 @@ import scala.util.Random
 class SimpleAppSpec extends AnyFlatSpec with Matchers {
   "Application Helper" should "build a JSON DummyMessage" in {
     val timestamp: Long = new Date().getTime()
-    val dummyMessage    = DummyMessage(1, "dummy", timestamp, 7)
-    val json: String    = AppHelper.buildDummyMessage(dummyMessage)
+    val dummyMessage = DummyMessage(1, "dummy", timestamp, 7)
+    val json: String = AppHelper.buildDummyMessage(dummyMessage)
 
     json shouldBe s"""{"id":1,"text":"dummy","timestamp":$timestamp,"key":7}"""
   }

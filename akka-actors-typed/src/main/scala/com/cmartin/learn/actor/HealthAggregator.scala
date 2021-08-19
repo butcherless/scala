@@ -3,7 +3,10 @@ package com.cmartin.learn.actor
 import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior, PostStop, Signal}
 import com.cmartin.learn.actor.HealthAgent.{RequestStatus, RespondStatus}
-import com.cmartin.learn.actor.HealthAggregator.{AggregatorMessage, WrappedAgentResponse}
+import com.cmartin.learn.actor.HealthAggregator.{
+  AggregatorMessage,
+  WrappedAgentResponse
+}
 
 object HealthAggregator {
   /*
@@ -12,7 +15,8 @@ object HealthAggregator {
   sealed trait AggregatorMessage
 
   // Agregator incoming message from external protocol
-  case class WrappedAgentResponse(response: HealthAgent.AgentResponse) extends AggregatorMessage
+  case class WrappedAgentResponse(response: HealthAgent.AgentResponse)
+      extends AggregatorMessage
 
   /*
     R E S P O N S E S
@@ -23,7 +27,8 @@ object HealthAggregator {
     Behaviors.setup[AggregatorMessage](context => new HealthAggregator(context))
 }
 
-class HealthAggregator(context: ActorContext[AggregatorMessage]) extends AbstractBehavior[AggregatorMessage](context) {
+class HealthAggregator(context: ActorContext[AggregatorMessage])
+    extends AbstractBehavior[AggregatorMessage](context) {
   import DummyInfrastructureManager._
 
   var agentCount = 3
@@ -34,21 +39,29 @@ class HealthAggregator(context: ActorContext[AggregatorMessage]) extends Abstrac
       WrappedAgentResponse(response)
     }
 
-  val kafkaAgent: ActorRef[HealthAgent.HealthMessage] = context.spawn(HealthAgent(KAFKA_AGENT), "kafka-agent")
-  val postgresDbAgent                                 = context.spawn(HealthAgent(POSTGRESQL_AGENT), "postgres-agent")
-  val systemAgent                                     = context.spawn(HealthAgent(SYSTEM_AGENT), "system-agent")
+  val kafkaAgent: ActorRef[HealthAgent.HealthMessage] =
+    context.spawn(HealthAgent(KAFKA_AGENT), "kafka-agent")
+  val postgresDbAgent =
+    context.spawn(HealthAgent(POSTGRESQL_AGENT), "postgres-agent")
+  val systemAgent = context.spawn(HealthAgent(SYSTEM_AGENT), "system-agent")
 
   kafkaAgent ! RequestStatus(getRequestId(), agentResponseAdapter)
   postgresDbAgent ! RequestStatus(getRequestId(), agentResponseAdapter)
   systemAgent ! RequestStatus(getRequestId(), agentResponseAdapter)
 
-  override def onMessage(message: AggregatorMessage): Behavior[AggregatorMessage] = {
+  override def onMessage(
+      message: AggregatorMessage
+  ): Behavior[AggregatorMessage] = {
     // No need to handle any messages
     message match {
       case WrappedAgentResponse(response) =>
         response match {
           case RespondStatus(requestId, status, _) =>
-            context.log.info("Receive response for requesId {} with status {}", requestId, status)
+            context.log.info(
+              "Receive response for requesId {} with status {}",
+              requestId,
+              status
+            )
             context.log.debug(s"agent count=$agentCount")
             agentCount = agentCount - 1
             //Behaviors.stopped
@@ -64,7 +77,8 @@ class HealthAggregator(context: ActorContext[AggregatorMessage]) extends Abstrac
     }
   }
 
-  override def onSignal: PartialFunction[Signal, Behavior[AggregatorMessage]] = {
+  override def onSignal
+      : PartialFunction[Signal, Behavior[AggregatorMessage]] = {
     case PostStop =>
       context.log.info("Health aggregator actor stopped")
       this

@@ -11,7 +11,7 @@ class DummyEntityValidatorSpec extends AnyFlatSpec with Matchers {
   behavior of "DummyEntity Validator"
 
   val number = 7
-  val text   = "bcdfghjklmnpqrstvwxyz"
+  val text = "bcdfghjklmnpqrstvwxyz"
 
   it should "validate a dummy entity" in {
     val result = validate(number, text).toEither
@@ -52,12 +52,20 @@ class DummyEntityValidatorSpec extends AnyFlatSpec with Matchers {
   it should "fail to validate a text with invalid characters and upper chars" in {
     val result = validate(number, "xazY").toEither
 
-    result shouldBe Left(NonEmptyChunk(InvalidCharactersError, UpperCaseLetterError))
+    result shouldBe Left(
+      NonEmptyChunk(InvalidCharactersError, UpperCaseLetterError)
+    )
   }
 
   it should "fail to validate a text with invalid characters and upper chars and number out of range" in {
     val result = validate(-1, "xazY").toEither
 
-    result shouldBe Left(NonEmptyChunk(OutOfRangeError, InvalidCharactersError, UpperCaseLetterError))
+    result shouldBe Left(
+      NonEmptyChunk(
+        OutOfRangeError,
+        InvalidCharactersError,
+        UpperCaseLetterError
+      )
+    )
   }
 }

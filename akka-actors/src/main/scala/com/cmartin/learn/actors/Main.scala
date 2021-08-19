@@ -24,7 +24,8 @@ object Main extends App {
     for (i <- 1 to 10)
       yield system.actorOf(IntegerProcessor.props(i - 1), s"worker-${i - 1}")
 
-  val dispatcherActor = system.actorOf(DispatcherActor.props(workers), "dispatcher")
+  val dispatcherActor =
+    system.actorOf(DispatcherActor.props(workers), "dispatcher")
 
   val intSourceResult: Future[Done] = buildRandomPositiveIntSource()
     .take(100)

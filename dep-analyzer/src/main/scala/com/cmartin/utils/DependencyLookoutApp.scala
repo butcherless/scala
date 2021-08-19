@@ -14,8 +14,9 @@ object DependencyLookoutApp extends App with ComponentLogging {
 
   import ApplicationHelper._
 
-  val filename      = "dep-analyzer/src/main/resources/deps3.log"                // TODO property
-  val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
+  val filename = "dep-analyzer/src/main/resources/deps3.log" // TODO property
+  val exclusionList =
+    List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
 
   /*
     ZIO[R, E, A]
@@ -30,15 +31,22 @@ object DependencyLookoutApp extends App with ComponentLogging {
    */
 
   val program: ZIO[Definitions, Throwable, Unit] = for {
-    lines        <- FileManager.>.getLinesFromFile(filename)
+    lines <- FileManager.>.getLinesFromFile(filename)
     dependencies <- LogicManager.>.parseLines(lines)
-    _            <- FileManager.>.logDepCollection(dependencies)
-    validDeps    <- LogicManager.>.filterValid(dependencies)
-    validRate    <- LogicManager.>.calculateValidRate(dependencies.size, validDeps.size)
-    finalDeps    <- LogicManager.>.excludeList(validDeps, exclusionList)
-    remoteDeps   <- HttpManager.managed().use(_.httpManager.checkDependencies(finalDeps))
-    _            <- FileManager.>.logMessage(s"Valid rate of dependencies in the file: $validRate %")
-    _            <- FileManager.>.logPairCollection(remoteDeps)
+    _ <- FileManager.>.logDepCollection(dependencies)
+    validDeps <- LogicManager.>.filterValid(dependencies)
+    validRate <- LogicManager.>.calculateValidRate(
+      dependencies.size,
+      validDeps.size
+    )
+    finalDeps <- LogicManager.>.excludeList(validDeps, exclusionList)
+    remoteDeps <- HttpManager
+      .managed()
+      .use(_.httpManager.checkDependencies(finalDeps))
+    _ <- FileManager.>.logMessage(
+      s"Valid rate of dependencies in the file: $validRate %"
+    )
+    _ <- FileManager.>.logPairCollection(remoteDeps)
   } yield ()
 
   /*

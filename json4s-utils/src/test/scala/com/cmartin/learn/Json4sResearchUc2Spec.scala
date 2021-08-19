@@ -16,7 +16,7 @@ class Json4sResearchUc2Spec extends Json4sResearchBaseSpec {
 
   it should "return a new shadow document with @timestamp date, UC-2-1" in {
     // g i v e n
-    val dto                    = CreateDto(0L, inputMessage_UC_2_1)
+    val dto = CreateDto(0L, inputMessage_UC_2_1)
     val expectedShadow: JValue = shadowMessage_UC_2_1
 
     // w h e n
@@ -28,7 +28,7 @@ class Json4sResearchUc2Spec extends Json4sResearchBaseSpec {
 
   it should "return untouched shadow document, outdated request, UC-2-2" in {
     // g i v e n
-    val dto                    = CreateDto(21L, inputMessage_UC_2_2)
+    val dto = CreateDto(21L, inputMessage_UC_2_2)
     val expectedShadow: JValue = shadowMessage_UC_2_1
 
     // w h e n
@@ -40,7 +40,7 @@ class Json4sResearchUc2Spec extends Json4sResearchBaseSpec {
 
   it should "return an updated shadow document with @timestamp date, UC-2-3" in {
     // g i v e n , 21L retrieves current state shadowMessage_UC_2_1
-    val dto                    = CreateDto(21L, inputMessage_UC_2_3)
+    val dto = CreateDto(21L, inputMessage_UC_2_3)
     val expectedShadow: JValue = shadowMessage_UC_2_3
 
     // w h e n

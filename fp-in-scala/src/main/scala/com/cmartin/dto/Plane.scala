@@ -1,6 +1,11 @@
 package com.cmartin.dto
 
-case class Plane(id: Long, registration: String, brand: String = "", model: String = "")
+case class Plane(
+    id: Long,
+    registration: String,
+    brand: String = "",
+    model: String = ""
+)
 
 //TODO refactor to Plane constructor
 object Plane {

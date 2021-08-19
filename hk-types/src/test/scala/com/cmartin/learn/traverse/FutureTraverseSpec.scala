@@ -13,7 +13,8 @@ class FutureTraverseSpec extends AsyncFlatSpec with TimeLimits {
     // simulates an arbitrary list of services
     val serviceList = List(Ko, Ok, Ok, Ko, Ok)
     failAfter(2 * delayMax milliseconds) {
-      val result: Future[Seq[ServiceResponse]] = composeServiceResponses(serviceList)
+      val result: Future[Seq[ServiceResponse]] =
+        composeServiceResponses(serviceList)
 
       result map { responses =>
         assert(responses.size == serviceList.size)

@@ -6,9 +6,13 @@ import com.cmartin.route.{ApiController, ControllerPath, JsonSupport}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class WebServerSpec extends AnyFlatSpec with Matchers with ScalatestRouteTest with JsonSupport {
+class WebServerSpec
+    extends AnyFlatSpec
+    with Matchers
+    with ScalatestRouteTest
+    with JsonSupport {
   val JSON_CONTENT_TYPE = ContentTypes.`application/json`
-  val ID                = "4e4387c4-38e0-4fd8-80cd-2ca7a6395d8e"
+  val ID = "4e4387c4-38e0-4fd8-80cd-2ca7a6395d8e"
 
   val controller = new ApiController()
 
@@ -45,7 +49,10 @@ class WebServerSpec extends AnyFlatSpec with Matchers with ScalatestRouteTest wi
   }
 
   "The controller method POST /transfer" should "return json message" in {
-    Post(s"/${ControllerPath.TRANSFER}", route.buildTransfer()) ~> controller.routes ~> check {
+    Post(
+      s"/${ControllerPath.TRANSFER}",
+      route.buildTransfer()
+    ) ~> controller.routes ~> check {
       status shouldEqual StatusCodes.Created
       contentType shouldEqual JSON_CONTENT_TYPE
       checkTransferResponse(responseAs[String])
@@ -53,7 +60,10 @@ class WebServerSpec extends AnyFlatSpec with Matchers with ScalatestRouteTest wi
   }
 
   "The controller method PUT /transfer" should "return json message" in {
-    Put(s"/${ControllerPath.TRANSFER}/${ID}", route.buildTransfer()) ~> controller.routes ~> check {
+    Put(
+      s"/${ControllerPath.TRANSFER}/${ID}",
+      route.buildTransfer()
+    ) ~> controller.routes ~> check {
       status shouldEqual StatusCodes.OK
       contentType shouldEqual JSON_CONTENT_TYPE
       checkTransferResponse(responseAs[String])

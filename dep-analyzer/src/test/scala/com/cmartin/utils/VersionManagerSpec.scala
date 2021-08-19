@@ -30,7 +30,13 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
   "Regex type release X.Y.Z.Final" should "match the collection of versions" in {
     val pattern: Regex = releaseFinalRegex.r
 
-    val versions = Seq("1.2.3.Final", "10.11.12.Final", "1.2.10.Final", "1.13.1.Final", "10.1.0.Final")
+    val versions = Seq(
+      "1.2.3.Final",
+      "10.11.12.Final",
+      "1.2.10.Final",
+      "1.13.1.Final",
+      "10.1.0.Final"
+    )
 
     versions.foreach(v => info(s"$v: ${pattern.matches(v)}"))
 
@@ -42,7 +48,13 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
   "Regex type release candidate" should "match the collection of versions" in {
     val pattern: Regex = rcRegex.r
 
-    val versions = Seq("1.2.3-RC1", "10.11.12-RC11", "1.2.10-RC2", "1.13.1-RC5", "10.1.0-RC15")
+    val versions = Seq(
+      "1.2.3-RC1",
+      "10.11.12-RC11",
+      "1.2.10-RC2",
+      "1.13.1-RC5",
+      "10.1.0-RC15"
+    )
 
     versions.foreach(v => info(s"$v: ${pattern.matches(v)}"))
 
@@ -52,8 +64,9 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
   }
 
   "Release version" should "match one of the regex in the collection" in {
-    val version: String       = "1.2.3"
-    val result: Option[Regex] = regexSet.find(pattern => pattern.matches(version))
+    val version: String = "1.2.3"
+    val result: Option[Regex] =
+      regexSet.find(pattern => pattern.matches(version))
 
     result.nonEmpty shouldBe true
     result.map { regex =>
@@ -63,8 +76,9 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
   }
 
   "Release Final version" should "match one of the regex in the collection" in {
-    val version: String       = "1.2.3.Final"
-    val result: Option[Regex] = regexSet.find(pattern => pattern.matches(version))
+    val version: String = "1.2.3.Final"
+    val result: Option[Regex] =
+      regexSet.find(pattern => pattern.matches(version))
 
     result.nonEmpty shouldBe true
     result.map { regex =>
@@ -74,8 +88,9 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
   }
 
   "Release candidate version" should "match one of the regex in the collection" in {
-    val version: String       = "1.2.3-RC1"
-    val result: Option[Regex] = regexSet.find(pattern => pattern.matches(version))
+    val version: String = "1.2.3-RC1"
+    val result: Option[Regex] =
+      regexSet.find(pattern => pattern.matches(version))
 
     result.nonEmpty shouldBe true
     result.map { regex =>
@@ -86,11 +101,11 @@ class VersionManagerSpec extends AnyFlatSpec with Matchers {
 }
 
 object VersionManagerSpec {
-  val releaseBaseRegex  = "[0-9]+.[0-9]+.[0-9]+"
-  val releaseRegex      = s"$releaseBaseRegex$$"
+  val releaseBaseRegex = "[0-9]+.[0-9]+.[0-9]+"
+  val releaseRegex = s"$releaseBaseRegex$$"
   val releaseFinalRegex = s"$releaseBaseRegex.Final$$"
-  val rcRegex           = s"$releaseBaseRegex-RC[0-9]+$$"
-  val milestoneRegex    = s"$releaseBaseRegex-M[0-9]+$$"
+  val rcRegex = s"$releaseBaseRegex-RC[0-9]+$$"
+  val milestoneRegex = s"$releaseBaseRegex-M[0-9]+$$"
 
   val regexSet: Set[Regex] = Set(releaseRegex.r, rcRegex.r, releaseFinalRegex.r)
 }

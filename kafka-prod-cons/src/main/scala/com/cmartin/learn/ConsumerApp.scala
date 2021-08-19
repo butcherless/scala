@@ -11,7 +11,9 @@ import scala.jdk.CollectionConverters._
 object ConsumerApp extends App with ComponentLogging {
   val loopCount = 10
 
-  UuidConsumer.consumer.subscribe(util.Collections.singletonList(UuidConsumer.kafkaTopic))
+  UuidConsumer.consumer.subscribe(
+    util.Collections.singletonList(UuidConsumer.kafkaTopic)
+  )
 
   for (c <- 1 to loopCount) {
     val records = UuidConsumer.consumer.poll(Duration.ofMillis(500))

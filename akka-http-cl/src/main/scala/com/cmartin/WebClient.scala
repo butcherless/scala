@@ -32,7 +32,9 @@ object WebClient extends Greeting {
         case Failure(_) => sys.error("something wrong")
       }
 
-    def transformEachLine(line: ByteString): ByteString = ByteString(line.utf8String.toUpperCase)
+    def transformEachLine(line: ByteString): ByteString = ByteString(
+      line.utf8String.toUpperCase
+    )
 
     Thread.sleep(4000)
 

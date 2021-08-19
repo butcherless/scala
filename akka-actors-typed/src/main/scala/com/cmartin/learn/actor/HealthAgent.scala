@@ -14,7 +14,10 @@ object HealthAgent {
    */
   sealed trait HealthMessage
 
-  final case class RequestStatus(requestId: UUID, replayTo: ActorRef[RespondStatus]) extends HealthMessage
+  final case class RequestStatus(
+      requestId: UUID,
+      replayTo: ActorRef[RespondStatus]
+  ) extends HealthMessage
 
   final case object Stop extends HealthMessage
 
@@ -23,11 +26,17 @@ object HealthAgent {
    */
   sealed trait AgentResponse
 
-  final case class RespondStatus(requestId: UUID, json: String, replayTo: ActorRef[Stop.type]) extends AgentResponse
+  final case class RespondStatus(
+      requestId: UUID,
+      json: String,
+      replayTo: ActorRef[Stop.type]
+  ) extends AgentResponse
 }
 
-class HealthAgent(context: ActorContext[HealthAgent.HealthMessage], agentId: String)
-    extends AbstractBehavior[HealthAgent.HealthMessage](context) {
+class HealthAgent(
+    context: ActorContext[HealthAgent.HealthMessage],
+    agentId: String
+) extends AbstractBehavior[HealthAgent.HealthMessage](context) {
   import DummyInfrastructureManager._
   import HealthAgent._
 
@@ -39,7 +48,11 @@ class HealthAgent(context: ActorContext[HealthAgent.HealthMessage], agentId: Str
     message match {
       case RequestStatus(requestId, replayTo) =>
         replayTo ! RespondStatus(requestId, getStatus(agentId), context.self)
-        context.log.info("Request status with requestId {} and sender {}", requestId, replayTo.path)
+        context.log.info(
+          "Request status with requestId {} and sender {}",
+          requestId,
+          replayTo.path
+        )
         this
 
       case Stop =>

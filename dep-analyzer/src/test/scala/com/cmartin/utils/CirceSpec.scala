@@ -15,7 +15,11 @@ class CirceSpec extends AnyFlatSpec with Matchers {
 
   "Parser response" should "return a dependency" in {
     // given a json response with a dependency
-    val expectedDep = Dep("com.softwaremill.sttp", "async-http-client-backend-zio_2.13", "1.7.1")
+    val expectedDep = Dep(
+      "com.softwaremill.sttp",
+      "async-http-client-backend-zio_2.13",
+      "1.7.1"
+    )
 
     // when
     val depEither = parseResponse(searchOkResponse)
@@ -48,7 +52,12 @@ object CirceSpec {
         if (count > 0)
           cursor.downField("response").downField("docs").downArray.as[Document]
         else
-          Left(DecodingFailure("no elements", List(DownField("response"), DownField("numFound"))))
+          Left(
+            DecodingFailure(
+              "no elements",
+              List(DownField("response"), DownField("numFound"))
+            )
+          )
       }
     } yield Dep(doc.g, doc.a, doc.latestVersion)
 

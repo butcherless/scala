@@ -8,15 +8,15 @@ import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
 import zio.{Runtime, Task, URIO}
 
 class SttpSpec extends AnyFlatSpec with Matchers {
-  val runtime          = Runtime.default
+  val runtime = Runtime.default
   implicit val backend = unsafeRun(AsyncHttpClientZioBackend())
 
   "Raw interpolator" should "build an encoded string" in {
-    val group    = "dev.zio"
+    val group = "dev.zio"
     val artifact = "zio_2.13"
 
     val filter = s"q=g:$group+AND+a:$artifact+AND+p:jar&rows=1&wt=json"
-    val uri    = raw"https://search.maven.org/solrsearch/select?$filter"
+    val uri = raw"https://search.maven.org/solrsearch/select?$filter"
 
     info(uri)
   }
@@ -30,11 +30,15 @@ class SttpSpec extends AnyFlatSpec with Matchers {
 
     info(postRequest.toCurl)
 
-    val postResponse: Task[Response[Either[String, String]]] = postRequest.send()
+    val postResponse: Task[Response[Either[String, String]]] =
+      postRequest.send()
 
-    val bodyResult: URIO[Any, Either[Throwable, Response[Either[String, String]]]] = postResponse.either
+    val bodyResult
+        : URIO[Any, Either[Throwable, Response[Either[String, String]]]] =
+      postResponse.either
 
-    val result: Either[Throwable, Response[Either[String, String]]] = runtime.unsafeRun(bodyResult)
+    val result: Either[Throwable, Response[Either[String, String]]] =
+      runtime.unsafeRun(bodyResult)
 
     result match {
       case Right(value) =>
@@ -50,7 +54,7 @@ class SttpSpec extends AnyFlatSpec with Matchers {
   }
 
   ignore should "make a GET request" in {
-    val group    = "dev.zio"
+    val group = "dev.zio"
     val artifact = "zio_2.13"
 
     val filter = s"q=g:$group+AND+a:$artifact+AND+p:jar&rows=1&wt=json"
@@ -61,9 +65,10 @@ class SttpSpec extends AnyFlatSpec with Matchers {
 
     info(getRequest.toCurl)
 
-    val getResponse                                                 = getRequest.send()
-    val bodyResult                                                  = getResponse.either
-    val result: Either[Throwable, Response[Either[String, String]]] = runtime.unsafeRun(bodyResult)
+    val getResponse = getRequest.send()
+    val bodyResult = getResponse.either
+    val result: Either[Throwable, Response[Either[String, String]]] =
+      runtime.unsafeRun(bodyResult)
 
     result match {
       case Right(value) =>

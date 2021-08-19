@@ -12,7 +12,8 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
   val compiler: algebra.CrudOperationA ~> SingleEither = eitherCompiler
 
   "Either compiler" should "create a CryptoCurrency" in {
-    val result: Either[String, String] = create(cryptoCurrency).map(c => c).foldMap(eitherCompiler)
+    val result: Either[String, String] =
+      create(cryptoCurrency).map(c => c).foldMap(eitherCompiler)
 
     result shouldBe Right(currencyName)
   }
@@ -28,7 +29,9 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
     val result: Either[String, CryptoCurrency] =
       read(currencyName).map(c => c).foldMap(eitherCompiler)
 
-    result.map(cc => cc.name) shouldBe Right(currencyName) //TODO fix uuid in read operation, Map repository
+    result.map(cc => cc.name) shouldBe Right(
+      currencyName
+    ) //TODO fix uuid in read operation, Map repository
   }
 
   it should "not read a CryptoCurrency, Left" in {
@@ -53,7 +56,8 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
   }
 
   it should "delete a CryptoCurrency" in {
-    val result: Either[String, UUID] = delete(cryptoCurrency).map(c => c).foldMap(eitherCompiler)
+    val result: Either[String, UUID] =
+      delete(cryptoCurrency).map(c => c).foldMap(eitherCompiler)
 
     result shouldBe Right(cryptoCurrency.id)
   }
