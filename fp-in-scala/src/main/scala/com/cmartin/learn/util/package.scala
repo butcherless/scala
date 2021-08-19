@@ -12,7 +12,8 @@ package object util {
         res
       else {
         map.head match {
-          case (k: String, v: Map[String, Any] @unchecked) => go(map.tail, res + (k -> go(v)))
+          case (k: String, v: Map[String, Any] @unchecked) =>
+            go(map.tail, res + (k -> go(v)))
 
           case (k: String, v: Any) => go(map.tail, res + (k -> v))
         }

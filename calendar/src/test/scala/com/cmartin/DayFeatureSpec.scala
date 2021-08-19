@@ -8,12 +8,11 @@ import org.scalatest.GivenWhenThen
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
 
-/**
-  * Created by cmartin on 02/02/2017.
+/** Created by cmartin on 02/02/2017.
   */
 class DayFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
   val weekenddate_2017_01_01 = LocalDate.ofYearDay(2017, 1)
-  val workdate_2017_01_02    = LocalDate.ofYearDay(2017, 2)
+  val workdate_2017_01_02 = LocalDate.ofYearDay(2017, 2)
 
   info("As a Day class user")
 
@@ -28,7 +27,13 @@ class DayFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
 
       Then("work day predicates validation should be Ok")
       val negativePredicates =
-        List(isAbsenceDay(_), isAnyHoliday(_), isCountryHoliday(_), isHoliday(_), isWeekendDay(_))
+        List(
+          isAbsenceDay(_),
+          isAnyHoliday(_),
+          isCountryHoliday(_),
+          isHoliday(_),
+          isWeekendDay(_)
+        )
       negativePredicates.forall(_(myWorkDay)) should be(false)
     }
 
@@ -63,7 +68,13 @@ class DayFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
 
       Then("holiday day predicates validation should be Ok")
       val negativePredicates =
-        List(isAbsenceDay(_), isCountryHoliday(_), isWorkDay(_), isWorkableDay(_), isWeekendDay(_))
+        List(
+          isAbsenceDay(_),
+          isCountryHoliday(_),
+          isWorkDay(_),
+          isWorkableDay(_),
+          isWeekendDay(_)
+        )
       negativePredicates.forall(_(holidayDay)) should be(false)
     }
 
@@ -77,7 +88,13 @@ class DayFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
 
       Then("country holiday day predicates validation should be Ok")
       val negativePredicates =
-        List(isAbsenceDay(_), isHoliday(_), isWorkDay(_), isWorkableDay(_), isWeekendDay(_))
+        List(
+          isAbsenceDay(_),
+          isHoliday(_),
+          isWorkDay(_),
+          isWorkableDay(_),
+          isWeekendDay(_)
+        )
       negativePredicates.forall(_(countryHolidayDay)) should be(false)
     }
 
@@ -91,7 +108,13 @@ class DayFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
 
       Then("absence holiday day predicates validation should be Ok")
       val negativePredicates =
-        List(isAnyHoliday(_), isHoliday(_), isWorkDay(_), isWorkableDay(_), isWeekendDay(_))
+        List(
+          isAnyHoliday(_),
+          isHoliday(_),
+          isWorkDay(_),
+          isWorkableDay(_),
+          isWeekendDay(_)
+        )
       negativePredicates.forall(_(absenceDay)) should be(false)
     }
   }

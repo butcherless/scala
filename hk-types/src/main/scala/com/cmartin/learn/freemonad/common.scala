@@ -10,9 +10,9 @@ import scalaz.{NonEmptyList, ValidationNel}
 import scala.util.{Failure, Try}
 
 object constants {
-  val notFoundUuid          = buildUuid
-  val foundUuid             = buildUuid
-  val notFoundName          = "name-not-found"
+  val notFoundUuid = buildUuid
+  val foundUuid = buildUuid
+  val notFoundName = "name-not-found"
   val operationErrorMessage = "operation-error-message"
 
 }
@@ -47,7 +47,13 @@ object functions {
 
   // H E L P E R
   def buildCryptoCurrency(name: String) =
-    CryptoCurrency(buildUuid, name, BigDecimal(4933580502.0), BigDecimal(0.075038), 3.94)
+    CryptoCurrency(
+      buildUuid,
+      name,
+      BigDecimal(4933580502.0),
+      BigDecimal(0.075038),
+      3.94
+    )
 
 }
 
@@ -62,12 +68,14 @@ case class CryptoCurrency(
 object CryptoCurrency {
   implicit val ord = new Ordering[CryptoCurrency] {
 
-    /**
-      * Comparator for dependencies classes
+    /** Comparator for dependencies classes
       *
-      * @param c1 one dependency
-      * @param c2 another one dependency
-      * @return 0 if equals, -1 if less than, +1 if greater than
+      * @param c1
+      *   one dependency
+      * @param c2
+      *   another one dependency
+      * @return
+      *   0 if equals, -1 if less than, +1 if greater than
       */
     def compare(c1: CryptoCurrency, c2: CryptoCurrency): Int = {
       c1.name.compareTo(c2.name)
@@ -78,8 +86,11 @@ object CryptoCurrency {
     if (name.isEmpty) ValidationError("Missing name").failureNel
     else name.success
 
-  def checkNegativeValue(value: BigDecimal): ValidationNel[ValidationError, BigDecimal] =
-    if (value <= ZERO) ValidationError(s"Negative value: ${value.toString}").failureNel
+  def checkNegativeValue(
+      value: BigDecimal
+  ): ValidationNel[ValidationError, BigDecimal] =
+    if (value <= ZERO)
+      ValidationError(s"Negative value: ${value.toString}").failureNel
     else value.success
 
   def validate(
@@ -118,8 +129,10 @@ object Factory {
     // TODO validation NEL
     // TODO declare business exception
     if (name.isEmpty) Failure(new RuntimeException("empty name"))
-    else if (marketCap <= ZERO) Failure(new RuntimeException("market cap less than zero"))
-    else if (price <= ZERO) Failure(new RuntimeException("currency price less than zero"))
+    else if (marketCap <= ZERO)
+      Failure(new RuntimeException("market cap less than zero"))
+    else if (price <= ZERO)
+      Failure(new RuntimeException("currency price less than zero"))
     else Try(CryptoCurrency(buildUuid, name, marketCap, price))
   }
 }
@@ -129,11 +142,41 @@ class CrytoCurrencyRepository {
   import scala.collection.immutable.TreeSet
 
   val repo: TreeSet[CryptoCurrency] = TreeSet(
-    CryptoCurrency(buildUuid, "Bitcoin", BigDecimal(153013899080.0), BigDecimal(8999.6), -0.84),
-    CryptoCurrency(buildUuid, "Ethereum", BigDecimal(64306036497.0), BigDecimal(648.99), 0.65),
-    CryptoCurrency(buildUuid, "Ripple", BigDecimal(32563377835.0), BigDecimal(0.831840), -0.84),
-    CryptoCurrency(buildUuid, "Litecoin", BigDecimal(8292021839.0), BigDecimal(147.34), -2.02),
-    CryptoCurrency(buildUuid, "TRON", BigDecimal(4933580502.0), BigDecimal(0.075038), 3.94)
+    CryptoCurrency(
+      buildUuid,
+      "Bitcoin",
+      BigDecimal(153013899080.0),
+      BigDecimal(8999.6),
+      -0.84
+    ),
+    CryptoCurrency(
+      buildUuid,
+      "Ethereum",
+      BigDecimal(64306036497.0),
+      BigDecimal(648.99),
+      0.65
+    ),
+    CryptoCurrency(
+      buildUuid,
+      "Ripple",
+      BigDecimal(32563377835.0),
+      BigDecimal(0.831840),
+      -0.84
+    ),
+    CryptoCurrency(
+      buildUuid,
+      "Litecoin",
+      BigDecimal(8292021839.0),
+      BigDecimal(147.34),
+      -2.02
+    ),
+    CryptoCurrency(
+      buildUuid,
+      "TRON",
+      BigDecimal(4933580502.0),
+      BigDecimal(0.075038),
+      3.94
+    )
   )
 
   def getByName(name: String) = repo.find(_.name == name)

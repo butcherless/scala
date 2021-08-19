@@ -5,10 +5,12 @@ import org.scalatest.GivenWhenThen
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
 
-/**
-  * Created by cmartin on 02/02/2017.
+/** Created by cmartin on 02/02/2017.
   */
-class PersonalCalendarFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
+class PersonalCalendarFeatureSpec
+    extends AnyFeatureSpec
+    with GivenWhenThen
+    with Matchers {
   info("As a PersonalCalendar class user")
 
   val YEAR = 2017

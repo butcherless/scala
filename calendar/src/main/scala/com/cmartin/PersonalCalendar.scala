@@ -4,9 +4,8 @@ import java.time.{DayOfWeek, LocalDate, Year}
 
 import com.cmartin.model._
 
-/**
-  * Created by cmartin on 21/01/2017.
-  * read file: http://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples
+/** Created by cmartin on 21/01/2017. read file:
+  * http://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples
   */
 trait PersonalCalendar {
 
@@ -72,7 +71,8 @@ object PersonalCalendar {
 class LocalDateCalendar(_year: Int) extends PersonalCalendar {
   def getAbsenceDays = yearDays.filter(PersonalCalendar.isAbsenceDay(_))
 
-  def getCountryHolidayDays = yearDays.filter(PersonalCalendar.isCountryHoliday(_))
+  def getCountryHolidayDays =
+    yearDays.filter(PersonalCalendar.isCountryHoliday(_))
 
   def getHolidayDays = yearDays.filter(PersonalCalendar.isHoliday(_))
 
@@ -104,8 +104,8 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
 
   private def buildYearDays: IndexedSeq[MyDay] = {
     val countryHolidays = readCountryHolidays()
-    val holidays        = readHolidays()
-    val absences        = readAbsences()
+    val holidays = readHolidays()
+    val absences = readAbsences()
 
     for (
       i <- 1 to dayCount;
@@ -153,17 +153,26 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
       .when(PersonalCalendar.isWeekendDate(date))(WeekendDay(date))
   }
 
-  def getHolidaysDay(date: LocalDate, holidays: List[LocalDate]): Option[MyDay] = {
+  def getHolidaysDay(
+      date: LocalDate,
+      holidays: List[LocalDate]
+  ): Option[MyDay] = {
     Option
       .when(holidays.contains(date))(HolidayDay(date))
   }
 
-  def getCountryHolidaysDay(date: LocalDate, holidays: List[LocalDate]): Option[MyDay] = {
+  def getCountryHolidaysDay(
+      date: LocalDate,
+      holidays: List[LocalDate]
+  ): Option[MyDay] = {
     Option
       .when(holidays.contains(date))(CountryHolidayDay(date))
   }
 
-  def getAbsenceDay(date: LocalDate, absences: List[LocalDate]): Option[MyDay] = {
+  def getAbsenceDay(
+      date: LocalDate,
+      absences: List[LocalDate]
+  ): Option[MyDay] = {
     Option
       .when(absences.contains(date))(AbsenceDay(date))
   }

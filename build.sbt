@@ -108,14 +108,29 @@ lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
   .settings(
     commonSettings,
     name := "akka-actors-typed-poc",
-    libraryDependencies ++= Seq(akkaHttp, akkaActorTyped, akkaStreamTyped, logback, zio, akkaTest)
+    libraryDependencies ++= Seq(
+      akkaHttp,
+      akkaActorTyped,
+      akkaStreamTyped,
+      logback,
+      zio,
+      akkaTest
+    )
   )
 
 lazy val akkahttphw = (project in file("akka-http-hw"))
   .settings(
     commonSettings,
     name := "akka-http-webserver",
-    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream, scalaLogging, logback, akkaHttpTest, akkaTest)
+    libraryDependencies ++= Seq(
+      akkaHttp,
+      akkaJson,
+      akkaStream,
+      scalaLogging,
+      logback,
+      akkaHttpTest,
+      akkaTest
+    )
   )
 
 lazy val akkahttpcl = (project in file("akka-http-cl"))

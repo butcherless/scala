@@ -9,10 +9,13 @@ import org.scalatest.TryValues._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class AircraftRepositorySpec extends AnyFlatSpec with Matchers with BeforeAndAfter {
-  private val AIRCRAFT_ID        = "EC-MXV"
+class AircraftRepositorySpec
+    extends AnyFlatSpec
+    with Matchers
+    with BeforeAndAfter {
+  private val AIRCRAFT_ID = "EC-MXV"
   private val AIR_EUROPA_AIRLINE = "Air Europa"
-  private val IBERIA_AIRLINE     = "Iberia"
+  private val IBERIA_AIRLINE = "Iberia"
 
   val repo = new AircraftRepository()
 
@@ -91,15 +94,34 @@ class AircraftRepositorySpec extends AnyFlatSpec with Matchers with BeforeAndAft
   private def buildAircraft(id: String, airline: String) =
     Aircraft(id, "A332", airline, "Sierra de Cazorla", LocalDate.now)
 
-  private def buildAircraft(id: String): Aircraft = buildAircraft(id, IBERIA_AIRLINE)
+  private def buildAircraft(id: String): Aircraft =
+    buildAircraft(id, IBERIA_AIRLINE)
 
   /*
   Creates 3 aircraft
    */
   private def buildAircraftList() = {
-    val a1 = Aircraft("ec-mab", "B787", AIR_EUROPA_AIRLINE, "Islas Canarias", LocalDate.now)
-    val a2 = Aircraft("ec-ncd", "A332", AIR_EUROPA_AIRLINE, "Islas Baleares", LocalDate.now)
-    val a3 = Aircraft("ec-mxv", "A359", IBERIA_AIRLINE, "Plácido Domingo", LocalDate.now)
+    val a1 = Aircraft(
+      "ec-mab",
+      "B787",
+      AIR_EUROPA_AIRLINE,
+      "Islas Canarias",
+      LocalDate.now
+    )
+    val a2 = Aircraft(
+      "ec-ncd",
+      "A332",
+      AIR_EUROPA_AIRLINE,
+      "Islas Baleares",
+      LocalDate.now
+    )
+    val a3 = Aircraft(
+      "ec-mxv",
+      "A359",
+      IBERIA_AIRLINE,
+      "Plácido Domingo",
+      LocalDate.now
+    )
     repo.save(a1)
     repo.save(a2)
     repo.save(a3)
