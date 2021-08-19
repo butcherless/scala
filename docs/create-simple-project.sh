@@ -7,7 +7,8 @@ SCALA_VER="2.13.6"
 SBT_VER="1.5.5"
 SBT_ASSEMBLY_VER="1.0.0"
 SBT_BLOOP_VER="1.4.8-83-27d9d739"
-SBT_SCALAFMT_VER="2.4.3"
+SBT_SCALAFMT_VER="3.0.0"
+SBT_PLUGIN_SCALAFMT_VER="2.4.3"
 DEP_GRAPH_VER="0.10.0-RC1"
 DEP_UP_VER="1.2.2"
 LOGBACK_VER="1.2.5"
@@ -46,7 +47,7 @@ addSbtPlugin("com.eed3si9n"       % "sbt-assembly"           % "'${SBT_ASSEMBLY_
 addSbtPlugin("net.virtual-void"   % "sbt-dependency-graph"   % "'${DEP_GRAPH_VER}'")
 addSbtPlugin("org.jmotor.sbt"     % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
 addSbtPlugin("org.scoverage"      % "sbt-scoverage"          % "'${SCOVERAGE_VER}'")
-addSbtPlugin("org.scalameta"      % "sbt-scalafmt"           % "'${SBT_SCALAFMT_VER}'")
+addSbtPlugin("org.scalameta"      % "sbt-scalafmt"           % "'${SBT_PLUGIN_SCALAFMT_VER}'")
 addSbtPlugin("ch.epfl.scala"      % "sbt-bloop"              % "'${SBT_BLOOP_VER}'")
 ' > project/plugins.sbt
 
