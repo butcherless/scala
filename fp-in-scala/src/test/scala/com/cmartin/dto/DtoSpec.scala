@@ -7,21 +7,22 @@ import org.scalatest.matchers.should.Matchers
 import scala.collection.immutable.HashSet
 
 class DtoSpec extends AnyFlatSpec with Matchers {
-  val ID           = 1234
+  val ID = 1234
   val REGISTRATION = "EC-LXM"
-  val MODEL        = "350-800"
+  val MODEL = "350-800"
   val EMPTY_STRING = ""
 
-  def plane2Tuple(p: Plane): (Long, String, String, String) = Plane.unapply(p).get
+  def plane2Tuple(p: Plane): (Long, String, String, String) =
+    Plane.unapply(p).get
 
   it should "mandatory constructor arguments" in {
-    val tuple    = plane2Tuple(Plane(ID, REGISTRATION))
+    val tuple = plane2Tuple(Plane(ID, REGISTRATION))
     val resTuple = (ID, REGISTRATION, EMPTY_STRING, EMPTY_STRING)
     resTuple shouldBe tuple
   }
 
   it should "named constructor arguments" in {
-    val tuple    = plane2Tuple(Plane(ID, REGISTRATION, model = MODEL))
+    val tuple = plane2Tuple(Plane(ID, REGISTRATION, model = MODEL))
     val resTuple = (ID, REGISTRATION, EMPTY_STRING, MODEL)
     resTuple shouldBe tuple
   }
@@ -50,7 +51,7 @@ class DtoSpec extends AnyFlatSpec with Matchers {
 
   it should "should be non empty collection" in {
     val child = Child(ID, "child description")
-    val res   = Parent(ID, "parent description", HashSet(child))
+    val res = Parent(ID, "parent description", HashSet(child))
     res.id shouldBe ID
     res.desc.isEmpty shouldBe false
     res.children.isEmpty shouldBe false

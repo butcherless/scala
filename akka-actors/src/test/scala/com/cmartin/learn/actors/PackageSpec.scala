@@ -17,7 +17,7 @@ class PackageSpec extends AnyFlatSpec {
   }
 
   it should "check Queue operations" in {
-    val digitSet          = (0 to 9).toSet
+    val digitSet = (0 to 9).toSet
     val queue: Queue[Int] = Queue.empty[Int]
 
     while (queue.size < 10) {
@@ -36,7 +36,7 @@ class PackageSpec extends AnyFlatSpec {
   }
 
   it should "not remove any processed element" in {
-    val messageSeq                   = Seq(mnp1, mnp2, mp1, mp2, mp3)
+    val messageSeq = Seq(mnp1, mnp2, mp1, mp2, mp3)
     var messageQueue: Queue[Message] = Queue.from(messageSeq)
 
     assert(messageQueue.nonEmpty)
@@ -46,7 +46,7 @@ class PackageSpec extends AnyFlatSpec {
   }
 
   it should "remove the longest prefix (3) of processed elements" in {
-    val messageSeq                   = Seq(mp1, mp2, mp3, mnp1, mnp2)
+    val messageSeq = Seq(mp1, mp2, mp3, mnp1, mnp2)
     var messageQueue: Queue[Message] = Queue.from(messageSeq)
 
     assert(messageQueue.nonEmpty)
@@ -60,7 +60,7 @@ object PackageSpec {
 
   val mnp1 = Message(1, false)
   val mnp2 = Message(2, false)
-  val mp1  = Message(3, true)
-  val mp2  = Message(4, true)
-  val mp3  = Message(5, true)
+  val mp1 = Message(3, true)
+  val mp2 = Message(4, true)
+  val mp3 = Message(5, true)
 }

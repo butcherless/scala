@@ -13,7 +13,10 @@ import sttp.client._
 import sttp.model.Uri
 import zio.{Task, UIO, ZIO}
 
-trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentLogging {
+trait HttpManagerLive
+    extends HttpManager
+    with HttpClientBackend
+    with ComponentLogging {
 
   import HttpManager._
 
@@ -23,18 +26,20 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
          2. element list to process
          3. processing function
      */
-    override def checkDependencies(deps: List[Domain.Gav]): UIO[List[RepoResult[Domain.GavPair]]] = {
+    override def checkDependencies(
+        deps: List[Domain.Gav]
+    ): UIO[List[RepoResult[Domain.GavPair]]] = {
       ZIO.foreachParN(1)(deps)(getDependency)
     }
 
     override def shutdown(): UIO[Unit] = {
       for {
         _ <- UIO.succeed(log.info("shutting down http resources"))
-         _ <- UIO.succeed(
+        _ <- UIO.succeed(
           backend
             .close()
             .catchAll(_ => UIO.unit)
-         )
+        )
       } yield ()
     }
 
@@ -43,7 +48,8 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
      */
 
     private def buildUri(dep: Gav): Uri = {
-      val filter = s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
+      val filter =
+        s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
       val rawUri = raw"https://search.maven.org/solrsearch/select?$filter"
       uri"$rawUri"
     }
@@ -51,16 +57,22 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
     private def getDependency(dep: Gav): UIO[RepoResult[GavPair]] = {
       (for {
         response <- basicRequest.get(buildUri(dep)).send()
-        remote   <- parseResponse(response)(dep)
+        remote <- parseResponse(response)(dep)
       } yield GavPair(dep, remote)).either
     }
 
-    private def parseResponse(response: Response[Either[String, String]])(dep: Gav): Task[Gav] = {
+    private def parseResponse(
+        response: Response[Either[String, String]]
+    )(dep: Gav): Task[Gav] = {
       response.body match {
-        case Left(error) => Task.fail(new RuntimeException(error)) //TODO domain error
+        case Left(error) =>
+          Task.fail(new RuntimeException(error)) //TODO domain error
         case Right(response) =>
           parseResponse(response).fold(
-            error => Task.fail(new RuntimeException(s"${error.getMessage} for $dep")), //TODO domain error
+            error =>
+              Task.fail(
+                new RuntimeException(s"${error.getMessage} for $dep")
+              ), //TODO domain error
             value => Task.succeed(value)
           )
       }
@@ -69,16 +81,25 @@ trait HttpManagerLive extends HttpManager with HttpClientBackend with ComponentL
     private def parseResponse(response: String): Either[circe.Error, Gav] = {
       val numFoundKey = "numFound"
       val responseKey = "response"
-      val docsKey     = "docs"
+      val docsKey = "docs"
       val opsResult: Either[circe.Error, Gav] = for {
         json <- parse(response)
         cursor = json.hcursor
         count <- cursor.downField(responseKey).get[Int](numFoundKey)
         doc <- {
           if (count > 0) {
-            cursor.downField(responseKey).downField(docsKey).downArray.as[Document]
+            cursor
+              .downField(responseKey)
+              .downField(docsKey)
+              .downArray
+              .as[Document]
           } else
-            Left(DecodingFailure("no elements", List(DownField(responseKey), DownField(numFoundKey))))
+            Left(
+              DecodingFailure(
+                "no elements",
+                List(DownField(responseKey), DownField(numFoundKey))
+              )
+            )
         }
       } yield Gav(doc.g, doc.a, doc.latestVersion)
 

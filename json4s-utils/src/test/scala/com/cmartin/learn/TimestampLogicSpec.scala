@@ -38,5 +38,6 @@ class TimestampLogicSpec extends AnyFlatSpec with Matchers {
 
 object TimestampLogicSpec {
 
-  val datePattern: Regex = """[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.*Z""".r
+  val datePattern: Regex =
+    """[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.*Z""".r
 }

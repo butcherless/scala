@@ -14,12 +14,12 @@ object Json4sResearch {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
-  val EPOCH_TEXT           = "1970-01-01T00:00:00Z"
-  val excludeKey: String   = "exclude"
-  val metadataKey: String  = "metadata"
-  val payloadKey: String   = "payload"
-  val stateKey: String     = "state"
-  val tFieldKey: String    = "t_field"
+  val EPOCH_TEXT = "1970-01-01T00:00:00Z"
+  val excludeKey: String = "exclude"
+  val metadataKey: String = "metadata"
+  val payloadKey: String = "payload"
+  val stateKey: String = "state"
+  val tFieldKey: String = "t_field"
   val timestampKey: String = "@timestamp"
 
   private val XPATH_REGEX = """([a-z][a-z0-9]*)+([.][a-z][a-z0-9]*)*""".r
@@ -65,16 +65,17 @@ object Json4sResearch {
       json match {
         case JObject(tuples) =>
           tuples
-            .map {
-              case (k, v) => _flatten(v, buildPath(path, k))
+            .map { case (k, v) =>
+              _flatten(v, buildPath(path, k))
             }
             .fold(JNothing)(_ merge _)
 
-        case JArray(jValues) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
+        case JArray(
+              jValues
+            ) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
           jValues.zipWithIndex
-            .map {
-              case (v, i) =>
-                _flatten(v, buildPath(path, s"$i"))
+            .map { case (v, i) =>
+              _flatten(v, buildPath(path, s"$i"))
             }
             .fold(JNothing)(_ merge _)
 
@@ -121,7 +122,7 @@ object Json4sResearch {
     def dateTextToEither(dateText: String): Either[Throwable, String] = {
       Try {
         ZonedDateTime.parse(dateText) // validate or fail
-        dateText                      // is a valid date
+        dateText // is a valid date
       }.toEither
     }
 
@@ -141,7 +142,10 @@ object Json4sResearch {
     }
   }
 
-  def filterPayload(payload: JValue, keys: List[String]): Either[Throwable, JValue] = {
+  def filterPayload(
+      payload: JValue,
+      keys: List[String]
+  ): Either[Throwable, JValue] = {
     Right(
       if (keys.isEmpty) {
         payload
@@ -162,16 +166,17 @@ object Json4sResearch {
       json match {
         case JObject(tuples) =>
           tuples
-            .map {
-              case (k, v) => go(v, buildPath(path, k))
+            .map { case (k, v) =>
+              go(v, buildPath(path, k))
             }
             .fold(JNothing)(_ merge _)
 
-        case JArray(jValues) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
+        case JArray(
+              jValues
+            ) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
           jValues.zipWithIndex
-            .map {
-              case (v, i) =>
-                go(v, buildPath(path, s"$i"))
+            .map { case (v, i) =>
+              go(v, buildPath(path, s"$i"))
             }
             .fold(JNothing)(_ merge _)
 
@@ -209,7 +214,7 @@ object Json4sResearch {
 
   private def getStringValue(key: String, json: JValue): Option[String] = {
     val fields = for {
-      JObject(fields)            <- json
+      JObject(fields) <- json
       JField(`key`, JString(ts)) <- fields
     } yield ts
 
@@ -221,11 +226,13 @@ object Json4sResearch {
       .now()
       .format(DateTimeFormatter.ISO_INSTANT)
 
-  case class ArrayNotSupportedException(message: String) extends Exception(message)
+  case class ArrayNotSupportedException(message: String)
+      extends Exception(message)
 
   object ExceptionMessages {
     val ARRAY_NOT_SUPPORTED = "The parser doesn't support array type"
-    val UNEXPECTED_TYPE     = "The type was not expected at this position of the document."
+    val UNEXPECTED_TYPE =
+      "The type was not expected at this position of the document."
   }
 
 }

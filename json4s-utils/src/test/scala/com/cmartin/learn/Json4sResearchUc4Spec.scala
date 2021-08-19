@@ -22,7 +22,7 @@ class Json4sResearchUc4Spec extends Json4sResearchBaseSpec {
 
   it should "return a new shadow document with excluded fields, UC-4-1" in {
     // g i v e n
-    val dto                    = CreateDto(0L, inputMessage_UC_4_1)
+    val dto = CreateDto(0L, inputMessage_UC_4_1)
     val expectedShadow: JValue = shadowMessage_UC_4_1
 
     // w h e n
@@ -34,7 +34,7 @@ class Json4sResearchUc4Spec extends Json4sResearchBaseSpec {
 
   it should "return an updated shadow document with excluded @timestamp, UC-4-2" in {
     // g i v e n
-    val dto                    = CreateDto(41L, inputMessage_UC_4_2)
+    val dto = CreateDto(41L, inputMessage_UC_4_2)
     val expectedShadow: JValue = shadowMessage_UC_4_2
 
     // w h e n
@@ -46,7 +46,7 @@ class Json4sResearchUc4Spec extends Json4sResearchBaseSpec {
 
   it should "return an updated shadow document with excluded @timestamp and previous field, UC-4-3" in {
     // g i v e n
-    val dto                    = CreateDto(42L, inputMessage_UC_4_3)
+    val dto = CreateDto(42L, inputMessage_UC_4_3)
     val expectedShadow: JValue = shadowMessage_UC_4_3
 
     // w h e n

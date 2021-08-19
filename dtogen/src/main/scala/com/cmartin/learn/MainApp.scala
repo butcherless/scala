@@ -16,7 +16,8 @@ object MainApp extends App {
   println("\nDtoGenerator algebra!")
   val typeRep = TryDtoGenerator.create(Type("mypkg", "MyTpe"))
   typeRep match {
-    case Success(s) => println(s"TypeRepresentation[type: ${s.t}, file: ${s.f}]")
+    case Success(s) =>
+      println(s"TypeRepresentation[type: ${s.t}, file: ${s.f}]")
     case Failure(f) => println(s"function create type " + f.toString)
   }
 

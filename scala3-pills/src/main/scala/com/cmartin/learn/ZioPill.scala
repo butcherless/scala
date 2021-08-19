@@ -34,17 +34,22 @@ object ZioPill {
 
   def manageError(e: BaseError): String = e match {
     case MissingEntityError(_) => "missing"
-    case NotFoundError(_) => "not-found"
-    case UnknownError(_) => "unknown"
-    case _ => "default"
+    case NotFoundError(_)      => "not-found"
+    case UnknownError(_)       => "unknown"
+    case _                     => "default"
   }
 
   def manageRepositoryError(e: RepositoryError): String = e match {
-    case MissingEntityError(_) => "missing"
+    case MissingEntityError(_)   => "missing"
     case DuplicateEntityError(_) => "duplicate"
   }
 
-  case class MessageDbo(id: UUID, date: Instant, data: String, location: Location)
+  case class MessageDbo(
+      id: UUID,
+      date: Instant,
+      data: String,
+      location: Location
+  )
 
   object MessageRepository {
     type MessageRepositoryEnv = Has[MessageRepository.Service]
@@ -57,11 +62,15 @@ object ZioPill {
       ZLayer.succeed(
         new Service {
           override def findById(id: UUID): IO[RepositoryError, MessageDbo] =
-            IO.succeed(MessageDbo(id, Instant.now, "message-data", Location(3.0, 40.0)))
+            IO.succeed(
+              MessageDbo(id, Instant.now, "message-data", Location(3.0, 40.0))
+            )
         }
       )
 
-    def findById(id: UUID): ZIO[MessageRepositoryEnv, RepositoryError, MessageDbo] =
+    def findById(
+        id: UUID
+    ): ZIO[MessageRepositoryEnv, RepositoryError, MessageDbo] =
       ZIO.accessM(_.get.findById(id))
   }
 
@@ -79,12 +88,16 @@ object ZioPill {
     val live: ULayer[AddressServiceEnv] =
       ZLayer.succeed(
         new Service {
-          override def findByLocation(location: Location): IO[ViewError, Address] =
+          override def findByLocation(
+              location: Location
+          ): IO[ViewError, Address] =
             IO.succeed(Address("address-name", Some(1)))
         }
       )
 
-    def findByLocation(location: Location): ZIO[AddressServiceEnv, ViewError, Address] =
+    def findByLocation(
+        location: Location
+    ): ZIO[AddressServiceEnv, ViewError, Address] =
       ZIO.accessM(_.get.findByLocation(location))
   }
 

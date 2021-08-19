@@ -21,14 +21,17 @@ object algebra {
   case class Delete(cc: CryptoCurrency) extends CrudOperationA[UUID]
 
   // 2. Free the ADT
-  type CrudOperation[A] = Free[CrudOperationA, A] // give monadic feature to the ADT
+  type CrudOperation[A] =
+    Free[CrudOperationA, A] // give monadic feature to the ADT
 
   // 3. Smart constructors
   def create(cc: CryptoCurrency): CrudOperation[String] = liftF(Create(cc))
 
   def read(name: String): CrudOperation[CryptoCurrency] = liftF(Read(name))
 
-  def update(cc: CryptoCurrency): CrudOperation[CryptoCurrency] = liftF(Update(cc))
+  def update(cc: CryptoCurrency): CrudOperation[CryptoCurrency] = liftF(
+    Update(cc)
+  )
 
   def delete(cc: CryptoCurrency): CrudOperation[UUID] = liftF(Delete(cc))
 

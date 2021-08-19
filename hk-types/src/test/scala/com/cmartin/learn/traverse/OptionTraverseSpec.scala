@@ -12,7 +12,9 @@ class OptionTraverseSpec extends AnyFlatSpec {
     val result: Seq[Option[Int]] = combineServiceResponses(serviceList)
 
     assert(
-      result.filter(_.isEmpty).size + result.filter(_.isDefined).size == serviceList.size
+      result.filter(_.isEmpty).size + result
+        .filter(_.isDefined)
+        .size == serviceList.size
     )
 
     assert(result.contains(None))

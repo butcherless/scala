@@ -40,7 +40,6 @@ object OpaquePill {
       def toString: String = name
     }
   }
-  
 
   case class Device(companyId: CompanyId, objectId: ObjectId, name: DeviceName)
 }
