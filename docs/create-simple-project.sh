@@ -176,7 +176,7 @@ object Library {
   }
 
   def sum(a: Int, b: Int): Task[Int] = {
-    Task.effectTotal(a + b)
+    Task.succeed(a + b)
   }
 
 }' > src/main/scala/${PKG_DIR}/Library.scala
@@ -258,7 +258,7 @@ object ZioSpec
       equalTo(TEXT))
     ),
 
-    testM("Zio effect sum 2 + 3")
+    test("Zio effect sum 2 + 3")
     (
       for {
         r <- sum(2, 3)
