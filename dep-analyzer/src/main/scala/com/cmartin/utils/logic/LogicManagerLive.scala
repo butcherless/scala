@@ -20,7 +20,7 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
     override def filterValid(
         dependencies: List[Either[String, Domain.Gav]]
     ): ZIO[Any, Nothing, List[Domain.Gav]] =
-      UIO.effectTotal(
+      UIO.succeed(
         dependencies
           .collect { case Right(dep) =>
             dep
@@ -31,7 +31,7 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
         dependencies: List[Domain.Gav],
         exclusionList: List[String]
     ): ZIO[Any, Nothing, List[Domain.Gav]] =
-      UIO.effectTotal(
+      UIO.succeed(
         dependencies.filterNot(dep => exclusionList.contains(dep.group))
       )
 
@@ -39,7 +39,7 @@ trait LogicManagerLive extends LogicManager with ComponentLogging {
         dependencyCount: Int,
         validCount: Int
     ): ZIO[Any, Nothing, Double] =
-      UIO.effectTotal(100.toDouble * validCount / dependencyCount)
+      UIO.succeed(100.toDouble * validCount / dependencyCount)
   }
 
   /*

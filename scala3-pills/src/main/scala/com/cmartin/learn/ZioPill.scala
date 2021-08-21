@@ -71,7 +71,7 @@ object ZioPill {
     def findById(
         id: UUID
     ): ZIO[MessageRepositoryEnv, RepositoryError, MessageDbo] =
-      ZIO.accessM(_.get.findById(id))
+      ZIO.accessZIO(_.get.findById(id))
   }
 
   case class Location(lon: Double, lat: Double)
@@ -98,7 +98,7 @@ object ZioPill {
     def findByLocation(
         location: Location
     ): ZIO[AddressServiceEnv, ViewError, Address] =
-      ZIO.accessM(_.get.findByLocation(location))
+      ZIO.accessZIO(_.get.findByLocation(location))
   }
 
   def findAddressByMessageId(id: UUID) =

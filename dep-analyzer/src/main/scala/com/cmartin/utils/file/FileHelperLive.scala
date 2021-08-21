@@ -25,7 +25,7 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
         for {
           fis <- openFile(filename)
           lines <- createFileSource(fis)
-            .bracket(closeSource)(getLines)
+            .acquireReleaseWith(closeSource)(getLines)
         } yield lines.toSeq
       }
 
@@ -33,7 +33,7 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
           dependencies: Seq[Either[String, Domain.Gav]]
       ): IO[DomainError, Unit] = {
         Task
-          .effect(
+          .attempt(
             dependencies
               .foreach { dep =>
                 dep.fold(
@@ -55,7 +55,7 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
 
   private def openFile(filename: String): IO[DomainError, FileInputStream] =
     Task
-      .effect(
+      .attempt(
         new FileInputStream(new File(filename))
       )
       .orElseFail(FileIOError(Domain.OPEN_FILE_ERROR))
@@ -64,14 +64,14 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
       fis: FileInputStream
   ): IO[DomainError, BufferedSource] = {
     Task
-      .effect(
+      .attempt(
         new BufferedSource(fis)
       )
       .orElseFail(FileIOError(Domain.FILE_BUFFER_ERROR))
   }
 
   private def closeSource(source: BufferedSource): UIO[Unit] = {
-    UIO.effectTotal(
+    UIO.succeed(
       source
         .close()
     )

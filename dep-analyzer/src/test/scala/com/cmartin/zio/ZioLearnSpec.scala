@@ -15,8 +15,8 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
   "An unfailling UIO effect" should "return a computation" in {
     val program = for {
-      r1 <- UIO.effectTotal(0)
-      result <- UIO.effectTotal(r1 + 1)
+      r1 <- UIO.succeed(0)
+      result <- UIO.succeed(r1 + 1)
     } yield result
 
     val result = runtime.unsafeRun(program)
@@ -64,8 +64,8 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
     import com.cmartin.utils.ZioLearn.refineError
 
     val program: Task[Int] = for {
-      r1 <- Task.effect(0)
-      result <- Task.effect(1 / r1)
+      r1 <- Task.attempt(0)
+      result <- Task.attempt(1 / r1)
     } yield result
 
     val programRefined: IO[MyDomainException, Int] =
@@ -104,18 +104,17 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "repeat 6 times exponentially from 10 millis" in {
-    import zio.clock._
-    import zio.console._
-    import zio.duration._
+    import zio.Console
+    import zio.Duration
 
     val policy =
       Schedule.exponential(10.milliseconds) &&
         //Schedule.spaced(3.seconds)
         Schedule.recurs(5)
 
-    val program: ZIO[Console with Clock, IOException, (Duration, Long)] =
+    val program =
       (for {
-        _ <- putStrLn("zio console message")
+        _ <- Console.printLine("zio console message")
         //_ <- sleep(1.second)
       } yield ()) repeat policy
 

@@ -41,11 +41,11 @@ object FileHelper {
     override def getLinesFromFile(
         filename: String
     ): ZIO[FileHelper, DomainError, FileLines] =
-      ZIO.accessM(r => r.fileHelper getLinesFromFile filename)
+      ZIO.accessZIO(r => r.fileHelper getLinesFromFile filename)
 
     override def logDepCollection(
         dependencies: Seq[Either[String, Gav]]
     ): ZIO[FileHelper, DomainError, Unit] =
-      ZIO.accessM(r => r.fileHelper logDepCollection dependencies)
+      ZIO.accessZIO(r => r.fileHelper logDepCollection dependencies)
   }
 }

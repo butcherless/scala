@@ -28,23 +28,23 @@ object FileManager {
     override def getLinesFromFile(
         filename: String
     ): ZIO[FileManager, Throwable, List[String]] =
-      ZIO.accessM(_.fileManager getLinesFromFile filename)
+      ZIO.accessZIO(_.fileManager getLinesFromFile filename)
 
     override def logDepCollection(
         dependencies: List[Either[String, Domain.Gav]]
     ): ZIO[FileManager, Throwable, Unit] =
-      ZIO.accessM(_.fileManager logDepCollection dependencies)
+      ZIO.accessZIO(_.fileManager logDepCollection dependencies)
 
     override def logMessage(
         message: String
     ): ZIO[FileManager, Throwable, Unit] = {
-      ZIO.accessM(_.fileManager logMessage message)
+      ZIO.accessZIO(_.fileManager logMessage message)
     }
 
     override def logPairCollection(
         collection: List[RepoResult[Domain.GavPair]]
     ): ZIO[FileManager, Throwable, Unit] = {
-      ZIO.accessM(_.fileManager logPairCollection collection)
+      ZIO.accessZIO(_.fileManager logPairCollection collection)
     }
   }
 

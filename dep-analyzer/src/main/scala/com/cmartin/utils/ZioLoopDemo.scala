@@ -1,15 +1,12 @@
 package com.cmartin.utils
 
 import zio.App
+import zio.Console
 import zio.ExitCode
 import zio.UIO
 import zio.ZIO
 
-import java.io.IOException
-
 object ZioLoopDemo extends App {
-
-  import zio.console._
 
   /** Loops with the specified effectual function, collecting the results into a
     * list. The moral equivalent of:
@@ -65,17 +62,17 @@ object ZioLoopDemo extends App {
   /*
    * program
    */
-  val program: ZIO[Console, IOException, Unit] =
+  val program =
     for {
-      _ <- putStrLn("zio loop demo:")
+      _ <- Console.print("zio loop demo:")
       evenOrOddList <- ZIO.loop(initial)(cont, dec)(body)
-      _ <- putStrLn(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
+      _ <- Console.print(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
     } yield ()
 
   // main function, needs exit = 0 [OK] or exit > 0 [ERROR]
   // Here the interpreter runs the program and perform side-effects
   override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, ExitCode] = {
     program.exitCode
-      .catchAllCause(cause => putStrLn(s"${cause.prettyPrint}").exitCode)
+      .catchAllCause(cause => Console.print(s"${cause.prettyPrint}").exitCode)
   }
 }

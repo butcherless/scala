@@ -59,7 +59,7 @@ object DependencyLookoutApp extends App with ComponentLogging {
      */
     program
       .provide(modules)
-      .foldM(
+      .foldZIO(
         e => Task(log.info(e.getMessage)).ignore *> UIO(ExitCode.failure), // KO
         _ => UIO(ExitCode.success)
       ) // OK

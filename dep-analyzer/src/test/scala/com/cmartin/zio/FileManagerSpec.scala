@@ -26,27 +26,8 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
     r shouldBe ()
   }
 
-  it should "do something more" in {
-    trait DomainError
-    case class DomainErrorOne(msg: String) extends DomainError
-
-    val r: Task[Int] =
-      Task
-        .effect(1 / 2)
-
-    val de: IO[DomainError, Int] =
-      Task
-        .effect(1 / 0)
-        .orElseFail(DomainErrorOne("arithmetic error"))
-    // GIVEN
-
-    // WHEN
-
-    // THEN
-  }
-
   it should "repeat a message" in {
-    import zio.duration._
+    import zio.Duration
     val policy1 = Schedule
       .exponential(10.milliseconds)
       .tapOutput(o => UIO(println(o))) >>> (Schedule.recurWhile(
@@ -55,7 +36,7 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
 
     val policy2 = Schedule.recurs(5) || Schedule.recurs(10)
     val program =
-      Task.effect(println("zio schedule test")) repeat policy1
+      Task.attempt(println("zio schedule test")) repeat policy1
 
     //TODO runtime.unsafeRun(program)
   }

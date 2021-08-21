@@ -34,24 +34,24 @@ object LogicManager {
     override def parseLines(
         lines: List[String]
     ): ZIO[LogicManager, Nothing, List[Either[String, Domain.Gav]]] =
-      ZIO.accessM(_.logicManager parseLines lines)
+      ZIO.accessZIO(_.logicManager parseLines lines)
 
     override def filterValid(
         dependencies: List[Either[String, Domain.Gav]]
     ): ZIO[LogicManager, Nothing, List[Domain.Gav]] =
-      ZIO.accessM(_.logicManager filterValid dependencies)
+      ZIO.accessZIO(_.logicManager filterValid dependencies)
 
     override def excludeList(
         dependencies: List[Domain.Gav],
         exclusionList: List[String]
     ): ZIO[LogicManager, Nothing, List[Domain.Gav]] =
-      ZIO.accessM(_.logicManager.excludeList(dependencies, exclusionList))
+      ZIO.accessZIO(_.logicManager.excludeList(dependencies, exclusionList))
 
     override def calculateValidRate(
         dependencyCount: Int,
         validCount: Int
     ): ZIO[LogicManager, Nothing, Double] =
-      ZIO.accessM(
+      ZIO.accessZIO(
         _.logicManager.calculateValidRate(dependencyCount, validCount)
       )
   }

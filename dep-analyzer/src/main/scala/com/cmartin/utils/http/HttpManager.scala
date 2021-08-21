@@ -30,16 +30,18 @@ object HttpManager {
     override def checkDependencies(
         deps: List[Domain.Gav]
     ): ZIO[HttpManager, Nothing, List[RepoResult[Domain.GavPair]]] =
-      ZIO.accessM(_.httpManager checkDependencies deps)
+      ZIO.accessZIO(_.httpManager checkDependencies deps)
 
     override def shutdown(): ZIO[HttpManager, Nothing, Unit] =
-      ZIO.accessM(_.httpManager.shutdown())
+      ZIO.accessZIO(_.httpManager.shutdown())
 
   }
 
   def managed(): ZManaged[HttpManager, Nothing, HttpManager] =
     ZManaged
-      .make(ZIO.environment[HttpManager])(_.httpManager.shutdown())
+      .acquireReleaseWith(ZIO.environment[HttpManager])(
+        _.httpManager.shutdown()
+      )
 
   final case class Document(
       id: String,

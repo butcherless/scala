@@ -18,13 +18,13 @@ trait FileManagerLive extends FileManager with ComponentLogging {
     override def getLinesFromFile(filename: String): Task[List[String]] =
       for {
         fis <- openFile(filename)
-        lines <- createFileSource(fis).bracket(closeSource)(getLines)
+        lines <- createFileSource(fis).acquireReleaseWith(closeSource)(getLines)
       } yield lines.toList
 
     override def logDepCollection(
         dependencies: List[Either[String, Gav]]
     ): Task[Unit] = {
-      Task.effect(
+      Task.attempt(
         dependencies.foreach { dep =>
           dep.fold(
             line =>
@@ -38,7 +38,7 @@ trait FileManagerLive extends FileManager with ComponentLogging {
     }
 
     override def logMessage(message: String): Task[Unit] = {
-      Task.effect(
+      Task.attempt(
         log.info(message)
       )
     }
@@ -46,7 +46,7 @@ trait FileManagerLive extends FileManager with ComponentLogging {
     override def logPairCollection(
         collection: List[RepoResult[Domain.GavPair]]
     ): Task[Unit] = {
-      Task.effectTotal {
+      Task.succeed {
         collection.foreach(
           _.fold(
             error => log.info(error.toString),
@@ -64,18 +64,18 @@ trait FileManagerLive extends FileManager with ComponentLogging {
     s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"
 
   private def openFile(filename: String): Task[FileInputStream] =
-    Task.effect(
+    Task.attempt(
       new FileInputStream(new File(filename))
     )
 
   private def createFileSource(fis: FileInputStream): Task[BufferedSource] = {
-    Task.effect(
+    Task.attempt(
       new BufferedSource(fis)
     )
   }
 
   private def closeSource(source: BufferedSource): UIO[Unit] = {
-    UIO.effectTotal(
+    UIO.succeed(
       source
         .close()
     )
