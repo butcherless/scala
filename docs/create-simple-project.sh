@@ -16,7 +16,7 @@ SCALAFMT_VER="2.7.5"
 SCALATEST_VER="3.2.9"
 SCOVERAGE_VER="1.8.2"
 SLF4ZIO_VER="1.0.0"
-ZIO_VER="1.0.9"
+ZIO_VER="2.0.0-M2"
 
 #
 # create filesystem
