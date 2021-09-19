@@ -16,7 +16,7 @@ object Versions {
   val slf4j = "1.7.31"
   val sttp = "2.2.10"
   val zio = "2.0.0-M2"
-  val zioConfig = "1.0.6"
+  val zioConfig = "1.0.9"
   val zioKafka = "0.12.0"
   val zioPrelude = "1.0.0-RC6"
 }
