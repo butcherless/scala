@@ -4,7 +4,7 @@ PROJECT_NAME="project-template"
 PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
 SCALA_VER="2.13.6"
-SBT_VER="1.5.5"
+SBT_VER="1.6.0-M1"
 SBT_ASSEMBLY_VER="1.1.0"
 SBT_BLOOP_VER="1.4.9"
 SBT_SCALAFMT_VER="3.0.3"
@@ -16,7 +16,7 @@ SCALAFMT_VER="2.7.5"
 SCALATEST_VER="3.2.10"
 SCOVERAGE_VER="1.9.0"
 SLF4ZIO_VER="1.0.0"
-ZIO_VER="2.0.0-M2"
+ZIO_VER="2.0.0-M3"
 
 #
 # create filesystem
