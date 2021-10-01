@@ -1,5 +1,14 @@
 {
-  "extends": [
-    "config:base"
+  "automerge": true,
+  "labels": [
+    "type: dependencies"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "sbt"
+      ],
+      "enabled": false
+    }
   ]
 }
