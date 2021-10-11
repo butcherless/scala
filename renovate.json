@@ -8,7 +8,7 @@
       "matchManagers": [
         "sbt"
       ],
-      "enabled": false
+      "enabled": true
     }
   ],
   "schedule": [
