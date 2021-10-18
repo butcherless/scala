@@ -178,7 +178,7 @@ lazy val json4sUtils = (project in file("json4s-utils"))
 
 lazy val scala3pills = (project in file("scala3-pills"))
   .settings(
-    scalaVersion := "3.0.2",
+    scalaVersion := "3.1.0",
     libraryDependencies ++= Seq(
       zio,
       scalaTest
