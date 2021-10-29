@@ -109,19 +109,19 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
     val policy =
       Schedule.exponential(10.milliseconds) &&
-        //Schedule.spaced(3.seconds)
+        // Schedule.spaced(3.seconds)
         Schedule.recurs(5)
 
     val program =
       (for {
         _ <- Console.printLine("zio console message")
-        //_ <- sleep(1.second)
+        // _ <- sleep(1.second)
       } yield ()) repeat policy
 
     // TODO
-    //val result: (Duration, Int) = runtime.unsafeRun(program)
+    // val result: (Duration, Int) = runtime.unsafeRun(program)
 
-    //info(result._1.toMillis.toString)
+    // info(result._1.toMillis.toString)
 
   }
 
@@ -170,11 +170,11 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
     val io = getAppConfigFromMap(mapSource)
 
-    //TODO val config = runtime.unsafeRun(io)
+    // TODO val config = runtime.unsafeRun(io)
 
-    //info(s"zio config result: $config")
+    // info(s"zio config result: $config")
 
-    //config shouldBe expectedConfig
+    // config shouldBe expectedConfig
   }
 
   it should "fail when trying to retrieve a missing property" in {
@@ -184,9 +184,9 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
     val io = getAppConfigFromMap(mapSource)
 
-    //TODO val failure = the[FiberFailure] thrownBy runtime.unsafeRun(io)
+    // TODO val failure = the[FiberFailure] thrownBy runtime.unsafeRun(io)
 
-    //failure.cause.failures.nonEmpty shouldBe true
+    // failure.cause.failures.nonEmpty shouldBe true
 
   }
 }

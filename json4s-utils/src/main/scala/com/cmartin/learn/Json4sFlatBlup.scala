@@ -88,7 +88,7 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
         if (keys.isEmpty) value
         else
           keys.head match {
-            case ArrayElem(_) => //JArray(value :: Nil)
+            case ArrayElem(_) => // JArray(value :: Nil)
               JArray(blowupElem(keys.tail, value) :: Nil)
             case _ => JObject(keys.head -> blowupElem(keys.tail, value))
           }
@@ -101,7 +101,7 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
             .map(tuple => blowupElem(tuple._1.split('.'), tuple._2))
             .fold(JNothing)(_ merge _)
 
-        //TODO case JArray
+        // TODO case JArray
         case _ => JNothing
       }
     }

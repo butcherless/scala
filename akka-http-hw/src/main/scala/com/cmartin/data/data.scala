@@ -79,7 +79,7 @@ package object data {
     override def removeAll(): Try[Unit] = Try(repo.clear())
 
     override def save(ac: Aircraft): Try[Boolean] = {
-      //TODO Try[Aircraft)
+      // TODO Try[Aircraft)
       repo
         .find(_.id == ac.id)
         .fold(true)(ac => repo.remove(ac))

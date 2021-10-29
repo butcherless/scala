@@ -92,7 +92,7 @@ object AircraftValidator {
   def validateDeliveryLength(
       delivery: String
   ): Validation[ValidationError, String] = {
-    //TODO regex?
+    // TODO regex?
     def validateDate(dateText: String) = {
       val x1: Array[String] = delivery.split('-')
       (x1.length == 2) && (x1(0).length == 4 && x1(1).length == 2)

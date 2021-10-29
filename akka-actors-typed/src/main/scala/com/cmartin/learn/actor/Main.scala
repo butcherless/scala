@@ -15,9 +15,9 @@ object Main extends App {
   }
 
   // Create ActorSystem and top level supervisor
-  //val system: ActorSystem[Nothing] = ActorSystem[Nothing](IotSupervisor(), "iot-system")
+  // val system: ActorSystem[Nothing] = ActorSystem[Nothing](IotSupervisor(), "iot-system")
 
-  //system.terminate()
+  // system.terminate()
 
   val greeter: Behavior[String] =
     Behaviors.receiveMessage[String] { message =>
@@ -29,7 +29,7 @@ object Main extends App {
 
   system ! "Papuchi"
 
-  //StdIn.readLine()
+  // StdIn.readLine()
   delay(1000)
   system.terminate()
 }

@@ -64,7 +64,7 @@ class HealthAggregator(context: ActorContext[AggregatorMessage])
             )
             context.log.debug(s"agent count=$agentCount")
             agentCount = agentCount - 1
-            //Behaviors.stopped
+            // Behaviors.stopped
             if (agentCount == 0) {
               context.log.debug(s"agent count=$agentCount")
               Behaviors.stopped

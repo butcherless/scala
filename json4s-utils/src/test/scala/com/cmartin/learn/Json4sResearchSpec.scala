@@ -61,7 +61,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     val result: JValue = getKey("", json)
 
     result shouldBe json
-    //a[RuntimeException] shouldBe thrownBy(getKey("", json))
+    // a[RuntimeException] shouldBe thrownBy(getKey("", json))
   }
 
   it should "flatten a json document" in {
@@ -69,7 +69,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     val flattened = flattenedInputMessageJson
     val result = flatten(json)
 
-    //info(pretty(render(result)))
+    // info(pretty(render(result)))
 
     result shouldBe flattened
   }
@@ -78,7 +78,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     val json = arrayDocumentJson
     val flattened = flattenedArrayDocumentJson
     val result = flatten(json)
-    //info(jValueToString(result))
+    // info(jValueToString(result))
 
     result shouldBe flattened
   }

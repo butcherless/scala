@@ -27,14 +27,14 @@ object Configuration {
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, s"$kafkaHost:$kafkaPort")
     props.put(
       ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-      //classOf[StringSerializer].getCanonicalName
+      // classOf[StringSerializer].getCanonicalName
       classOf[IntegerSerializer].getCanonicalName
     )
     props.put(
       ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
       classOf[StringSerializer].getCanonicalName
     )
-    //props.put(ProducerConfig.RETRIES_CONFIG, "5")
+    // props.put(ProducerConfig.RETRIES_CONFIG, "5")
 
     lazy val producer = new KafkaProducer[Int, String](props)
     lazy val producer2 = new KafkaProducer[Int, String](props)

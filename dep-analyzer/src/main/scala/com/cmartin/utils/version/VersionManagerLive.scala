@@ -13,7 +13,7 @@ trait VersionManagerLive {
           local: Domain.Gav,
           remote: Domain.Gav
       ): UIO[Domain.ComparationResult] = {
-        //TODO naive implementation
+        // TODO naive implementation
         local.version.compareTo(remote.version) match {
           case 0  => UIO.succeed(Domain.Same)
           case -1 => UIO.succeed(Domain.Newer)

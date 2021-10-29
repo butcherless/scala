@@ -40,7 +40,7 @@ class ServicesSpec extends AnyFlatSpec with Matchers {
     val fruitService: SimpleService[Fruit] =
       new FruitServiceImpl(new FruitRepository)
 
-    //TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
+    // TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
 
     val fruit = for {
       color <- colorService.getByHash(COLOR_CODE_OK)
@@ -59,12 +59,12 @@ class ServicesSpec extends AnyFlatSpec with Matchers {
     val fruitService: SimpleService[Fruit] =
       new FruitServiceImpl(new FruitRepository)
 
-    //TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
+    // TODO refactor for-comprehension in a funtion f(x: Int) : Option[Fruit)
 
     val fruit = for {
       color <- colorService.getByHash(COLOR_CODE_KO)
       shape <- shapeService.getByHash(color.next)
-      fruit <- fruitService.getByHash(nextFruitHash(shape.name)) //TODO
+      fruit <- fruitService.getByHash(nextFruitHash(shape.name)) // TODO
     } yield fruit
 
     fruit shouldBe None

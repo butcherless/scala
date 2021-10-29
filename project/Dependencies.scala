@@ -26,8 +26,8 @@ object Dependencies {
   lazy val kafkaClient =
     "org.apache.kafka" % "kafka-clients" % Versions.kafkaClient
   lazy val logback =
-    "ch.qos.logback" % "logback-classic" % Versions.logback //exclude("org.slf4j", "slf4j-api")
-  //lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion
+    "ch.qos.logback" % "logback-classic" % Versions.logback // exclude("org.slf4j", "slf4j-api")
+  // lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion
 
   lazy val refined = "eu.timepit" %% "refined" % Versions.refined
   lazy val scalaLogging =
@@ -42,8 +42,8 @@ object Dependencies {
   lazy val zio = "dev.zio" %% "zio" % Versions.zio
   lazy val zioConfig = "dev.zio" %% "zio-config" % Versions.zioConfig
   lazy val zioPrelude = "dev.zio" %% "zio-prelude" % Versions.zioPrelude
-  //lazy val zioStreams = "dev.zio" %% "zio-streams" % zioVersion
-  //lazy val zioKafka = "dev.zio" %% "zio-kafka"  % zioKafkaVersion
+  // lazy val zioStreams = "dev.zio" %% "zio-streams" % zioVersion
+  // lazy val zioKafka = "dev.zio" %% "zio-kafka"  % zioKafkaVersion
 
   // testing code
   lazy val akkaHttpTest =
