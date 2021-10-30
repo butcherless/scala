@@ -21,7 +21,7 @@ class ShadowService(shadowRepository: ShadowRepository) {
         filteredPayload,
         currentShadow
       )
-      //_ <- shadowRepository.save(ShadowDbo(dto.id,JNothing))
+      // _ <- shadowRepository.save(ShadowDbo(dto.id,JNothing))
     } yield shadow
   }
 

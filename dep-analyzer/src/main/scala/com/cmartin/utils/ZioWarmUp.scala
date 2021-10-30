@@ -59,16 +59,16 @@ object ZioWarmUp {
   case class Gav(group: String, artifact: String, version: String)
 
   def checkDependency(gav: Gav): Task[Gav] = {
-    //println(s"performing action over artifact $gav")
+    // println(s"performing action over artifact $gav")
     val delay = 250 + Random.nextInt(250)
     TimeUtils.doDelay(delay)
-    //println(s"fiber($fiberName) took $delay milliseconds")
+    // println(s"fiber($fiberName) took $delay milliseconds")
     if (gav.version == "") IO.fail(new RuntimeException("connection error"))
     else IO.attempt(gav.copy(version = s"${gav.version}\u2713"))
   }
 
   def checkDependencies(): List[Gav] = {
-    //ZIO.collectAllParN(4)(Iterable.from(actions))
+    // ZIO.collectAllParN(4)(Iterable.from(actions))
 
     List.empty[Gav] // TODO
   }

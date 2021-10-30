@@ -8,7 +8,7 @@ import com.cmartin.learn.freemonad.types.MyMap
 import scala.util.{Failure, Success, Try}
 
 object main {
-  //extends App {
+  // extends App {
 
   val s = ApiImpl.read(7)
   println(s"Generic: $s")

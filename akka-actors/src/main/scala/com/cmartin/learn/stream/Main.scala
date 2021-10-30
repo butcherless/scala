@@ -18,9 +18,9 @@ object Main { //extends App {
   //  val done = Source
   //    .combine(sources(0), sources(1))(Concat(_))
   //    .runWith(Sink.foreach(println))
-  //val done: Future[Done] = Source(1 to 10).throttle(1, 1 second).runWith(Sink.foreach(println))
+  // val done: Future[Done] = Source(1 to 10).throttle(1, 1 second).runWith(Sink.foreach(println))
 
-  //val r = buildIntSource(1).runWith(printSink)
+  // val r = buildIntSource(1).runWith(printSink)
 
   val s1 = Source[Int](1 to 10)
   val s2 = Source[Int](11 to 20)

@@ -66,13 +66,13 @@ trait HttpManagerLive
     )(dep: Gav): Task[Gav] = {
       response.body match {
         case Left(error) =>
-          Task.fail(new RuntimeException(error)) //TODO domain error
+          Task.fail(new RuntimeException(error)) // TODO domain error
         case Right(response) =>
           parseResponse(response).fold(
             error =>
               Task.fail(
                 new RuntimeException(s"${error.getMessage} for $dep")
-              ), //TODO domain error
+              ), // TODO domain error
             value => Task.succeed(value)
           )
       }

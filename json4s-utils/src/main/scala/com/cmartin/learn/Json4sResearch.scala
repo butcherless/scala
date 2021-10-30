@@ -72,7 +72,7 @@ object Json4sResearch {
 
         case JArray(
               jValues
-            ) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
+            ) => // throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
           jValues.zipWithIndex
             .map { case (v, i) =>
               _flatten(v, buildPath(path, s"$i"))
@@ -173,7 +173,7 @@ object Json4sResearch {
 
         case JArray(
               jValues
-            ) => //throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
+            ) => // throw ArrayNotSupportedException(ExceptionMessages.ARRAY_NOT_SUPPORTED)
           jValues.zipWithIndex
             .map { case (v, i) =>
               go(v, buildPath(path, s"$i"))

@@ -15,14 +15,14 @@ class TimestampLogicSpec extends AnyFlatSpec with Matchers {
 
   it should "return now() date for missing timestamp and t_field" in {
     val timestamp: String = resolveTimestamp(inputMessage_UC_1_1).getOrElse("")
-    //info(timestamp)
+    // info(timestamp)
 
     timestamp should fullyMatch regex datePattern
   }
 
   it should "return the inputMessage.payload @timestamp property value" in {
     val timestamp: String = resolveTimestamp(inputMessage_UC_2_1).getOrElse("")
-    //info(timestamp)
+    // info(timestamp)
 
     timestamp shouldBe "2020-06-10T04:21:13Z"
   }

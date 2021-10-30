@@ -31,7 +31,7 @@ class EitherCompilerSpecs extends AbstractCompilerSpecs {
 
     result.map(cc => cc.name) shouldBe Right(
       currencyName
-    ) //TODO fix uuid in read operation, Map repository
+    ) // TODO fix uuid in read operation, Map repository
   }
 
   it should "not read a CryptoCurrency, Left" in {

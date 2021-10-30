@@ -15,10 +15,10 @@ import scala.concurrent.Future
 object interpreter {
 
   // 5. Build the program compiler
-  //val compiler: CrudOperationA ~> Id = ???
-  //val compiler: CrudOperationA ~> Option = ???
-  //val compiler: CrudOperationA ~> Either = ???
-  //val compiler: CrudOperationA ~> Future = ???
+  // val compiler: CrudOperationA ~> Id = ???
+  // val compiler: CrudOperationA ~> Option = ???
+  // val compiler: CrudOperationA ~> Either = ???
+  // val compiler: CrudOperationA ~> Future = ???
 
   def idCompiler: CrudOperationA ~> Id =
     new (CrudOperationA ~> Id) {
@@ -60,7 +60,7 @@ object interpreter {
         }
     }
 
-  //TODO rename
+  // TODO rename
   type SingleEither[A] = Either[String, A]
 
   def eitherCompiler: CrudOperationA ~> SingleEither =

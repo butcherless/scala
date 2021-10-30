@@ -57,7 +57,7 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "write two lines in the log destination" in {
-    //TODO https://gist.github.com/jdegoes/dd66656382247dc5b7228fb0f2cb97c8
+    // TODO https://gist.github.com/jdegoes/dd66656382247dc5b7228fb0f2cb97c8
     // add a logger dependency, via constructor or via module pattern
     val deps =
       Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))

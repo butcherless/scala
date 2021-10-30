@@ -43,7 +43,7 @@ object program {
       myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(eitherCompiler)
     println(s"Either Interpreter result: $eitherResult")
 
-    //TODO println("\nRunning Future[A] program interpreter")
+    // TODO println("\nRunning Future[A] program interpreter")
     val futureResult =
       myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(futureCompiler)
 

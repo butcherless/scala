@@ -92,7 +92,7 @@ object ErrorManagementPill {
       def create(createReq: CreateRequest): IO[ServiceError, Task]
     }
 
-    //TODO repository dependency
+    // TODO repository dependency
     class TaskServiceImpl extends TaskService {
       override def create(createReq: CreateRequest): IO[ServiceError, Task] =
         createReq.task.definition match {
@@ -121,7 +121,7 @@ object ErrorManagementPill {
       def insert[A](a: A): Long
     }
 
-    //TODO
+    // TODO
     class DatabaseServiceImpl extends DatabaseService {
       override def insert[A](a: A): Long = a.hashCode.toLong
     }

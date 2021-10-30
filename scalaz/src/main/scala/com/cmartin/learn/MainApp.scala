@@ -24,7 +24,7 @@ object MainApp extends App {
 
   def hasModDigit(s: String): Boolean = isDigit(mod16(s))
 
-  //val modR = Reader(mod16)
+  // val modR = Reader(mod16)
 
   /** function composition: mod16 andThen toHex
     *
@@ -55,7 +55,7 @@ object MainApp extends App {
 
   println(s"hasModDigit $line=" + hasModDigit(line))
 
-  //val hexMod = Reader(mod16).map(toHex)
+  // val hexMod = Reader(mod16).map(toHex)
 
   println(s"reader.map(toHex): " + hexMod("pepe"))
 

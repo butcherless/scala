@@ -60,10 +60,10 @@ object freecats {
     } yield ccLite
 
   // 5. Build the program compiler
-  //val compiler: CrudOperationA ~> Id = ???
-  //val compiler: CrudOperationA ~> Option = ???
-  //val compiler: CrudOperationA ~> Either = ???
-  //val compiler: CrudOperationA ~> Future = ???
+  // val compiler: CrudOperationA ~> Id = ???
+  // val compiler: CrudOperationA ~> Option = ???
+  // val compiler: CrudOperationA ~> Either = ???
+  // val compiler: CrudOperationA ~> Future = ???
 
   def compiler: CrudOperationA ~> Id =
     new (CrudOperationA ~> Id) {
@@ -94,7 +94,7 @@ object freecats {
           case Read(name) =>
             println(s"read name Option: $name")
             Some(buildCryptoCurrency(name))
-          //None
+          // None
           case Update(cc) =>
             println(s"update crypto currency Option: ${cc}")
             Some(cc)
@@ -115,7 +115,7 @@ object freecats {
             Right(cc.name)
           case Read(name) =>
             println(s"read name Either: $name")
-            //Right(buildCryptoCurrency(name))
+            // Right(buildCryptoCurrency(name))
             Left(s"unable to find: $name")
           case Update(cc) =>
             println(s"update crypto currency Either: ${cc}")

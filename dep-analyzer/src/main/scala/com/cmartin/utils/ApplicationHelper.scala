@@ -12,7 +12,7 @@ import zio.Task
 object ApplicationHelper {
 
   type Definitions =
-    FileManager with LogicManager with HttpManager //TODO  with ConfigManager
+    FileManager with LogicManager with HttpManager // TODO  with ConfigManager
 
   trait Modules
       extends FileManagerLive
