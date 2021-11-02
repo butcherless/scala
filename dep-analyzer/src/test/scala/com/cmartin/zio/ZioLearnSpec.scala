@@ -7,8 +7,6 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
 
-import java.io.IOException
-
 class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
   val runtime = Runtime.default
@@ -178,11 +176,9 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "fail when trying to retrieve a missing property" in {
-    val mapSource = Map(
-      "FILENAME" -> "dependencies.data"
-    )
+//    val mapSource = Map("FILENAME" -> "dependencies.data")
 
-    val io = getAppConfigFromMap(mapSource)
+    // val io = getAppConfigFromMap(mapSource)
 
     // TODO val failure = the[FiberFailure] thrownBy runtime.unsafeRun(io)
 

@@ -1,12 +1,8 @@
 package com.cmartin.utils
 
-import zio.App
-import zio.Console
-import zio.ExitCode
-import zio.UIO
-import zio.ZIO
+import zio._
 
-object ZioLoopDemo extends App {
+object ZioLoopDemo extends ZIOAppDefault {
 
   /** Loops with the specified effectual function, collecting the results into a
     * list. The moral equivalent of:
@@ -71,8 +67,7 @@ object ZioLoopDemo extends App {
 
   // main function, needs exit = 0 [OK] or exit > 0 [ERROR]
   // Here the interpreter runs the program and perform side-effects
-  override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, ExitCode] = {
+  def run =
     program.exitCode
       .catchAllCause(cause => Console.print(s"${cause.prettyPrint}").exitCode)
-  }
 }
