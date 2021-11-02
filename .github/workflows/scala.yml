@@ -5,15 +5,17 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 17
+    - name: Setup Scala and Java
       uses: olafurpg/setup-scala@v13
       with:
         java-version: '17'
         distribution: 'temurin'
+    - name: compile main
+      run: sbt -v --client update 
     - name: compile main
       run: sbt -v -Dfile.encoding=UTF-8 --client compile 
     - name: compile unit tests
@@ -26,11 +28,11 @@ jobs:
       run: sbt -v -Dfile.encoding=UTF-8 --client assembly
 
   project-template:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 11
+    - name: Setup Scala and Java
       uses: olafurpg/setup-scala@v13
       with:
         distribution: 'temurin'
