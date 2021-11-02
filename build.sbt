@@ -186,7 +186,16 @@ lazy val scala3pills = (project in file("scala3-pills"))
     coverageEnabled := false
   )
 
-Global / onChangedBuildSource := ReloadOnSourceChanges
+// clear screen and banner
+lazy val cls = taskKey[Unit]("Prints a separator")
+cls := {
+  val brs = "\n".repeat(2)
+  val message = "* B U I L D   B E G I N S   H E R E *"
+  val chars = "*".repeat(message.length())
+  println(s"$brs$chars")
+  println("* B U I L D   B E G I N S   H E R E *")
+  println(s"$chars$brs ")
+}
 
 addCommandAlias("xcoverage", "clean;coverage;test;coverageReport")
 addCommandAlias("xreload", "clean;reload")
