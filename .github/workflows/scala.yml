@@ -13,8 +13,8 @@ jobs:
     - name: Setup Scala and Java
       uses: olafurpg/setup-scala@v13
       with:
-        java-version: '17'
-        distribution: 'zulu'
+        java-version: '11'
+        distribution: 'temurin'
     - name: init
       run: sbt -v --client update 
     - name: compile main
