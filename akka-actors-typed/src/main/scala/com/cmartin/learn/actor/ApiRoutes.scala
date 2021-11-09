@@ -6,11 +6,7 @@ import akka.actor.typed.scaladsl.AskPattern._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.util.Timeout
-import com.cmartin.learn.actor.ServiceActor.{
-  ServiceActorResponse,
-  ServiceAskCommand,
-  ServiceTellCommand
-}
+import com.cmartin.learn.actor.ServiceActor.{ServiceActorResponse, ServiceAskCommand, ServiceTellCommand}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._

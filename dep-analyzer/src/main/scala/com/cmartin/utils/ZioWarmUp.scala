@@ -52,7 +52,7 @@ object ZioWarmUp {
     }.mapError {
       case _: ParsingException => ParsingError("invalid format")
       case _: MappingException => MappingError("invalid type")
-      case _: Throwable => UnknownError("error while processing json message")
+      case _: Throwable        => UnknownError("error while processing json message")
     }.either
   }
 

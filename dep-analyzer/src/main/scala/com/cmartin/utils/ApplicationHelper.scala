@@ -20,8 +20,7 @@ object ApplicationHelper {
       with HttpManagerLive
 
   val modules: Modules = new Modules {
-    override implicit val backend
-        : SttpBackend[Task, Nothing, WebSocketHandler] =
+    override implicit val backend: SttpBackend[Task, Nothing, WebSocketHandler] =
       unsafeRun(AsyncHttpClientZioBackend())
   }
 
