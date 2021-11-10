@@ -8,13 +8,7 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
 import akka.http.scaladsl.server.Directives
 import org.slf4j.LoggerFactory
-import spray.json.{
-  DefaultJsonProtocol,
-  JsObject,
-  JsString,
-  JsValue,
-  RootJsonFormat
-}
+import spray.json.{DefaultJsonProtocol, JsObject, JsString, JsValue, RootJsonFormat}
 
 import scala.util.Random
 

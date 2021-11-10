@@ -5,11 +5,7 @@ import java.util.{Properties, UUID}
 import com.typesafe.config.ConfigFactory
 import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
-import org.apache.kafka.common.serialization.{
-  IntegerSerializer,
-  StringDeserializer,
-  StringSerializer
-}
+import org.apache.kafka.common.serialization.{IntegerSerializer, StringDeserializer, StringSerializer}
 
 object Configuration {
   trait KafkaConf {

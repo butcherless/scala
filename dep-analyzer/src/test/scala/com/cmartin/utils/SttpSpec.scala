@@ -33,8 +33,7 @@ class SttpSpec extends AnyFlatSpec with Matchers {
     val postResponse: Task[Response[Either[String, String]]] =
       postRequest.send()
 
-    val bodyResult
-        : URIO[Any, Either[Throwable, Response[Either[String, String]]]] =
+    val bodyResult: URIO[Any, Either[Throwable, Response[Either[String, String]]]] =
       postResponse.either
 
     val result: Either[Throwable, Response[Either[String, String]]] =

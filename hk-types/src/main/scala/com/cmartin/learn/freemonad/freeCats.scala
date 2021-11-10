@@ -157,13 +157,7 @@ object freecats {
 }
 
 object MainCats extends App {
-  import freecats.{
-    compiler,
-    eitherCompiler,
-    futureCompiler,
-    myAwesomeProgram,
-    optionCompiler
-  }
+  import freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
 
   // 6. Run the program, fold the sentence list
   println("\nRunning Id[A] program interpreter")

@@ -56,8 +56,7 @@ class ServiceActor(
     }
   }
 
-  override def onSignal
-      : PartialFunction[Signal, Behavior[ServiceActorCommand]] = {
+  override def onSignal: PartialFunction[Signal, Behavior[ServiceActorCommand]] = {
     case PostStop =>
       context.log.info("Service Actor {} stopped", serviceId)
       this

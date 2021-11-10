@@ -3,10 +3,7 @@ package com.cmartin.learn.actor
 import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior, PostStop, Signal}
 import com.cmartin.learn.actor.HealthAgent.{RequestStatus, RespondStatus}
-import com.cmartin.learn.actor.HealthAggregator.{
-  AggregatorMessage,
-  WrappedAgentResponse
-}
+import com.cmartin.learn.actor.HealthAggregator.{AggregatorMessage, WrappedAgentResponse}
 
 object HealthAggregator {
   /*
@@ -77,8 +74,7 @@ class HealthAggregator(context: ActorContext[AggregatorMessage])
     }
   }
 
-  override def onSignal
-      : PartialFunction[Signal, Behavior[AggregatorMessage]] = {
+  override def onSignal: PartialFunction[Signal, Behavior[AggregatorMessage]] = {
     case PostStop =>
       context.log.info("Health aggregator actor stopped")
       this
