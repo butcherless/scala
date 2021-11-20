@@ -19,22 +19,22 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: init
-      run: sbt "${{env.SBT_OPTS}}" update 
+      run: sbt -v --client update 
       working-directory: ${{env.WORK_DIR}}
     - name: compile main
       run: sbt -v --client compile 
       working-directory: ${{env.WORK_DIR}}
     - name: compile unit tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client Test/compile
+      run: sbt -v --client Test/compile
       working-directory: ${{env.WORK_DIR}}
     - name: compile integration tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client IntegrationTest/compile
+      run: sbt -v --client IntegrationTest/compile
       working-directory: ${{env.WORK_DIR}}
     - name: tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client test
+      run: sbt -v --client test
       working-directory: ${{env.WORK_DIR}}
     - name: assembly
-      run: sbt -v -Dfile.encoding=UTF-8 --client assembly
+      run: sbt -v --client assembly
       working-directory: ${{env.WORK_DIR}}
 
   scala3:
