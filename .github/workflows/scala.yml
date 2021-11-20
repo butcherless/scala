@@ -32,6 +32,7 @@ jobs:
       working-directory: scala-2
     - name: assembly
       run: sbt -v -Dfile.encoding=UTF-8 --client assembly
+      working-directory: scala-3
 
   scala3:
 
@@ -59,6 +60,7 @@ jobs:
       working-directory: scala-3
     - name: assembly
       run: sbt -v --client assembly
+      working-directory: scala-3
 
   project-template:
     runs-on: ubuntu-20.04
