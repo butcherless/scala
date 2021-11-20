@@ -7,6 +7,8 @@ jobs:
 
     runs-on: ubuntu-20.04
     timeout-minutes: 10
+    env:
+      WORK_DIR: scala-2
 
     steps:
     - uses: actions/checkout@v2
@@ -17,7 +19,7 @@ jobs:
         distribution: 'temurin'
     - name: init
       run: sbt -v --client update 
-      working-directory: scala-2
+      working-directory: ${env.WORK_DIR}
     - name: compile main
       run: sbt -v --client compile 
       working-directory: scala-2
