@@ -9,7 +9,6 @@ jobs:
     timeout-minutes: 10
     env:
       WORK_DIR: scala-2
-      SBT_OPTS: -v --client
 
     steps:
     - uses: actions/checkout@v2
