@@ -9,6 +9,40 @@ jobs:
     timeout-minutes: 10
     env:
       WORK_DIR: scala-2
+      SBT_OPTS: -v --client
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Scala and Java
+      uses: olafurpg/setup-scala@v13
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    - name: init
+      run: sbt ${{env.SBT_OPTS}} update 
+      working-directory: ${{env.WORK_DIR}}
+    - name: compile main
+      run: sbt -v --client compile 
+      working-directory: ${{env.WORK_DIR}}
+    - name: compile unit tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client Test/compile
+      working-directory: ${{env.WORK_DIR}}
+    - name: compile integration tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client IntegrationTest/compile
+      working-directory: ${{env.WORK_DIR}}
+    - name: tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client test
+      working-directory: ${{env.WORK_DIR}}
+    - name: assembly
+      run: sbt -v -Dfile.encoding=UTF-8 --client assembly
+      working-directory: ${{env.WORK_DIR}}
+
+  scala3:
+
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    env:
+      WORK_DIR: scala-3
 
     steps:
     - uses: actions/checkout@v2
@@ -22,47 +56,16 @@ jobs:
       working-directory: ${{env.WORK_DIR}}
     - name: compile main
       run: sbt -v --client compile 
-      working-directory: scala-2
-    - name: compile unit tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client Test/compile
-      working-directory: scala-2
-    - name: compile integration tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client IntegrationTest/compile
-      working-directory: scala-2
-    - name: tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client test
-      working-directory: scala-2
-    - name: assembly
-      run: sbt -v -Dfile.encoding=UTF-8 --client assembly
-      working-directory: scala-3
-
-  scala3:
-
-    runs-on: ubuntu-20.04
-    timeout-minutes: 5
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup Scala and Java
-      uses: olafurpg/setup-scala@v13
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-    - name: init
-      run: sbt -v --client update 
-      working-directory: scala-3
-    - name: compile main
-      run: sbt -v --client compile 
-      working-directory: scala-3
+      working-directory: ${{env.WORK_DIR}}
     - name: compile unit tests
       run: sbt -v --client Test/compile
-      working-directory: scala-3
+      working-directory: ${{env.WORK_DIR}}
     - name: tests
       run: sbt -v --client test
-      working-directory: scala-3
+      working-directory: ${{env.WORK_DIR}}
     - name: assembly
       run: sbt -v --client assembly
-      working-directory: scala-3
+      working-directory: ${{env.WORK_DIR}}
 
   project-template:
     runs-on: ubuntu-20.04
