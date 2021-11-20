@@ -19,7 +19,7 @@ jobs:
         distribution: 'temurin'
     - name: init
       run: sbt -v --client update 
-      working-directory: ${env.WORK_DIR}
+      working-directory: ${{env.WORK_DIR}}
     - name: compile main
       run: sbt -v --client compile 
       working-directory: scala-2
