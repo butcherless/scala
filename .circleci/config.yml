@@ -21,6 +21,7 @@ jobs:
       - run:
           name: compile, test
           command: |
+            cd scala-2
             sbt clean test
             sbt -mem 2048 assembly
 
@@ -28,6 +29,7 @@ jobs:
       - run:
           name: coverage
           command: |
+            cd scala-2
             sbt -mem 2048 xcoverage
             curl -Os https://uploader.codecov.io/latest/codecov-linux
             chmod +x codecov-linux

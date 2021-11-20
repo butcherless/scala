@@ -3,10 +3,10 @@ name: Scala CI
 on: [push]
 
 jobs:
-  build:
+  scala2:
 
     runs-on: ubuntu-20.04
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
@@ -17,20 +17,55 @@ jobs:
         distribution: 'temurin'
     - name: init
       run: sbt -v --client update 
+      working-directory: scala-2
     - name: compile main
       run: sbt -v --client compile 
+      working-directory: scala-2
     - name: compile unit tests
       run: sbt -v -Dfile.encoding=UTF-8 --client test:compile
+      working-directory: scala-2
     - name: compile integration tests
       run: sbt -v -Dfile.encoding=UTF-8 --client it:compile
+      working-directory: scala-2
     - name: tests
       run: sbt -v -Dfile.encoding=UTF-8 --client test
+      working-directory: scala-2
+    - name: assembly
+      run: sbt -v -Dfile.encoding=UTF-8 --client assembly
+
+  scala3:
+
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Scala and Java
+      uses: olafurpg/setup-scala@v13
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    - name: init
+      run: sbt -v --client update 
+      working-directory: scala-3
+    - name: compile main
+      run: sbt -v --client compile 
+      working-directory: scala-3
+    - name: compile unit tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client test:compile
+      working-directory: scala-3
+    - name: compile integration tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client it:compile
+      working-directory: scala-3
+    - name: tests
+      run: sbt -v -Dfile.encoding=UTF-8 --client test
+      working-directory: scala-3
     - name: assembly
       run: sbt -v -Dfile.encoding=UTF-8 --client assembly
 
   project-template:
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
     - uses: actions/checkout@v2
@@ -40,4 +75,5 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
     - name: create project template
-      run: cd docs && chmod u+x create-simple-project.sh && ./create-simple-project.sh
+      run: chmod u+x create-simple-project.sh && ./create-simple-project.sh
+      working-directory: docs
