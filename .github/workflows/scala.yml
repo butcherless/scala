@@ -19,7 +19,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: init
-      run: sbt "${env.SBT_OPTS}" update 
+      run: sbt "${{env.SBT_OPTS}}" update 
       working-directory: ${{env.WORK_DIR}}
     - name: compile main
       run: sbt -v --client compile 
