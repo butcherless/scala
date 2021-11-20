@@ -22,10 +22,10 @@ jobs:
       run: sbt -v --client compile 
       working-directory: scala-2
     - name: compile unit tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client test:compile
+      run: sbt -v -Dfile.encoding=UTF-8 --client Test/compile
       working-directory: scala-2
     - name: compile integration tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client it:compile
+      run: sbt -v -Dfile.encoding=UTF-8 --client IntegrationTest/compile
       working-directory: scala-2
     - name: tests
       run: sbt -v -Dfile.encoding=UTF-8 --client test
@@ -52,16 +52,13 @@ jobs:
       run: sbt -v --client compile 
       working-directory: scala-3
     - name: compile unit tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client test:compile
-      working-directory: scala-3
-    - name: compile integration tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client it:compile
+      run: sbt -v --client Test/compile
       working-directory: scala-3
     - name: tests
-      run: sbt -v -Dfile.encoding=UTF-8 --client test
+      run: sbt -v --client test
       working-directory: scala-3
     - name: assembly
-      run: sbt -v -Dfile.encoding=UTF-8 --client assembly
+      run: sbt -v --client assembly
 
   project-template:
     runs-on: ubuntu-20.04
