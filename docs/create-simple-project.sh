@@ -7,16 +7,16 @@ SCALA_VER="2.13.7"
 SBT_VER="1.6.0-M1"
 SBT_ASSEMBLY_VER="1.1.0"
 SBT_BLOOP_VER="1.4.11"
-SBT_SCALAFMT_VER="3.0.8"
+SBT_SCALAFMT_VER="3.1.1"
 SBT_PLUGIN_SCALAFMT_VER="2.4.4"
 DEP_GRAPH_VER="0.10.0-RC1"
-DEP_UP_VER="1.2.2"
+DEP_UP_VER="0.5.3"
 LOGBACK_VER="1.2.7"
 SCALAFMT_VER="2.7.5"
 SCALATEST_VER="3.2.10"
-SCOVERAGE_VER="1.9.2"
+SCOVERAGE_VER="2.0.0-M3"
 SLF4ZIO_VER="1.0.0"
-ZIO_VER="2.0.0-M4"
+ZIO_VER="2.0.0-M6-1"
 
 #
 # create filesystem
@@ -45,10 +45,11 @@ docstrings = ScalaDoc
 echo '// sbt tool plugins
 addSbtPlugin("com.eed3si9n"       % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
 addSbtPlugin("net.virtual-void"   % "sbt-dependency-graph"   % "'${DEP_GRAPH_VER}'")
-addSbtPlugin("org.jmotor.sbt"     % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
+addSbtPlugin("com.timushev.sbt"   % "sbt-updates"            % "'${DEP_UP_VER}'")
 addSbtPlugin("org.scoverage"      % "sbt-scoverage"          % "'${SCOVERAGE_VER}'")
 addSbtPlugin("org.scalameta"      % "sbt-scalafmt"           % "'${SBT_PLUGIN_SCALAFMT_VER}'")
 addSbtPlugin("ch.epfl.scala"      % "sbt-bloop"              % "'${SBT_BLOOP_VER}'")
+//addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "1.2.2")
 ' > project/plugins.sbt
 
 
@@ -88,9 +89,7 @@ object Dependencies {
     
     // TESTING
     
-    "org.scalatest" %% "scalatest" % Versions.scalatest % Test,
-    "dev.zio" %% "zio-test" % Versions.zio % "test",
-    "dev.zio" %% "zio-test-sbt" % Versions.zio % "test"
+    "org.scalatest" %% "scalatest" % Versions.scalatest % Test
   )
 }' > project/Dependencies.scala
 
@@ -101,7 +100,7 @@ object Dependencies {
 echo 'import Dependencies._
 
 ThisBuild / scalaVersion := "'${SCALA_VER}'"
-ThisBuild / organization := "com.cmartin.learn"
+ThisBuild / organization := "'${SOURCE_PKG}'"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -125,8 +124,7 @@ lazy val commonSettings = Seq(
 lazy val templateProject = (project in file("."))
   .settings(
       commonSettings,
-      name := "'${PROJECT_NAME}'",
-      testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+      name := "'${PROJECT_NAME}'"
   )' > build.sbt
 
 
@@ -219,58 +217,37 @@ echo 'package '${SOURCE_PKG}'
 import '${SOURCE_PKG}'.Library._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import zio.Runtime.{default => runtime}
 
 class LibrarySpec
   extends AnyFlatSpec
     with Matchers {
 
-  behavior of "LibrarySpec"
+  behavior of "Library"
 
   it should "return the same text" in {
     val result = echo(TEXT)
 
     result shouldBe TEXT
   }
+
+  it should "sum two numbers" in {
+    //given
+    val a = 1
+    val b = 2
+
+    //when
+    val program = sum(a,b)
+    val result = runtime.unsafeRun(program)
+
+    //then
+    result shouldBe a+b
+  }
+
 }' > src/test/scala/${PKG_DIR}/LibrarySpec.scala
-
-#
-# ziotest template
-#
-echo 'package '${SOURCE_PKG}'
-
-import '${SOURCE_PKG}'.Library._
-import zio.test.Assertion._
-import zio.test._
-
-object ZioSpec
-  extends DefaultRunnableSpec {
-
-  def spec = suite("my spec")(
-    test("my test")
-    (assert(1 + 1)
-    (
-      equalTo(2))
-    ),
-
-    test("Echo function return the same text")
-    (assert(echo(TEXT))
-    (
-      equalTo(TEXT))
-    ),
-
-    test("Zio effect sum 2 + 3")
-    (
-      for {
-        r <- sum(2, 3)
-      } yield assert(r)(equalTo(5))
-    )
-
-  )
-}
-' > src/test/scala/${PKG_DIR}/ZioSpec.scala
 
 
 #
 # run this script
 #
-sbt clean coverage test coverageReport dependencyUpdates assembly sbtVersion run
+sbt clean update scalaVersion sbtVersion coverage test coverageReport dependencyUpdates assembly run
