@@ -30,7 +30,7 @@ lazy val commonSettings = Seq(
   //  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
 )
 
-lazy val scala3pills = (project in file("."))
+lazy val pills = (project in file("pills"))
   .settings(
     libraryDependencies ++= Seq(
       zio,
