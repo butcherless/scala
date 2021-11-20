@@ -1,4 +1,0 @@
-- name: foo_step
-  tag: master
-  service: app
-  command: sbt clean test
