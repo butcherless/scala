@@ -7,16 +7,14 @@ SCALA_VER="2.13.7"
 SBT_VER="1.6.0-M1"
 SBT_ASSEMBLY_VER="1.1.0"
 SBT_BLOOP_VER="1.4.11"
-SBT_SCALAFMT_VER="3.1.1"
+SBT_SCALAFMT_VER="3.1.2"
 SBT_PLUGIN_SCALAFMT_VER="2.4.4"
 DEP_GRAPH_VER="0.10.0-RC1"
 DEP_UP_VER="0.5.3"
-LOGBACK_VER="1.2.7"
 SCALAFMT_VER="2.7.5"
 SCALATEST_VER="3.2.10"
 SCOVERAGE_VER="2.0.0-M3"
-SLF4ZIO_VER="1.0.0"
-ZIO_VER="2.0.0-M6-1"
+ZIO_VER="2.0.0-M6-2"
 
 #
 # create filesystem
@@ -34,9 +32,9 @@ echo "sbt.version=${SBT_VER}" > project/build.properties
 # create code format file
 #
 echo 'version = "'${SBT_SCALAFMT_VER}'"
-align = more // For pretty alignment.
+align.preset = more
 maxColumn = 120
-docstrings = ScalaDoc
+runner.dialect = scala213source3
 ' > .scalafmt.conf
 
 #
@@ -65,11 +63,10 @@ echo 'ThisBuild / version := "1.0.0-SNAPSHOT"
 # create versions file
 #
 echo 'object Versions {
-
-  val logback = "'${LOGBACK_VER}'"
-  val slf4zio = "'${SLF4ZIO_VER}'"
+  // main
   val zio     = "'${ZIO_VER}'"
 
+  // test
   val scalatest = "'${SCALATEST_VER}'"
 
 }' > project/Versions.scala
@@ -83,12 +80,10 @@ echo 'import sbt._
 object Dependencies {
 
   val mainAndTest = Seq(
-    "ch.qos.logback" % "logback-classic" % Versions.logback,
-    "com.github.mlangc" %% "slf4zio" % Versions.slf4zio,
+    // MAIN
     "dev.zio" %% "zio" % Versions.zio,
     
-    // TESTING
-    
+    // TEST
     "org.scalatest" %% "scalatest" % Versions.scalatest % Test
   )
 }' > project/Dependencies.scala
@@ -186,25 +181,18 @@ object Library {
 echo 'package '${SOURCE_PKG}'
 
 import '${SOURCE_PKG}'.Library._
-import com.github.mlangc.slf4zio.api._
-import zio.{App, ExitCode, ZIO}
+import zio.Console.printLine
+import zio.ZIOAppDefault
 
 object SimpleApp
-  extends App
-    with LoggingSupport {
+  extends ZIOAppDefault {
 
-  override def run(args: List[String]): ZIO[zio.ZEnv, Nothing, ExitCode] = {
-    val program = for {
-      _ <- logger.debugIO(echo(TEXT))
+  def run = {
+    for {
+      _      <- printLine(echo(TEXT))
       result <- sum(2, 3)
-      _ <- logger.debugIO(s"sum result: $result")
+      _      <- printLine(s"sum result: $result")
     } yield ()
-
-    program.fold(e => {
-      logger.errorIO("program error:", e)
-      ExitCode.failure
-    },
-      _ => ExitCode.success)
   }
 }' > src/main/scala/${PKG_DIR}/SimpleApp.scala
 
