@@ -1,10 +1,9 @@
 package com.cmartin.learn
 
-import zio.Runtime
-
+import com.cmartin.learn.ErrorManagementPill.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import ErrorManagementPill._
+import zio.Runtime
 
 class ErrorManagementPillSpec extends AnyFlatSpec with Matchers {
   behavior of "ErrorManagementPill"

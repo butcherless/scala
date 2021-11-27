@@ -1,15 +1,9 @@
 package com.cmartin.learn
 
-import zio.Runtime
-import zio.Task
+import zio.{IO, Runtime, Task, ULayer, ZIO, ZLayer}
+
+import java.time.{Instant, LocalDateTime}
 import java.util.UUID
-import java.time.LocalDateTime
-import java.time.Instant
-import zio.Has
-import com.cmartin.learn.ZioPill.MessageRepository
-import zio.{ZLayer, ULayer}
-import zio.ZIO
-import zio.IO
 
 object ZioPill {
   val runtime = Runtime.default
@@ -44,13 +38,15 @@ object ZioPill {
     case DuplicateEntityError(_) => "duplicate"
   }
 
+  case class Location(lon: Double, lat: Double)
+  case class Address(name: String, number: Option[Int])
   case class MessageDbo(
       id: UUID,
       date: Instant,
       data: String,
       location: Location
   )
-
+  /*
   object MessageRepository {
     type MessageRepositoryEnv = Has[MessageRepository.Service]
 
@@ -74,9 +70,6 @@ object ZioPill {
       ZIO.accessM(_.get.findById(id))
   }
 
-  case class Location(lon: Double, lat: Double)
-
-  case class Address(name: String, number: Option[Int])
 
   object AddressService {
     type AddressServiceEnv = Has[AddressService.Service]
@@ -112,5 +105,5 @@ object ZioPill {
   val result: IO[BaseError, Address] =
     findAddressByMessageId(UUID.randomUUID)
       .provideLayer(messageAddressLayer)
-
+   */
 }

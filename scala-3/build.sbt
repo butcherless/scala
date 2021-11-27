@@ -1,6 +1,4 @@
 import Dependencies._
-import sbtassembly.AssemblyKeys.{assembly, assemblyMergeStrategy}
-import sbtassembly.MergeStrategy
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -33,9 +31,10 @@ lazy val commonSettings = Seq(
 lazy val pills = (project in file("pills"))
   .settings(
     libraryDependencies ++= Seq(
-      zio,
+      zio, zioPrelude,zioLogging,
       scalaTest
     ),
+    parallelExecution := false,
     coverageEnabled := false
   )
 

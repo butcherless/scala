@@ -2,7 +2,6 @@ package com.cmartin.learn
 
 import zio._
 import com.cmartin.learn.ConcurrencyPill.DomainError
-import zio.duration._
 
 object ConcurrencyPill {
   enum DomainError:

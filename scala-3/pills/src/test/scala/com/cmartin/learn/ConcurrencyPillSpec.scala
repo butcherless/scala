@@ -1,9 +1,9 @@
 package com.cmartin.learn
 
+import com.cmartin.learn.ConcurrencyPill.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import ConcurrencyPill._
-import zio.Runtime.{default => runtime}
+import zio.Runtime.default as runtime
 import zio.ZIO
 
 class ConcurrencyPillSpec
