@@ -2,22 +2,20 @@ package com.cmartin.learn
 
 import com.cmartin.learn.AviationModel.*
 import org.slf4j.LoggerFactory
+import zio.*
 import zio.internal.stacktracer.Tracer
-import zio.logging.LogAppender.{Service, withLoggerNameFromLine}
-import zio.logging.Logger.LoggerWithFormat
-import zio.logging.*
-import zio.{UIO, ULayer, *}
 
+/* ZLayer useful operators:
+   - '>+>'
+   - '>>>'
+   - '++'
+ */
 object ZLayerPill {
 
+  // domain names
   type MyError = String
 
   // TODO add zio.logging.Logger or ZIO.2.x Logger
-  object LoggingService {
-    type LoggingService = Logger[String]
-    val logger: LoggingService = ???
-    val layer: ULayer[LoggingService] = ??? // ZLayer.fromZIO(UIO(logger))
-  }
 
   object Repositories {
 
@@ -34,54 +32,67 @@ object ZLayerPill {
     object MyAirportRepository extends Accessible[MyAirportRepository]
   }
 
+  object SimpleLayer {
+    trait MyService {
+      def f1(): IO[String, Int]
+    }
+    case class MyServiceLive() extends MyService {
+      override def f1(): IO[String, Int] = IO.succeed(0)
+    }
+
+    object MyServiceLive {
+      val layer: ULayer[MyService] =
+        ZLayer.fromZIO(UIO.succeed(MyServiceLive()))
+    }
+  }
+
   object RepositoryImplementations {
-    import LoggingService.*
     import Repositories.*
 
-    case class MyCountryRepositoryLive(logger: LoggingService) extends MyCountryRepository {
+    case class MyCountryRepositoryLive()
+        extends MyCountryRepository {
 
       override def existsByCode(code: CountryCode): IO[MyError, Boolean] = {
         for {
-          _ <- logger.debug(s"existsByCode: $code")
+          _ <- ZIO.logDebug(s"existsByCode: $code")
           exists <- UIO.succeed(true) // simulation
         } yield exists
       } // .provide(logging)
 
       override def insert(country: Country): IO[MyError, Long] = {
         for {
-          _ <- logger.debug(s"insert: $country")
+          _ <- ZIO.logDebug(s"insert: $country")
           id <- IO.succeed(1L)
         } yield id
       } // .provide(logging)
 
       override def findByCode(code: CountryCode): IO[MyError, Option[Country]] = {
         for {
-          _ <- logger.debug(s"findByCode: $code")
+          _ <- ZIO.logDebug(s"findByCode: $code")
         } yield Some(Country(code, s"Country-name-for-$code"))
       } // .provide(logging)
-
     }
 
     object MyCountryRepositoryLive {
-      val layer: URLayer[LoggingService, MyCountryRepository] =
-        (MyCountryRepositoryLive(_)).toLayer
+      val layer: ULayer[MyCountryRepository] =
+        ZLayer.fromZIO(UIO.succeed(MyCountryRepositoryLive()))
     }
 
-    case class MyAirportRepositoryLive(logger: LoggingService) extends MyAirportRepository {
+    case class MyAirportRepositoryLive()
+        extends MyAirportRepository {
 
       override def insert(airport: Airport): IO[MyError, Long] = {
         for {
-          _ <- logger.debug(s"insert: $airport")
+          _ <- ZIO.logDebug(s"insert: $airport")
           id <- IO.succeed(1L)
         } yield id
       } // .provide(logging)
     }
 
     object MyAirportRepositoryLive {
-      val layer: URLayer[LoggingService, MyAirportRepository] =
-        (MyAirportRepositoryLive(_)).toLayer
+      val layer: ULayer[MyAirportRepository] =
+        ZLayer.fromZIO(UIO.succeed(MyAirportRepositoryLive()))
     }
-
   }
 
   object Services {
@@ -96,20 +107,18 @@ object ZLayerPill {
     }
 
     object MyAirportService extends Accessible[MyAirportService]
-
   }
 
   object ServiceImplementations {
-    import LoggingService.*
     import Repositories.*
     import Services.*
 
-    case class MyCountryServiceLive(logger: LoggingService, countryRepository: MyCountryRepository)
+    case class MyCountryServiceLive(countryRepository: MyCountryRepository)
         extends MyCountryService {
 
       override def create(country: Country): IO[MyError, Country] = {
         for {
-          _ <- logger.debug(s"create: $country")
+          _ <- ZIO.logDebug(s"create: $country")
           _ <- countryRepository.insert(country)
         } yield country
       } // .provide(logging)
@@ -117,19 +126,16 @@ object ZLayerPill {
     }
 
     object MyCountryServiceLive {
-      val layer: URLayer[LoggingService with MyCountryRepository, MyCountryService] =
-        (MyCountryServiceLive(_, _)).toLayer
+      val layer: URLayer[MyCountryRepository, MyCountryService] =
+        (MyCountryServiceLive(_)).toLayer
     }
 
-    case class MyAirportServiceLive(
-        logger: LoggingService,
-        countryRepository: MyCountryRepository,
-        airportRepository: MyAirportRepository
-    ) extends MyAirportService {
+    case class MyAirportServiceLive(countryRepository: MyCountryRepository, airportRepository: MyAirportRepository)
+        extends MyAirportService {
 
       override def create(airport: Airport): IO[MyError, Airport] = {
         for {
-          _ <- logger.debug(s"create: $airport")
+          _ <- ZIO.logDebug(s"create: $airport")
           _ <- ZIO.ifZIO(countryRepository.existsByCode(airport.country.code))(
             airportRepository.insert(airport),
             IO.fail(s"Country not found for code: ${airport.country.code}")
@@ -139,8 +145,8 @@ object ZLayerPill {
     }
 
     object MyAirportServiceLive {
-      val layer: URLayer[LoggingService with MyCountryRepository with MyAirportRepository, MyAirportService] =
-        (MyAirportServiceLive(_, _, _)).toLayer
+      val layer: URLayer[MyCountryRepository with MyAirportRepository, MyAirportService] =
+        (MyAirportServiceLive(_, _)).toLayer
     }
   }
 
@@ -159,7 +165,7 @@ object ZLayerPill {
      - output: Repository Layer
      */
     val countryRepoEnv =
-      LoggingService.layer >>> MyCountryRepositoryLive.layer
+      MyCountryRepositoryLive.layer
 
     // insert computation 'has' a Repository dependency
     val repositoryProgram: ZIO[MyCountryRepository, String, Long] =
@@ -181,7 +187,7 @@ object ZLayerPill {
      - output: Service Layer
      */
     val countryServEnv =
-      LoggingService.layer >+> MyCountryRepositoryLive.layer >>> MyCountryServiceLive.layer
+      MyCountryRepositoryLive.layer >>> MyCountryServiceLive.layer
 
     val serviceProgram: ZIO[MyCountryService, String, Country] =
       MyCountryService(_.create(country))
@@ -200,7 +206,7 @@ object ZLayerPill {
      - output: Logging + RepoA + RepoB Layer
      */
     val repositoriesEnv =
-      LoggingService.layer >+> MyCountryRepositoryLive.layer ++ MyAirportRepositoryLive.layer
+      MyCountryRepositoryLive.layer ++ MyAirportRepositoryLive.layer
 
     /* Service Layer
      - requirement: Logging + RepoA + RepoB
@@ -209,11 +215,26 @@ object ZLayerPill {
     val airportServEnv =
       repositoriesEnv >>> MyAirportServiceLive.layer
 
+    val country: Country = ???
     val airport: Airport = ???
     val airportSrvProg: ZIO[MyAirportService, String, Airport] =
       MyAirportService(_.create(airport))
     val airportSrvRes: Airport = runtime.unsafeRun(
       airportSrvProg.provide(airportServEnv)
+    )
+
+    val fullLayer =
+      repositoriesEnv >>>
+        MyCountryServiceLive.layer ++
+        MyAirportServiceLive.layer
+
+    val fullProgram: ZIO[MyAirportService with MyCountryService, MyError, Unit] = for {
+      x1 <- MyCountryService(_.create(country))
+      x2 <- MyAirportService(_.create(airport))
+    } yield ()
+
+    val fullResult: Unit = runtime.unsafeRun(
+      fullProgram.provide(fullLayer)
     )
   }
 
