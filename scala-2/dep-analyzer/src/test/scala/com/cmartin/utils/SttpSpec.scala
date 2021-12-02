@@ -1,15 +1,18 @@
 package com.cmartin.utils
 
-import com.cmartin.utils.DependencyLookoutApp.unsafeRun
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import sttp.client._
 import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
 import zio.{Runtime, Task, URIO}
+import org.scalatest.Ignore
 
 class SttpSpec extends AnyFlatSpec with Matchers {
   val runtime = Runtime.default
-  implicit val backend = unsafeRun(AsyncHttpClientZioBackend())
+
+  // TODO Sttp/Zio-2 implicit val backend = Runtime.default.unsafeRun(AsyncHttpClientZioBackend())
+
+  behavior of "Sttp client"
 
   "Raw interpolator" should "build an encoded string" in {
     val group = "dev.zio"
@@ -21,8 +24,7 @@ class SttpSpec extends AnyFlatSpec with Matchers {
     info(uri)
   }
 
-  behavior of "Sttp client"
-
+  /*
   ignore should "make a post request" in {
     val postRequest = basicRequest
       .post(uri"http://httpbin.org/post")
@@ -81,4 +83,5 @@ class SttpSpec extends AnyFlatSpec with Matchers {
       case Left(value) => fail(s"expected successful result: $value")
     }
   }
+   */
 }

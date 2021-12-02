@@ -5,7 +5,6 @@ import com.cmartin.utils.file.FileManagerLive
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
-import zio.duration._
 
 class FileManagerSpec extends AnyFlatSpec with Matchers {
 
@@ -16,10 +15,10 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
   it should "provide the env" in {
     // GIVEN
     val program: ZIO[FileManager, Throwable, Unit] = for {
-      _ <- FileManager.>.logMessage(">>> message <<<")
+      _ <- FileManager(_.logMessage(">>> message <<<"))
     } yield ()
 
-    val io = program.provideSome[Any] { f => FileManagerLive }
+    val io = program.provide(FileManagerLive.layer)
 
     // WHEN
     val r = runtime.unsafeRun(io)

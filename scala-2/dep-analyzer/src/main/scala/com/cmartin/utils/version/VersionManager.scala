@@ -1,7 +1,9 @@
 package com.cmartin.utils.version
 
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{ComparationResult, Gav}
+import com.cmartin.utils.Domain.ComparationResult
+import com.cmartin.utils.Domain.Gav
+import zio.UIO
 import zio.ZIO
 
 /* ZIO Module Steps: [https://zio.dev/docs/howto/howto_use_module_pattern]
@@ -15,29 +17,13 @@ import zio.ZIO
  */
 
 trait VersionManager {
-  val versionManager: VersionManager.Service[Any]
+  def compare(local: Gav, remote: Gav): UIO[ComparationResult]
 }
 
 object VersionManager {
 
-  /** Service operations
-    *
-    * @tparam R
-    *   the environment
-    */
-  trait Service[R] {
-    def compare(local: Gav, remote: Gav): ZIO[R, Nothing, ComparationResult]
-  }
-
-  object Helper extends VersionManager.Service[VersionManager] {
-
-    override def compare(
-        local: Domain.Gav,
-        remote: Domain.Gav
-    ): ZIO[VersionManager, Nothing, Domain.ComparationResult] = {
-      ZIO.accessM(_.versionManager.compare(local, remote))
-    }
-
+  def compare(local: Domain.Gav, remote: Domain.Gav): ZIO[VersionManager, Nothing, Domain.ComparationResult] = {
+    ZIO.environmentWithZIO(_.get.compare(local, remote))
   }
 
 }

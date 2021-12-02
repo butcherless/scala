@@ -3,10 +3,10 @@ package com.cmartin.learn.actor
 import akka.actor.typed.ActorSystem
 import zio._
 
-object ZioHelloWorld extends App {
-  override def run(args: List[String]) =
+object ZioHelloWorld extends ZIOAppDefault {
+  def run =
     Managed
-      .make(Task(ActorSystem(HelloWorldMain(), "hello")))(system => Task(system.terminate()).ignore)
+      .acquireReleaseWith(Task(ActorSystem(HelloWorldMain(), "hello")))(system => Task(system.terminate()).ignore)
       .use(system =>
         for {
           _ <- Task(system ! HelloWorldMain.Start("World"))

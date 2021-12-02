@@ -1,51 +1,21 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
-import zio.ZIO
+import com.cmartin.utils.Domain.Gav
+import com.cmartin.utils.Domain.GavPair
+import com.cmartin.utils.Domain.RepoResult
+import zio.Accessible
+import zio.Task
 
 trait FileManager {
-  val fileManager: FileManager.Service[Any]
-}
+  def getLinesFromFile(filename: String): Task[List[String]]
 
-object FileManager {
+  def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit]
 
-  trait Service[R] {
-    def getLinesFromFile(filename: String): ZIO[R, Throwable, List[String]]
+  def logMessage(message: String): Task[Unit]
 
-    def logDepCollection(
-        dependencies: List[Either[String, Gav]]
-    ): ZIO[R, Throwable, Unit]
-
-    def logMessage(message: String): ZIO[R, Throwable, Unit]
-
-    def logPairCollection(
-        collection: List[RepoResult[GavPair]]
-    ): ZIO[R, Throwable, Unit]
-  }
-
-  object > extends FileManager.Service[FileManager] {
-    override def getLinesFromFile(
-        filename: String
-    ): ZIO[FileManager, Throwable, List[String]] =
-      ZIO.accessM(_.fileManager getLinesFromFile filename)
-
-    override def logDepCollection(
-        dependencies: List[Either[String, Domain.Gav]]
-    ): ZIO[FileManager, Throwable, Unit] =
-      ZIO.accessM(_.fileManager logDepCollection dependencies)
-
-    override def logMessage(
-        message: String
-    ): ZIO[FileManager, Throwable, Unit] = {
-      ZIO.accessM(_.fileManager logMessage message)
-    }
-
-    override def logPairCollection(
-        collection: List[RepoResult[Domain.GavPair]]
-    ): ZIO[FileManager, Throwable, Unit] = {
-      ZIO.accessM(_.fileManager logPairCollection collection)
-    }
-  }
+  def logPairCollection(collection: List[RepoResult[GavPair]]): Task[Unit]
 
 }
+
+object FileManager
+    extends Accessible[FileManager]

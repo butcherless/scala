@@ -6,67 +6,57 @@ import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.DomainError
 import com.cmartin.utils.Domain.FileIOError
 import com.cmartin.utils.file.FileHelper.FileLines
-import zio.IO
-import zio.Task
-import zio.UIO
+import zio._
 
 import java.io.File
 import java.io.FileInputStream
 import scala.io.BufferedSource
 
-trait FileHelperLive extends FileHelper with ComponentLogging {
+case class FileHelperLive()
+    extends FileHelper
+    with ComponentLogging {
 
-  override val fileHelper: FileHelper.Service[Any] =
-    new FileHelper.Service[Any] {
+  override def getLinesFromFile(filename: String): IO[DomainError, FileLines] = {
+    for {
+      _ <- logDebug(s"getLinesFromFile: $filename")
+      fis <- openFile(filename)
+      source <- createFileSource(fis)
+      lines <- getLines(source)
+    } yield lines.toSeq
+  }
 
-      override def getLinesFromFile(
-          filename: String
-      ): IO[DomainError, FileLines] = {
-        for {
-          fis <- openFile(filename)
-          source <- createFileSource(fis)
-          lines <- getLines(source)
-        } yield lines.toSeq
-      }
-
-      override def logDepCollection(
-          dependencies: Seq[Either[String, Domain.Gav]]
-      ): IO[DomainError, Unit] = {
-        Task
-          .effect(
-            dependencies
-              .foreach { dep =>
-                dep.fold(
-                  line =>
-                    log.info(
-                      s"${colourYellow("invalid dependency")} => ${colourYellow(line)}"
-                    ),
-                  dep => log.info(dep.toString) // OK case
-                )
-              }
+  override def logDepCollection(dependencies: Seq[Either[String, Domain.Gav]]): IO[DomainError, Unit] = {
+    Task.attempt(
+      dependencies
+        .foreach { dep =>
+          dep.fold(
+            line =>
+              log.info(
+                s"${colourYellow("invalid dependency")} => ${colourYellow(line)}"
+              ),
+            dep => log.info(dep.toString) // OK case
           )
-          .orElseFail(FileIOError("Error writing a log message"))
-      }
-    }
+        }
+    )
+      .orElseFail(FileIOError("Error writing a log message"))
+  }
 
   /*
     H E L P E R S
    */
 
   private def openFile(filename: String): IO[DomainError, FileInputStream] =
-    Task
-      .effect(
-        new FileInputStream(new File(filename))
-      )
+    Task.attempt(
+      new FileInputStream(new File(filename))
+    )
       .orElseFail(FileIOError(Domain.OPEN_FILE_ERROR))
 
   private def createFileSource(
       fis: FileInputStream
   ): IO[DomainError, BufferedSource] = {
-    Task
-      .effect(
-        new BufferedSource(fis)
-      )
+    Task.attempt(
+      new BufferedSource(fis)
+    )
       .orElseFail(FileIOError(Domain.FILE_BUFFER_ERROR))
   }
 
@@ -87,4 +77,7 @@ trait FileHelperLive extends FileHelper with ComponentLogging {
 
 }
 
-object FileHelperLive extends FileHelperLive
+object FileHelperLive {
+  val layer: ZLayer[Any, Nothing, FileHelper] =
+    ZLayer.fromZIO(UIO.succeed(FileHelperLive()))
+}

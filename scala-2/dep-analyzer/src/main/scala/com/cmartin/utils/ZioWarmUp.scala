@@ -1,7 +1,9 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.TimeUtils
-import zio.{IO, Task, UIO}
+import zio.IO
+import zio.Task
+import zio.UIO
 
 import scala.util.Random
 
@@ -36,7 +38,7 @@ object ZioWarmUp {
       else Json(jsonKeys)
     }
 
-    IO.effect {
+    IO.attempt {
       parse(message)
     }.either
   }
@@ -47,7 +49,7 @@ object ZioWarmUp {
       else Action(message, 0)
     }
 
-    IO.effect {
+    IO.attempt {
       extract(message)
     }.mapError {
       case _: ParsingException => ParsingError("invalid format")
@@ -64,7 +66,7 @@ object ZioWarmUp {
     TimeUtils.doDelay(delay)
     // println(s"fiber($fiberName) took $delay milliseconds")
     if (gav.version == "") IO.fail(new RuntimeException("connection error"))
-    else IO.effect(gav.copy(version = s"${gav.version}\u2713"))
+    else IO.attempt(gav.copy(version = s"${gav.version}\u2713"))
   }
 
   def checkDependencies(): List[Gav] = {

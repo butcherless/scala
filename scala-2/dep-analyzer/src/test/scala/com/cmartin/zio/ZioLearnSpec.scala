@@ -103,7 +103,6 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
   it should "repeat 6 times exponentially from 10 millis" in {
     import zio._
-    import zio.duration._
 
     val policy =
       Schedule.exponential(10.milliseconds) &&
@@ -112,7 +111,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
     val program =
       (for {
-        _ <- UIO(Console.println("zio console message"))
+        _ <- UIO(Console.printLine("zio console message"))
         // _ <- sleep(1.second)
       } yield ()) repeat policy
 

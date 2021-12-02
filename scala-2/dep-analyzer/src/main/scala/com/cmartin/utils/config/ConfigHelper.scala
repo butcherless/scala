@@ -1,7 +1,9 @@
 package com.cmartin.utils.config
 
 import zio.config.ConfigDescriptor._
-import zio.config.{ConfigSource, ReadError, read}
+import zio.config.ConfigSource
+import zio.config.ReadError
+import zio.config.read
 
 object ConfigHelper {
 

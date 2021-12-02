@@ -30,7 +30,7 @@ lazy val common = (project in file("common"))
     commonSettings,
     Defaults.itSettings,
     name := "common",
-    libraryDependencies ++= Seq(logback, scalaTest)
+    libraryDependencies ++= Seq(logback, zio, scalaTest)
   )
 
 lazy val fpInScala = (project in file("fp-in-scala"))

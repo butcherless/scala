@@ -1,24 +1,24 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
-import com.cmartin.utils.file.FileManager
-import com.cmartin.utils.http.HttpManager
+import com.cmartin.utils.file._
+import com.cmartin.utils.http._
 import com.cmartin.utils.logic.LogicManager
-import zio.App
-import zio.ExitCode
-import zio.ZIO
+import com.cmartin.utils.logic.LogicManagerLive
+import zio._
 
 /*
   http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
+  https://twitter.com/jdegoes/status/1462758239418867714  ZLayer
+  https://twitter.com/jdegoes/status/1463261876150849547
  */
 
-object DependencyLookoutApp extends App with ComponentLogging {
-
-  import ApplicationHelper._
+object DependencyLookoutApp
+    extends ZIOAppDefault
+    with ComponentLogging {
 
   val filename = "dep-analyzer/src/main/resources/deps3.log" // TODO property
-  val exclusionList =
-    List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
+  val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
 
   /*
     ZIO[R, E, A]
@@ -32,35 +32,36 @@ object DependencyLookoutApp extends App with ComponentLogging {
       - A: Either[Exception, Results]
    */
 
-  val program: ZIO[Definitions, Throwable, Unit] = for {
-    lines <- FileManager.>.getLinesFromFile(filename)
-    dependencies <- LogicManager.>.parseLines(lines)
-    _ <- FileManager.>.logDepCollection(dependencies)
-    validDeps <- LogicManager.>.filterValid(dependencies)
-    validRate <- LogicManager.>.calculateValidRate(
-      dependencies.size,
-      validDeps.size
-    )
-    finalDeps <- LogicManager.>.excludeList(validDeps, exclusionList)
-    remoteDeps <- HttpManager
-      .managed()
-      .use(_.httpManager.checkDependencies(finalDeps))
-    _ <- FileManager.>.logMessage(
-      s"Valid rate of dependencies in the file: $validRate %"
-    )
-    _ <- FileManager.>.logPairCollection(remoteDeps)
+  val program = for {
+    lines <- FileManager(_.getLinesFromFile(filename))
+    dependencies <- LogicManager(_.parseLines(lines))
+    _ <- FileManager(_.logDepCollection(dependencies))
+    validDeps <- LogicManager(_.filterValid(dependencies))
+    validRate <- LogicManager(_.calculateValidRate(dependencies.size, validDeps.size))
+    finalDeps <- LogicManager(_.excludeList(validDeps, exclusionList))
+    remoteDeps <- HttpManager.managed().use(_.get.checkDependencies(finalDeps))
+    _ <- FileManager(_.logMessage(s"Valid rate of dependencies in the file: $validRate %"))
+    _ <- FileManager(_.logPairCollection(remoteDeps))
   } yield ()
+
+  type Services = FileManager with LogicManager with HttpManager
+
+  val programLayer: ULayer[Services] =
+    FileManagerLive.layer ++
+      LogicManagerLive.layer ++
+      HttpManagerLive.layer
 
   /*
      E X E C U T I O N
    */
-  override def run(args: List[String]) = {
+  override def run = {
     /*
      This is similar to dependency injection, and the `provide` function can be
      thought of as `inject`.
      */
+
     program
-      .provide(modules)
+      .provide(programLayer)
       .fold(
         e => {
           log.info(e.getMessage)
@@ -68,5 +69,6 @@ object DependencyLookoutApp extends App with ComponentLogging {
         }, // KO
         _ => ExitCode.success
       ) // OK
+
   }
 }

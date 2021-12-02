@@ -19,11 +19,11 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
     val filename = "dep-analyzer/src/test/resources/test-file.txt"
 
     val program: ZIO[FileHelper, Domain.DomainError, FileLines] = for {
-      lines <- FileHelper.>.getLinesFromFile(filename)
+      lines <- FileHelper(_.getLinesFromFile(filename))
     } yield lines
 
     // provide ~ dependency injection
-    val result: FileLines = runtime.unsafeRun(program.provide(FileHelperLive))
+    val result: FileLines = runtime.unsafeRun(program.provide(FileHelperLive.layer))
     result shouldBe expectedLines
   }
 
@@ -31,11 +31,11 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
     val filename = "non-existent-file"
 
     val program: ZIO[FileHelper, Domain.DomainError, FileLines] = for {
-      lines <- FileHelper.>.getLinesFromFile(filename)
+      lines <- FileHelper(_.getLinesFromFile(filename))
     } yield lines
 
     val failure = the[FiberFailure] thrownBy runtime.unsafeRun(
-      program.provide(FileHelperLive)
+      program.provide(FileHelperLive.layer)
     )
 
     failure.cause.failureOption.map { message =>
@@ -46,7 +46,7 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
   it should "return an unknown domain error" in {
     val filename = "unknown"
     val program = for {
-      result <- FileHelperTest.fileHelper.getLinesFromFile(filename)
+      result <- FileHelperTest.getLinesFromFile(filename)
     } yield result
 
     val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
@@ -61,10 +61,10 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
     // add a logger dependency, via constructor or via module pattern
     val deps =
       Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
-    val program = FileHelper.>.logDepCollection(deps)
+    val program = FileHelper(_.logDepCollection(deps))
 
     info("TODO: refactor log module")
-    runtime.unsafeRun(program.provide(FileHelperLive))
+    runtime.unsafeRun(program.provide(FileHelperLive.layer))
   }
 
 }
