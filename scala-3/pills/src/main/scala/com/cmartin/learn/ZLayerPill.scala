@@ -170,9 +170,8 @@ object ZLayerPill {
     // insert computation 'has' a Repository dependency
     val repositoryProgram: ZIO[MyCountryRepository, String, Long] =
       MyCountryRepository(_.insert(country))
-    val repositoryResult: Long = runtime.unsafeRun(
-      repositoryProgram.provide(countryRepoEnv)
-    )
+    // TODO remove macro error val repositoryResult = runtime.unsafeRun(
+    //  repositoryProgram.provide(countryRepoEnv))
   }
 
   object CountryServiceUse {
@@ -191,9 +190,8 @@ object ZLayerPill {
 
     val serviceProgram: ZIO[MyCountryService, String, Country] =
       MyCountryService(_.create(country))
-    val serviceResult: Country = runtime.unsafeRun(
-      serviceProgram.provide(countryServEnv)
-    )
+    // TODO remove macro error val serviceResult: Country = runtime.unsafeRun(
+    //  serviceProgram.provide(countryServEnv))
   }
 
   object AirportServiceUse {
@@ -219,9 +217,8 @@ object ZLayerPill {
     val airport: Airport = ???
     val airportSrvProg: ZIO[MyAirportService, String, Airport] =
       MyAirportService(_.create(airport))
-    val airportSrvRes: Airport = runtime.unsafeRun(
-      airportSrvProg.provide(airportServEnv)
-    )
+    // TODO remove macro error val airportSrvRes: Airport = runtime.unsafeRun(
+    //  airportSrvProg.provide(airportServEnv))
 
     val fullLayer =
       repositoriesEnv >>>
