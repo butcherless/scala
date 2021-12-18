@@ -9,7 +9,6 @@ SBT_ASSEMBLY_VER="1.1.0"
 SBT_BLOOP_VER="1.4.11"
 SBT_SCALAFMT_VER="3.1.2"
 SBT_PLUGIN_SCALAFMT_VER="2.4.4"
-DEP_GRAPH_VER="0.10.0-RC1"
 DEP_UP_VER="0.5.3"
 SCALAFMT_VER="2.7.5"
 SCALATEST_VER="3.2.10"
@@ -42,7 +41,6 @@ runner.dialect = scala213source3
 #
 echo '// sbt tool plugins
 addSbtPlugin("com.eed3si9n"       % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
-addSbtPlugin("net.virtual-void"   % "sbt-dependency-graph"   % "'${DEP_GRAPH_VER}'")
 addSbtPlugin("com.timushev.sbt"   % "sbt-updates"            % "'${DEP_UP_VER}'")
 addSbtPlugin("org.scoverage"      % "sbt-scoverage"          % "'${SCOVERAGE_VER}'")
 addSbtPlugin("org.scalameta"      % "sbt-scalafmt"           % "'${SBT_PLUGIN_SCALAFMT_VER}'")
