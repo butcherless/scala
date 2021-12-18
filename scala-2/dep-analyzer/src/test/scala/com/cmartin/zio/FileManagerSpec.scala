@@ -36,7 +36,7 @@ class FileManagerSpec extends AnyFlatSpec with Matchers {
 
     // val policy2 = Schedule.recurs(5) || Schedule.recurs(10)
     val program =
-      Task.effect(println("zio schedule test")) repeat policy1
+      Task.attempt(println("zio schedule test")) repeat policy1
 
     // TODO runtime.unsafeRun(program)
   }

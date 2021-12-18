@@ -62,8 +62,8 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
     import com.cmartin.utils.ZioLearn.refineError
 
     val program: Task[Int] = for {
-      r1 <- Task.effect(0)
-      result <- Task.effect(1 / r1)
+      r1 <- Task.attempt(0)
+      result <- Task.attempt(1 / r1)
     } yield result
 
     val programRefined: IO[MyDomainException, Int] =
