@@ -1,8 +1,6 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.Domain.GavPair
-import com.cmartin.utils.Domain.RepoResult
+import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
 import zio._
 
 trait HttpManager {

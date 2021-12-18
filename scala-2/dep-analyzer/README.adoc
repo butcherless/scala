@@ -80,7 +80,7 @@ Lista de tareas previas al caso de uso:
 . Se consultan las versiones de la colección de dependencias final.
 . Se obtiene una colección de resultados que contiene la dependencia _local_ y la dependencia _remota_.
 
-== Create a ZIO Module
+== Create a ZIO Module (Deprecated use Pattern 2 with ZIO-2 Layers)
 
 https://zio.dev/docs/howto/howto_use_module_pattern
 

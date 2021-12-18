@@ -1,8 +1,7 @@
 package com.cmartin.zio
 
 import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.ZioLearn.MyDomainException
-import com.cmartin.utils.ZioLearn.MyExceptionTwo
+import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._

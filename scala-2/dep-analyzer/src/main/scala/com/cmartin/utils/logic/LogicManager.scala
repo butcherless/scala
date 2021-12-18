@@ -1,8 +1,7 @@
 package com.cmartin.utils.logic
 
 import com.cmartin.utils.Domain.Gav
-import zio.Accessible
-import zio.UIO
+import zio.{Accessible, UIO}
 
 trait LogicManager {
   def parseLines(lines: List[String]): UIO[List[Either[String, Gav]]]

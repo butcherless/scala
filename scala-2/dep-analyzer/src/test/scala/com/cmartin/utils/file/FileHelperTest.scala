@@ -1,13 +1,10 @@
 package com.cmartin.utils.file
 
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.FileIOError
-import com.cmartin.utils.Domain.UnknownError
+import com.cmartin.utils.Domain.{FileIOError, UnknownError}
 import com.cmartin.utils.file.FileHelper.FileLines
 import com.cmartin.utils.file.FileHelperSpec._
-import zio.IO
-import zio.UIO
-import zio.ZIO
+import zio.{IO, UIO, ZIO}
 
 trait FileHelperTest extends FileHelper {
 

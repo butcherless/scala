@@ -1,24 +1,20 @@
 package com.cmartin.utils.file
 
-import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.learn.common.Utils.colourYellow
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.DomainError
-import com.cmartin.utils.Domain.FileIOError
+import com.cmartin.utils.Domain.{DomainError, FileIOError}
 import com.cmartin.utils.file.FileHelper.FileLines
 import zio._
 
-import java.io.File
-import java.io.FileInputStream
+import java.io.{File, FileInputStream}
 import scala.io.BufferedSource
 
 case class FileHelperLive()
-    extends FileHelper
-    with ComponentLogging {
+    extends FileHelper {
 
   override def getLinesFromFile(filename: String): IO[DomainError, FileLines] = {
     for {
-      _ <- logDebug(s"getLinesFromFile: $filename")
+      _ <- ZIO.logInfo(s"getLinesFromFile: $filename")
       fis <- openFile(filename)
       source <- createFileSource(fis)
       lines <- getLines(source)
@@ -31,10 +27,8 @@ case class FileHelperLive()
         .foreach { dep =>
           dep.fold(
             line =>
-              log.info(
-                s"${colourYellow("invalid dependency")} => ${colourYellow(line)}"
-              ),
-            dep => log.info(dep.toString) // OK case
+              ZIO.logInfo(s"${colourYellow("invalid dependency")} => ${colourYellow(line)}"),
+            dep => ZIO.logInfo(dep.toString) // OK case
           )
         }
     )

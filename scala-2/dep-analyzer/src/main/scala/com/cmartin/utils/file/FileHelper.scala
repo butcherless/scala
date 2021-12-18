@@ -1,11 +1,8 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain.DomainError
-import com.cmartin.utils.Domain.Gav
-import zio.Accessible
-import zio.IO
-
-import FileHelper.FileLines
+import com.cmartin.utils.Domain.{DomainError, Gav}
+import com.cmartin.utils.file.FileHelper.FileLines
+import zio.{Accessible, IO}
 
 trait FileHelper {
 

@@ -2,10 +2,7 @@ package com.cmartin.utils
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import sttp.client._
-import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
-import zio.{Runtime, Task, URIO}
-import org.scalatest.Ignore
+import zio.Runtime
 
 class SttpSpec extends AnyFlatSpec with Matchers {
   val runtime = Runtime.default

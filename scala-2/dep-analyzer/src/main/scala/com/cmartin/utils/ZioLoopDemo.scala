@@ -61,14 +61,14 @@ object ZioLoopDemo
    */
   val program =
     for {
-      _ <- UIO(Console.print("zio loop demo:"))
+      _ <- ZIO.logInfo("zio loop demo:")
       evenOrOddList <- ZIO.loop(initial)(cont, dec)(body)
-      _ <- UIO(Console.print(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}"))
+      _ <- ZIO.logInfo(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
     } yield ()
 
   // main function, needs exit = 0 [OK] or exit > 0 [ERROR]
   // Here the interpreter runs the program and perform side-effects
   override def run =
-    program.exitCode
-      .catchAllCause(cause => UIO(Console.print(s"${cause.prettyPrint}")).exitCode)
+    program
+  // .catchAllCause(cause => UIO(Console.print(s"${cause.prettyPrint}")).exitCode)
 }

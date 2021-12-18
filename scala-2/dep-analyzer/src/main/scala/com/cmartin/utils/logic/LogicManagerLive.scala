@@ -1,6 +1,5 @@
 package com.cmartin.utils.logic
 
-import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.Gav
 import zio._
@@ -8,8 +7,7 @@ import zio._
 import scala.util.matching.Regex
 
 case class LogicManagerLive()
-    extends LogicManager
-    with ComponentLogging {
+    extends LogicManager {
 
   val pattern: Regex =
     raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
@@ -35,7 +33,7 @@ case class LogicManagerLive()
     H E L P E R S
    */
   private def parseDepLine(line: String): Either[String, Gav] = {
-    log.debug(s"reading dependency candidate: $line matches regex? $matches")
+    ZIO.logInfo(s"reading dependency candidate: $line matches regex? $matches")
     lazy val matches = pattern.matches(line)
 
     if (matches) {

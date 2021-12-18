@@ -3,8 +3,7 @@ package com.cmartin.utils
 import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.file._
 import com.cmartin.utils.http._
-import com.cmartin.utils.logic.LogicManager
-import com.cmartin.utils.logic.LogicManagerLive
+import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import zio._
 
 /*
@@ -40,13 +39,13 @@ object DependencyLookoutApp
     validRate <- LogicManager(_.calculateValidRate(dependencies.size, validDeps.size))
     finalDeps <- LogicManager(_.excludeList(validDeps, exclusionList))
     remoteDeps <- HttpManager.managed().use(_.get.checkDependencies(finalDeps))
-    _ <- FileManager(_.logMessage(s"Valid rate of dependencies in the file: $validRate %"))
+    _ <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
     _ <- FileManager(_.logPairCollection(remoteDeps))
   } yield ()
 
   type Services = FileManager with LogicManager with HttpManager
 
-  val programLayer: ULayer[Services] =
+  val programLayer =
     FileManagerLive.layer ++
       LogicManagerLive.layer ++
       HttpManagerLive.layer
@@ -62,13 +61,6 @@ object DependencyLookoutApp
 
     program
       .provide(programLayer)
-      .fold(
-        e => {
-          log.info(e.getMessage)
-          ExitCode.failure
-        }, // KO
-        _ => ExitCode.success
-      ) // OK
 
   }
 }

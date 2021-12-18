@@ -1,19 +1,15 @@
 package com.cmartin.utils.file
 
-import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.learn.common.Utils._
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.Domain.RepoResult
+import com.cmartin.utils.Domain.{Gav, RepoResult}
 import zio._
 
-import java.io.File
-import java.io.FileInputStream
+import java.io.{File, FileInputStream}
 import scala.io.BufferedSource
 
 case class FileManagerLive()
-    extends FileManager
-    with ComponentLogging {
+    extends FileManager {
 
   override def getLinesFromFile(filename: String): Task[List[String]] =
     for {
@@ -27,18 +23,10 @@ case class FileManagerLive()
       dependencies.foreach { dep =>
         dep.fold(
           line =>
-            log.info(
-              s"${colourRed("invalid dependency")} => ${colourRed(line)}"
-            ),
-          dep => log.info(dep.toString)
+            ZIO.logInfo(s"${colourRed("invalid dependency")} => ${colourRed(line)}"),
+          dep => ZIO.logInfo(dep.toString)
         )
       }
-    )
-  }
-
-  override def logMessage(message: String): Task[Unit] = {
-    Task.attempt(
-      log.info(message)
     )
   }
 
@@ -46,8 +34,8 @@ case class FileManagerLive()
     Task.succeed {
       collection.foreach(
         _.fold(
-          error => log.info(error.toString),
-          pair => if (pair.hasNewVersion) log.info(formatChanges(pair))
+          error => ZIO.logInfo(error.toString),
+          pair => if (pair.hasNewVersion) ZIO.logInfo(formatChanges(pair))
         )
       )
     }

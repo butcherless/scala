@@ -5,7 +5,7 @@ import com.cmartin.utils.Domain.{FileIOError, Gav, UnknownError}
 import com.cmartin.utils.file.FileHelper.FileLines
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import zio.{FiberFailure, Runtime, ZIO}
+import zio.{Runtime, ZIO}
 
 class FileHelperSpec extends AnyFlatSpec with Matchers {
 
@@ -27,20 +27,20 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
     result shouldBe expectedLines
   }
 
-  it should "return a file domain error" in {
+  it should "WIP return a file domain error" in {
     val filename = "non-existent-file"
 
     val program: ZIO[FileHelper, Domain.DomainError, FileLines] = for {
       lines <- FileHelper(_.getLinesFromFile(filename))
     } yield lines
 
-    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(
-      program.provide(FileHelperLive.layer)
+    val failure = runtime.unsafeRun(
+      program
+        .either
+        .provide(FileHelperLive.layer)
     )
 
-    failure.cause.failureOption.map { message =>
-      message shouldBe FileIOError(Domain.OPEN_FILE_ERROR)
-    }
+    failure shouldBe Left(FileIOError(Domain.OPEN_FILE_ERROR))
   }
 
   it should "return an unknown domain error" in {
@@ -49,21 +49,15 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
       result <- FileHelperTest.getLinesFromFile(filename)
     } yield result
 
-    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
+    val failure = runtime.unsafeRun(program.either)
 
-    failure.cause.failureOption.map { message =>
-      message shouldBe UnknownError(UNKNOWN_ERROR_MESSAGE)
-    }
+    failure shouldBe Left(UnknownError(UNKNOWN_ERROR_MESSAGE))
   }
 
   it should "write two lines in the log destination" in {
-    // TODO https://gist.github.com/jdegoes/dd66656382247dc5b7228fb0f2cb97c8
-    // add a logger dependency, via constructor or via module pattern
-    val deps =
-      Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
+    val deps = Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
     val program = FileHelper(_.logDepCollection(deps))
 
-    info("TODO: refactor log module")
     runtime.unsafeRun(program.provide(FileHelperLive.layer))
   }
 

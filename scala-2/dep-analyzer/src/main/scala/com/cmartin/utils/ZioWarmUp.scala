@@ -1,9 +1,7 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.TimeUtils
-import zio.IO
-import zio.Task
-import zio.UIO
+import zio.{IO, Task, UIO}
 
 import scala.util.Random
 

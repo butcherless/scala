@@ -1,10 +1,7 @@
 package com.cmartin.utils.http
 
-import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.Domain.GavPair
-import com.cmartin.utils.Domain.RepoResult
+import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
 import io.circe
 import io.circe.CursorOp.DownField
 import io.circe.DecodingFailure
@@ -15,8 +12,7 @@ import sttp.model.Uri
 import zio._
 
 case class HttpManagerLive()
-    extends HttpManager
-    with ComponentLogging {
+    extends HttpManager {
 
   import HttpManagerLive.Document
 
@@ -34,7 +30,7 @@ case class HttpManagerLive()
 
   override def shutdown(): UIO[Unit] = {
     for {
-      _ <- UIO.succeed(log.info("shutting down http resources"))
+      _ <- ZIO.logInfo("shutting down http resources")
       _ <- UIO.succeed(
         backend
           .close()

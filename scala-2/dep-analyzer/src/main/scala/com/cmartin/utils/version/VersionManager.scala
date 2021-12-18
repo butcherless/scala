@@ -1,10 +1,8 @@
 package com.cmartin.utils.version
 
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.ComparationResult
-import com.cmartin.utils.Domain.Gav
-import zio.UIO
-import zio.ZIO
+import com.cmartin.utils.Domain.{ComparationResult, Gav}
+import zio.{UIO, ZIO}
 
 /* ZIO Module Steps: [https://zio.dev/docs/howto/howto_use_module_pattern]
   - create VersionManager object.
