@@ -1,4 +1,5 @@
 .DS_Store
+.bloop
 .bsp
 .gradle
 .idea
@@ -10,6 +11,5 @@ build/
 out/
 target/
 *.iml
-.bloop
 **/metals.sbt
 **/project/project/

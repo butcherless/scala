@@ -1,15 +1,12 @@
 {
   "automerge": true,
+  "automergeType": "pr",
+  "dependencyDashboard": true,
   "labels": [
     "type: dependencies"
   ],
-  "packageRules": [
-    {
-      "matchManagers": [
-        "sbt"
-      ],
-      "enabled": true
-    }
+  "extends": [
+    "config:base"
   ],
   "schedule": [
     "after 7pm"

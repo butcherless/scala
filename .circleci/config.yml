@@ -36,38 +36,6 @@ jobs:
             chmod +x codecov-linux
             ./codecov-linux -t ${CODECOV_TOKEN}
 
-  scala_3:
-    docker:
-      - image: circleci/openjdk:17-jdk-buster
-
-    working_directory: ~/repo
-
-    environment:
-      JVM_OPTS: -Xmx2048m
-      TERM: dumb
-
-    steps:
-      - checkout
-
-      # compiler, test & run
-      - run:
-          name: compile, test
-          command: |
-            cd scala-3
-            sbt clean test
-            sbt -mem 2048 assembly
-
-      # coverage, dependencies
-      - run:
-          name: coverage
-          command: |
-            cd scala-3
-            sbt -mem 2048 xcoverage
-            curl -Os https://uploader.codecov.io/latest/codecov-linux
-            chmod +x codecov-linux
-            ./codecov-linux -t ${CODECOV_TOKEN}
-
-
   build_template:
     docker:
       - image: circleci/openjdk:11-jdk
@@ -94,5 +62,4 @@ workflows:
   build:
     jobs:
       - scala_2
-      - scala_3
       - build_template
