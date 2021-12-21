@@ -5,18 +5,15 @@ import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.{Gav, RepoResult}
 import zio._
 
-import java.io.{File, FileInputStream}
-import scala.io.BufferedSource
+import scala.io.{BufferedSource, Source}
 
 case class FileManagerLive()
     extends FileManager {
 
   override def getLinesFromFile(filename: String): Task[List[String]] =
-    for {
-      fis <- openFile(filename)
-      source <- createFileSource(fis) // TODO use ZManaged
-      lines <- getLines(source)
-    } yield lines.toList
+    manageFile(filename).use { file =>
+      Task.attempt(file.getLines().toList)
+    }
 
   override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
     Task.attempt(
@@ -44,35 +41,16 @@ case class FileManagerLive()
   /*
     H E L P E R S
    */
+
+  def manageFile(filename: String): TaskManaged[BufferedSource] =
+    ZManaged.fromAutoCloseable(Task.attempt(Source.fromFile(filename)))
+
   def formatChanges(pair: Domain.GavPair): String =
     s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"
 
-  private def openFile(filename: String): Task[FileInputStream] =
-    Task.attempt(
-      new FileInputStream(new File(filename))
-    )
-
-  private def createFileSource(fis: FileInputStream): Task[BufferedSource] = {
-    Task.attempt(
-      new BufferedSource(fis)
-    )
-  }
-
-  private def closeSource(source: BufferedSource): UIO[Unit] = {
-    UIO.succeed(
-      source
-        .close()
-    )
-  }
-
-  private def getLines(source: BufferedSource): Task[Iterator[String]] =
-    Task(
-      source
-        .getLines()
-    )
 }
 
 object FileManagerLive {
-  val layer: ZLayer[Any, Nothing, FileManager] =
+  val layer: ULayer[FileManager] =
     ZLayer.fromZIO(UIO.succeed(FileManagerLive()))
 }

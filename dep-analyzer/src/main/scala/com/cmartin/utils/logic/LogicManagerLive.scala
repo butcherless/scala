@@ -12,6 +12,12 @@ case class LogicManagerLive()
   val pattern: Regex =
     raw"(^[a-z][a-z0-9-_\.]+):([a-zA-Z0-9-_\.]+):([0-9A-Za-z-\.]+)".r
 
+  // TODO find ZIO native function to accumulate failure and success results
+  type ParseError = String
+  private def TODO_parseDepLine(line: String): IO[ParseError, String] = ???
+  private def TODO_parseLines(lines: List[String]): UIO[(Iterable[ParseError], Iterable[String])] =
+    ZIO.partitionPar(lines)(TODO_parseDepLine).withParallelism(4)
+
   override def parseLines(lines: List[String]): ZIO[Any, Nothing, List[Either[String, Domain.Gav]]] =
     UIO.foreach(lines)(line => UIO.succeed(parseDepLine(line)))
 
