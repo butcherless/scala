@@ -14,33 +14,44 @@ case class LogicManagerLive()
 
   // TODO find ZIO native function to accumulate failure and success results
   type ParseError = String
-  private def TODO_parseDepLine(line: String): IO[ParseError, String] = ???
-  private def TODO_parseLines(lines: List[String]): UIO[(Iterable[ParseError], Iterable[String])] =
-    ZIO.partitionPar(lines)(TODO_parseDepLine).withParallelism(4)
 
-  override def parseLines(lines: List[String]): ZIO[Any, Nothing, List[Either[String, Domain.Gav]]] =
-    UIO.foreach(lines)(line => UIO.succeed(parseDepLine(line)))
+  private def parseDepLine(line: String): IO[String, Gav] = {
+    for {
+      _ <- ZIO.logInfo(s"parsing line: $line")
+      iterator <- UIO.succeed(pattern.findAllMatchIn(line))
+      result <- ZIO.ifZIO(UIO.succeed(iterator.hasNext))(
+        IO.succeed(Gav.fromRegexMatch(iterator.next())),
+        IO.fail(line)
+      )
+    } yield result
+  }
 
-  override def filterValid(dependencies: List[Either[String, Domain.Gav]]): ZIO[Any, Nothing, List[Domain.Gav]] =
+  override def parseLines(lines: List[String]): UIO[(Iterable[ParseError], Iterable[Gav])] =
+    ZIO.partitionPar(lines)(parseDepLine).withParallelism(4)
+
+  override def parseLines2(lines: List[String]): UIO[List[Either[String, Domain.Gav]]] =
+    UIO.foreach(lines)(line => UIO.succeed(parseDepLine2(line)))
+
+  override def filterValid(dependencies: List[Either[String, Domain.Gav]]): UIO[List[Domain.Gav]] =
     UIO.succeed(dependencies.collect { case Right(dep) => dep })
 
   override def excludeList(
-      dependencies: List[Domain.Gav],
+      dependencies: Iterable[Domain.Gav],
       exclusionList: List[String]
-  ): ZIO[Any, Nothing, List[Domain.Gav]] =
+  ): ZIO[Any, Nothing, Iterable[Domain.Gav]] =
     UIO.succeed(
       dependencies.filterNot(dep => exclusionList.contains(dep.group))
     )
 
-  override def calculateValidRate(dependencyCount: Int, validCount: Int): ZIO[Any, Nothing, Double] =
+  override def calculateValidRate(dependencyCount: Int, validCount: Int): UIO[Double] =
     UIO.succeed(100.toDouble * validCount / dependencyCount)
 
   /*
     H E L P E R S
    */
-  private def parseDepLine(line: String): Either[String, Gav] = {
-    ZIO.logInfo(s"reading dependency candidate: $line matches regex? $matches")
+  private def parseDepLine2(line: String): Either[String, Gav] = {
     lazy val matches = pattern.matches(line)
+    ZIO.logInfo(s"reading dependency candidate: $line matches regex? $matches")
 
     if (matches) {
       val regexMatch: Regex.Match = pattern.findAllMatchIn(line).next()

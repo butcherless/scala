@@ -52,5 +52,5 @@ object Dependencies {
     "com.typesafe.akka" %% "akka-actor-testkit-typed" % Versions.akka % Test
   lazy val pegdown = "org.pegdown" % "pegdown" % Versions.pegdown % Test
   lazy val scalaTest =
-    "org.scalatest" %% "scalatest" % Versions.scalatest % Test
+    "org.scalatest" %% "scalatest" % Versions.scalatest % "it,test"
 }

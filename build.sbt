@@ -26,6 +26,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val common = (project in file("common"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     Defaults.itSettings,
@@ -34,6 +35,7 @@ lazy val common = (project in file("common"))
   )
 
 lazy val fpInScala = (project in file("fp-in-scala"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "fp-in-scala",
@@ -41,14 +43,19 @@ lazy val fpInScala = (project in file("fp-in-scala"))
   )
 
 lazy val `zio-prelude` = (project in file("zio-prelude"))
+  .configs(IntegrationTest)
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "zio-prelude",
     libraryDependencies ++= Seq(zioPrelude, scalaTest)
   )
 
+
 lazy val depAnalyzer = (project in file("dep-analyzer"))
+  .configs(IntegrationTest)
   .settings(
+    Defaults.itSettings,
     commonSettings,
     name := "depAnalyzer",
     libraryDependencies ++= Seq(
@@ -72,6 +79,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
   .dependsOn(common)
 
 lazy val hkTypes = (project in file("hk-types"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "hkTypes",
@@ -79,6 +87,7 @@ lazy val hkTypes = (project in file("hk-types"))
   )
 
 lazy val typeclasses = (project in file("typeclasses"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "typeclasses",
@@ -86,6 +95,7 @@ lazy val typeclasses = (project in file("typeclasses"))
   )
 
 lazy val dtogen = (project in file("dtogen"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "dtogen",
@@ -93,6 +103,7 @@ lazy val dtogen = (project in file("dtogen"))
   )
 
 lazy val scalazlearn = (project in file("scalaz"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "scalazlearn",
@@ -100,6 +111,7 @@ lazy val scalazlearn = (project in file("scalaz"))
   )
 
 lazy val akkaActors = (project in file("akka-actors"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-actors-proof-of-concept",
@@ -107,6 +119,7 @@ lazy val akkaActors = (project in file("akka-actors"))
   )
 
 lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-actors-typed-poc",
@@ -121,6 +134,7 @@ lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
   )
 
 lazy val akkahttphw = (project in file("akka-http-hw"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-http-webserver",
@@ -136,6 +150,7 @@ lazy val akkahttphw = (project in file("akka-http-hw"))
   )
 
 lazy val akkahttpcl = (project in file("akka-http-cl"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-http-webclient",
@@ -143,6 +158,7 @@ lazy val akkahttpcl = (project in file("akka-http-cl"))
   )
 
 lazy val calendar = (project in file("calendar"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "personal-calendar",
@@ -150,6 +166,7 @@ lazy val calendar = (project in file("calendar"))
   )
 
 lazy val refinedPoc = (project in file("refined-poc"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "refined-proof-of-concept",
@@ -157,6 +174,7 @@ lazy val refinedPoc = (project in file("refined-poc"))
   )
 
 lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "kafka-producer-consumer",
@@ -172,6 +190,7 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
   .dependsOn(common)
 
 lazy val json4sUtils = (project in file("json4s-utils"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "json4s-utils",

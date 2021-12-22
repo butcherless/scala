@@ -5,7 +5,9 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
 
-class FileManagerSpec extends AnyFlatSpec with Matchers {
+class FileManagerSpec
+    extends AnyFlatSpec
+    with Matchers {
 
   val runtime = Runtime.default
 

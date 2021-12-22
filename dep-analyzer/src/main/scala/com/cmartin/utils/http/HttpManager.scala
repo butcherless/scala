@@ -4,7 +4,7 @@ import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
 import zio._
 
 trait HttpManager {
-  def checkDependencies(deps: List[Gav]): UIO[List[RepoResult[GavPair]]]
+  def checkDependencies(deps: Iterable[Gav]): UIO[Iterable[RepoResult[GavPair]]]
 
   def shutdown(): UIO[Unit]
 }

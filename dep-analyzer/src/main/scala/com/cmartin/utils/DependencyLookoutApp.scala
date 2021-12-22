@@ -33,9 +33,8 @@ object DependencyLookoutApp
 
   val program = for {
     lines <- FileManager(_.getLinesFromFile(filename))
-    dependencies <- LogicManager(_.parseLines(lines))
-    _ <- FileManager(_.logDepCollection(dependencies))
-    validDeps <- LogicManager(_.filterValid(dependencies))
+    (dependencies, validDeps) <- LogicManager(_.parseLines(lines))
+    // _ <- FileManager(_.logDepCollection(dependencies))
     validRate <- LogicManager(_.calculateValidRate(dependencies.size, validDeps.size))
     finalDeps <- LogicManager(_.excludeList(validDeps, exclusionList))
     remoteDeps <- HttpManager.managed().use(_.get.checkDependencies(finalDeps))

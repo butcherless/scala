@@ -171,7 +171,7 @@
 //
 //  "FileManager" should "read all the lines from a file" in {
 //
-//    val filename = "dep-analyzer/src/main/resources/deps.log"
+//    val filename = "dep-analyzer/src/main/resources/deps-1.txt"
 //
 //    val program = OldFileManager.getLinesFromFile(filename).refineOrDie {
 //      case e: java.io.IOException => FileIOError(s"IO access error: ${e.getMessage}")

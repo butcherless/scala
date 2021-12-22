@@ -2,7 +2,6 @@ com.globalavl.hiber.services:event-seed_2.13:1.0.0-SNAPSHOT
 com.geirsson:metaconfig-core_2.13:0.9.4
 com.geirsson:metaconfig-typesafe-config_2.13:0.9.4
 com.globalavl.hiber.services:docs_2.13:1.0.0-SNAPSHOT
-com.vladsch.flexmark$$$:flexmark:0.40.4
 com.google.protobuf:protobuf-java:3.7.1
 com.googlecode.java-diff-utils:diffutils:1.3.0
 com.ibm.icu:icu4j:59.1
@@ -17,6 +16,7 @@ com.openhtmltopdf:openhtmltopdf-rtl-support:0.0.1-RC13
 com.thesamet.scalapb:lenses_2.13:0.9.0
 com.thesamet.scalapb:scalapb-runtime_2.13:0.9.0
 com.typesafe:config:1.2.1
+com.vladsch.flexmark$$$:flexmark:0.40.4
 com.vladsch.flexmark%%%:flexmark-all:0.40.4
 commons-logging:commons-logging:1.2
 de.rototor.pdfbox:graphics2d:0.12

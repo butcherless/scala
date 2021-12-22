@@ -24,7 +24,7 @@ case class HttpManagerLive()
          2. element list to process
          3. processing function
    */
-  override def checkDependencies(deps: List[Domain.Gav]): UIO[List[RepoResult[Domain.GavPair]]] = {
+  override def checkDependencies(deps: Iterable[Domain.Gav]): UIO[Iterable[RepoResult[Domain.GavPair]]] = {
     ZIO.foreachPar(deps)(getDependency)
   }
 

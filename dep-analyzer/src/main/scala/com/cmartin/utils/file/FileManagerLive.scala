@@ -2,7 +2,7 @@ package com.cmartin.utils.file
 
 import com.cmartin.learn.common.Utils._
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{Gav, RepoResult}
+import com.cmartin.utils.Domain.{DomainError, FileIOError, Gav, RepoResult}
 import zio._
 
 import scala.io.{BufferedSource, Source}
@@ -10,10 +10,13 @@ import scala.io.{BufferedSource, Source}
 case class FileManagerLive()
     extends FileManager {
 
-  override def getLinesFromFile(filename: String): Task[List[String]] =
+  override def getLinesFromFile(filename: String): IO[DomainError, List[String]] =
     manageFile(filename).use { file =>
-      Task.attempt(file.getLines().toList)
-    }
+      ZIO.logInfo(s"reading from file: $filename") *>
+      ZIO.attempt(file.getLines().toList)
+    }.orElseFail(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
+
+
 
   override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
     Task.attempt(
@@ -27,7 +30,7 @@ case class FileManagerLive()
     )
   }
 
-  override def logPairCollection(collection: List[RepoResult[Domain.GavPair]]): Task[Unit] = {
+  override def logPairCollection(collection: Iterable[RepoResult[Domain.GavPair]]): Task[Unit] = {
     Task.succeed {
       collection.foreach(
         _.fold(

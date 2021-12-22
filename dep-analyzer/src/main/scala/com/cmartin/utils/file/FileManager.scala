@@ -1,14 +1,14 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
-import zio.{Accessible, Task}
+import com.cmartin.utils.Domain.{DomainError, Gav, GavPair, RepoResult}
+import zio.{Accessible, IO, Task}
 
 trait FileManager {
-  def getLinesFromFile(filename: String): Task[List[String]]
+  def getLinesFromFile(filename: String): IO[DomainError, List[String]]
 
   def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit]
 
-  def logPairCollection(collection: List[RepoResult[GavPair]]): Task[Unit]
+  def logPairCollection(collection: Iterable[RepoResult[GavPair]]): Task[Unit]
 
 }
 
