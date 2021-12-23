@@ -7,7 +7,7 @@ object Versions {
   val config = "1.4.1"
   val json4s = "4.0.3"
   val kafkaClient = "3.0.0"
-  val logback = "1.2.9"
+  val logback = "1.2.10"
   val pegdown = "1.6.0"
   val refined = "0.9.28"
   val scalaLogging = "3.9.4"
