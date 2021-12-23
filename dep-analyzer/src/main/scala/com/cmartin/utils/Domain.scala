@@ -76,7 +76,7 @@ object Domain {
       Gav(
         regexMatch.group(1), // group
         regexMatch.group(2), // artifact
-        regexMatch.group(3)  // version
+        regexMatch.group(3) // version
       )
     }
   }

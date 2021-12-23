@@ -51,7 +51,6 @@ lazy val `zio-prelude` = (project in file("zio-prelude"))
     libraryDependencies ++= Seq(zioPrelude, scalaTest)
   )
 
-
 lazy val depAnalyzer = (project in file("dep-analyzer"))
   .configs(IntegrationTest)
   .settings(

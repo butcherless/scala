@@ -13,10 +13,8 @@ case class FileManagerLive()
   override def getLinesFromFile(filename: String): IO[DomainError, List[String]] =
     manageFile(filename).use { file =>
       ZIO.logInfo(s"reading from file: $filename") *>
-      ZIO.attempt(file.getLines().toList)
+        ZIO.attempt(file.getLines().toList)
     }.orElseFail(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
-
-
 
   override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
     Task.attempt(
