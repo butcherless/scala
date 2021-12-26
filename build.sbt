@@ -66,7 +66,8 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       sttpZio,
       logback,
       zio,
-      zioConfig
+      zioConfig,
+      zioJson
     ),
     assemblyMergeStrategy := {
       case "META-INF/io.netty.versions.properties" => MergeStrategy.discard

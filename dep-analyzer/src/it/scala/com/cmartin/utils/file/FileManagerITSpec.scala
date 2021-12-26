@@ -4,12 +4,14 @@ import com.cmartin.utils.Domain
 import com.cmartin.utils.Domain.FileIOError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import zio.Runtime.{default => runtime}
+import zio.{LogLevel, Runtime, ZLogger}
 
 class FileManagerITSpec
     extends AnyFlatSpec with Matchers {
 
   behavior of "FileManager"
+  val loggers = ZLogger.Set.default.map(println(_)).filterLogLevel(_ >= LogLevel.Debug)
+  val runtime = Runtime.default.mapRuntimeConfig(_.copy(loggers = loggers))
 
   it should "retrieve a sequence of text lines from a file" in {
     val filename = "dep-analyzer/src/it/resources/dependency-list.txt"

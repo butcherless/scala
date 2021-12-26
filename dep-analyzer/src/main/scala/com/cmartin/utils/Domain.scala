@@ -1,6 +1,7 @@
 package com.cmartin.utils
 
 import scala.util.matching.Regex
+import zio.json.{DeriveJsonDecoder, JsonDecoder}
 
 object Domain {
   /*
@@ -10,13 +11,15 @@ object Domain {
   val OPEN_FILE_ERROR = "Error while opening the file"
   val FILE_BUFFER_ERROR = "Error while creating the file buffer"
 
-  type RepoResult[GavPair] = Either[Throwable, GavPair]
+  type RepoResult[GavPair] = Either[DomainError, GavPair]
 
   sealed trait DomainError
 
   case class FileIOError(message: String) extends DomainError
 
   case class NetworkError(message: String) extends DomainError
+  case class ResponseError(message: String) extends DomainError
+  case class DecodeError(message: String) extends DomainError
 
   case class UnknownError(m: String) extends DomainError
 
@@ -56,6 +59,8 @@ object Domain {
   /** Companion Object for Gav case class
     */
   object Gav {
+    implicit val decoder: JsonDecoder[Gav] = DeriveJsonDecoder.gen[Gav]
+
     implicit val ord: Ordering[Gav] = new Ordering[Gav] {
 
       /** Comparator for dependencies classes

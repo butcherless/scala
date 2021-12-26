@@ -2,7 +2,7 @@ package com.cmartin.utils.file
 
 import com.cmartin.learn.common.Utils._
 import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{DomainError, FileIOError, Gav, RepoResult}
+import com.cmartin.utils.Domain._
 import zio._
 
 import scala.io.{BufferedSource, Source}
@@ -12,30 +12,18 @@ case class FileManagerLive()
 
   override def getLinesFromFile(filename: String): IO[DomainError, List[String]] =
     manageFile(filename).use { file =>
-      ZIO.logInfo(s"reading from file: $filename") *>
+      ZIO.logLevel(LogLevel.Debug) {
+        ZIO.log(s"reading from file: $filename")
+      } *>
         ZIO.attempt(file.getLines().toList)
     }.orElseFail(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
 
-  override def logDepCollection(dependencies: List[Either[String, Gav]]): Task[Unit] = {
-    Task.attempt(
-      dependencies.foreach { dep =>
-        dep.fold(
-          line =>
-            ZIO.logInfo(s"${colourRed("invalid dependency")} => ${colourRed(line)}"),
-          dep => ZIO.logInfo(dep.toString)
-        )
-      }
-    )
-  }
+  override def logWrongDependencies(dependencies: List[String]): Task[Unit] =
+    ZIO.foreachDiscard(dependencies)(d => ZIO.logInfo(s"invalid dependency: $d"))
 
-  override def logPairCollection(collection: Iterable[RepoResult[Domain.GavPair]]): Task[Unit] = {
-    Task.succeed {
-      collection.foreach(
-        _.fold(
-          error => ZIO.logInfo(error.toString),
-          pair => if (pair.hasNewVersion) ZIO.logInfo(formatChanges(pair))
-        )
-      )
+  override def logPairCollection(collection: Iterable[GavPair]): Task[Unit] = {
+    ZIO.foreachDiscard(collection) { pair =>
+      ZIO.when(pair.hasNewVersion)(ZIO.logInfo(formatChanges(pair)))
     }
   }
 

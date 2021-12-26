@@ -1,33 +1,85 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{Gav, GavPair, RepoResult}
+import com.cmartin.utils.Domain._
+import sttp.model.StatusCode
+import zio._
+import zio.json.DecoderOps
+
+import java.net.URI
+import java.net.http.HttpResponse
+/*
 import io.circe
 import io.circe.CursorOp.DownField
 import io.circe.DecodingFailure
 import io.circe.generic.auto._
 import io.circe.parser.parse
-import sttp.client._
-import sttp.model.Uri
-import zio._
+ */
+
+import java.net.http.HttpResponse.BodyHandlers
+import java.net.http.{HttpClient, HttpRequest}
 
 case class HttpManagerLive()
     extends HttpManager {
 
-  import HttpManagerLive.Document
+  import HttpManagerLive._
 
+  override def checkDependencies(deps: Iterable[Gav]): UIO[(Iterable[DomainError], Iterable[GavPair])] =
+    buildManagedClient() { implicit client =>
+      ZIO.partition(deps)(getDependency(_)).withParallelism(2)
+    }
+
+  def acquireClient(): UIO[HttpClient] = UIO.succeed(HttpClient.newHttpClient())
+  lazy val releaseClient = (_: HttpClient) => ZIO.unit
+
+  def buildManagedClient() =
+    ZIO.acquireReleaseWith(acquireClient())(releaseClient)
+
+  def makeRequest(dep: Gav): HttpRequest =
+    HttpRequest.newBuilder().uri(
+      URI.create(
+        s"${scheme}://${path}?q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&core=gav&rows=10"
+      )
+    ).build()
+
+  def checkStatusCode(code: Int): IO[DomainError, Option[Nothing]] =
+    ZIO.when(!StatusCode(code).isSuccess)(IO.fail(ResponseError(s"status code: $code")))
+
+  def extractDependency(response: HttpResponse[String]): IO[DomainError, Gav] = {
+    response.body()
+      .fromJson[Gav] // body to model
+      .fold[IO[DomainError, Gav]](
+        e => IO.fail(DecodeError(s"Unable to decode response: $e")),
+        IO.succeed(_)
+      )
+  }
+
+  def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
+    for {
+      response <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
+        .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
+      _ <- checkStatusCode(response.statusCode())
+      remoteGav <- extractDependency(response)
+    } yield GavPair(dep, remoteGav)
+  }
+
+  /*
+   TODO Wait until the integration between Tapir and ZIO-2-.x
   implicit val backend: SttpBackend[Task, Nothing, NothingT] = ???
+   */
 
   // import HttpManager._
   /* Pattern:
-         1. parallelism factor
-         2. element list to process
-         3. processing function
+         1. element list to process
+         2. processing function
+         3. parallelism factor
    */
-  override def checkDependencies(deps: Iterable[Domain.Gav]): UIO[Iterable[RepoResult[Domain.GavPair]]] = {
-    ZIO.foreachPar(deps)(getDependency)
+  /*
+  override def checkDependencies(deps: Iterable[Gav]): UIO[Iterable[RepoResult[GavPair]]] = {
+    ZIO.foreachPar(deps)(getDependency).withParallelism(2)
   }
+   */
 
+  /*
   override def shutdown(): UIO[Unit] = {
     for {
       _ <- ZIO.logInfo("shutting down http resources")
@@ -38,28 +90,25 @@ case class HttpManagerLive()
       )
     } yield ()
   }
-
+   */
   /*
       H E L P E R S
    */
 
+  /*
   private def buildUri(dep: Gav): Uri = {
     val filter =
       s"q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&rows=1&wt=json"
     val rawUri = raw"https://search.maven.org/solrsearch/select?$filter"
     uri"$rawUri"
   }
-
   private def getDependency(dep: Gav): UIO[RepoResult[GavPair]] = {
     (for {
       response <- basicRequest.get(buildUri(dep)).send()
       remote <- parseResponse(response)(dep)
     } yield GavPair(dep, remote)).either
   }
-
-  private def parseResponse(
-      response: Response[Either[String, String]]
-  )(dep: Gav): Task[Gav] = {
+  private def parseResponse(response: Response[Either[String, String]])(dep: Gav): Task[Gav] = {
     response.body match {
       case Left(error) =>
         Task.fail(new RuntimeException(error)) // TODO domain error
@@ -101,9 +150,19 @@ case class HttpManagerLive()
 
     opsResult
   }
+   */
+
+  /* TODO
+     a) zio.json decoders
+
+   */
+
 }
 
 object HttpManagerLive {
+
+  val scheme = "https"
+  val path = "search.maven.org/solrsearch/select"
 
   final case class Document(
       id: String,
