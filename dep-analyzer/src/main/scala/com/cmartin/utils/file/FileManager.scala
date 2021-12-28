@@ -1,6 +1,6 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain.{DomainError, GavPair, RepoResult}
+import com.cmartin.utils.Domain.{DomainError, GavPair}
 import zio.{Accessible, IO, Task}
 
 trait FileManager {
@@ -9,7 +9,6 @@ trait FileManager {
   def logWrongDependencies(dependencies: Iterable[DomainError]): Task[Unit]
 
   def logPairCollection(collection: Iterable[GavPair]): Task[Unit]
-
 
 }
 

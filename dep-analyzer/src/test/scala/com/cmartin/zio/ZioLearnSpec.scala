@@ -10,7 +10,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
   val runtime = Runtime.default
 
-  "An unfailling UIO effect" should "return a computation" in {
+  "An non fallible UIO effect" should "return a computation" in {
     val program = for {
       r1 <- UIO.succeed(0)
       result <- UIO.succeed(r1 + 1)
