@@ -6,6 +6,7 @@ import zio._
 import zio.json.DecoderOps
 
 import java.net.URI
+import scala.util.matching.Regex
 /*
 import io.circe
 import io.circe.CursorOp.DownField
@@ -36,7 +37,7 @@ case class HttpManagerLive()
   def makeRequest(dep: Gav): HttpRequest =
     HttpRequest.newBuilder().uri(
       URI.create(
-        s"${scheme}://${path}?q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&core=gav&rows=10"
+        s"$scheme://$path?q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&core=gav&rows=10"
       )
     ).build()
 
@@ -57,7 +58,7 @@ case class HttpManagerLive()
       )
   }
 
-  def retrieveFirstSimilar(deps: Seq[Gav], gav: Gav): IO[DomainError, Gav] = {
+  def retrieveFirstMajor(deps: Seq[Gav], gav: Gav): IO[DomainError, Gav] = {
     majorVersionRegex.findFirstMatchIn(gav.version)
       .fold[IO[DomainError, Gav]](
         IO.fail(ResponseError(s"no major version number found for: $gav"))
@@ -77,8 +78,8 @@ case class HttpManagerLive()
       _ <- ZIO.log(s"http status code: ${response.statusCode()}")
       _ <- checkStatusCode(response.statusCode())
       remoteGavs <- extractResults(response.body())
-      _ <- ZIO.log(s"remoteGavs: $remoteGavs")
-      remoteGav <- retrieveFirstSimilar(remoteGavs, dep)
+      _ <- ZIO.log(s"remoteGavs(initial three): ${remoteGavs.take(3)}")
+      remoteGav <- retrieveFirstMajor(remoteGavs, dep)
     } yield GavPair(dep, remoteGav)
   }
 
@@ -185,7 +186,7 @@ object HttpManagerLive {
   val path = "search.maven.org/solrsearch/select"
 
   // extract major version number
-  val majorVersionRegex = raw"(^[0-9]+)..*".r
+  val majorVersionRegex: Regex = raw"(^[0-9]+)..*".r
 
   final case class Document(
       id: String,

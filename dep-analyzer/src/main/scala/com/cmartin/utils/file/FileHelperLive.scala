@@ -54,12 +54,6 @@ case class FileHelperLive()
       .orElseFail(FileIOError(Domain.FILE_BUFFER_ERROR))
   }
 
-  private def closeSource(source: BufferedSource): UIO[Unit] = {
-    UIO.succeed(
-      source
-        .close()
-    )
-  }
 
   private def getLines(
       source: BufferedSource
