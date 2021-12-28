@@ -119,7 +119,18 @@ lazy val templateProject = (project in file("."))
   .settings(
       commonSettings,
       name := "'${PROJECT_NAME}'"
-  )' > build.sbt
+  )
+
+ // clear screen and banner
+ lazy val cls = taskKey[Unit]("Prints a separator")
+ cls := {
+   val brs = "\n".repeat(2)
+   val message = "* B U I L D   B E G I N S   H E R E *"
+   val chars = "*".repeat(message.length())
+   println(s"$brs$chars")
+   println("* B U I L D   B E G I N S   H E R E *")
+   println(s"$chars$brs ")
+ } ' > build.sbt
 
 
 #
