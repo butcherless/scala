@@ -6,9 +6,10 @@ import zio.{Accessible, IO, Task}
 trait FileManager {
   def getLinesFromFile(filename: String): IO[DomainError, List[String]]
 
-  def logWrongDependencies(dependencies: List[String]): Task[Unit]
+  def logWrongDependencies(dependencies: Iterable[DomainError]): Task[Unit]
 
   def logPairCollection(collection: Iterable[GavPair]): Task[Unit]
+
 
 }
 

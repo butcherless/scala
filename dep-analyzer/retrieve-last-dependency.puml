@@ -1,0 +1,30 @@
+@startuml
+start
+:local dep input;
+:httpClient.get(search_url);
+if (computation?) then (succeed)
+  :checkStatusCode(response.code);
+  if (computation?) then (succeed)
+    :extractResults(response.body);
+    if (computation?) then (succeed)
+      :findLastRemote(deps);
+      if (computation?) then (succeed)
+        :(localDep,remoteDep);
+      else (failure)
+        :ResponseError(NoResults));
+        stop
+      endif
+    else (failure)
+      :DecodeError(SearchResults));
+      stop
+    endif
+  else (failure)
+    :ResponseError(stauts_code);
+    stop
+  endif
+else (failure)
+  :NetworkError(dep);
+  stop
+endif
+end
+@enduml

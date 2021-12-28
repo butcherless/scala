@@ -9,7 +9,7 @@ SBT_ASSEMBLY_VER="1.1.0"
 SBT_BLOOP_VER="1.4.11"
 SBT_SCALAFMT_VER="3.1.2"
 SBT_PLUGIN_SCALAFMT_VER="2.4.6"
-DEP_UP_VER="0.5.3"
+DEP_UP_VER="0.6.1"
 SCALAFMT_VER="3.3.0"
 SCALATEST_VER="3.2.10"
 SCOVERAGE_VER="2.0.0-M3"
@@ -40,6 +40,7 @@ runner.dialect = scala213source3
 # create sbt plugins file
 #
 echo '// sbt tool plugins
+addDependencyTreePlugin
 addSbtPlugin("com.eed3si9n"       % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
 addSbtPlugin("com.timushev.sbt"   % "sbt-updates"            % "'${DEP_UP_VER}'")
 addSbtPlugin("org.scoverage"      % "sbt-scoverage"          % "'${SCOVERAGE_VER}'")

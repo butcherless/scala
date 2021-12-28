@@ -1,7 +1,8 @@
 package com.cmartin.utils
 
-import scala.util.matching.Regex
 import zio.json.{DeriveJsonDecoder, JsonDecoder}
+
+import scala.util.matching.Regex
 
 object Domain {
   /*
@@ -84,6 +85,66 @@ object Domain {
         regexMatch.group(3) // version
       )
     }
+  }
+
+  case class MavenSearchResult(
+      responseHeader: ResponseHeader,
+      response: Response
+  )
+
+  object MavenSearchResult {
+    implicit val decoder: JsonDecoder[MavenSearchResult] = DeriveJsonDecoder.gen[MavenSearchResult]
+
+  }
+
+  case class ResponseHeader(
+      status: Int,
+      params: Params
+  )
+
+  object ResponseHeader {
+    implicit val decoder: JsonDecoder[ResponseHeader] = DeriveJsonDecoder.gen[ResponseHeader]
+
+  }
+
+  case class Params(
+      q: String,
+      core: String,
+      fl: String,
+      sort: String,
+      rows: Int,
+      wt: String,
+      version: String
+  )
+
+  object Params {
+    implicit val decoder: JsonDecoder[Params] = DeriveJsonDecoder.gen[Params]
+
+  }
+
+  case class Response(
+      numFound: Int,
+      start: Int,
+      docs: Seq[Artifact]
+  )
+
+  object Response {
+    implicit val decoder: JsonDecoder[Response] = DeriveJsonDecoder.gen[Response]
+
+  }
+
+  case class Artifact(
+      id: String,
+      g: String,
+      a: String,
+      v: String,
+      p: String,
+      timestamp: Long,
+      ec: Seq[String]
+  )
+
+  object Artifact {
+    implicit val decoder: JsonDecoder[Artifact] = DeriveJsonDecoder.gen[Artifact]
   }
 
 }

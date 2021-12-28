@@ -18,8 +18,8 @@ case class FileManagerLive()
         ZIO.attempt(file.getLines().toList)
     }.orElseFail(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
 
-  override def logWrongDependencies(dependencies: List[String]): Task[Unit] =
-    ZIO.foreachDiscard(dependencies)(d => ZIO.logInfo(s"invalid dependency: $d"))
+  override def logWrongDependencies(errors: Iterable[DomainError]): Task[Unit] =
+    ZIO.foreachDiscard(errors)(e => ZIO.logInfo(s"invalid dependency: $e"))
 
   override def logPairCollection(collection: Iterable[GavPair]): Task[Unit] = {
     ZIO.foreachDiscard(collection) { pair =>

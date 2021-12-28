@@ -6,7 +6,6 @@ import zio._
 import zio.json.DecoderOps
 
 import java.net.URI
-import java.net.http.HttpResponse
 /*
 import io.circe
 import io.circe.CursorOp.DownField
@@ -44,21 +43,42 @@ case class HttpManagerLive()
   def checkStatusCode(code: Int): IO[DomainError, Option[Nothing]] =
     ZIO.when(!StatusCode(code).isSuccess)(IO.fail(ResponseError(s"status code: $code")))
 
-  def extractDependency(response: HttpResponse[String]): IO[DomainError, Gav] = {
-    response.body()
-      .fromJson[Gav] // body to model
-      .fold[IO[DomainError, Gav]](
+  def extractResults(body: String): IO[DomainError, Seq[Gav]] = {
+    body
+      .fromJson[MavenSearchResult] // response body to model
+      .fold[IO[DomainError, Seq[Gav]]](
         e => IO.fail(DecodeError(s"Unable to decode response: $e")),
-        IO.succeed(_)
+        results =>
+          IO.succeed(
+            results.response.docs.map { artifact =>
+              Gav(group = artifact.g, artifact = artifact.a, version = artifact.v)
+            }
+          )
       )
+  }
+
+  def retrieveFirstSimilar(deps: Seq[Gav], gav: Gav): IO[DomainError, Gav] = {
+    majorVersionRegex.findFirstMatchIn(gav.version)
+      .fold[IO[DomainError, Gav]](
+        IO.fail(ResponseError(s"no major version number found for: $gav"))
+      ) { regexMatch =>
+        deps.find(d => d.version.startsWith(regexMatch.group(1)))
+          .fold[IO[DomainError, Gav]](
+            IO.fail(ResponseError(s"no remote dependency found for: $gav"))
+          )(d => IO.succeed(Gav(d.group, d.artifact, d.version)))
+      }
   }
 
   def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
     for {
       response <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
         .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
+      _ <- ZIO.log(s"http request: ${response.request()}")
+      _ <- ZIO.log(s"http status code: ${response.statusCode()}")
       _ <- checkStatusCode(response.statusCode())
-      remoteGav <- extractDependency(response)
+      remoteGavs <- extractResults(response.body())
+      _ <- ZIO.log(s"remoteGavs: $remoteGavs")
+      remoteGav <- retrieveFirstSimilar(remoteGavs, dep)
     } yield GavPair(dep, remoteGav)
   }
 
@@ -163,6 +183,9 @@ object HttpManagerLive {
 
   val scheme = "https"
   val path = "search.maven.org/solrsearch/select"
+
+  // extract major version number
+  val majorVersionRegex = raw"(^[0-9]+)..*".r
 
   final case class Document(
       id: String,
