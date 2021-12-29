@@ -40,28 +40,16 @@ case class FileHelperLive()
    */
 
   private def openFile(filename: String): IO[DomainError, FileInputStream] =
-    Task.attempt(
-      new FileInputStream(new File(filename))
-    )
+    Task.attempt(new FileInputStream(new File(filename)))
       .orElseFail(FileIOError(Domain.OPEN_FILE_ERROR))
 
-  private def createFileSource(
-      fis: FileInputStream
-  ): IO[DomainError, BufferedSource] = {
-    Task.attempt(
-      new BufferedSource(fis)
-    )
+  private def createFileSource(fis: FileInputStream): IO[DomainError, BufferedSource] = {
+    Task.attempt(new BufferedSource(fis))
       .orElseFail(FileIOError(Domain.FILE_BUFFER_ERROR))
   }
 
-
-  private def getLines(
-      source: BufferedSource
-  ): IO[DomainError, Iterator[String]] =
-    Task(
-      source
-        .getLines()
-    ).orElseFail(FileIOError("Error while accessing the file contents"))
+  private def getLines(source: BufferedSource): IO[DomainError, Iterator[String]] =
+    Task(source.getLines()).orElseFail(FileIOError("Error while accessing the file contents"))
 
 }
 

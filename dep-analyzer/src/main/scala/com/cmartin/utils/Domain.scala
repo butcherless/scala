@@ -12,8 +12,6 @@ object Domain {
   val OPEN_FILE_ERROR = "Error while opening the file"
   val FILE_BUFFER_ERROR = "Error while creating the file buffer"
 
-  type RepoResult[GavPair] = Either[DomainError, GavPair]
-
   sealed trait DomainError
 
   case class FileIOError(message: String) extends DomainError
@@ -39,8 +37,6 @@ object Domain {
     def hasNewVersion: Boolean =
       local.version != remote.version
   }
-
-  case class Results(pairs: List[RepoResult[GavPair]], validRate: Double)
 
   /** It represents a maven dependency
     *
