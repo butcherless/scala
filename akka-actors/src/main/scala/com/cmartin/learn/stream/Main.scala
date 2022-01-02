@@ -7,7 +7,7 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 import scala.collection.immutable
 import scala.concurrent.duration._
 
-object Main { //extends App {
+object Main { // extends App {
   println("Main streams")
 
   implicit val system = ActorSystem("QuickStart")

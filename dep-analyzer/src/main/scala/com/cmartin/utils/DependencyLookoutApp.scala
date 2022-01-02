@@ -39,7 +39,7 @@ object DependencyLookoutApp
     _ <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
     finalDeps <- LogicManager(_.excludeList(validDeps, exclusionList))
     (errors, remoteDeps) <- HttpManager(_.checkDependencies(finalDeps))
-    //TODO process errors
+    // TODO process errors
     _ <- FileManager(_.logPairCollection(remoteDeps))
     _ <- FileManager(_.logWrongDependencies(errors))
   } yield ()
