@@ -12,11 +12,11 @@ class SttpSpec extends AnyFlatSpec with Matchers {
   behavior of "Sttp client"
 
   "Raw interpolator" should "build an encoded string" in {
-    val group = "dev.zio"
+    val group    = "dev.zio"
     val artifact = "zio_2.13"
 
     val filter = s"q=g:$group+AND+a:$artifact+AND+p:jar&rows=1&wt=json"
-    val uri = raw"https://search.maven.org/solrsearch/select?$filter"
+    val uri    = raw"https://search.maven.org/solrsearch/select?$filter"
 
     info(uri)
   }

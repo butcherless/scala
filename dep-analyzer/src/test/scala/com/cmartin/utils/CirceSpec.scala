@@ -45,10 +45,10 @@ class CirceSpec extends AnyFlatSpec with Matchers {
 object CirceSpec {
   def parseResponse(response: String): Either[circe.Error, Dep] = {
     val opsResult: Either[circe.Error, Dep] = for {
-      json <- parse(response)
+      json  <- parse(response)
       cursor = json.hcursor
       count <- cursor.downField("response").get[Int]("numFound")
-      doc <- {
+      doc   <- {
         if (count > 0)
           cursor.downField("response").downField("docs").downArray.as[Document]
         else

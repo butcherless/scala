@@ -27,6 +27,6 @@ trait FileHelper {
 object FileHelper
     extends Accessible[FileHelper] {
 
-  type FileLines = Seq[String]
+  type FileLines        = Seq[String]
   type ParsedDependency = Either[String, Gav]
 }

@@ -16,7 +16,7 @@ object DependencyLookoutApp
     extends ZIOAppDefault
     with ComponentLogging {
 
-  val filename = "/tmp/dep-list.log" // TODO property
+  val filename      = "/tmp/dep-list.log"                                        // TODO property
   val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
 
   /*
@@ -32,16 +32,16 @@ object DependencyLookoutApp
    */
 
   val program = for {
-    lines <- FileManager(_.getLinesFromFile(filename))
+    lines                     <- FileManager(_.getLinesFromFile(filename))
     (dependencies, validDeps) <- LogicManager(_.parseLines(lines))
     // _ <- FileManager(_.logDepCollection(dependencies))
-    validRate <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
-    _ <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
-    finalDeps <- LogicManager(_.excludeList(validDeps, exclusionList))
-    (errors, remoteDeps) <- HttpManager(_.checkDependencies(finalDeps))
+    validRate                 <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
+    _                         <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
+    finalDeps                 <- LogicManager(_.excludeList(validDeps, exclusionList))
+    (errors, remoteDeps)      <- HttpManager(_.checkDependencies(finalDeps))
     // TODO process errors
-    _ <- FileManager(_.logPairCollection(remoteDeps))
-    _ <- FileManager(_.logWrongDependencies(errors))
+    _                         <- FileManager(_.logPairCollection(remoteDeps))
+    _                         <- FileManager(_.logWrongDependencies(errors))
   } yield ()
 
   type Services = FileManager with LogicManager with HttpManager

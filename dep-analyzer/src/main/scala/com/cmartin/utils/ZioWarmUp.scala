@@ -7,7 +7,7 @@ import scala.util.Random
 
 object ZioWarmUp {
   val jsonKeys: List[String] = List("k1", "k2", "k3")
-  val jsonDoc: Json = Json(jsonKeys)
+  val jsonDoc: Json          = Json(jsonKeys)
 
   sealed trait JsonException extends Exception
 

@@ -17,12 +17,12 @@ case class LogicManagerLive()
 
   private def parseDepLine(line: String): IO[String, Gav] = {
     for {
-      _ <- ZIO.logInfo(s"parsing line: $line")
+      _        <- ZIO.logInfo(s"parsing line: $line")
       iterator <- UIO.succeed(pattern.findAllMatchIn(line))
-      result <- ZIO.ifZIO(UIO.succeed(iterator.hasNext))(
-        IO.succeed(Gav.fromRegexMatch(iterator.next())),
-        IO.fail(line)
-      )
+      result   <- ZIO.ifZIO(UIO.succeed(iterator.hasNext))(
+                    IO.succeed(Gav.fromRegexMatch(iterator.next())),
+                    IO.fail(line)
+                  )
     } yield result
   }
 

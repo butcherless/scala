@@ -36,24 +36,24 @@ object ZioLoopDemo
   /*
    * initial state of the business information
    */
-  val initial: MyInfo = MyInfo(10)
+  val initial: MyInfo                    = MyInfo(10)
   /*
    * function that determines the continuation of the processing loop
    */
-  def cont(info: MyInfo): Boolean = info.a > 0
+  def cont(info: MyInfo): Boolean        = info.a > 0
   /*
    * function that gets the next status of business information
    */
-  def dec(info: MyInfo): MyInfo = MyInfo(info.a - 1)
+  def dec(info: MyInfo): MyInfo          = MyInfo(info.a - 1)
   /*
    * business function
    */
-  def body(info: MyInfo): UIO[MyResult] =
+  def body(info: MyInfo): UIO[MyResult]  =
     UIO(MyResult(info.a.toDouble, intTypeText(info.a)))
   /*
    * helper functions
    */
-  def intTypeText(a: Int): String = if (a % 2 == 0) "even" else "odd"
+  def intTypeText(a: Int): String        = if (a % 2 == 0) "even" else "odd"
   def prettyPrint[A](l: List[A]): String = l.mkString("\n\t", "\n\t", "\n")
 
   /*
@@ -61,9 +61,9 @@ object ZioLoopDemo
    */
   val program =
     for {
-      _ <- ZIO.logInfo("zio loop demo:")
+      _             <- ZIO.logInfo("zio loop demo:")
       evenOrOddList <- ZIO.loop(initial)(cont, dec)(body)
-      _ <- ZIO.logInfo(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
+      _             <- ZIO.logInfo(s"-> evenOrOddList => ${prettyPrint(evenOrOddList)}")
     } yield ()
 
   // main function, needs exit = 0 [OK] or exit > 0 [ERROR]

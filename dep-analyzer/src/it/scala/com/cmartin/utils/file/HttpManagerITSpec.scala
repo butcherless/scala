@@ -15,7 +15,7 @@ class HttpManagerITSpec
 
   it should "retrieve a single dependency change" in {
     // given
-    val deps = Seq(zioDep)
+    val deps    = Seq(zioDep)
     // when
     val program = HttpManager(_.checkDependencies(deps))
 
@@ -37,7 +37,7 @@ class HttpManagerITSpec
 
   it should "retrieve multiple dependency changes" in {
     // given
-    val deps = Seq(zioDep, logbackDep)
+    val deps    = Seq(zioDep, logbackDep)
     // when
     val program = HttpManager(_.checkDependencies(deps))
 
@@ -55,8 +55,8 @@ class HttpManagerITSpec
 
   it should "WIP retrieve a list of failures" in {
     // given
-    val dep = zioDep.copy(artifact = "missing-zio")
-    val deps = Seq(dep)
+    val dep     = zioDep.copy(artifact = "missing-zio")
+    val deps    = Seq(dep)
     // when
     val program = HttpManager(_.checkDependencies(deps))
 
@@ -77,14 +77,14 @@ class HttpManagerITSpec
 }
 
 object HttpManagerITSpec {
-  val zioGroup = "dev.zio"
+  val zioGroup    = "dev.zio"
   val zioArtifact = "zio_2.13"
-  val zioVersion = "2.0.0"
-  val zioDep = Gav(zioGroup, zioArtifact, zioVersion)
+  val zioVersion  = "2.0.0"
+  val zioDep      = Gav(zioGroup, zioArtifact, zioVersion)
 
-  val lbGroup = "ch.qos.logback"
+  val lbGroup    = "ch.qos.logback"
   val lbArtifact = "logback-classic"
-  val lbVersion = "1.2.5"
+  val lbVersion  = "1.2.5"
   val logbackDep = Gav(lbGroup, lbArtifact, lbVersion)
 
   def takeMajorNumber(version: String) = version.split('.').head

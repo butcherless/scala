@@ -14,10 +14,10 @@ case class FileHelperLive()
 
   override def getLinesFromFile(filename: String): IO[DomainError, FileLines] = {
     for {
-      _ <- ZIO.logInfo(s"getLinesFromFile: $filename")
-      fis <- openFile(filename)
+      _      <- ZIO.logInfo(s"getLinesFromFile: $filename")
+      fis    <- openFile(filename)
       source <- createFileSource(fis)
-      lines <- getLines(source)
+      lines  <- getLines(source)
     } yield lines.toSeq
   }
 

@@ -45,7 +45,7 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
 
   it should "return an unknown domain error" in {
     val filename = "unknown"
-    val program = for {
+    val program  = for {
       result <- FileHelperTest.getLinesFromFile(filename)
     } yield result
 
@@ -55,7 +55,7 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "write two lines in the log destination" in {
-    val deps = Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
+    val deps    = Seq(Left("invalid.dep"), Right(Gav("group", "artifact", "version")))
     val program = FileHelper(_.logDepCollection(deps))
 
     runtime.unsafeRun(program.provide(FileHelperLive.layer))
@@ -65,6 +65,6 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
 
 object FileHelperSpec {
   val expectedLines: Seq[String] = Seq("line-1", "line-2")
-  val FILE_NOT_FOUD_MESSAGE = "file not found"
-  val UNKNOWN_ERROR_MESSAGE = "error trying to access a file"
+  val FILE_NOT_FOUD_MESSAGE      = "file not found"
+  val UNKNOWN_ERROR_MESSAGE      = "error trying to access a file"
 }

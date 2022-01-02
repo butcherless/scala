@@ -93,7 +93,7 @@ object Logic {
             gs.group(GAV_VERSION_POS)
           )
         )
-      case None => None
+      case None     => None
     }
   }
 

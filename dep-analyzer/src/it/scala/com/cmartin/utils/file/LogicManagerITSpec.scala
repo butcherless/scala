@@ -12,8 +12,8 @@ class LogicManagerITSpec
 
   it should "successfully retrieve the dependencies from a file" in {
     val filename = "dep-analyzer/src/it/resources/deps-1.txt"
-    val program = for {
-      lines <- FileManager(_.getLinesFromFile(filename))
+    val program  = for {
+      lines                  <- FileManager(_.getLinesFromFile(filename))
       (errors, dependencies) <- LogicManager(_.parseLines(lines))
     } yield (errors, dependencies, lines.size)
 
@@ -27,8 +27,8 @@ class LogicManagerITSpec
 
   it should "retrieve two collections of dependencies with successes and failures" in {
     val filename = "dep-analyzer/src/it/resources/deps-2.txt"
-    val program = for {
-      lines <- FileManager(_.getLinesFromFile(filename))
+    val program  = for {
+      lines                  <- FileManager(_.getLinesFromFile(filename))
       (errors, dependencies) <- LogicManager(_.parseLines(lines))
     } yield (errors.size, dependencies, lines.size)
 

@@ -29,7 +29,7 @@ case class HttpManagerLive()
     }
 
   def acquireClient(): UIO[HttpClient] = UIO.succeed(HttpClient.newHttpClient())
-  lazy val releaseClient = (_: HttpClient) => ZIO.unit
+  lazy val releaseClient               = (_: HttpClient) => ZIO.unit
 
   def buildManagedClient() =
     ZIO.acquireReleaseWith(acquireClient())(releaseClient)
@@ -72,14 +72,14 @@ case class HttpManagerLive()
 
   def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
     for {
-      response <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
-        .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
-      _ <- ZIO.log(s"http request: ${response.request()}")
-      _ <- ZIO.log(s"http status code: ${response.statusCode()}")
-      _ <- checkStatusCode(response.statusCode())
+      response   <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
+                      .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
+      _          <- ZIO.log(s"http request: ${response.request()}")
+      _          <- ZIO.log(s"http status code: ${response.statusCode()}")
+      _          <- checkStatusCode(response.statusCode())
       remoteGavs <- extractResults(response.body())
-      _ <- ZIO.log(s"remoteGavs(initial three): ${remoteGavs.take(3)}")
-      remoteGav <- retrieveFirstMajor(remoteGavs, dep)
+      _          <- ZIO.log(s"remoteGavs(initial three): ${remoteGavs.take(3)}")
+      remoteGav  <- retrieveFirstMajor(remoteGavs, dep)
     } yield GavPair(dep, remoteGav)
   }
 
@@ -183,7 +183,7 @@ case class HttpManagerLive()
 object HttpManagerLive {
 
   val scheme = "https"
-  val path = "search.maven.org/solrsearch/select"
+  val path   = "search.maven.org/solrsearch/select"
 
   // extract major version number
   val majorVersionRegex: Regex = raw"(^[0-9]+)..*".r

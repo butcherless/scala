@@ -12,7 +12,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
   "An non fallible UIO effect" should "return a computation" in {
     val program = for {
-      r1 <- UIO.succeed(0)
+      r1     <- UIO.succeed(0)
       result <- UIO.succeed(r1 + 1)
     } yield result
 
@@ -23,7 +23,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
   "A fallible Task effect" should "throw a FiberFailure when an exception occurs" in {
     val program = for {
-      r1 <- UIO(0)
+      r1     <- UIO(0)
       result <- Task(r1 / r1)
     } yield result
 
@@ -32,8 +32,8 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
   it should "throw a FiberFailure containing a String when a exception occurs" in {
     val expectedMessage = "error-message"
-    val program = for {
-      r1 <- UIO(0)
+    val program         = for {
+      r1     <- UIO(0)
       result <- Task(r1 / r1).orElseFail(expectedMessage)
     } yield result
 
@@ -61,7 +61,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
     import com.cmartin.utils.ZioLearn.refineError
 
     val program: Task[Int] = for {
-      r1 <- Task.attempt(0)
+      r1     <- Task.attempt(0)
       result <- Task.attempt(1 / r1)
     } yield result
 
@@ -74,17 +74,17 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "map None to a String into the error channel" in {
-    val none: Option[Int] = None
+    val none: Option[Int]                 = None
     val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
-    val program: IO[String, Int] = noneZio.orElseFail("mapped error")
+    val program: IO[String, Int]          = noneZio.orElseFail("mapped error")
 
     a[FiberFailure] should be thrownBy runtime.unsafeRun(program)
   }
 
   it should "return a Left with an string error" in {
-    val none: Option[Int] = None
+    val none: Option[Int]                 = None
     val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
-    val program: IO[String, Int] = noneZio.mapError(_ => "mapped error")
+    val program: IO[String, Int]          = noneZio.mapError(_ => "mapped error")
 
     val result: Either[String, Int] = runtime.unsafeRun(program.either)
 
@@ -95,7 +95,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
     import ZioLearnSpec._
 
     val exclusionList = List("group-2", "group-4")
-    val result = artifacts.filterNot(dep => exclusionList.contains(dep.group))
+    val result        = artifacts.filterNot(dep => exclusionList.contains(dep.group))
 
     result shouldBe filteredArtifacts
   }
@@ -128,7 +128,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _ <- Task(1 / 1).orElseFail(ErrorOne("error-one"))
+        _      <- Task(1 / 1).orElseFail(ErrorOne("error-one"))
         result <- Task(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
@@ -145,7 +145,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _ <- Task(1 / 0).orElseFail(ErrorOne("error-one"))
+        _      <- Task(1 / 0).orElseFail(ErrorOne("error-one"))
         result <- Task(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
@@ -158,7 +158,7 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
   "Zio Config" should "read the configuration from a Map" in {
 
     val mapSource = Map(
-      "FILENAME" -> "dependencies.data",
+      "FILENAME"   -> "dependencies.data",
       "EXCLUSIONS" -> "dep-exclusion-1"
     )
 

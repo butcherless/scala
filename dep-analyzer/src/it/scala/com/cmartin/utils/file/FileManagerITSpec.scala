@@ -15,7 +15,7 @@ class FileManagerITSpec
 
   it should "retrieve a sequence of text lines from a file" in {
     val filename = "dep-analyzer/src/it/resources/dependency-list.txt"
-    val program = FileManager(_.getLinesFromFile(filename))
+    val program  = FileManager(_.getLinesFromFile(filename))
       .provide(FileManagerLive.layer)
 
     val lines = runtime.unsafeRun(program)
@@ -26,7 +26,7 @@ class FileManagerITSpec
 
   it should "fail for missing file" in {
     val filename = "missing-file.txt"
-    val program = FileManager(_.getLinesFromFile(filename))
+    val program  = FileManager(_.getLinesFromFile(filename))
       .provide(FileManagerLive.layer)
 
     val lines = runtime.unsafeRun(program.either)

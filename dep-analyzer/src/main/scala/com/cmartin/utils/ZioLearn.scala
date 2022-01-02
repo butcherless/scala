@@ -15,7 +15,7 @@ object ZioLearn {
   def refineError(): PartialFunction[Throwable, MyDomainException] = {
     case e: java.lang.IllegalArgumentException =>
       MyExceptionOne(s"refine illegal argument: [${e.getMessage}]")
-    case e: java.lang.ArithmeticException =>
+    case e: java.lang.ArithmeticException      =>
       MyExceptionTwo(s"refine arithmetic error: [${e.getMessage}]")
   }
 
