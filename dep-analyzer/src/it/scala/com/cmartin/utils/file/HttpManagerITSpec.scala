@@ -55,7 +55,7 @@ class HttpManagerITSpec
 
   it should "WIP retrieve a list of failures" in {
     // given
-    val dep  = zioDep.copy(artifact = "missing-zio")
+    val dep = zioDep.copy(artifact = "missing-zio")
     val deps = Seq(dep)
     // when
     val program = HttpManager(_.checkDependencies(deps))
