@@ -10,7 +10,7 @@ SBT_BLOOP_VER="1.4.11"
 SBT_SCALAFMT_VER="3.1.2"
 SBT_PLUGIN_SCALAFMT_VER="2.4.6"
 DEP_UP_VER="0.6.1"
-SCALAFMT_VER="3.3.0"
+SCALAFMT_VER="3.3.1"
 SCALATEST_VER="3.2.10"
 SCOVERAGE_VER="2.0.0-M3"
 ZIO_VER="2.0.0-RC1"
@@ -63,7 +63,7 @@ echo 'ThisBuild / version := "1.0.0-SNAPSHOT"
 #
 echo 'object Versions {
   // main
-  val zio     = "'${ZIO_VER}'"
+  val zio       = "'${ZIO_VER}'"
 
   // test
   val scalatest = "'${SCALATEST_VER}'"
