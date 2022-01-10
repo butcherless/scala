@@ -27,7 +27,7 @@ class FileHelperSpec extends AnyFlatSpec with Matchers {
     result shouldBe expectedLines
   }
 
-  it should "WIP return a file domain error" in {
+  it should "return a file domain error" in {
     val filename = "non-existent-file"
 
     val program: ZIO[FileHelper, Domain.DomainError, FileLines] = for {

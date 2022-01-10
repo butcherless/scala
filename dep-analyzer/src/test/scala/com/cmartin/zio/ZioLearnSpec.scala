@@ -1,12 +1,18 @@
 package com.cmartin.zio
 
 import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
+import com.cmartin.utils.ZioLearn.MyDomainException
+import com.cmartin.utils.ZioLearn.MyExceptionTwo
+import com.cmartin.utils.config.ConfigHelper._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
+import zio.config.ReadError
 
-class ZioLearnSpec extends AnyFlatSpec with Matchers {
+class ZioLearnSpec extends AnyFlatSpec
+    with Matchers {
+
+  import ZioLearnSpec._
 
   val runtime = Runtime.default
 
@@ -135,7 +141,6 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
     val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
 
     failure.cause.failureOption.map { ex => ex shouldBe ErrorTwo("error-two") }
-
   }
 
   it should "return a domain error inside Left (either)" in {
@@ -154,34 +159,31 @@ class ZioLearnSpec extends AnyFlatSpec with Matchers {
     result shouldBe Left(ErrorOne("error-one"))
   }
 
-  import com.cmartin.utils.config.ConfigHelper._
   "Zio Config" should "read the configuration from a Map" in {
-
-    val mapSource = Map(
-      "FILENAME"   -> "dependencies.data",
-      "EXCLUSIONS" -> "dep-exclusion-1"
+    val configMap = Map(
+      "FILENAME"   -> filename,
+      "EXCLUSIONS" -> exclusions
     )
 
-    val expectedConfig = AppConfig("dependencies.data", "dep-exclusion-1")
+    val expectedConfig = AppConfig(filename, exclusions)
 
-    val io = getAppConfigFromMap(mapSource)
+    val configEither = getConfigFromMap(configMap)
 
-    // TODO val config = runtime.unsafeRun(io)
+    info(s"info: $configEither")
 
-    // info(s"zio config result: $config")
-
-    // config shouldBe expectedConfig
+    configEither shouldBe Right(expectedConfig)
   }
 
   it should "fail when trying to retrieve a missing property" in {
-//    val mapSource = Map("FILENAME" -> "dependencies.data")
+    val configMap = Map("FILENAME" -> filename)
 
-    // val io = getAppConfigFromMap(mapSource)
+    val configEither: Either[ReadError[String], AppConfig] = getConfigFromMap(configMap)
+    info(s"info: $configEither")
 
-    // TODO val failure = the[FiberFailure] thrownBy runtime.unsafeRun(io)
-
-    // failure.cause.failures.nonEmpty shouldBe true
-
+    configEither.isLeft shouldBe true
+    configEither.left.map { error =>
+      error shouldBe a[ReadError.ZipErrors[_]]
+    }
   }
 }
 
@@ -199,4 +201,8 @@ object ZioLearnSpec {
     Gav("group-1", "a12", "v12"),
     Gav("group-3", "a31", "v31")
   )
+
+  val filename   = "dependencies.data"
+  val exclusions = "dep-exclusion-1"
+
 }
