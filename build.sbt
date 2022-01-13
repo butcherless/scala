@@ -4,7 +4,7 @@ import sbtassembly.MergeStrategy
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-ThisBuild / scalaVersion := "2.13.7"
+ThisBuild / scalaVersion := "2.13.8"
 ThisBuild / organization := "com.cmartin.learn"
 
 lazy val basicScalacOptions = Seq(
@@ -56,7 +56,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
     Defaults.itSettings,
     commonSettings,
-    name := "depAnalyzer",
+    name                  := "depAnalyzer",
     libraryDependencies ++= Seq(
       akkaStream,
       circeGeneric,
@@ -71,7 +71,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
     ),
     assemblyMergeStrategy := {
       case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
-      case x =>
+      case x                                       =>
         val oldStrategy = assemblyMergeStrategy.value
         oldStrategy(x)
     }
@@ -200,9 +200,9 @@ lazy val json4sUtils = (project in file("json4s-utils"))
 // clear screen and banner
 lazy val cls = taskKey[Unit]("Prints a separator")
 cls := {
-  val brs = "\n".repeat(2)
+  val brs     = "\n".repeat(2)
   val message = "* B U I L D   B E G I N S   H E R E *"
-  val chars = "*".repeat(message.length())
+  val chars   = "*".repeat(message.length())
   println(s"$brs$chars")
   println("* B U I L D   B E G I N S   H E R E *")
   println(s"$chars$brs ")
