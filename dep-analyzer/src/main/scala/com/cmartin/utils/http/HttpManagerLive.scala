@@ -25,13 +25,13 @@ case class HttpManagerLive()
 
   override def checkDependencies(deps: Iterable[Gav]): UIO[(Iterable[DomainError], Iterable[GavPair])] =
     buildManagedClient() { implicit client =>
-      ZIO.partition(deps)(getDependency(_)).withParallelism(2)
+      ZIO.partitionPar(deps)(getDependency(_)).withParallelism(3)
     }
 
-  def acquireClient(): UIO[HttpClient] = UIO.succeed(HttpClient.newHttpClient())
-  lazy val releaseClient               = (_: HttpClient) => ZIO.unit
+  def acquireClient(): UIO[HttpClient]            = UIO.succeed(HttpClient.newHttpClient())
+  lazy val releaseClient: HttpClient => UIO[Unit] = (_: HttpClient) => ZIO.unit
 
-  def buildManagedClient() =
+  def buildManagedClient(): ZIO.Release[Any, Nothing, HttpClient] =
     ZIO.acquireReleaseWith(acquireClient())(releaseClient)
 
   def makeRequest(dep: Gav): HttpRequest =
@@ -72,6 +72,7 @@ case class HttpManagerLive()
 
   def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
     for {
+      _          <- ZIO.log("start time: ")
       response   <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
                       .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
       _          <- ZIO.log(s"http request: ${response.request()}")

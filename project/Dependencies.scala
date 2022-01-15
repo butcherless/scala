@@ -30,8 +30,6 @@ object Dependencies {
   // lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion
 
   lazy val refined      = "eu.timepit" %% "refined" % Versions.refined
-  lazy val scalaLogging =
-    "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging
   lazy val scalaz = "org.scalaz" %% "scalaz-core" % Versions.scalaz
 
   lazy val sttpCore = "com.softwaremill.sttp.client" %% "core" % Versions.sttp

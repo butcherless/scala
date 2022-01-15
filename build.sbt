@@ -91,7 +91,7 @@ lazy val typeclasses = (project in file("typeclasses"))
   .settings(
     commonSettings,
     name := "typeclasses",
-    libraryDependencies ++= Seq(scalaLogging, logback)
+    libraryDependencies ++= Seq( logback)
   )
 
 lazy val dtogen = (project in file("dtogen"))
@@ -99,7 +99,7 @@ lazy val dtogen = (project in file("dtogen"))
   .settings(
     commonSettings,
     name := "dtogen",
-    libraryDependencies ++= Seq(scalaLogging, logback)
+    libraryDependencies ++= Seq( logback)
   )
 
 lazy val scalazlearn = (project in file("scalaz"))
@@ -142,7 +142,6 @@ lazy val akkahttphw = (project in file("akka-http-hw"))
       akkaHttp,
       akkaJson,
       akkaStream,
-      scalaLogging,
       logback,
       akkaHttpTest,
       akkaTest
@@ -183,8 +182,7 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
       circeGeneric,
       typesafeConfig,
       kafkaClient,
-      logback,
-      scalaLogging
+      logback
     )
   )
   .dependsOn(common)
@@ -194,7 +192,7 @@ lazy val json4sUtils = (project in file("json4s-utils"))
   .settings(
     commonSettings,
     name := "json4s-utils",
-    libraryDependencies ++= Seq(json4s, logback, scalaLogging)
+    libraryDependencies ++= Seq(json4s, logback)
   )
 
 // clear screen and banner

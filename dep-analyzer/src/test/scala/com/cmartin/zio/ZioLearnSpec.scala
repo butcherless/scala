@@ -1,13 +1,13 @@
 package com.cmartin.zio
 
 import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.ZioLearn.MyDomainException
-import com.cmartin.utils.ZioLearn.MyExceptionTwo
+import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
+import com.cmartin.utils.config.ConfigHelper
 import com.cmartin.utils.config.ConfigHelper._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
-import zio.config.ReadError
+import zio.config.{ReadError, _}
 
 class ZioLearnSpec extends AnyFlatSpec
     with Matchers {
@@ -160,29 +160,41 @@ class ZioLearnSpec extends AnyFlatSpec
   }
 
   "Zio Config" should "read the configuration from a Map" in {
-    val configMap = Map(
+    val expectedConfig: AppConfig = AppConfig(filename, exclusions)
+    val configMap: Map[String, String] = Map(
       "FILENAME"   -> filename,
       "EXCLUSIONS" -> exclusions
     )
 
-    val expectedConfig = AppConfig(filename, exclusions)
+    val configLayer: Layer[ReadError[String], AppConfig] =
+      ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
 
-    val configEither = getConfigFromMap(configMap)
+    val program = getConfig[AppConfig]
 
-    info(s"info: $configEither")
+    val result = runtime.unsafeRun(
+      program.provideLayer(configLayer)
+    )
 
-    configEither shouldBe Right(expectedConfig)
+    result shouldBe expectedConfig
   }
 
   it should "fail when trying to retrieve a missing property" in {
-    val configMap = Map("FILENAME" -> filename)
+    val configMap: Map[String, String]                   = Map.empty //  Map("FILENAME" -> filename)
+    val configLayer: Layer[ReadError[String], AppConfig] =
+      ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
 
-    val configEither: Either[ReadError[String], AppConfig] = getConfigFromMap(configMap)
-    info(s"info: $configEither")
+    val program = getConfig[AppConfig]
 
-    configEither.isLeft shouldBe true
-    configEither.left.map { error =>
+    val resultEither = runtime.unsafeRun(
+      program.provideLayer(configLayer).either
+    )
+
+    info(s"$resultEither")
+
+    resultEither.isLeft shouldBe true
+    resultEither.left.map { error =>
       error shouldBe a[ReadError.ZipErrors[_]]
+      error.size shouldBe 2
     }
   }
 }

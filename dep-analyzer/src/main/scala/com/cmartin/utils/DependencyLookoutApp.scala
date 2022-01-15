@@ -6,6 +6,8 @@ import com.cmartin.utils.http._
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import zio._
 
+import java.util.concurrent.TimeUnit
+
 /*
   http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
   https://twitter.com/jdegoes/status/1462758239418867714  ZLayer
@@ -32,6 +34,7 @@ object DependencyLookoutApp
    */
 
   val program = for {
+    startTime                 <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
     lines                     <- FileManager(_.getLinesFromFile(filename))
     (dependencies, validDeps) <- LogicManager(_.parseLines(lines))
     // _ <- FileManager(_.logDepCollection(dependencies))
@@ -42,6 +45,9 @@ object DependencyLookoutApp
     // TODO process errors
     _                         <- FileManager(_.logPairCollection(remoteDeps))
     _                         <- FileManager(_.logWrongDependencies(errors))
+    stopTime                  <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
+    _                         <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
+
   } yield ()
 
   type Services = FileManager with LogicManager with HttpManager
@@ -61,6 +67,6 @@ object DependencyLookoutApp
      */
 
     program
-      .provide(programLayer)
+      .provide(programLayer ++ zio.Clock.live)
   }
 }
