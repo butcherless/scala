@@ -18,8 +18,9 @@ object DependencyLookoutApp
     extends ZIOAppDefault
     with ComponentLogging {
 
-  val filename      = "/tmp/dep-list.log"                                        // TODO property
-  val exclusionList = List("com.globalavl.core", "com.globalavl.hiber.services") // TODO property
+  // TODO add zio config to read application properties
+  val filename      = "/tmp/dep-list.log"       // TODO property
+  val exclusionList = List("com.cmartin.learn") // TODO property
 
   /*
     ZIO[R, E, A]
@@ -34,19 +35,18 @@ object DependencyLookoutApp
    */
 
   val program = for {
-    startTime                 <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
-    lines                     <- FileManager(_.getLinesFromFile(filename))
-    (dependencies, validDeps) <- LogicManager(_.parseLines(lines))
-    // _ <- FileManager(_.logDepCollection(dependencies))
-    validRate                 <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
-    _                         <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
-    finalDeps                 <- LogicManager(_.excludeList(validDeps, exclusionList))
-    (errors, remoteDeps)      <- HttpManager(_.checkDependencies(finalDeps))
+    startTime                <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
+    lines                    <- FileManager(_.getLinesFromFile(filename))
+    (parseErrors, validDeps) <- LogicManager(_.parseLines(lines))
+    validRate                <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
+    _                        <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
+    finalDeps                <- LogicManager(_.excludeFromList(validDeps, exclusionList))
+    (errors, remoteDeps)     <- HttpManager(_.checkDependencies(finalDeps))
     // TODO process errors
-    _                         <- FileManager(_.logPairCollection(remoteDeps))
-    _                         <- FileManager(_.logWrongDependencies(errors))
-    stopTime                  <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
-    _                         <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
+    _                        <- FileManager(_.logPairCollection(remoteDeps))
+    _                        <- FileManager(_.logWrongDependencies(errors))
+    stopTime                 <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
+    _                        <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
 
   } yield ()
 

@@ -8,7 +8,7 @@ trait LogicManager {
 
   def filterValid(dependencies: List[Either[String, Gav]]): UIO[List[Gav]]
 
-  def excludeList(dependencies: Iterable[Gav], exclusionList: List[String]): UIO[Iterable[Gav]]
+  def excludeFromList(dependencies: Iterable[Gav], exclusions: List[String]): UIO[Iterable[Gav]]
 
   def calculateValidRate(dependencyCount: Int, validCount: Int): UIO[Double]
 
