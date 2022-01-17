@@ -67,6 +67,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       logback,
       zio,
       zioConfig,
+      zioConfigTypesafe,
       zioJson
     ),
     assemblyMergeStrategy := {

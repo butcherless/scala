@@ -197,6 +197,9 @@ class ZioLearnSpec extends AnyFlatSpec
       error.size shouldBe 2
     }
   }
+
+  //TODO
+  //   TypesafeConfig.fromHoconFile(file, descriptor)
 }
 
 object ZioLearnSpec {

@@ -39,6 +39,7 @@ object Dependencies {
   // Z I O  a n d  E C O S Y S T E M
   lazy val zio        = "dev.zio" %% "zio"         % Versions.zio
   lazy val zioConfig  = "dev.zio" %% "zio-config"  % Versions.zioConfig
+  lazy val zioConfigTypesafe = "dev.zio" %% "zio-config-typesafe" % Versions.zioConfig
   lazy val zioJson    = "dev.zio" %% "zio-json"    % Versions.zioJson
   lazy val zioPrelude = "dev.zio" %% "zio-prelude" % Versions.zioPrelude
   // lazy val zioStreams = "dev.zio" %% "zio-streams" % zioVersion

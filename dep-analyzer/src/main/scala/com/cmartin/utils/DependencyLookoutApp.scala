@@ -1,10 +1,13 @@
 package com.cmartin.utils
 
 import com.cmartin.learn.common.ComponentLogging
+import com.cmartin.utils.config.ConfigHelper
+import com.cmartin.utils.config.ConfigHelper.AppConfig
 import com.cmartin.utils.file._
 import com.cmartin.utils.http._
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
-import zio._
+import zio.config.{ReadError, _}
+import zio.{Clock, _}
 
 import java.util.concurrent.TimeUnit
 
@@ -19,8 +22,12 @@ object DependencyLookoutApp
     with ComponentLogging {
 
   // TODO add zio config to read application properties
-  val filename      = "/tmp/dep-list.log"       // TODO property
-  val exclusionList = List("com.cmartin.learn") // TODO property
+  // val filename      = "/tmp/dep-list.log"       // TODO property
+  // val exclusionList = List("com.cmartin.learn") // TODO property
+  val configMap: Map[String, String] = Map(
+    "FILENAME"   -> "/tmp/dep-list.log",
+    "EXCLUSIONS" -> "com.cmartin.learn"
+  )
 
   /*
     ZIO[R, E, A]
@@ -35,12 +42,13 @@ object DependencyLookoutApp
    */
 
   val program = for {
+    config                   <- getConfig[AppConfig]
     startTime                <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
-    lines                    <- FileManager(_.getLinesFromFile(filename))
+    lines                    <- FileManager(_.getLinesFromFile(config.filename))
     (parseErrors, validDeps) <- LogicManager(_.parseLines(lines))
     validRate                <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
     _                        <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
-    finalDeps                <- LogicManager(_.excludeFromList(validDeps, exclusionList))
+    finalDeps                <- LogicManager(_.excludeFromList(validDeps, List(config.exclusions)))
     (errors, remoteDeps)     <- HttpManager(_.checkDependencies(finalDeps))
     // TODO process errors
     _                        <- FileManager(_.logPairCollection(remoteDeps))
@@ -50,12 +58,16 @@ object DependencyLookoutApp
 
   } yield ()
 
-  type Services = FileManager with LogicManager with HttpManager
+  val configLayer: Layer[ReadError[String], AppConfig] =
+    ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
 
-  val programLayer =
-    FileManagerLive.layer ++
+  val programLayer = {
+    Clock.live ++
+      configLayer ++
+      FileManagerLive.layer ++
       LogicManagerLive.layer ++
       HttpManagerLive.layer
+  }
 
   /*
      E X E C U T I O N
@@ -67,6 +79,6 @@ object DependencyLookoutApp
      */
 
     program
-      .provide(programLayer ++ zio.Clock.live)
+      .provide(programLayer)
   }
 }
