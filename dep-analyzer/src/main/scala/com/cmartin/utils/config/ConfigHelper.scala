@@ -12,4 +12,10 @@ object ConfigHelper {
       .zip(string("EXCLUSIONS"))
       .to[AppConfig]
 
+  final case class AppConfig2(filename: String, exclusions: List[String])
+  val configDescriptor2: ConfigDescriptor[AppConfig2] =
+    string("filename")
+      .zip(list("exclusions")(string))
+      .to[AppConfig2]
+
 }

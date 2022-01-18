@@ -160,7 +160,7 @@ class ZioLearnSpec extends AnyFlatSpec
   }
 
   "Zio Config" should "read the configuration from a Map" in {
-    val expectedConfig: AppConfig = AppConfig(filename, exclusions)
+    val expectedConfig: AppConfig      = AppConfig(filename, exclusions)
     val configMap: Map[String, String] = Map(
       "FILENAME"   -> filename,
       "EXCLUSIONS" -> exclusions
@@ -174,6 +174,25 @@ class ZioLearnSpec extends AnyFlatSpec
     val result = runtime.unsafeRun(
       program.provideLayer(configLayer)
     )
+
+    result shouldBe expectedConfig
+  }
+
+  it should "WIP read a HOCON configuration string" in {
+    import typesafe._
+    val filename       = "/tmp/deps-log.txt"
+    val exclusions     = List("exclusion-one", "exclusion-two")
+    val expectedConfig = AppConfig2(filename, exclusions)
+    val hoconConfig    =
+      """
+        | filename: /tmp/deps-log.txt
+        | exclusions: [exclusion-one, exclusion-two]
+        |""".stripMargin
+
+    val descriptor: ConfigDescriptor[AppConfig2] = ConfigHelper.configDescriptor2
+    val source: ConfigSource                     = ConfigSource.fromHoconString(hoconConfig)
+    val program                                  = read(descriptor.from(source))
+    val result                                   = runtime.unsafeRun(program)
 
     result shouldBe expectedConfig
   }
@@ -198,7 +217,7 @@ class ZioLearnSpec extends AnyFlatSpec
     }
   }
 
-  //TODO
+  // TODO
   //   TypesafeConfig.fromHoconFile(file, descriptor)
 }
 
