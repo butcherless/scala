@@ -10,7 +10,7 @@ object Versions {
   val logback     = "1.2.10"
   val pegdown     = "1.6.0"
   val refined     = "0.9.28"
-  val scalaz      = "7.3.5"
+  val scalaz      = "7.3.6"
   val scalatest   = "3.2.10"
   val slf4j       = "1.7.33"
   val sttp        = "2.3.0"
