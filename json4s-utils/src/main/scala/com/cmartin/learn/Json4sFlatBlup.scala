@@ -72,8 +72,8 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
         flatten steps: {parse, flatten, serialize}
      */
     for {
-      json: JValue <- JsonMethods.parseOpt(blownUp)
-      flattened: JValue <- _flatten(json).toOption
+      json: JValue       <- JsonMethods.parseOpt(blownUp)
+      flattened: JValue  <- _flatten(json).toOption
       jsonString: String <- Option(Serialization.write(flattened))
     } yield jsonString
   }
@@ -90,7 +90,7 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
           keys.head match {
             case ArrayElem(_) => // JArray(value :: Nil)
               JArray(blowupElem(keys.tail, value) :: Nil)
-            case _ => JObject(keys.head -> blowupElem(keys.tail, value))
+            case _            => JObject(keys.head -> blowupElem(keys.tail, value))
           }
       }
 
@@ -102,13 +102,13 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
             .fold(JNothing)(_ merge _)
 
         // TODO case JArray
-        case _ => JNothing
+        case _               => JNothing
       }
     }
 
     for {
-      parsed: JValue <- JsonMethods.parseOpt(flatten)
-      blownUp: JValue <- _blowup(parsed).toOption
+      parsed: JValue     <- JsonMethods.parseOpt(flatten)
+      blownUp: JValue    <- _blowup(parsed).toOption
       jsonString: String <- Option(Serialization.write(blownUp))
     } yield jsonString
 

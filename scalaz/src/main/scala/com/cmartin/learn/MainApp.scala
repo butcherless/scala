@@ -46,7 +46,7 @@ object MainApp extends App {
 
   println("Learning scalaz")
 
-  val line = "scalaz-library-learning"
+  val line      = "scalaz-library-learning"
   val modOfLine = mod16(line)
   println(s"mod of: $line=" + modOfLine)
 

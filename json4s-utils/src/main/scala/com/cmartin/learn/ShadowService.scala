@@ -9,18 +9,18 @@ class ShadowService(shadowRepository: ShadowRepository) {
 
   def create(dto: CreateDto): Either[Throwable, JValue] = {
     val currentShadow: JValue = shadowRepository.findShadow(dto.id)
-    val keys: List[String] = getExclusionKeys(dto.entity \ metadataKey)
+    val keys: List[String]    = getExclusionKeys(dto.entity \ metadataKey)
 
     for {
-      timestamp <- resolveTimestamp(dto.entity)
+      timestamp       <- resolveTimestamp(dto.entity)
       filteredPayload <- filterPayload(dto.entity \ payloadKey, keys)
       shadowTimestamp <- getShadowTimestamp(currentShadow)
-      shadow <- buildShadow(
-        timestamp,
-        shadowTimestamp,
-        filteredPayload,
-        currentShadow
-      )
+      shadow          <- buildShadow(
+                           timestamp,
+                           shadowTimestamp,
+                           filteredPayload,
+                           currentShadow
+                         )
       // _ <- shadowRepository.save(ShadowDbo(dto.id,JNothing))
     } yield shadow
   }
@@ -31,7 +31,7 @@ class ShadowService(shadowRepository: ShadowRepository) {
     Right {
       val (timestamp, shadowTimestamp, payload, currentShadow) = data
       if (isNewer(timestamp, shadowTimestamp)) {
-        val metadata = createMetadata(payload, timestamp)
+        val metadata       = createMetadata(payload, timestamp)
         val incomingShadow = createShadow(payload, metadata)
         mergeShadows(currentShadow, incomingShadow)
       } else currentShadow

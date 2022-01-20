@@ -37,7 +37,7 @@ object main {
   val tryService: CoinMarketService[Try] = new TryCoinMarketService(
     new CrytoCurrencyRepository
   )
-  val resultFailure = tryService.readByName("Dummy")
+  val resultFailure                      = tryService.readByName("Dummy")
   printTry(resultFailure)
 
   val resultSuccess = tryService.readByName(("TRON"))

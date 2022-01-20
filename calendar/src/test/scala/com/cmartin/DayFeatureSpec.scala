@@ -12,7 +12,7 @@ import org.scalatest.matchers.should.Matchers
   */
 class DayFeatureSpec extends AnyFeatureSpec with GivenWhenThen with Matchers {
   val weekenddate_2017_01_01 = LocalDate.ofYearDay(2017, 1)
-  val workdate_2017_01_02 = LocalDate.ofYearDay(2017, 2)
+  val workdate_2017_01_02    = LocalDate.ofYearDay(2017, 2)
 
   info("As a Day class user")
 

@@ -1,9 +1,9 @@
 package com.cmartin.learn.actor
 
 object DummyInfrastructureManager {
-  val KAFKA_AGENT = "kafka-health-agent"
+  val KAFKA_AGENT      = "kafka-health-agent"
   val POSTGRESQL_AGENT = "postgres-db-health-agent"
-  val SYSTEM_AGENT = "system-health-agent"
+  val SYSTEM_AGENT     = "system-health-agent"
 
   def getKafkaStatus(): String =
     """

@@ -11,17 +11,17 @@ object Definition {
 
     import DispatcherActor._
 
-    var map = Map.empty[String, RequestInfo]
-    var received: Int = 0
+    var map            = Map.empty[String, RequestInfo]
+    var received: Int  = 0
     var processed: Int = 0
-    var rejected: Int = 0
+    var rejected: Int  = 0
 
     override def receive: Receive = {
 
       case number: Int =>
         received += 1
-        val id = generateId() // generates id for message
-        val worker = randomBetween0And9() // picks a random worker
+        val id      = generateId()         // generates id for message
+        val worker  = randomBetween0And9() // picks a random worker
         val reqInfo = RequestInfo(sender(), id, number, worker)
         map += (id -> reqInfo) // add to pending message collection
         workers(worker) ! Request(number, id) // sends the message to the worker
@@ -29,7 +29,7 @@ object Definition {
 
       case Accepted(number, id) =>
         val reqInfo = map(id)
-        map -= id // remove processed message
+        map -= id               // remove processed message
         processed += 1
         reqInfo.sender ! number // stream back-pressure
         log.info(s"Accepted: ${reqInfo.toShortString()}")
@@ -45,17 +45,17 @@ object Definition {
             id
           ) // sends the message to the worker
           log.debug(s"${Rejected(number, id)} => new worker[$worker]")
-        } else { // self
-          map -= id // remove message
+        } else {                  // self
+          map -= id               // remove message
           rejected += 1
           reqInfo.sender ! number // stream back-pressure
           log.info(s"Discarded($number,$id)}")
         }
 
       case Stats =>
-        val total = processed + rejected
-        val okRate = 100.toDouble * processed / total
-        val koRate = 100.toDouble * rejected / total
+        val total        = processed + rejected
+        val okRate       = 100.toDouble * processed / total
+        val koRate       = 100.toDouble * rejected / total
         val resultString =
           s"Stats=[received=$received, processed=$processed ($okRate), rejected=$rejected ($koRate), total=$total]"
         log.info(resultString)
@@ -97,7 +97,7 @@ object Definition {
           delayUpTo(8)
           sender() ! Rejected(number, id)
         }
-      case message =>
+      case message             =>
         log.info(s"unable to process $message")
         sender() ! Unknown
     }

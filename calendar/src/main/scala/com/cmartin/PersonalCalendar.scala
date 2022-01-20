@@ -104,17 +104,17 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
 
   private def buildYearDays: IndexedSeq[MyDay] = {
     val countryHolidays = readCountryHolidays()
-    val holidays = readHolidays()
-    val absences = readAbsences()
+    val holidays        = readHolidays()
+    val absences        = readAbsences()
 
     for (
-      i <- 1 to dayCount;
+      i   <- 1 to dayCount;
       date = LocalDate.ofYearDay(2017, i);
-      day = getWeekendDay(date)
-        .orElse(getCountryHolidaysDay(date, countryHolidays))
-        .orElse(getHolidaysDay(date, holidays))
-        .orElse(getAbsenceDay(date, absences))
-        .orElse(getWorkDay(date))
+      day  = getWeekendDay(date)
+               .orElse(getCountryHolidaysDay(date, countryHolidays))
+               .orElse(getHolidaysDay(date, holidays))
+               .orElse(getAbsenceDay(date, absences))
+               .orElse(getWorkDay(date))
     ) yield day.get
   }
 
@@ -144,7 +144,7 @@ class LocalDateCalendar(_year: Int) extends PersonalCalendar {
 
     for (
       i <- 1 to dayCount;
-      d = LocalDate.ofYearDay(2017, i) if (countryHolidays contains d)
+      d  = LocalDate.ofYearDay(2017, i) if (countryHolidays contains d)
     ) yield HolidayDay(d)
   }
 

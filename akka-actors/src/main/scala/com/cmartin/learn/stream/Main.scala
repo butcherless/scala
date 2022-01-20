@@ -11,7 +11,7 @@ object Main { // extends App {
   println("Main streams")
 
   implicit val system = ActorSystem("QuickStart")
-  implicit val ec = system.dispatcher
+  implicit val ec     = system.dispatcher
 
   val sources = immutable.Seq(Source(List(1, 2, 3)), Source(List(10, 20, 30)))
 
@@ -22,8 +22,8 @@ object Main { // extends App {
 
   // val r = buildIntSource(1).runWith(printSink)
 
-  val s1 = Source[Int](1 to 10)
-  val s2 = Source[Int](11 to 20)
+  val s1                                    = Source[Int](1 to 10)
+  val s2                                    = Source[Int](11 to 20)
   val onePerSecSource: Source[Int, NotUsed] = s1.throttle(1, 1 second)
   val twoPerSecSource: Source[Int, NotUsed] = s2.throttle(2, 1 second)
 

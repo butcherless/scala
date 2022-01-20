@@ -5,14 +5,14 @@ import org.scalatest.matchers.should.Matchers
 
 class ServicesSpec extends AnyFlatSpec with Matchers {
 
-  val RED = "red"
-  val LIGHT_RED = "light-red"
+  val RED           = "red"
+  val LIGHT_RED     = "light-red"
   val COLOR_CODE_OK = 4
   val COLOR_CODE_KO = 2
 
   it should "hash function should generate an Int between 1 and 10 for Color class" in {
     val color = Color("red", 1)
-    val res = Services.calcHashId(color)
+    val res   = Services.calcHashId(color)
     res shouldBe >(1)
     res shouldBe <=(10)
   }

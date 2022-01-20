@@ -12,7 +12,7 @@ class JsonableTypeClassSpec extends AnyFlatSpec with Matchers {
   behavior of "Jsonable type class"
 
   it should "serialize a Person" in {
-    val person =
+    val person         =
       Person(name, firstName, ObfuscatedInt(33), id, ObfuscatedString(password))
     val result: String = serialize(person)
 
@@ -22,7 +22,7 @@ class JsonableTypeClassSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "serialize an Int" in {
-    val integer = 1234
+    val integer        = 1234
     val result: String = serialize(integer)
 
     result shouldBe """Int={"value":1234}"""
@@ -30,13 +30,13 @@ class JsonableTypeClassSpec extends AnyFlatSpec with Matchers {
 
   it should "serialize a double" in {
     val double: Double = 1234.5678
-    val result = serialize(double)
+    val result         = serialize(double)
 
     result shouldBe """Double={"value":1234.5678}"""
   }
 
   it should "serialize an integer via syntax" in {
-    val integer = 1234
+    val integer        = 1234
     val result: String = integer.serialize
 
     info(result)
@@ -45,7 +45,7 @@ class JsonableTypeClassSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "serialize a double via syntax" in {
-    val double = 1234.5678
+    val double         = 1234.5678
     val result: String = double.serialize
 
     info(result)

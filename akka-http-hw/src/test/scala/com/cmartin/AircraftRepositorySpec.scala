@@ -13,9 +13,9 @@ class AircraftRepositorySpec
     extends AnyFlatSpec
     with Matchers
     with BeforeAndAfter {
-  private val AIRCRAFT_ID = "EC-MXV"
+  private val AIRCRAFT_ID        = "EC-MXV"
   private val AIR_EUROPA_AIRLINE = "Air Europa"
-  private val IBERIA_AIRLINE = "Iberia"
+  private val IBERIA_AIRLINE     = "Iberia"
 
   val repo = new AircraftRepository()
 
@@ -47,7 +47,7 @@ class AircraftRepositorySpec
   }
 
   "The getById function" should "return an entity" in {
-    val expected = buildAircraft(AIRCRAFT_ID)
+    val expected  = buildAircraft(AIRCRAFT_ID)
     repo.save(expected)
     val actualTry = repo.getById(AIRCRAFT_ID)
     expected shouldBe actualTry.success.value.value // Try/Option/Aircraft
@@ -55,11 +55,11 @@ class AircraftRepositorySpec
   }
 
   "The update function" should "change the entity" in {
-    val initial = buildAircraft(AIRCRAFT_ID)
+    val initial    = buildAircraft(AIRCRAFT_ID)
     repo.save(initial)
     val initialTry = repo.getById(initial.id)
     initialTry.success.value.value shouldBe initial
-    val updated = initial.copy(typeCode = "A346")
+    val updated    = initial.copy(typeCode = "A346")
     repo.save(updated)
     val updatedTry = repo.getById(updated.id)
     updatedTry.success.value.value shouldBe updated
@@ -67,11 +67,11 @@ class AircraftRepositorySpec
   }
 
   "The remove function" should "delete the entity from repository" in {
-    val initial = buildAircraft(AIRCRAFT_ID)
+    val initial    = buildAircraft(AIRCRAFT_ID)
     repo.save(initial)
     val initialTry = repo.getById(initial.id)
     assertRepoCount(1)
-    val result = repo.remove(initialTry.success.value.value)
+    val result     = repo.remove(initialTry.success.value.value)
     result.success.value shouldBe true
     assertRepoCount(0)
   }

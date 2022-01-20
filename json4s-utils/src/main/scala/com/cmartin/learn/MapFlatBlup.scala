@@ -36,7 +36,7 @@ object MapFlatBlup extends FlatBlup[String, Option[Map[String, Any]]] {
         flatten steps: {parse, flatten, toMap}
      */
     for {
-      json: JValue <- JsonMethods.parseOpt(blownUp)
+      json: JValue                <- JsonMethods.parseOpt(blownUp)
       flattened: Map[String, Any] <- Option(_flatten(json))
     } yield flattened
   }

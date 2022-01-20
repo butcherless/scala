@@ -29,19 +29,19 @@ object Dependencies {
     "ch.qos.logback" % "logback-classic" % Versions.logback // exclude("org.slf4j", "slf4j-api")
   // lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion
 
-  lazy val refined      = "eu.timepit" %% "refined" % Versions.refined
-  lazy val scalaz = "org.scalaz" %% "scalaz-core" % Versions.scalaz
+  lazy val refined = "eu.timepit" %% "refined"     % Versions.refined
+  lazy val scalaz  = "org.scalaz" %% "scalaz-core" % Versions.scalaz
 
   lazy val sttpCore = "com.softwaremill.sttp.client" %% "core" % Versions.sttp
   lazy val sttpZio  =
     "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % Versions.sttp
 
   // Z I O  a n d  E C O S Y S T E M
-  lazy val zio        = "dev.zio" %% "zio"         % Versions.zio
-  lazy val zioConfig  = "dev.zio" %% "zio-config"  % Versions.zioConfig
+  lazy val zio               = "dev.zio" %% "zio"                 % Versions.zio
+  lazy val zioConfig         = "dev.zio" %% "zio-config"          % Versions.zioConfig
   lazy val zioConfigTypesafe = "dev.zio" %% "zio-config-typesafe" % Versions.zioConfig
-  lazy val zioJson    = "dev.zio" %% "zio-json"    % Versions.zioJson
-  lazy val zioPrelude = "dev.zio" %% "zio-prelude" % Versions.zioPrelude
+  lazy val zioJson           = "dev.zio" %% "zio-json"            % Versions.zioJson
+  lazy val zioPrelude        = "dev.zio" %% "zio-prelude"         % Versions.zioPrelude
   // lazy val zioStreams = "dev.zio" %% "zio-streams" % zioVersion
   // lazy val zioKafka = "dev.zio" %% "zio-kafka"  % zioKafkaVersion
 

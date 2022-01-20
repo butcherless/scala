@@ -13,7 +13,7 @@ import scala.util.{Failure, Success}
 
 object WebClient extends Greeting {
   def main(args: Array[String]): Unit = {
-    implicit val system = ActorSystem()
+    implicit val system           = ActorSystem()
     // needed for the future flatMap/onComplete in the end
     implicit val executionContext = system.dispatcher
 
@@ -29,7 +29,7 @@ object WebClient extends Greeting {
             .runWith(FileIO.toPath(new File("/tmp/example.out").toPath))
           println(response.headers.foreach(println(_)))
         }
-        case Failure(_) => sys.error("something wrong")
+        case Failure(_)        => sys.error("something wrong")
       }
 
     def transformEachLine(line: ByteString): ByteString = ByteString(

@@ -31,7 +31,7 @@ package object util {
           println(s"key: ${k}, value map")
           debug(v)
           debug(map.tail)
-        case (k: String, v: Any) =>
+        case (k: String, v: Any)                         =>
           println(s"key: ${k}, value: ${v}, type: ${v.getClass}")
           debug(map.tail)
       }

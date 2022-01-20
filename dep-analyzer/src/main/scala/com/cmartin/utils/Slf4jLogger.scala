@@ -8,7 +8,7 @@ import zio.{FiberId, FiberRef, LogLevel, LogSpan, ZLogger, ZTraceElement}
  */
 object Slf4jLogger {
 
-  val defaultSlf4j: ZLogger[String, Unit]                                   = (
+  val defaultSlf4j: ZLogger[String, Unit] = (
       trace: ZTraceElement,
       fiberId: FiberId,
       logLevel: LogLevel,

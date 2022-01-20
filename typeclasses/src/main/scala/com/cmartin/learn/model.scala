@@ -21,11 +21,11 @@ package object model {
   }
 
   object Constants {
-    val name = "Carlos"
+    val name      = "Carlos"
     val firstName = "Martin"
-    val age = 49
-    val id = "carlos.martin"
-    val password = "dummy-password"
+    val age       = 49
+    val id        = "carlos.martin"
+    val password  = "dummy-password"
   }
 
 }

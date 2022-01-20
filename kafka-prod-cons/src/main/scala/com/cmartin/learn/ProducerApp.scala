@@ -32,9 +32,9 @@ object ProducerApp extends App with ComponentLogging {
   val messageCount = 1000
 
   for (i <- 1 to messageCount) {
-    val deviceId: Int = Random.nextInt(100)
+    val deviceId: Int        = Random.nextInt(100)
     val randomString: String = Random.alphanumeric.take(64).mkString
-    val timestamp: Long = new Date().getTime()
+    val timestamp: Long      = new Date().getTime()
     // UuidProducer.producer.send(buildRecord(deviceId, s"$randomString[$i]"))
     UuidProducer.producer.send(
       buildRecord(

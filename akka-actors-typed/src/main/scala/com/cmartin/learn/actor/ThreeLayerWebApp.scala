@@ -19,7 +19,7 @@ object ThreeLayerWebApp
     Behaviors.setup[Done] { context =>
       implicit lazy val untypedSystem: actor.ActorSystem =
         context.system.toClassic
-      implicit lazy val ec: ExecutionContextExecutor =
+      implicit lazy val ec: ExecutionContextExecutor     =
         context.system.executionContext
 
       context.log.info("ThreeLayerWebApp ActorSystem started")
@@ -36,7 +36,7 @@ object ThreeLayerWebApp
           log.info(
             s"Server online at http://${bound.localAddress.getHostString}:${bound.localAddress.getPort}/"
           )
-        case Failure(e) =>
+        case Failure(e)     =>
           log.error(s"Server could not start!")
           e.printStackTrace()
           context.self ! Done
