@@ -14,12 +14,12 @@ object Json4sResearch {
 
   implicit val formats: DefaultFormats = org.json4s.DefaultFormats
 
-  val EPOCH_TEXT = "1970-01-01T00:00:00Z"
-  val excludeKey: String = "exclude"
-  val metadataKey: String = "metadata"
-  val payloadKey: String = "payload"
-  val stateKey: String = "state"
-  val tFieldKey: String = "t_field"
+  val EPOCH_TEXT           = "1970-01-01T00:00:00Z"
+  val excludeKey: String   = "exclude"
+  val metadataKey: String  = "metadata"
+  val payloadKey: String   = "payload"
+  val stateKey: String     = "state"
+  val tFieldKey: String    = "t_field"
   val timestampKey: String = "@timestamp"
 
   private val XPATH_REGEX = """([a-z][a-z0-9]*)+([.][a-z][a-z0-9]*)*""".r
@@ -100,7 +100,7 @@ object Json4sResearch {
         as.collect { // ignores JValue types except JString
           case JString(text) => text
         }
-      case _ => List.empty
+      case _          => List.empty
     }
   }
 
@@ -122,7 +122,7 @@ object Json4sResearch {
     def dateTextToEither(dateText: String): Either[Throwable, String] = {
       Try {
         ZonedDateTime.parse(dateText) // validate or fail
-        dateText // is a valid date
+        dateText                      // is a valid date
       }.toEither
     }
 
@@ -214,7 +214,7 @@ object Json4sResearch {
 
   private def getStringValue(key: String, json: JValue): Option[String] = {
     val fields = for {
-      JObject(fields) <- json
+      JObject(fields)            <- json
       JField(`key`, JString(ts)) <- fields
     } yield ts
 
@@ -231,7 +231,7 @@ object Json4sResearch {
 
   object ExceptionMessages {
     val ARRAY_NOT_SUPPORTED = "The parser doesn't support array type"
-    val UNEXPECTED_TYPE =
+    val UNEXPECTED_TYPE     =
       "The type was not expected at this position of the document."
   }
 

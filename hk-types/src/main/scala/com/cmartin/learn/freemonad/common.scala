@@ -10,9 +10,9 @@ import scalaz.{NonEmptyList, ValidationNel}
 import scala.util.{Failure, Try}
 
 object constants {
-  val notFoundUuid = buildUuid
-  val foundUuid = buildUuid
-  val notFoundName = "name-not-found"
+  val notFoundUuid          = buildUuid
+  val foundUuid             = buildUuid
+  val notFoundName          = "name-not-found"
   val operationErrorMessage = "operation-error-message"
 
 }
@@ -113,7 +113,7 @@ object Factory {
       price: BigDecimal
   ): Option[CryptoCurrency] = {
     CryptoCurrency.validate(name, marketCap, price) match {
-      case scalaz.Success(s) => Some(s)
+      case scalaz.Success(s)  => Some(s)
       case scalaz.Failure(el) => {
         logErrorList(el)
         None

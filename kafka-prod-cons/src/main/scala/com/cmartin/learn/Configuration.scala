@@ -13,8 +13,8 @@ object Configuration {
     val conf = ConfigFactory.load("kafka.conf")
 
     // kafka config
-    lazy val kafkaHost = conf.getString("kafka.host")
-    lazy val kafkaPort = conf.getInt("kafka.port")
+    lazy val kafkaHost  = conf.getString("kafka.host")
+    lazy val kafkaPort  = conf.getInt("kafka.port")
     lazy val kafkaTopic = conf.getString("kafka.topic")
   }
 
@@ -32,7 +32,7 @@ object Configuration {
     )
     // props.put(ProducerConfig.RETRIES_CONFIG, "5")
 
-    lazy val producer = new KafkaProducer[Int, String](props)
+    lazy val producer  = new KafkaProducer[Int, String](props)
     lazy val producer2 = new KafkaProducer[Int, String](props)
   }
 

@@ -70,9 +70,9 @@ class FutureSpec extends AsyncFlatSpec {
       val f3 = buildOkResponseFuture(3)
 
       val results = for {
-        repo <- f1
+        repo    <- f1
         flatten <- f2
-        shadow <- f3
+        shadow  <- f3
       } yield Results(repo, flatten, shadow)
 
       results
@@ -81,8 +81,8 @@ class FutureSpec extends AsyncFlatSpec {
     val result = for {
       r3 <- f3() // parallel tasks
       r4 <- Future(
-        r3.repo + r3.flatten + r3.shadow
-      ) // task waiting for 3 previous tasks
+              r3.repo + r3.flatten + r3.shadow
+            ) // task waiting for 3 previous tasks
     } yield r4
 
     val expectedText = "Service result S[X] successful"
@@ -103,9 +103,9 @@ class FutureSpec extends AsyncFlatSpec {
       val f3 = buildOkResponseFuture(3)
 
       val results = for {
-        repo <- f1
+        repo    <- f1
         flatten <- f2
-        shadow <- f3
+        shadow  <- f3
       } yield Results(repo, flatten, shadow)
 
       results
@@ -114,8 +114,8 @@ class FutureSpec extends AsyncFlatSpec {
     val result4 = for {
       r3 <- f3() // parallel tasks
       r4 <- Future(
-        r3.repo + r3.flatten + r3.shadow
-      ) // task waiting for 3 previous tasks
+              r3.repo + r3.flatten + r3.shadow
+            ) // task waiting for 3 previous tasks
     } yield r4
 
     val result = result4.recoverWith { case e: RuntimeException =>

@@ -14,7 +14,7 @@ object HelloWorld extends App {
   }
 
   object Monoid {
-    implicit val IntMonoid: Monoid[Int] = new Monoid[Int] {
+    implicit val IntMonoid: Monoid[Int]       = new Monoid[Int] {
       def mappend(a: Int, b: Int): Int = a + b
 
       def mzero: Int = 0

@@ -85,10 +85,10 @@ class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
 
 object AircraftValidatorSpec {
 
-  val modelOne = "B738"
+  val modelOne        = "B738"
   val registrationOne = "EC-LUT"
-  val countryOne = "B738"
-  val deliveryOne = "2013-04"
+  val countryOne      = "B738"
+  val deliveryOne     = "2013-04"
 
   val aircraftOne: Aircraft =
     Aircraft(modelOne, registrationOne, countryOne, deliveryOne)

@@ -2,7 +2,7 @@ package com.cmartin.learn.refined
 
 class PersonNameSpec extends PropertySpec {
 
-  val personNames = Table(
+  val personNames        = Table(
     "name",
     "Robben Ford",
     "Katherine Jones-Smith",

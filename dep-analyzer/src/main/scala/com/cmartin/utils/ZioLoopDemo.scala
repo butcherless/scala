@@ -21,7 +21,7 @@ object ZioLoopDemo
     * }}}
     *
     * def loop[R, E, A, S](initial: S)(cont: S => Boolean, inc: S => S)(body: S
-    * => ZIO[R, E, A]): ZIO[R, E, List[A]] = if (cont(initial))
+    * \=> ZIO[R, E, A]): ZIO[R, E, List[A]] = if (cont(initial))
     * body(initial).flatMap(a => loop(inc(initial))(cont, inc)(body).map(as => a
     * :: as)) else ZIO.succeedNow(List.empty[A])
     */

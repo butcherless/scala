@@ -25,7 +25,7 @@ class TypeClassSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "show an Int" in {
-    val int = 1234
+    val int    = 1234
     val result = show(int)
 
     result.nonEmpty shouldBe true
@@ -35,7 +35,7 @@ class TypeClassSpec extends AnyFlatSpec with Matchers {
 
   it should "show a Long" in {
     val long: Long = 1234
-    val result = show(long)
+    val result     = show(long)
 
     result.nonEmpty shouldBe true
     result.contains(getNameToLower(long)) shouldBe true
@@ -44,7 +44,7 @@ class TypeClassSpec extends AnyFlatSpec with Matchers {
 
   it should "show a BigDecimal" in {
     val bd: BigDecimal = BigDecimal(1234.56)
-    val result = show(bd)
+    val result         = show(bd)
 
     result.nonEmpty shouldBe true
     result.contains(String.valueOf(bd)) shouldBe true

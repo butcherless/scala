@@ -11,7 +11,7 @@ class DummyEntityValidatorSpec extends AnyFlatSpec with Matchers {
   behavior of "DummyEntity Validator"
 
   val number = 7
-  val text = "bcdfghjklmnpqrstvwxyz"
+  val text   = "bcdfghjklmnpqrstvwxyz"
 
   it should "validate a dummy entity" in {
     val result = validate(number, text).toEither

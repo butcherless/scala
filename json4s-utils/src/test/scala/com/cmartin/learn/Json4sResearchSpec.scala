@@ -34,14 +34,14 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "get an existing key in a json document with a simple type value" in {
-    val json = inputMessageJson
+    val json           = inputMessageJson
     val result: JValue = getKey("features.location.coordinate.lat", json)
 
     result shouldBe JDouble(-12.21099)
   }
 
   it should "get an existing key in a json document with an object value" in {
-    val json = inputMessageJson
+    val json           = inputMessageJson
     val result: JValue = getKey("features.location.coordinate", json)
 
     result shouldBe JObject(
@@ -50,14 +50,14 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return the JNothing value for a non-existing key in a json document" in {
-    val json = inputMessageJson
+    val json           = inputMessageJson
     val result: JValue = getKey("features.xxx.lat", json)
 
     result shouldBe JNothing
   }
 
   it should "return the input document for an empty path" in {
-    val json = inputMessageJson
+    val json           = inputMessageJson
     val result: JValue = getKey("", json)
 
     result shouldBe json
@@ -65,9 +65,9 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "flatten a json document" in {
-    val json = inputMessageJson
+    val json      = inputMessageJson
     val flattened = flattenedInputMessageJson
-    val result = flatten(json)
+    val result    = flatten(json)
 
     // info(pretty(render(result)))
 
@@ -75,9 +75,9 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "flatten a json document containing an array" in {
-    val json = arrayDocumentJson
+    val json      = arrayDocumentJson
     val flattened = flattenedArrayDocumentJson
-    val result = flatten(json)
+    val result    = flatten(json)
     // info(jValueToString(result))
 
     result shouldBe flattened
@@ -103,7 +103,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     val j2 = json4String
 
     // j1 was the previous state in the repository
-    val diff = j1 diff j2
+    val diff   = j1 diff j2
     val merged = j1 merge diff.added
 
     merged shouldBe j2
@@ -115,14 +115,14 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
     val j2 = json5String
 
     // j1 was the previous state in the repository
-    val diff = j1 diff j2
+    val diff   = j1 diff j2
     val merged = j1 merge diff.changed
 
     merged shouldBe j2
   }
 
   it should "add and update contents to the entity state" in {
-    val current = json1String
+    val current  = json1String
     val expected = json1_6String // added and changed
     // the incoming state, add and change contents
     val incoming = json6String
@@ -134,7 +134,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "exclude a key from the document, single value" in {
-    val json = jsonForExcluding
+    val json           = jsonForExcluding
     val result: JValue =
       json
         .replace(splitPath("k1"), JNothing)
@@ -144,7 +144,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "exclude a nested key from the document, single value TODO" in {
-    val json = jsonForExcluding
+    val json           = jsonForExcluding
     val result: JValue =
       json
         .replace(splitPath("k2.k21"), JNothing)
@@ -154,7 +154,7 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "exclude a nested key from the document, object value TODO" in {
-    val json = jsonForExcluding
+    val json           = jsonForExcluding
     val result: JValue =
       json
         .replace(splitPath("k2.k23"), JNothing)
@@ -164,8 +164,8 @@ class Json4sResearchSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "exclude a list of keys from the document TODO" in {
-    val keys = List("k1", "k2.k21", "k2.k23")
-    val json = jsonForExcluding
+    val keys           = List("k1", "k2.k21", "k2.k23")
+    val json           = jsonForExcluding
     val result: JValue =
       excludeKeys(keys, json)
         .remove(_ == JNothing) // removed when rendering

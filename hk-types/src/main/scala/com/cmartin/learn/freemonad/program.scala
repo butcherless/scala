@@ -15,11 +15,11 @@ object program {
       price: BigDecimal
   ): CrudOperation[CryptoCurrency] =
     for {
-      cc <- read(name)
+      cc       <- read(name)
       nameLite <- create(cc.copy(name = s"${cc.name}Lite"))
-      ccLite <- read(nameLite)
-      _ <- update(cc.copy(id = cc.id, price = price))
-      _ <- delete(cc)
+      ccLite   <- read(nameLite)
+      _        <- update(cc.copy(id = cc.id, price = price))
+      _        <- delete(cc)
     } yield ccLite
 
   object Application extends App {

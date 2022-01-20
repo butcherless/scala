@@ -38,9 +38,9 @@ class HealthAggregator(context: ActorContext[AggregatorMessage])
 
   val kafkaAgent: ActorRef[HealthAgent.HealthMessage] =
     context.spawn(HealthAgent(KAFKA_AGENT), "kafka-agent")
-  val postgresDbAgent =
+  val postgresDbAgent                                 =
     context.spawn(HealthAgent(POSTGRESQL_AGENT), "postgres-agent")
-  val systemAgent = context.spawn(HealthAgent(SYSTEM_AGENT), "system-agent")
+  val systemAgent                                     = context.spawn(HealthAgent(SYSTEM_AGENT), "system-agent")
 
   kafkaAgent ! RequestStatus(getRequestId(), agentResponseAdapter)
   postgresDbAgent ! RequestStatus(getRequestId(), agentResponseAdapter)
@@ -68,7 +68,7 @@ class HealthAggregator(context: ActorContext[AggregatorMessage])
             } else {
               Behaviors.same
             }
-          case _ =>
+          case _                                   =>
             Behaviors.same
         }
     }

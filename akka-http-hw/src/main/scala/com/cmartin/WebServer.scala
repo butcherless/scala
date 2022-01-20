@@ -16,10 +16,10 @@ final case class Transfer(
 )
 
 object WebServer extends App {
-  val logger = LoggerFactory.getLogger("WebServer")
+  val logger     = LoggerFactory.getLogger("WebServer")
   val controller = new ApiController()
 
-  implicit val system = ActorSystem("my-system")
+  implicit val system           = ActorSystem("my-system")
   // needed for the future flatMap/onComplete in the end
   implicit val executionContext = system.dispatcher
 
@@ -29,8 +29,8 @@ object WebServer extends App {
       .bind(controller.routes)
 
   println(s"Server online at http://${HOST}:${PORT}/\nPress RETURN to stop...")
-  StdIn.readLine() // let it run until user presses return
+  StdIn.readLine()                       // let it run until user presses return
   bindingFuture
-    .flatMap(_.unbind()) // trigger unbinding from the port
+    .flatMap(_.unbind())                 // trigger unbinding from the port
     .onComplete(_ => system.terminate()) // and shutdown when done
 }

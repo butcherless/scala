@@ -8,16 +8,16 @@ import eu.timepit.refined.string.{MatchesRegex, ValidInt}
 
 package object refined {
 
-  type EvenPositive = Positive And Even // TODO
+  type EvenPositive  = Positive And Even // TODO
   type WellKnownPort = Interval.Closed[W.`0`.T, W.`1023`.T]
-  type UserPort = Interval.Closed[W.`1024`.T, W.`65535`.T]
-  type NetworkPort = WellKnownPort Or UserPort
-  type ZipCode = Interval.Closed[W.`1000`.T, W.`52999`.T]
-  type LeapYear =
+  type UserPort      = Interval.Closed[W.`1024`.T, W.`65535`.T]
+  type NetworkPort   = WellKnownPort Or UserPort
+  type ZipCode       = Interval.Closed[W.`1000`.T, W.`52999`.T]
+  type LeapYear      =
     Positive And Divisible[W.`4`.T] And Not[Divisible[W.`100`.T]] Or Divisible[
       W.`400`.T
     ]
-  type PersonName = MatchesRegex[W.`"[a-zA-Z][a-zA-Z -]*"`.T]
+  type PersonName    = MatchesRegex[W.`"[a-zA-Z][a-zA-Z -]*"`.T]
 
   def validatePositiveInt(a: Int): Either[String, Refined[Int, Positive]] =
     refineV(a)
@@ -41,7 +41,7 @@ package object refined {
     val validInt: Either[String, Refined[String, ValidInt]] = refineV(zcs)
 
     validInt match {
-      case Right(_) => {
+      case Right(_)    => {
         refineV[ZipCode](zcs.toInt) match {
           case Right(_)    => validInt
           case Left(value) => Left(value)

@@ -92,7 +92,7 @@ lazy val typeclasses = (project in file("typeclasses"))
   .settings(
     commonSettings,
     name := "typeclasses",
-    libraryDependencies ++= Seq( logback)
+    libraryDependencies ++= Seq(logback)
   )
 
 lazy val dtogen = (project in file("dtogen"))
@@ -100,7 +100,7 @@ lazy val dtogen = (project in file("dtogen"))
   .settings(
     commonSettings,
     name := "dtogen",
-    libraryDependencies ++= Seq( logback)
+    libraryDependencies ++= Seq(logback)
   )
 
 lazy val scalazlearn = (project in file("scalaz"))

@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 
 class ApiRoutes(context: ActorContext[Done]) extends ComponentLogging {
   implicit val timeout: Timeout = 3.seconds
-  implicit val scheduler = context.system.scheduler
+  implicit val scheduler        = context.system.scheduler
 
   val serviceActor = context.spawn(ServiceActor("service-1"), "service-1")
 
