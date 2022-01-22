@@ -6,7 +6,8 @@ import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
 
 class LogicManagerITSpec
-    extends AnyFlatSpec with Matchers {
+    extends AnyFlatSpec
+      with Matchers {
 
   behavior of "LogicManager"
 

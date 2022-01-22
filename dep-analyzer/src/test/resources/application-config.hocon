@@ -1,0 +1,2 @@
+filename: /tmp/deps-log.txt
+exclusions: [exclusion-one, exclusion-two]

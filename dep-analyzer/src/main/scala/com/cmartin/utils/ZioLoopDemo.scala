@@ -2,7 +2,7 @@ package com.cmartin.utils
 
 import zio._
 
-object ZioLoopDemo
+class ZioLoopDemo
     extends ZIOAppDefault {
 
   /** Loops with the specified effectual function, collecting the results into a

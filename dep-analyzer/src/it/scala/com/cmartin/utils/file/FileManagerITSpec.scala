@@ -7,7 +7,8 @@ import org.scalatest.matchers.should.Matchers
 import zio.{Runtime, ZLogger}
 
 class FileManagerITSpec
-    extends AnyFlatSpec with Matchers {
+    extends AnyFlatSpec
+      with Matchers {
 
   behavior of "FileManager"
   // val loggers = ZLogger.Set.default.map(println(_)).filterLogLevel(_ >= LogLevel.Debug)

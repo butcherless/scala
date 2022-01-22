@@ -1,13 +1,10 @@
 package com.cmartin.utils
 
-import com.cmartin.learn.common.ComponentLogging
 import com.cmartin.utils.config.ConfigHelper
-import com.cmartin.utils.config.ConfigHelper.AppConfig
 import com.cmartin.utils.file._
 import com.cmartin.utils.http._
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
-import zio.config.{ReadError, _}
-import zio.{Clock, _}
+import zio._
 
 import java.util.concurrent.TimeUnit
 
@@ -18,16 +15,7 @@ import java.util.concurrent.TimeUnit
  */
 
 object DependencyLookoutApp
-    extends ZIOAppDefault
-    with ComponentLogging {
-
-  // TODO add zio config to read application properties
-  // val filename      = "/tmp/dep-list.log"       // TODO property
-  // val exclusionList = List("com.cmartin.learn") // TODO property
-  val configMap: Map[String, String] = Map(
-    "FILENAME"   -> "/tmp/dep-list.log",
-    "EXCLUSIONS" -> "com.cmartin.learn"
-  )
+    extends ZIOAppDefault {
 
   /*
     ZIO[R, E, A]
@@ -41,44 +29,45 @@ object DependencyLookoutApp
       - A: Either[Exception, Results]
    */
 
-  val program = for {
-    config                   <- getConfig[AppConfig]
-    startTime                <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
-    lines                    <- FileManager(_.getLinesFromFile(config.filename))
-    (parseErrors, validDeps) <- LogicManager(_.parseLines(lines))
-    validRate                <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
-    _                        <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
-    finalDeps                <- LogicManager(_.excludeFromList(validDeps, List(config.exclusions)))
-    (errors, remoteDeps)     <- HttpManager(_.checkDependencies(finalDeps))
-    // TODO process errors
-    _                        <- FileManager(_.logPairCollection(remoteDeps))
-    _                        <- FileManager(_.logWrongDependencies(errors))
-    stopTime                 <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
-    _                        <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
-
-  } yield ()
-
-  val configLayer: Layer[ReadError[String], AppConfig] =
-    ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
-
   val programLayer = {
-    Clock.live ++
-      configLayer ++
+    ZEnv.live ++
       FileManagerLive.layer ++
       LogicManagerLive.layer ++
       HttpManagerLive.layer
   }
 
-  /*
-     E X E C U T I O N
+  /* E X E C U T I O N
+     This is similar to dependency injection and
+     the `provide` function can be thought of as `inject`.
    */
   override def run = {
-    /*
-     This is similar to dependency injection, and the `provide` function can be
-     thought of as `inject`.
-     */
 
-    program
-      .provide(programLayer)
+    // TODO resolve error channel type, actual Object
+    def logicProgram(filename: String) = for {
+      // config                   <- getConfig[AppConfig]
+      config                   <- ConfigHelper.readFromFile(filename)
+      startTime                <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
+      lines                    <- FileManager(_.getLinesFromFile(config.filename))
+      (parseErrors, validDeps) <- LogicManager(_.parseLines(lines))
+      validRate                <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
+      _                        <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
+      finalDeps                <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
+      (errors, remoteDeps)     <- HttpManager(_.checkDependencies(finalDeps))
+      // TODO process errors
+      _                        <- FileManager(_.logPairCollection(remoteDeps))
+      _                        <- FileManager(_.logWrongDependencies(errors))
+      stopTime                 <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
+      _                        <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
+    } yield ()
+
+    // main program
+    for {
+      args <- getArgs
+      _    <- ZIO.when(args.isEmpty) {
+                Console.printLine(s"please, supply hocon config file, for example: application-config.hocon") *>
+                  IO.fail("empty command line arguments")
+              }
+      _    <- logicProgram(args.head).provide(programLayer)
+    } yield ()
   }
 }

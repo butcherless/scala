@@ -6,6 +6,7 @@ import io.circe.Json
 import io.circe.parser._
 
 object ZioLearn {
+
   sealed trait MyDomainException extends Exception
 
   case class MyExceptionOne(m: String) extends MyDomainException
@@ -19,7 +20,8 @@ object ZioLearn {
       MyExceptionTwo(s"refine arithmetic error: [${e.getMessage}]")
   }
 
-  def parseMessage(message: String): Either[circe.Error, Json] = parse(message)
+  def parseMessage(message: String): Either[circe.Error, Json] =
+    parse(message)
 
   def getValue(json: Json, key: String): Result[Json] =
     json.hcursor.downField(key).as[Json]

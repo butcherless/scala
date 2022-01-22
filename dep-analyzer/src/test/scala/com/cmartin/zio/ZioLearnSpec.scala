@@ -7,60 +7,14 @@ import com.cmartin.utils.config.ConfigHelper._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
-import zio.config.{ReadError, _}
+import zio.config._
+import zio.config.typesafe._
 
-class ZioLearnSpec extends AnyFlatSpec
+class ZioLearnSpec
+    extends AnyFlatSpec
     with Matchers {
 
-  import ZioLearnSpec._
-
   val runtime = Runtime.default
-
-  "An non fallible UIO effect" should "return a computation" in {
-    val program = for {
-      r1     <- UIO.succeed(0)
-      result <- UIO.succeed(r1 + 1)
-    } yield result
-
-    val result = runtime.unsafeRun(program)
-
-    result shouldBe 1
-  }
-
-  "A fallible Task effect" should "throw a FiberFailure when an exception occurs" in {
-    val program = for {
-      r1     <- UIO(0)
-      result <- Task(r1 / r1)
-    } yield result
-
-    an[FiberFailure] should be thrownBy runtime.unsafeRun(program)
-  }
-
-  it should "throw a FiberFailure containing a String when a exception occurs" in {
-    val expectedMessage = "error-message"
-    val program         = for {
-      r1     <- UIO(0)
-      result <- Task(r1 / r1).orElseFail(expectedMessage)
-    } yield result
-
-    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
-
-    failure.cause.failureOption.map { message =>
-      message shouldBe expectedMessage
-    }
-  }
-
-  /* probes the function 'ZIO.either' */
-  it should "should return a Left containing an exception" in {
-    val program = for {
-      a <- Task(1)
-      b <- Task(a / 0)
-    } yield b
-
-    val result = runtime.unsafeRun(program.either)
-    result shouldBe Symbol("left")
-    result.swap.map(_ shouldBe an[ArithmeticException])
-  }
 
   // Throwable => MyDomainException
   it should "refine a failure with a custom exception" in {
@@ -106,27 +60,6 @@ class ZioLearnSpec extends AnyFlatSpec
     result shouldBe filteredArtifacts
   }
 
-  it should "repeat 6 times exponentially from 10 millis" in {
-    import zio._
-
-    val policy =
-      Schedule.exponential(10.milliseconds) &&
-        // Schedule.spaced(3.seconds)
-        Schedule.recurs(5)
-
-    val program =
-      (for {
-        _ <- UIO(Console.printLine("zio console message"))
-        // _ <- sleep(1.second)
-      } yield ()) repeat policy
-
-    // TODO
-    // val result: (Duration, Int) = runtime.unsafeRun(program)
-
-    // info(result._1.toMillis.toString)
-
-  }
-
   it should "return a domain error inside fiber failure" in {
     trait DomainError
     case class ErrorOne(m: String) extends DomainError
@@ -159,46 +92,41 @@ class ZioLearnSpec extends AnyFlatSpec
     result shouldBe Left(ErrorOne("error-one"))
   }
 
-  "Zio Config" should "read the configuration from a Map" in {
-    val expectedConfig: AppConfig      = AppConfig(filename, exclusions)
-    val configMap: Map[String, String] = Map(
-      "FILENAME"   -> filename,
-      "EXCLUSIONS" -> exclusions
-    )
-
-    val configLayer: Layer[ReadError[String], AppConfig] =
-      ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
-
-    val program = getConfig[AppConfig]
-
-    val result = runtime.unsafeRun(
-      program.provideLayer(configLayer)
-    )
-
-    result shouldBe expectedConfig
-  }
-
-  it should "WIP read a HOCON configuration string" in {
-    import typesafe._
+  "Zio Config" should "read a HOCON configuration string" in {
     val filename       = "/tmp/deps-log.txt"
     val exclusions     = List("exclusion-one", "exclusion-two")
-    val expectedConfig = AppConfig2(filename, exclusions)
+    val expectedConfig = AppConfig(filename, exclusions)
     val hoconConfig    =
       """
         | filename: /tmp/deps-log.txt
         | exclusions: [exclusion-one, exclusion-two]
         |""".stripMargin
 
-    val descriptor: ConfigDescriptor[AppConfig2] = ConfigHelper.configDescriptor2
-    val source: ConfigSource                     = ConfigSource.fromHoconString(hoconConfig)
-    val program                                  = read(descriptor.from(source))
-    val result                                   = runtime.unsafeRun(program)
+    val descriptor: ConfigDescriptor[AppConfig] = ConfigHelper.configDescriptor
+    val source: ConfigSource                    = ConfigSource.fromHoconString(hoconConfig)
+    val program                                 = read(descriptor.from(source))
+    val result                                  = runtime.unsafeRun(program)
 
     result shouldBe expectedConfig
+
+    // TODO move to integration test dir
+    val file        = new java.io.File("dep-analyzer/src/test/resources/application-config.hocon")
+    val descriptor2 = ConfigHelper.configDescriptor
+    val source2     = TypesafeConfigSource.fromHoconFile(file)
+    val program2    = read(descriptor2.from(source2))
+    val result2     = runtime.unsafeRun(program2)
+
+    result2 shouldBe expectedConfig
+
+    // TODO move to integration test dir
+    val x1       = ZConfig.fromHoconFile(file, descriptor)
+    val program3 = getConfig[AppConfig].provideLayer(x1)
+    val result3  = runtime.unsafeRun(program3)
+    result3 shouldBe expectedConfig
   }
 
   it should "fail when trying to retrieve a missing property" in {
-    val configMap: Map[String, String]                   = Map.empty //  Map("FILENAME" -> filename)
+    val configMap: Map[String, String]                   = Map.empty
     val configLayer: Layer[ReadError[String], AppConfig] =
       ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
 
@@ -217,8 +145,6 @@ class ZioLearnSpec extends AnyFlatSpec
     }
   }
 
-  // TODO
-  //   TypesafeConfig.fromHoconFile(file, descriptor)
 }
 
 object ZioLearnSpec {
@@ -237,6 +163,6 @@ object ZioLearnSpec {
   )
 
   val filename   = "dependencies.data"
-  val exclusions = "dep-exclusion-1"
+  val exclusions = List("dep-exclusion-1")
 
 }
