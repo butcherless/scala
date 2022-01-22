@@ -8,7 +8,7 @@ import zio.{Runtime, ZLogger}
 
 class FileManagerITSpec
     extends AnyFlatSpec
-      with Matchers {
+    with Matchers {
 
   behavior of "FileManager"
   // val loggers = ZLogger.Set.default.map(println(_)).filterLogLevel(_ >= LogLevel.Debug)
