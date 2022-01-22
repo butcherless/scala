@@ -14,8 +14,8 @@ jobs:
     - name: Setup Scala and Java
       uses: olafurpg/setup-scala@v13
       with:
-        java-version: '11'
-        distribution: 'temurin'
+        java-version: '17'
+        distribution: 'zulu'
     - name: init
       run: sbt -v --client update 
       working-directory: ${{env.WORK_DIR}}
