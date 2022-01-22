@@ -14,8 +14,7 @@ jobs:
     - name: Setup Scala and Java
       uses: olafurpg/setup-scala@v13
       with:
-        java-version: '17'
-        distribution: 'zulu'
+        java-version: zulu@1.17 
     - name: init
       run: sbt -v --client update 
       working-directory: ${{env.WORK_DIR}}
