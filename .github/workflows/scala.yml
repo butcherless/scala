@@ -43,8 +43,7 @@ jobs:
     - name: Setup Scala and Java
       uses: olafurpg/setup-scala@v13
       with:
-        distribution: 'temurin'
-        java-version: '11'
+        java-version: zulu@1.17 
     - name: create project template
       run: chmod u+x create-simple-project.sh && ./create-simple-project.sh
       working-directory: docs
