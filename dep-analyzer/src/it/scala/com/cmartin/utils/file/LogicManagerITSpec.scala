@@ -7,7 +7,7 @@ import zio.Runtime.{default => runtime}
 
 class LogicManagerITSpec
     extends AnyFlatSpec
-      with Matchers {
+    with Matchers {
 
   behavior of "LogicManager"
 
