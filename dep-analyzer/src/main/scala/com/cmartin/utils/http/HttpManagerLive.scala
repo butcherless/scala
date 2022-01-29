@@ -72,14 +72,13 @@ case class HttpManagerLive()
 
   def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
     for {
-      _          <- ZIO.log("start time: ")
       response   <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
                       .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
       _          <- ZIO.log(s"http request: ${response.request()}")
       _          <- ZIO.log(s"http status code: ${response.statusCode()}")
       _          <- checkStatusCode(response.statusCode())
       remoteGavs <- extractResults(response.body())
-      _          <- ZIO.log(s"remoteGavs(initial three): ${remoteGavs.take(3)}")
+      _          <- ZIO.log(s"remoteGavs(only the first three are shown): ${remoteGavs.take(3)}")
       remoteGav  <- retrieveFirstMajor(remoteGavs, dep)
     } yield GavPair(dep, remoteGav)
   }
