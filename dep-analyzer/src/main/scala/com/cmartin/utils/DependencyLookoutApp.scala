@@ -19,13 +19,13 @@ object DependencyLookoutApp
 
   /*
     ZIO[R, E, A]
-      - R: application module/s
+      - R: application services / dependencies
       - E: error in case of failure
       - A: returned value
 
     Examples:
       - R = { ConfigManger, FileManager, LogicManager, HttpManager }
-      - E: ConnectionError (ADT)
+      - E: ConnectionError (part of an ADT)
       - A: Either[Exception, Results]
    */
 
@@ -38,7 +38,7 @@ object DependencyLookoutApp
    */
   override def run = {
 
-    val applicationLayer =
+    val applicationLayer: ULayer[ApplicationDependencies] =
       ZLayer.make[ApplicationDependencies](
         Clock.live,
         FileManagerLive.layer,
@@ -48,7 +48,7 @@ object DependencyLookoutApp
       )
 
     // TODO resolve error channel type, actual Object
-    def logicProgram(filename: String) = for {
+    def logicProgram(filename: String) = (for {
       config                   <- ConfigHelper.readFromFile(filename)
       startTime                <- Clock.currentTime(TimeUnit.MILLISECONDS)
       lines                    <- FileManager(_.getLinesFromFile(config.filename))
@@ -63,16 +63,17 @@ object DependencyLookoutApp
       _                        <- FileManager(_.logWrongDependencies(errors))
       stopTime                 <- Clock.currentTime(TimeUnit.MILLISECONDS)
       _                        <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
-    } yield ()
+    } yield ()).provide(applicationLayer)
 
     // main program
     for {
       args <- getArgs
       _    <- ZIO.when(args.isEmpty) {
-                Console.printLine(s"please, supply hocon config file, for example: application-config.hocon") *>
+                Console.printLine(s"Please, supply hocon config file, for example: /tmp/application-config.hocon") *>
                   IO.fail("empty command line arguments")
               }
-      _    <- logicProgram(args.head).provide(applicationLayer)
+      _    <- logicProgram(args.head)
     } yield ()
   }
+
 }

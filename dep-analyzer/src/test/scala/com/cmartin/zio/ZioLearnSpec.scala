@@ -10,8 +10,10 @@ import zio._
 import zio.config._
 import zio.config.typesafe._
 
+import java.io.{File, FileOutputStream}
+
 class ZioLearnSpec
-    extends AnyFlatSpec
+  extends AnyFlatSpec
     with Matchers {
 
   val runtime = Runtime.default
@@ -21,7 +23,7 @@ class ZioLearnSpec
     import com.cmartin.utils.ZioLearn.refineError
 
     val program: Task[Int] = for {
-      r1     <- Task.attempt(0)
+      r1 <- Task.attempt(0)
       result <- Task.attempt(1 / r1)
     } yield result
 
@@ -34,17 +36,17 @@ class ZioLearnSpec
   }
 
   it should "map None to a String into the error channel" in {
-    val none: Option[Int]                 = None
+    val none: Option[Int] = None
     val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
-    val program: IO[String, Int]          = noneZio.orElseFail("mapped error")
+    val program: IO[String, Int] = noneZio.orElseFail("mapped error")
 
     a[FiberFailure] should be thrownBy runtime.unsafeRun(program)
   }
 
   it should "return a Left with an string error" in {
-    val none: Option[Int]                 = None
+    val none: Option[Int] = None
     val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
-    val program: IO[String, Int]          = noneZio.mapError(_ => "mapped error")
+    val program: IO[String, Int] = noneZio.mapError(_ => "mapped error")
 
     val result: Either[String, Int] = runtime.unsafeRun(program.either)
 
@@ -55,7 +57,7 @@ class ZioLearnSpec
     import ZioLearnSpec._
 
     val exclusionList = List("group-2", "group-4")
-    val result        = artifacts.filterNot(dep => exclusionList.contains(dep.group))
+    val result = artifacts.filterNot(dep => exclusionList.contains(dep.group))
 
     result shouldBe filteredArtifacts
   }
@@ -67,7 +69,7 @@ class ZioLearnSpec
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task(1 / 1).orElseFail(ErrorOne("error-one"))
+        _ <- Task(1 / 1).orElseFail(ErrorOne("error-one"))
         result <- Task(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
@@ -83,7 +85,7 @@ class ZioLearnSpec
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task(1 / 0).orElseFail(ErrorOne("error-one"))
+        _ <- Task(1 / 0).orElseFail(ErrorOne("error-one"))
         result <- Task(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
@@ -93,40 +95,40 @@ class ZioLearnSpec
   }
 
   "Zio Config" should "read a HOCON configuration string" in {
-    val filename       = "/tmp/deps-log.txt"
-    val exclusions     = List("exclusion-one", "exclusion-two")
+    val filename = "/tmp/deps-log.txt"
+    val exclusions = List("exclusion-one", "exclusion-two")
     val expectedConfig = AppConfig(filename, exclusions)
-    val hoconConfig    =
+    val hoconConfig =
       """
         | filename: /tmp/deps-log.txt
         | exclusions: [exclusion-one, exclusion-two]
         |""".stripMargin
 
     val descriptor: ConfigDescriptor[AppConfig] = ConfigHelper.configDescriptor
-    val source: ConfigSource                    = ConfigSource.fromHoconString(hoconConfig)
-    val program                                 = read(descriptor.from(source))
-    val result                                  = runtime.unsafeRun(program)
+    val source: ConfigSource = ConfigSource.fromHoconString(hoconConfig)
+    val program = read(descriptor.from(source))
+    val result = runtime.unsafeRun(program)
 
     result shouldBe expectedConfig
 
     // TODO move to integration test dir
-    val file        = new java.io.File("dep-analyzer/src/test/resources/application-config.hocon")
+    val file = new java.io.File("dep-analyzer/src/test/resources/application-config.hocon")
     val descriptor2 = ConfigHelper.configDescriptor
-    val source2     = TypesafeConfigSource.fromHoconFile(file)
-    val program2    = read(descriptor2.from(source2))
-    val result2     = runtime.unsafeRun(program2)
+    val source2 = TypesafeConfigSource.fromHoconFile(file)
+    val program2 = read(descriptor2.from(source2))
+    val result2 = runtime.unsafeRun(program2)
 
     result2 shouldBe expectedConfig
 
     // TODO move to integration test dir
-    val x1       = ZConfig.fromHoconFile(file, descriptor)
+    val x1 = ZConfig.fromHoconFile(file, descriptor)
     val program3 = getConfig[AppConfig].provideLayer(x1)
-    val result3  = runtime.unsafeRun(program3)
+    val result3 = runtime.unsafeRun(program3)
     result3 shouldBe expectedConfig
   }
 
   it should "fail when trying to retrieve a missing property" in {
-    val configMap: Map[String, String]                   = Map.empty
+    val configMap: Map[String, String] = Map.empty
     val configLayer: Layer[ReadError[String], AppConfig] =
       ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
 
@@ -162,7 +164,7 @@ object ZioLearnSpec {
     Gav("group-3", "a31", "v31")
   )
 
-  val filename   = "dependencies.data"
+  val filename = "dependencies.data"
   val exclusions = List("dep-exclusion-1")
 
 }

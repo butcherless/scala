@@ -8,6 +8,7 @@ import zio.{IO, Layer}
 object ConfigHelper {
 
   final case class AppConfig(filename: String, exclusions: List[String])
+  
   val configDescriptor: ConfigDescriptor[AppConfig] =
     string("filename")
       .zip(list("exclusions")(string))
@@ -24,4 +25,8 @@ object ConfigHelper {
   def buildLayerFromFile(filename: String): Layer[ReadError[String], AppConfig] =
     ZConfig.fromHoconFilePath(filename, configDescriptor)
 
+  def printConfig(): String =
+    generateDocs(configDescriptor)
+      .toTable
+      .toGithubFlavouredMarkdown
 }
