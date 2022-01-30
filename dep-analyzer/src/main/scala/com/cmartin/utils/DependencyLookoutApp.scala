@@ -29,12 +29,8 @@ object DependencyLookoutApp
       - A: Either[Exception, Results]
    */
 
-  val programLayer = {
-    ZEnv.live ++
-      FileManagerLive.layer ++
-      LogicManagerLive.layer ++
-      HttpManagerLive.layer
-  }
+  type ApplicationDependencies =
+    Clock with FileManager with HttpManager with LogicManager
 
   /* E X E C U T I O N
      This is similar to dependency injection and
@@ -42,13 +38,22 @@ object DependencyLookoutApp
    */
   override def run = {
 
+    val applicationLayer =
+      ZLayer.make[ApplicationDependencies](
+        Clock.live,
+        FileManagerLive.layer,
+        HttpManagerLive.layer,
+        LogicManagerLive.layer,
+        ZLayer.Debug.mermaid
+      )
+
     // TODO resolve error channel type, actual Object
     def logicProgram(filename: String) = for {
-      // config                   <- getConfig[AppConfig]
       config                   <- ConfigHelper.readFromFile(filename)
-      startTime                <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
+      startTime                <- Clock.currentTime(TimeUnit.MILLISECONDS)
       lines                    <- FileManager(_.getLinesFromFile(config.filename))
       (parseErrors, validDeps) <- LogicManager(_.parseLines(lines))
+      _                        <- ZIO.logInfo(s"parsingErrors: $parseErrors")
       validRate                <- LogicManager(_.calculateValidRate(lines.size, validDeps.size))
       _                        <- ZIO.logInfo(s"Valid rate of dependencies in the file: $validRate %")
       finalDeps                <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
@@ -56,7 +61,7 @@ object DependencyLookoutApp
       // TODO process errors
       _                        <- FileManager(_.logPairCollection(remoteDeps))
       _                        <- FileManager(_.logWrongDependencies(errors))
-      stopTime                 <- zio.Clock.currentTime(TimeUnit.MILLISECONDS)
+      stopTime                 <- Clock.currentTime(TimeUnit.MILLISECONDS)
       _                        <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
     } yield ()
 
@@ -67,7 +72,7 @@ object DependencyLookoutApp
                 Console.printLine(s"please, supply hocon config file, for example: application-config.hocon") *>
                   IO.fail("empty command line arguments")
               }
-      _    <- logicProgram(args.head).provide(programLayer)
+      _    <- logicProgram(args.head).provide(applicationLayer)
     } yield ()
   }
 }

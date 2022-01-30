@@ -53,7 +53,7 @@ case class FileHelperLive()
 
 }
 
-object FileHelperLive {
-  val layer: ZLayer[Any, Nothing, FileHelper] =
-    ZLayer.fromZIO(UIO.succeed(FileHelperLive()))
+object FileHelperLive extends (() => FileHelper) {
+  val layer: ULayer[FileHelper] =
+    FileHelperLive.toLayer
 }

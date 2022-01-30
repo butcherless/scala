@@ -11,7 +11,8 @@ import com.cmartin.utils.poc.Zio2Layers.Repositories.{
 import com.cmartin.utils.poc.Zio2Layers.Services.{AuditService, AuditServiceLive}
 import zio.{IO, ZIO, ZIOAppDefault, _}
 
-object Zio2Layers extends ZIOAppDefault {
+object Zio2Layers
+    extends ZIOAppDefault {
 
   object Model {
     case class Airline(name: String, code: String)
@@ -70,7 +71,7 @@ object Zio2Layers extends ZIOAppDefault {
     }
 
     object AirlineRepositoryLive {
-      val layer = (AirlineRepositoryLive(_)).toLayer
+      val layer: URLayer[Database, AirlineRepository] = (AirlineRepositoryLive(_)).toLayer
     }
 
     trait AircraftRepository {
@@ -95,7 +96,7 @@ object Zio2Layers extends ZIOAppDefault {
     }
 
     object AircraftRepositoryLive {
-      val layer = (AircraftRepositoryLive(_)).toLayer
+      val layer: URLayer[Database, AircraftRepository] = (AircraftRepositoryLive(_)).toLayer
     }
 
   }
@@ -139,10 +140,13 @@ object Zio2Layers extends ZIOAppDefault {
     } yield counters
   }
 
-  def run = {
+  type ApplicationDependencies =
+    Config with Database with AirlineRepository with AircraftRepository with AuditService
 
-    val dependencies =
-      ZLayer.make[Config with Database with AirlineRepository with AircraftRepository with AuditService](
+  override def run = {
+
+    val applicationLayer =
+      ZLayer.make[ApplicationDependencies](
         ConfigLive.layer,
         DatabaseLive.layer,
         AirlineRepositoryLive.layer,
@@ -152,6 +156,7 @@ object Zio2Layers extends ZIOAppDefault {
       )
 
     val program = for {
+      // args         <- getArgs
       _            <- ZIO.log("start application")
       config       <- ZIO.service[Config]
       appCfg       <- config.read("filepath")
@@ -162,7 +167,8 @@ object Zio2Layers extends ZIOAppDefault {
       _            <- ZIO.log("stop application")
     } yield ()
 
-    program.provide(dependencies)
+    program.provide(applicationLayer)
+
   }
-  
+
 }

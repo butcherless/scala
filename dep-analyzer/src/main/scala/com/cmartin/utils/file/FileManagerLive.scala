@@ -39,7 +39,7 @@ case class FileManagerLive()
 
 }
 
-object FileManagerLive {
+object FileManagerLive extends (() => FileManager) {
   val layer: ULayer[FileManager] =
-    ZLayer.fromZIO(UIO.succeed(FileManagerLive()))
+    FileManagerLive.toLayer
 }

@@ -180,7 +180,7 @@ case class HttpManagerLive()
 
 }
 
-object HttpManagerLive {
+object HttpManagerLive extends (() => HttpManager) {
 
   val scheme = "https"
   val path   = "search.maven.org/solrsearch/select"
@@ -197,7 +197,7 @@ object HttpManagerLive {
       timestamp: Long
   )
 
-  val layer: ZLayer[Any, Nothing, HttpManager] =
-    ZLayer.fromZIO(UIO.succeed(HttpManagerLive()))
+  val layer: ULayer[HttpManager] =
+    HttpManagerLive.toLayer
 
 }
