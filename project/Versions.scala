@@ -4,7 +4,7 @@ object Versions {
   val akkaTyped   = "2.6.18"
   val cats        = "2.7.0"
   val circe       = "0.14.1"
-  val config      = "1.4.1"
+  val config      = "1.4.2"
   val json4s      = "4.0.4"
   val kafkaClient = "3.1.0"
   val logback     = "1.2.10"
