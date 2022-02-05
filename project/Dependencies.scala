@@ -41,6 +41,7 @@ object Dependencies {
   lazy val zioConfig         = "dev.zio" %% "zio-config"          % Versions.zioConfig
   lazy val zioConfigTypesafe = "dev.zio" %% "zio-config-typesafe" % Versions.zioConfig
   lazy val zioJson           = "dev.zio" %% "zio-json"            % Versions.zioJson
+  lazy val zioLogging        = "dev.zio" %% "zio-logging-slf4j"   % Versions.zioLogging
   lazy val zioPrelude        = "dev.zio" %% "zio-prelude"         % Versions.zioPrelude
   // lazy val zioStreams = "dev.zio" %% "zio-streams" % zioVersion
   // lazy val zioKafka = "dev.zio" %% "zio-kafka"  % zioKafkaVersion

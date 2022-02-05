@@ -14,9 +14,10 @@ object Versions {
   val scalatest   = "3.2.11"
   val slf4j       = "1.7.33"
   val sttp        = "2.3.0"
-  val zio         = "2.0.0-RC1" // RC2 depends on zio-config next release
-  val zioConfig   = "3.0.0-RC1"
-  val zioJson     = "0.3.0-RC2"
+  val zio         = "2.0.0-RC2"  // RC2 depends on zio-config next release
+  val zioConfig   = "3.0.0-RC2"
+  val zioLogging  = "2.0.0-RC5"
+  val zioJson     = "0.3.0-RC3"
   val zioKafka    = "0.12.0"
-  val zioPrelude  = "1.0.0-RC9" // RC10 depends on zio-rc2 next release
+  val zioPrelude  = "1.0.0-RC10" // RC10 depends on zio-rc2 next release
 }

@@ -1,4 +1,5 @@
 # Dependency Analyzer
+
 ## TODOes
 
 - manage `java.io.FileNotFoundException`
@@ -13,7 +14,6 @@ The App has the following modules:
 - LogicManager: collection processing, filtering, statistics, regex, etc.
 - HttpManager: HTTP client
 - LoggingManager: logging app operations
-
 
 ZManaged example:
 
@@ -37,6 +37,7 @@ Regex
 
 ```bash
 sbt "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
+cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
 ```
  
 http://queirozf.com/entries/scala-regular-expressions-examples-reference
@@ -45,8 +46,7 @@ https://logback.qos.ch/manual/configuration.html
 
 Obtener dependencias y generar un archivo
 
- gw dep --configuration default > /tmp/gradle-deps-default
-
+gw dep --configuration default > /tmp/gradle-deps-default
 
 Lista de tareas previas al caso de uso:
 
@@ -68,7 +68,6 @@ Lista de tareas previas al caso de uso:
 
 - elaborar el report con las dependencias que tienen nueva versión
 
-
 ## Secuencia
 
 - Se obtiene la colección de dependencias de un archivo de texto en el que cada línea de texto contiene un dependencia.
@@ -77,7 +76,6 @@ Lista de tareas previas al caso de uso:
 - Se filtran las dependencias que pertenecen a determinados `groupId'.
 - Se consultan las versiones de la colección de dependencias final.
 - Se obtiene una colección de resultados que contiene la dependencia _local_ y la dependencia _remota_.
-
 
 ## Create a ZIO Module (Deprecated use Pattern 2 with ZIO-2 Layers)
 
@@ -90,7 +88,6 @@ https://zio.dev/docs/howto/howto_use_module_pattern
 - create `VersionManagerLive` object which extends `VersionManagerLive` trait
 - create an instance of `VersionManager.Service[Any]` trait and implement its definition.
 - create `VersionManagerHelper` object which extends `VersionManager.Service[VersionManager]`.
-
 
 ## Links
 

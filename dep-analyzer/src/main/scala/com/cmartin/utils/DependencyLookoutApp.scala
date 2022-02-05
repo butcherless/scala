@@ -5,6 +5,8 @@ import com.cmartin.utils.file._
 import com.cmartin.utils.http._
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import zio._
+import zio.logging.LogFormat
+import zio.logging.backend.SLF4J
 
 import java.util.concurrent.TimeUnit
 
@@ -31,6 +33,14 @@ object DependencyLookoutApp
 
   type ApplicationDependencies =
     Clock with FileManager with HttpManager with LogicManager
+
+  val logAspect: RuntimeConfigAspect =
+    SLF4J.slf4j(
+      logLevel = LogLevel.Debug,
+      format = LogFormat.line
+    )
+
+  override def hook = logAspect
 
   /* E X E C U T I O N
      This is similar to dependency injection and
@@ -62,7 +72,7 @@ object DependencyLookoutApp
       _                        <- FileManager(_.logPairCollection(remoteDeps))
       _                        <- FileManager(_.logWrongDependencies(errors))
       stopTime                 <- Clock.currentTime(TimeUnit.MILLISECONDS)
-      _                        <- ZIO.log(s"processing time: ${stopTime - startTime} milliseconds")
+      _                        <- ZIO.logInfo(s"processing time: ${stopTime - startTime} milliseconds")
     } yield ()).provide(applicationLayer)
 
     // main program
