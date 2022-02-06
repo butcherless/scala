@@ -38,6 +38,7 @@ Regex
 ```bash
 sbt "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
 cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
+java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
 ```
  
 http://queirozf.com/entries/scala-regular-expressions-examples-reference
