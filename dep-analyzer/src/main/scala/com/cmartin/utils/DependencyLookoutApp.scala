@@ -40,7 +40,7 @@ object DependencyLookoutApp
       format = LogFormat.line
     )
 
-  override def hook = logAspect
+  override def hook: RuntimeConfigAspect = logAspect
 
   /* E X E C U T I O N
      This is similar to dependency injection and
