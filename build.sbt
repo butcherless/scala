@@ -56,7 +56,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
   .settings(
     Defaults.itSettings,
     commonSettings,
-    name                  := "depAnalyzer",
+    name                       := "depAnalyzer",
     libraryDependencies ++= Seq(
       akkaStream,
       circeGeneric,
@@ -71,13 +71,13 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       zioJson,
       zioLogging
     ),
-    assemblyMergeStrategy := {
+    assemblyMergeStrategy      := {
       case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
       case x                                       =>
         val oldStrategy = assemblyMergeStrategy.value
         oldStrategy(x)
     },
-    assembly / mainClass  := Some("com.cmartin.utils.DependencyLookoutApp"),
+    assembly / mainClass       := Some("com.cmartin.utils.DependencyLookoutApp"),
     assembly / assemblyJarName := "depLookoutApp.jar"
   )
   .dependsOn(common)
