@@ -1,5 +1,5 @@
 addDependencyTreePlugin
-addSbtPlugin("com.eed3si9n"     % "sbt-assembly"  % "1.1.0")
+addSbtPlugin("com.eed3si9n"     % "sbt-assembly"  % "1.1.1")
 addSbtPlugin("com.timushev.sbt" % "sbt-updates"   % "0.6.2")
 addSbtPlugin("org.scalameta"    % "sbt-scalafmt"  % "2.4.6")
 addSbtPlugin("org.scoverage"    % "sbt-coveralls" % "1.3.1")
