@@ -7,7 +7,7 @@ version: 2
 jobs:
   scala_2:
     docker:
-      - image: circleci/openjdk:17-jdk-buster
+      - image: circleci/openjdk:18-jdk-buster
 
     working_directory: ~/repo
 
