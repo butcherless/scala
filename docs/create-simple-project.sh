@@ -30,11 +30,15 @@ echo "sbt.version=${SBT_VER}" > project/build.properties
 #
 # create code format file
 #
-echo 'version = "'${SBT_SCALAFMT_VER}'"
-align.preset = more
+echo 'version = "'${SCALAFMT_VER}'"
+align.preset = most
 maxColumn = 120
+newlines.source = keep
+lineEndings = preserve
 runner.dialect = scala213source3
-' > .scalafmt.conf
+docstrings = JavaDoc
+docstrings.wrapMaxColumn = 80
+project.git = true' > .scalafmt.conf
 
 #
 # create sbt plugins file
