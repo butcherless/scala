@@ -13,6 +13,10 @@ Typical application:
 - Metrics layer
 - Configuratior layer
 
+Side effects:
+- Domain & Use cases (NO, in memory)
+- Infrastructure (YES, file, network, database, topic, queue, socket)
+
 ## Axioms
 - change sentences: do => describe
 - program as computation sequence
