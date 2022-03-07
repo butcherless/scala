@@ -1,5 +1,5 @@
 object Versions {
-  val akkaHttp    = "10.2.8"
+  val akkaHttp    = "10.2.9"
   val akka        = "2.6.18"
   val akkaTyped   = "2.6.18"
   val cats        = "2.7.0"
@@ -7,7 +7,7 @@ object Versions {
   val config      = "1.4.2"
   val json4s      = "4.0.4"
   val kafkaClient = "3.1.0"
-  val logback     = "1.2.10"
+  val logback     = "1.2.11"
   val pegdown     = "1.6.0"
   val refined     = "0.9.28"
   val scalaz      = "7.3.6"
