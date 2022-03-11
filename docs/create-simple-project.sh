@@ -194,18 +194,19 @@ object Library {
 #
 echo 'package '${SOURCE_PKG}'
 
-import '${SOURCE_PKG}'.Library._
+import com.cmartin.learn.Library._
 import zio.Console.printLine
-import zio.ZIOAppDefault
+import zio._
 
 object SimpleApp
-  extends ZIOAppDefault {
+    extends ZIOAppDefault {
+
+  val logAspect = ZIOAspect.loggedWith[Int](r => s"sum result: $r")
 
   def run = {
     for {
-      _      <- printLine(echo(TEXT))
-      result <- sum(2, 3)
-      _      <- printLine(s"sum result: $result")
+      _      <- ZIO.log(echo(TEXT))
+      result <- sum(2, 3) @@ logAspect
     } yield ()
   }
 }' > src/main/scala/${PKG_DIR}/SimpleApp.scala
