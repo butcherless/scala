@@ -1,8 +1,8 @@
 #!/bin/bash
 
 PROJECT_NAME="project-template"
-PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
+PKG_DIR=`echo ${SOURCE_PKG} | sed 's/\./\//g'`
 SCALA_VER="2.13.8"
 SBT_VER="1.6.2"
 SBT_ASSEMBLY_VER="1.2.0"
