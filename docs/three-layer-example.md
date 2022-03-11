@@ -22,7 +22,8 @@ Side effects:
 - program as computation sequence
 - compiler
 - effect system
-- interpreter
+- effect composition
+- interpreter (1 description -> N interpretations)
 
 ## Implementation problems
 - error management
