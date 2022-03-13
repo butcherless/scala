@@ -1,6 +1,6 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.http.{HttpManager, HttpManagerLive}
+import com.cmartin.utils.http.{HttpClientManager, HttpManager}
 import com.cmartin.utils.model.Domain.{Gav, ResponseError}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -20,7 +20,7 @@ class HttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(HttpManagerLive.layer)
+      program.provide(HttpClientManager.layer)
     )
 
     info(s"errors: $errors")
@@ -42,7 +42,7 @@ class HttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(HttpManagerLive.layer)
+      program.provide(HttpClientManager.layer)
     )
 
     info(s"errors: $errors")
@@ -61,7 +61,7 @@ class HttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(HttpManagerLive.layer)
+      program.provide(HttpClientManager.layer)
     )
 
     info(s"errors: $errors")

@@ -1,5 +1,6 @@
 package com.cmartin.utils.http
 
+import com.cmartin.utils.http.HttpManager.retrieveFirstMajor
 import com.cmartin.utils.model.Domain._
 import sttp.client3._
 import sttp.client3.asynchttpclient.zio._
@@ -9,10 +10,12 @@ import zio._
 final case class ZioHttpManager()
     extends HttpManager {
 
-  import HttpManagerLive.majorVersionRegex
+  private val managedClient = AsyncHttpClientZioBackend().toManaged
+
   import ZioHttpManager._
+
   override def checkDependencies(gavs: Iterable[Gav]): UIO[(Iterable[DomainError], Iterable[GavPair])] =
-    ZIO.partitionPar(gavs)(getDependency(_)).withParallelism(3)
+    ZIO.partitionPar(gavs)(getDependency).withParallelism(3)
 
   def getDependency(gav: Gav): IO[DomainError, GavPair] = {
     for {
@@ -25,32 +28,21 @@ final case class ZioHttpManager()
 
   }
 
-  def makeRequest(dep: Gav) = {
+  private def makeRequest(dep: Gav) = {
     val uri = s"$scheme://$searchPath?q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&core=gav&rows=$resultSize"
     basicRequest
       .get(uri"$uri")
       .response(asJson[MavenSearchResult].getRight)
   }
 
-  def getMavenRequest(gav: Gav): IO[NetworkError, Response[MavenSearchResult]] =
-    AsyncHttpClientZioBackend().toManaged.use { b =>
+  private def getMavenRequest(gav: Gav): IO[NetworkError, Response[MavenSearchResult]] =
+    managedClient.use { b =>
       makeRequest(gav).send(b)
-    }.mapError(e => NetworkError(e.getMessage()))
+    }.mapError(e => NetworkError(e.getMessage))
 
   def extractDependencies(results: MavenSearchResult): UIO[Seq[Gav]] =
     UIO.succeed(results.response.docs.map(viewToModel))
 
-  def retrieveFirstMajor(gavs: Seq[Gav], gav: Gav): IO[DomainError, Gav] = {
-    majorVersionRegex.findFirstMatchIn(gav.version)
-      .fold[IO[DomainError, Gav]](
-        IO.fail(ResponseError(s"no major version number found for: $gav"))
-      )(regexMatch =>
-        gavs.find(d => d.version.startsWith(regexMatch.group(1)))
-          .fold[IO[DomainError, Gav]](
-            IO.fail(ResponseError(s"no remote dependency found for: $gav"))
-          )(IO.succeed(_))
-      )
-  }
 }
 
 object ZioHttpManager extends (() => HttpManager) {

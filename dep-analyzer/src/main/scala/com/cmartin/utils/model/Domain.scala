@@ -58,20 +58,8 @@ object Domain {
   object Gav {
     implicit val decoder: JsonDecoder[Gav] = DeriveJsonDecoder.gen[Gav]
 
-    implicit val ord: Ordering[Gav] = new Ordering[Gav] {
-
-      /** Comparator for dependencies classes
-        *
-        * @param d1
-        *   one dependency
-        * @param d2
-        *   another one dependency
-        * @return
-        *   0 if equals, -1 if less than, +1 if greater than
-        */
-      def compare(d1: Gav, d2: Gav): Int = {
-        d1.version.compareTo(d2.version)
-      }
+    implicit val ord: Ordering[Gav] = (d1: Gav, d2: Gav) => {
+      d1.version.compareTo(d2.version)
     }
 
     def fromRegexMatch(regexMatch: Regex.Match): Gav = {

@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import zio._
 
 class FileManagerSpec
-  extends AnyFlatSpec
+    extends AnyFlatSpec
     with Matchers {
 
   val runtime = Runtime.default
@@ -25,7 +25,7 @@ class FileManagerSpec
     val r = runtime.unsafeRun(io)
 
     // THEN
-    r shouldBe()
+    r shouldBe ()
   }
 
 }

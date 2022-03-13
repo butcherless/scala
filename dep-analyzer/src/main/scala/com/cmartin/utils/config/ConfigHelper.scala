@@ -1,7 +1,7 @@
 package com.cmartin.utils.config
 
 import com.cmartin.utils.file.{FileManager, FileManagerLive}
-import com.cmartin.utils.http.{HttpManager, HttpManagerLive}
+import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import zio.config.ConfigDescriptor._
 import zio.config._
@@ -42,8 +42,10 @@ object ConfigHelper {
     )
 
   // loggers
-  def genericLog[T](message: String)   = ZIOAspect.loggedWith[T](a => s"$message: $a")
-  def iterableLog(message: String)     = ZIOAspect.loggedWith[Iterable[_]](i => s"$message:${i.mkString("\n", "\n", "")}")
+  def genericLog[T](message: String) = ZIOAspect.loggedWith[T](a => s"$message: $a")
+
+  def iterableLog(message: String) = ZIOAspect.loggedWith[Iterable[_]](i => s"$message:${i.mkString("\n", "\n", "")}")
+
   def iterablePairLog(message: String) = ZIOAspect.loggedWith[(Iterable[String], _)] { case (it, _) =>
     it match {
       case Nil => s"$message: empty sequence of elements"
@@ -58,7 +60,7 @@ object ConfigHelper {
     ZLayer.make[ApplicationDependencies](
       Clock.live,
       FileManagerLive.layer,
-      HttpManagerLive.layer,
+      ZioHttpManager.layer,
       LogicManagerLive.layer,
       ZLayer.Debug.mermaid
     )

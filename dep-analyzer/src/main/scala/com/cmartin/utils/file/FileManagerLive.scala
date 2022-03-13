@@ -11,10 +11,8 @@ case class FileManagerLive()
     extends FileManager {
 
   override def getLinesFromFile(filename: String): IO[DomainError, List[String]] =
-    manageFile(filename).use { file =>
-      ZIO.logLevel(LogLevel.Debug) {
-        ZIO.log(s"reading from file: $filename")
-      } *>
+    managedFile(filename).use { file =>
+      ZIO.logInfo(s"reading from file: $filename") *>
         ZIO.attempt(file.getLines().toList)
     }.orElseFail(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
 
@@ -25,7 +23,7 @@ case class FileManagerLive()
     Task.succeed(
       collection
         .filter(_.hasNewVersion)
-        .map(formatChanges(_))
+        .map(formatChanges)
     )
 
     /*     ZIO.foreachDiscard(collection) { pair =>
@@ -37,7 +35,7 @@ case class FileManagerLive()
     H E L P E R S
    */
 
-  def manageFile(filename: String): TaskManaged[BufferedSource] =
+  def managedFile(filename: String): TaskManaged[BufferedSource] =
     ZManaged.fromAutoCloseable(Task.attempt(Source.fromFile(filename)))
 
   def formatChanges(pair: Domain.GavPair): String =

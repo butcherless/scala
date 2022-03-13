@@ -11,11 +11,11 @@
     </appender>
 
     <!-- application loggers -->
-    <logger name="com.cmartin.utils" level="INFO"/>
+    <logger name="com.cmartin.utils" level="DEBUG"/>
 
     <!-- infrastructure loggers -->
     <logger name="io.netty" level="INFO"/>
-    <logger name="org.asynchttpclient.netty" level="DEBUG"/>
+    <logger name="org.asynchttpclient.netty" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="ASYNC"/>

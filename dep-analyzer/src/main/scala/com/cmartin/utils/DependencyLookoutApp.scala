@@ -34,9 +34,9 @@ object DependencyLookoutApp
       config                   <- ConfigHelper.readFromFile(filename)
       startTime                <- getMillis()
       lines                    <- FileManager(_.getLinesFromFile(config.filename))
-      (parseErrors, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
+      (_, validDeps)           <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
       _                        <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
-                                    genericLog("Valid rate of dependencies")
+                                    genericLog("valid rate of dependencies")
       finalDeps                <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
       (errors, remoteDepPairs) <- HttpManager(_.checkDependencies(finalDeps))
       // TODO process errors
