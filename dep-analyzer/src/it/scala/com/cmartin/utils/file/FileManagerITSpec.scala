@@ -1,7 +1,8 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain.FileIOError
-import com.cmartin.utils.{DependencyLookoutApp, Domain}
+import com.cmartin.utils.config.ConfigHelper
+import com.cmartin.utils.model.Domain
+import com.cmartin.utils.model.Domain.FileIOError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.{Runtime, ZEnv}
@@ -15,7 +16,7 @@ class FileManagerITSpec
 
   val runtime: Runtime[ZEnv] =
     Runtime.default
-      .mapRuntimeConfig(DependencyLookoutApp.logAspect)
+      .mapRuntimeConfig(ConfigHelper.logAspect)
 
   it should "retrieve a sequence of text lines from a file" in {
     val filename = "dep-analyzer/src/it/resources/dependency-list.txt"

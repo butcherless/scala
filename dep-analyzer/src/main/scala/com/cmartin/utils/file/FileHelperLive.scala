@@ -1,9 +1,9 @@
 package com.cmartin.utils.file
 
 import com.cmartin.learn.common.Utils.colourYellow
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{DomainError, FileIOError}
 import com.cmartin.utils.file.FileHelper.FileLines
+import com.cmartin.utils.model.Domain
+import com.cmartin.utils.model.Domain.{DomainError, FileIOError}
 import zio._
 
 import java.io.{File, FileInputStream}

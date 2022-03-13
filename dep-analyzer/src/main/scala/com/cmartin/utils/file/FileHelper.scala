@@ -1,7 +1,7 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain.{DomainError, Gav}
 import com.cmartin.utils.file.FileHelper.FileLines
+import com.cmartin.utils.model.Domain.{DomainError, Gav}
 import zio.{Accessible, IO}
 
 trait FileHelper {

@@ -1,39 +1,19 @@
 package com.cmartin.zio
 
-import com.cmartin.utils.Domain.Gav
-import com.cmartin.utils.ZioLearn.{MyDomainException, MyExceptionTwo}
 import com.cmartin.utils.config.ConfigHelper
 import com.cmartin.utils.config.ConfigHelper._
+import com.cmartin.utils.model.Domain.Gav
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
 import zio.config._
 import zio.config.typesafe._
 
-import java.io.{File, FileOutputStream}
-
 class ZioLearnSpec
     extends AnyFlatSpec
     with Matchers {
 
   val runtime = Runtime.default
-
-  // Throwable => MyDomainException
-  it should "refine a failure with a custom exception" in {
-    import com.cmartin.utils.ZioLearn.refineError
-
-    val program: Task[Int] = for {
-      r1     <- Task.attempt(0)
-      result <- Task.attempt(1 / r1)
-    } yield result
-
-    val programRefined: IO[MyDomainException, Int] =
-      program.refineOrDie(refineError())
-
-    val result = runtime.unsafeRun(programRefined.either)
-
-    result.swap.map(_ shouldBe a[MyExceptionTwo])
-  }
 
   it should "map None to a String into the error channel" in {
     val none: Option[Int]                 = None

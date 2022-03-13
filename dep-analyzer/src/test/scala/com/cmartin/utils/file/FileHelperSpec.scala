@@ -1,8 +1,8 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.{FileIOError, Gav, UnknownError}
 import com.cmartin.utils.file.FileHelper.FileLines
+import com.cmartin.utils.model.Domain
+import com.cmartin.utils.model.Domain.{FileIOError, Gav, UnknownError}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.{Runtime, ZIO}

@@ -59,16 +59,14 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
     name                       := "depAnalyzer",
     libraryDependencies ++= Seq(
       akkaStream,
-      circeGeneric,
-      circeParser,
       json4s,
+      logback,
       sttpCore,
       sttpZio,
-      logback,
+      sttpZioJson,
       zio,
       zioConfig,
       zioConfigTypesafe,
-      zioJson,
       zioLogging
     ),
     assemblyMergeStrategy      := {

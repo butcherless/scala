@@ -1,38 +1,38 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.Domain._
+import com.cmartin.utils.http.HttpManager.retrieveFirstMajor
+import com.cmartin.utils.model.Domain._
 import sttp.model.StatusCode
 import zio._
 import zio.json.DecoderOps
 
 import java.net.URI
-import scala.util.matching.Regex
-/*
-import io.circe
-import io.circe.CursorOp.DownField
-import io.circe.DecodingFailure
-import io.circe.generic.auto._
-import io.circe.parser.parse
- */
-
 import java.net.http.HttpResponse.BodyHandlers
 import java.net.http.{HttpClient, HttpRequest}
 
-case class HttpManagerLive()
+case class HttpClientManager()
     extends HttpManager {
 
-  import HttpManagerLive._
+  import HttpClientManager._
 
   override def checkDependencies(deps: Iterable[Gav]): UIO[(Iterable[DomainError], Iterable[GavPair])] =
     buildManagedClient() { implicit client =>
       ZIO.partitionPar(deps)(getDependency(_)).withParallelism(3)
     }
 
-  def acquireClient(): UIO[HttpClient]            = UIO.succeed(HttpClient.newHttpClient())
-  lazy val releaseClient: HttpClient => UIO[Unit] = (_: HttpClient) => ZIO.unit
-
-  def buildManagedClient(): ZIO.Release[Any, Nothing, HttpClient] =
-    ZIO.acquireReleaseWith(acquireClient())(releaseClient)
+  def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
+    for {
+      // TODO refactor line below to a function, see ZioHttpManager.getMavenRequest
+      response   <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
+                      .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
+      _          <- ZIO.log(s"http request: ${response.request()}")
+      _          <- ZIO.log(s"http status code: ${response.statusCode()}")
+      _          <- checkStatusCode(response.statusCode())
+      remoteGavs <- extractResults(response.body())
+      _          <- ZIO.log(s"remoteGavs(only the first three are shown): ${remoteGavs.take(3)}")
+      remoteGav  <- retrieveFirstMajor(remoteGavs, dep)
+    } yield GavPair(dep, remoteGav)
+  }
 
   def makeRequest(dep: Gav): HttpRequest =
     HttpRequest.newBuilder().uri(
@@ -40,6 +40,12 @@ case class HttpManagerLive()
         s"$scheme://$path?q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&core=gav&rows=10"
       )
     ).build()
+
+  def acquireClient(): UIO[HttpClient]            = UIO.succeed(HttpClient.newHttpClient())
+  lazy val releaseClient: HttpClient => UIO[Unit] = (_: HttpClient) => ZIO.unit
+
+  def buildManagedClient(): ZIO.Release[Any, Nothing, HttpClient] =
+    ZIO.acquireReleaseWith(acquireClient())(releaseClient)
 
   def checkStatusCode(code: Int): IO[DomainError, Option[Nothing]] =
     ZIO.when(!StatusCode(code).isSuccess)(IO.fail(ResponseError(s"status code: $code")))
@@ -56,31 +62,6 @@ case class HttpManagerLive()
             }
           )
       )
-  }
-
-  def retrieveFirstMajor(deps: Seq[Gav], gav: Gav): IO[DomainError, Gav] = {
-    majorVersionRegex.findFirstMatchIn(gav.version)
-      .fold[IO[DomainError, Gav]](
-        IO.fail(ResponseError(s"no major version number found for: $gav"))
-      ) { regexMatch =>
-        deps.find(d => d.version.startsWith(regexMatch.group(1)))
-          .fold[IO[DomainError, Gav]](
-            IO.fail(ResponseError(s"no remote dependency found for: $gav"))
-          )(d => IO.succeed(Gav(d.group, d.artifact, d.version)))
-      }
-  }
-
-  def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
-    for {
-      response   <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
-                      .orElseFail(NetworkError(s"Connection error while checking dependency: $dep"))
-      _          <- ZIO.log(s"http request: ${response.request()}")
-      _          <- ZIO.log(s"http status code: ${response.statusCode()}")
-      _          <- checkStatusCode(response.statusCode())
-      remoteGavs <- extractResults(response.body())
-      _          <- ZIO.log(s"remoteGavs(only the first three are shown): ${remoteGavs.take(3)}")
-      remoteGav  <- retrieveFirstMajor(remoteGavs, dep)
-    } yield GavPair(dep, remoteGav)
   }
 
   /*
@@ -180,13 +161,10 @@ case class HttpManagerLive()
 
 }
 
-object HttpManagerLive extends (() => HttpManager) {
+object HttpClientManager extends (() => HttpManager) {
 
   val scheme = "https"
   val path   = "search.maven.org/solrsearch/select"
-
-  // extract major version number
-  val majorVersionRegex: Regex = raw"(^[0-9]+)..*".r
 
   final case class Document(
       id: String,
@@ -198,6 +176,6 @@ object HttpManagerLive extends (() => HttpManager) {
   )
 
   val layer: ULayer[HttpManager] =
-    HttpManagerLive.toLayer
+    HttpClientManager.toLayer
 
 }
