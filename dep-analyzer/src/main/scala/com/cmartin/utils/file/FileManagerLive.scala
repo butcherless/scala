@@ -1,8 +1,8 @@
 package com.cmartin.utils.file
 
 import com.cmartin.learn.common.Utils._
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain._
+import com.cmartin.utils.model.Domain
+import com.cmartin.utils.model.Domain._
 import zio._
 
 import scala.io.{BufferedSource, Source}
@@ -21,10 +21,16 @@ case class FileManagerLive()
   override def logWrongDependencies(errors: Iterable[DomainError]): Task[Unit] =
     ZIO.foreachDiscard(errors)(e => ZIO.logInfo(s"invalid dependency: $e"))
 
-  override def logPairCollection(collection: Iterable[GavPair]): Task[Unit] = {
-    ZIO.foreachDiscard(collection) { pair =>
+  override def logPairCollection(collection: Iterable[GavPair]): UIO[Iterable[String]] = {
+    Task.succeed(
+      collection
+        .filter(_.hasNewVersion)
+        .map(formatChanges(_))
+    )
+
+    /*     ZIO.foreachDiscard(collection) { pair =>
       ZIO.when(pair.hasNewVersion)(ZIO.logInfo(formatChanges(pair)))
-    }
+    } */
   }
 
   /*

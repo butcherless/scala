@@ -1,6 +1,6 @@
 package com.cmartin.utils.logic
 
-import com.cmartin.utils.Domain.Gav
+import com.cmartin.utils.model.Domain.Gav
 import zio.{Accessible, UIO}
 
 trait LogicManager {

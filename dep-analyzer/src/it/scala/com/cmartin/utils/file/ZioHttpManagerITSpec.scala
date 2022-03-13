@@ -1,26 +1,26 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.http.{HttpManager, HttpManagerLive}
-import com.cmartin.utils.model.Domain.{Gav, ResponseError}
+import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
+import com.cmartin.utils.model.Domain.ResponseError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
 
-class HttpManagerITSpec
+class ZioHttpManagerITSpec
     extends AnyFlatSpec with Matchers {
 
   import HttpManagerITSpec._
 
-  behavior of "HttpManager"
+  behavior of "ZioHttpManager"
 
   it should "retrieve a single dependency change" in {
     // given
-    val deps    = Seq(zioDep)
-    // when
-    val program = HttpManager(_.checkDependencies(deps))
+    val deps = Seq(zioDep)
 
+    // when
+    val program            = HttpManager(_.checkDependencies(deps))
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(HttpManagerLive.layer)
+      program.provide(ZioHttpManager.layer)
     )
 
     info(s"errors: $errors")
@@ -32,6 +32,7 @@ class HttpManagerITSpec
     val pair = depPairs.head
     pair.local.group shouldBe pair.remote.group
     pair.local.artifact shouldBe pair.remote.artifact
+    // TODO assert: remote > local
     takeMajorNumber(pair.local.version) shouldBe takeMajorNumber(pair.remote.version)
   }
 
@@ -42,7 +43,7 @@ class HttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(HttpManagerLive.layer)
+      program.provide(ZioHttpManager.layer)
     )
 
     info(s"errors: $errors")
@@ -53,7 +54,7 @@ class HttpManagerITSpec
     depPairs should have size 2
   }
 
-  it should "retrieve a list of failures" in {
+  it should "WIP retrieve a list of failures" in {
     // given
     val dep     = zioDep.copy(artifact = "missing-zio")
     val deps    = Seq(dep)
@@ -61,7 +62,7 @@ class HttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(HttpManagerLive.layer)
+      program.provide(ZioHttpManager.layer)
     )
 
     info(s"errors: $errors")
@@ -73,19 +74,4 @@ class HttpManagerITSpec
     val failure = errors.head
     failure shouldBe ResponseError(s"no remote dependency found for: $dep")
   }
-
-}
-
-object HttpManagerITSpec {
-  val zioGroup    = "dev.zio"
-  val zioArtifact = "zio_2.13"
-  val zioVersion  = "1.0.0"
-  val zioDep      = Gav(zioGroup, zioArtifact, zioVersion)
-
-  val lbGroup    = "ch.qos.logback"
-  val lbArtifact = "logback-classic"
-  val lbVersion  = "1.2.5"
-  val logbackDep = Gav(lbGroup, lbArtifact, lbVersion)
-
-  def takeMajorNumber(version: String) = version.split('.').head
 }

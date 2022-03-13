@@ -1,7 +1,7 @@
 package com.cmartin.utils.logic
 
-import com.cmartin.utils.Domain
-import com.cmartin.utils.Domain.Gav
+import com.cmartin.utils.model.Domain
+import com.cmartin.utils.model.Domain.Gav
 import zio._
 
 import scala.util.matching.Regex

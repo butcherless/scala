@@ -1,6 +1,6 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.Domain.{DomainError, Gav, GavPair}
+import com.cmartin.utils.model.Domain.{DomainError, Gav, GavPair}
 import zio.{UIO, _}
 
 trait HttpManager {
