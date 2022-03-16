@@ -4,7 +4,6 @@ import com.cmartin.utils.config.ConfigHelper.ApiClient
 import com.cmartin.utils.http.HttpManager.retrieveFirstMajor
 import com.cmartin.utils.model.Domain._
 import sttp.client3._
-
 import sttp.client3.ziojson._
 import zio._
 
@@ -13,15 +12,16 @@ final case class ZioHttpManager(managedClient: TaskManaged[ApiClient])
 
   import ZioHttpManager._
 
-  override def checkDependencies(gavs: Iterable[Gav]): UIO[(Iterable[DomainError], Iterable[GavPair])] = {
+  override def checkDependencies(gavs: Iterable[Gav]): IO[DomainError, (Iterable[DomainError], Iterable[GavPair])] = {
     managedClient.use { client =>
-      ZIO.partitionPar(gavs)(getDependency(_)(client)).withParallelism(3)
-    }.orDie // TODO manage error
+      ZIO.partitionPar(gavs)(getDependency(_)(client)).withParallelism(4)
+    }.mapError(e => WebClientError(e.getMessage()))
   }
 
-  def getDependency(gav: Gav)(client: ApiClient): IO[DomainError, GavPair] = {
+  private def getDependency(gav: Gav)(client: ApiClient): IO[DomainError, GavPair] = {
     for {
-      response   <- makeRequest(gav).send(client).mapError(e => NetworkError(e.getMessage)) // TODO refactor
+      response   <- makeRequest(gav).send(client)
+                      .mapError(e => NetworkError(e.getMessage)) // TODO refactor
       _          <- ZIO.log(s"status code: ${response.code}")
       remoteGavs <- extractDependencies(response.body)
       _          <- ZIO.log(s"remoteGavs(only the first three are shown): ${remoteGavs.take(3)}")

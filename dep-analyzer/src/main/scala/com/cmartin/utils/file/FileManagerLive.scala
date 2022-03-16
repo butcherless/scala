@@ -25,10 +25,6 @@ case class FileManagerLive()
         .filter(_.hasNewVersion)
         .map(formatChanges)
     )
-
-    /*     ZIO.foreachDiscard(collection) { pair =>
-      ZIO.when(pair.hasNewVersion)(ZIO.logInfo(formatChanges(pair)))
-    } */
   }
 
   /*

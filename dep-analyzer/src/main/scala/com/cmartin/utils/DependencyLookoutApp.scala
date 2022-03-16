@@ -31,18 +31,18 @@ object DependencyLookoutApp
 
     // TODO resolve error channel type, actual Object
     def logicProgram(filename: String) = (for {
-      config                   <- ConfigHelper.readFromFile(filename)
-      startTime                <- getMillis()
-      lines                    <- FileManager(_.getLinesFromFile(config.filename))
-      (_, validDeps)           <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
-      _                        <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
-                                    genericLog("valid rate of dependencies")
-      finalDeps                <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
-      (errors, remoteDepPairs) <- HttpManager(_.checkDependencies(finalDeps))
+      config         <- ConfigHelper.readFromFile(filename)
+      startTime      <- getMillis()
+      lines          <- FileManager(_.getLinesFromFile(config.filename))
+      (_, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
+      _              <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
+                          genericLog("valid rate of dependencies")
+      finalDeps      <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
+      results        <- HttpManager(_.checkDependencies(finalDeps))
       // TODO process errors
-      _                        <- FileManager(_.logPairCollection(remoteDepPairs)) @@ iterableLog("updated dependencies")
-      _                        <- FileManager(_.logWrongDependencies(errors))
-      _                        <- calcElapsedMillis(startTime) @@ genericLog("processing time")
+      _              <- FileManager(_.logPairCollection(results._2)) @@ iterableLog("updated dependencies")
+      _              <- FileManager(_.logWrongDependencies(results._1))
+      _              <- calcElapsedMillis(startTime) @@ genericLog("processing time")
     } yield ()).provide(applicationLayer)
 
     // main program
