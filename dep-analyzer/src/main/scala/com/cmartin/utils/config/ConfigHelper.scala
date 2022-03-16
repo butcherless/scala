@@ -3,12 +3,16 @@ package com.cmartin.utils.config
 import com.cmartin.utils.file.{FileManager, FileManagerLive}
 import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
+import sttp.capabilities
+import sttp.capabilities.zio.ZioStreams
+import sttp.client3.SttpBackend
+import sttp.client3.httpclient.zio.HttpClientZioBackend
 import zio.config.ConfigDescriptor._
 import zio.config._
 import zio.config.typesafe._
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
-import zio.{Clock, IO, Layer, LogLevel, RuntimeConfigAspect, ULayer, ZIOAspect, ZLayer}
+import zio.{Clock, IO, Layer, LogLevel, RuntimeConfigAspect, Task, TaskManaged, ULayer, ZIOAspect, ZLayer}
 
 object ConfigHelper {
 
@@ -53,13 +57,19 @@ object ConfigHelper {
     }
   }
 
+  type ApiClient = SttpBackend[Task, ZioStreams with capabilities.WebSockets]
+
+  val sttpBackendLayer: ULayer[TaskManaged[ApiClient]] =
+    ZLayer.succeed(HttpClientZioBackend().toManaged)
+
   type ApplicationDependencies =
     Clock with FileManager with HttpManager with LogicManager
 
-  val applicationLayer: ULayer[ApplicationDependencies] =
+  val applicationLayer =
     ZLayer.make[ApplicationDependencies](
       Clock.live,
       FileManagerLive.layer,
+      sttpBackendLayer,
       ZioHttpManager.layer,
       LogicManagerLive.layer,
       ZLayer.Debug.mermaid

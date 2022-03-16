@@ -4,7 +4,9 @@ import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
 import com.cmartin.utils.model.Domain.ResponseError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import sttp.client3.httpclient.zio.HttpClientZioBackend
 import zio.Runtime.{default => runtime}
+import zio.ZLayer
 
 class ZioHttpManagerITSpec
     extends AnyFlatSpec with Matchers {
@@ -13,6 +15,12 @@ class ZioHttpManagerITSpec
 
   behavior of "ZioHttpManager"
 
+  val applicationLayer =
+    ZLayer.make[HttpManager](
+      ZLayer.succeed(HttpClientZioBackend().toManaged),
+      ZioHttpManager.layer
+    )
+
   it should "retrieve a single dependency change" in {
     // given
     val deps = Seq(zioDep)
@@ -20,7 +28,7 @@ class ZioHttpManagerITSpec
     // when
     val program            = HttpManager(_.checkDependencies(deps))
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(ZioHttpManager.layer)
+      program.provide(applicationLayer)
     )
 
     info(s"errors: $errors")
@@ -43,7 +51,7 @@ class ZioHttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(ZioHttpManager.layer)
+      program.provide(applicationLayer)
     )
 
     info(s"errors: $errors")
@@ -54,7 +62,7 @@ class ZioHttpManagerITSpec
     depPairs should have size 2
   }
 
-  it should "WIP retrieve a list of failures" in {
+  it should "retrieve a list of failures" in {
     // given
     val dep     = zioDep.copy(artifact = "missing-zio")
     val deps    = Seq(dep)
@@ -62,7 +70,7 @@ class ZioHttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val (errors, depPairs) = runtime.unsafeRun(
-      program.provide(ZioHttpManager.layer)
+      program.provide(applicationLayer)
     )
 
     info(s"errors: $errors")
@@ -74,4 +82,5 @@ class ZioHttpManagerITSpec
     val failure = errors.head
     failure shouldBe ResponseError(s"no remote dependency found for: $dep")
   }
+
 }

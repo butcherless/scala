@@ -27,9 +27,11 @@ object Dependencies {
   lazy val refined = "eu.timepit" %% "refined"     % Versions.refined
   lazy val scalaz  = "org.scalaz" %% "scalaz-core" % Versions.scalaz
 
-  lazy val sttpCore    = "com.softwaremill.sttp.client3" %% "core"                          % Versions.sttp
-  lazy val sttpZio     = "com.softwaremill.sttp.client3" %% "async-http-client-backend-zio" % Versions.sttp
-  lazy val sttpZioJson = "com.softwaremill.sttp.client3" %% "zio-json"                      % Versions.sttp
+  lazy val sttpCore       = "com.softwaremill.sttp.client3" %% "core"                          % Versions.sttp
+  lazy val sttpZio        = "com.softwaremill.sttp.client3" %% "httpclient-backend-zio"        % Versions.sttp
+  lazy val sttpArmeriaZio = "com.softwaremill.sttp.client3" %% "armeria-backend-zio"           % Versions.sttp
+  lazy val sttpAsyncZio   = "com.softwaremill.sttp.client3" %% "async-http-client-backend-zio" % Versions.sttp
+  lazy val sttpZioJson    = "com.softwaremill.sttp.client3" %% "zio-json"                      % Versions.sttp
 
   // Z I O  a n d  E C O S Y S T E M
   lazy val zio               = "dev.zio" %% "zio"                 % Versions.zio
