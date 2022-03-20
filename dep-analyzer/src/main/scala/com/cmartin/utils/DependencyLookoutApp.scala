@@ -31,26 +31,28 @@ object DependencyLookoutApp
   override def run = {
 
     // TODO resolve error channel type, actual Object
-    def logicProgram(filename: String) = (
-      for {
-        _              <- printBanner("Dep Lookout")
-        config         <- getConfig[ConfigHelper.AppConfig]
-        startTime      <- getMillis()
-        lines          <- IOManager(_.getLinesFromFile(config.filename))
-        (_, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
-        _              <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
-                            genericLog("valid rate of dependencies")
-        finalDeps      <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
-        results        <- HttpManager(_.checkDependencies(finalDeps))
-        // TODO process errors
-        _              <- IOManager(_.logPairCollection(results._2)) @@ iterableLog("updated dependencies")
-        _              <- IOManager(_.logWrongDependencies(results._1))
-        _              <- calcElapsedMillis(startTime) @@ genericLog("processing time")
-      } yield ()
-    ).provide(
-      buildLayerFromFile(filename),
-      applicationLayer
-    )
+    def logicProgram(filename: String) =
+      (
+        for {
+          _              <- printBanner("Dep Lookout")
+          config         <- getConfig[ConfigHelper.AppConfig]
+          startTime      <- getMillis()
+          lines          <- IOManager(_.getLinesFromFile(config.filename))
+          (_, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
+          _              <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
+                              genericLog("valid rate of dependencies")
+          finalDeps      <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
+          results        <- HttpManager(_.checkDependencies(finalDeps))
+          // TODO process errors
+          _              <- IOManager(_.logPairCollection(results.gavList)) @@ iterableLog("updated dependencies")
+          _              <- IOManager(_.logWrongDependencies(results.errors))
+          _              <- calcElapsedMillis(startTime) @@ genericLog("processing time")
+        } yield ()
+      ).provide(
+        buildLayerFromFile(filename),
+        applicationLayer
+      )
+
     // main program
     for {
       args <- getArgs

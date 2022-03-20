@@ -1,5 +1,6 @@
 package com.cmartin.utils.http
 
+import com.cmartin.utils.http.HttpManager.GavResults
 import com.cmartin.utils.model.Domain.{DomainError, Gav, GavPair, ResponseError}
 import zio._
 
@@ -7,11 +8,13 @@ import scala.util.matching.Regex
 
 trait HttpManager {
 
-  def checkDependencies(gavList: Iterable[Gav]): IO[DomainError, (Iterable[DomainError], Iterable[GavPair])]
+  def checkDependencies(gavList: Iterable[Gav]): IO[DomainError, GavResults]
 
 }
 
 object HttpManager extends Accessible[HttpManager] {
+
+  case class GavResults(errors: Iterable[DomainError], gavList: Iterable[GavPair])
 
   // extract major version number
   val majorVersionRegex: Regex = raw"(^[0-9]+)..*".r

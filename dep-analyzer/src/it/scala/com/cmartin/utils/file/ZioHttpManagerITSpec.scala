@@ -26,18 +26,18 @@ class ZioHttpManagerITSpec
     val deps = Seq(zioDep)
 
     // when
-    val program            = HttpManager(_.checkDependencies(deps))
-    val (errors, depPairs) = runtime.unsafeRun(
+    val program = HttpManager(_.checkDependencies(deps))
+    val results = runtime.unsafeRun(
       program.provide(applicationLayer)
     )
 
-    info(s"errors: $errors")
-    info(s"(local,remote): $depPairs")
+    info(s"errors: ${results.errors}")
+    info(s"(local,remote): ${results.gavList}")
 
     // then
-    errors shouldBe empty
-    depPairs should have size 1
-    val pair = depPairs.head
+    results.errors shouldBe empty
+    results.gavList should have size 1
+    val pair = results.gavList.head
     pair.local.group shouldBe pair.remote.group
     pair.local.artifact shouldBe pair.remote.artifact
     // TODO assert: remote > local
@@ -50,16 +50,16 @@ class ZioHttpManagerITSpec
     // when
     val program = HttpManager(_.checkDependencies(deps))
 
-    val (errors, depPairs) = runtime.unsafeRun(
+    val results = runtime.unsafeRun(
       program.provide(applicationLayer)
     )
 
-    info(s"errors: $errors")
-    info(s"(local,remote): $depPairs")
+    info(s"errors: ${results.errors}")
+    info(s"(local,remote): ${results.gavList}")
 
     // then
-    errors shouldBe empty
-    depPairs should have size 2
+    results.errors shouldBe empty
+    results.gavList should have size 2
   }
 
   it should "retrieve a list of failures" in {
@@ -69,17 +69,17 @@ class ZioHttpManagerITSpec
     // when
     val program = HttpManager(_.checkDependencies(deps))
 
-    val (errors, depPairs) = runtime.unsafeRun(
+    val results = runtime.unsafeRun(
       program.provide(applicationLayer)
     )
 
-    info(s"errors: $errors")
-    info(s"(local,remote): $depPairs")
+    info(s"errors: ${results.errors}")
+    info(s"(local,remote): ${results.gavList}")
 
     // then
-    depPairs shouldBe empty
-    errors should have size 1
-    val failure = errors.head
+    results.gavList shouldBe empty
+    results.errors should have size 1
+    val failure = results.errors.head
     failure shouldBe ResponseError(s"no remote dependency found for: $dep")
   }
 
