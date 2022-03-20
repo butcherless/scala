@@ -13,7 +13,7 @@ DEP_UP_VER="0.6.2"
 SCALAFMT_VER="3.4.3"
 SCALATEST_VER="3.2.11"
 SCOVERAGE_VER="2.0.0-M4"
-ZIO_VER="2.0.0-RC2"
+ZIO_VER="2.0.0-RC3"
 
 #
 # create filesystem
