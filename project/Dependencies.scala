@@ -24,8 +24,9 @@ object Dependencies {
   lazy val logback        = "ch.qos.logback"   % "logback-classic" % Versions.logback // exclude("org.slf4j", "slf4j-api")
   // lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion
 
-  lazy val refined = "eu.timepit" %% "refined"     % Versions.refined
-  lazy val scalaz  = "org.scalaz" %% "scalaz-core" % Versions.scalaz
+  lazy val figlet4s = "com.colofabrix.scala" %% "figlet4s-core" % Versions.figlet4s
+  lazy val refined  = "eu.timepit"           %% "refined"       % Versions.refined
+  lazy val scalaz   = "org.scalaz"           %% "scalaz-core"   % Versions.scalaz
 
   lazy val sttpCore       = "com.softwaremill.sttp.client3" %% "core"                          % Versions.sttp
   lazy val sttpZio        = "com.softwaremill.sttp.client3" %% "httpclient-backend-zio"        % Versions.sttp

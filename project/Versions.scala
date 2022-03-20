@@ -5,6 +5,7 @@ object Versions {
   val cats        = "2.7.0"
   val circe       = "0.14.1"
   val config      = "1.4.2"
+  val figlet4s    = "0.3.1"
   val json4s      = "4.0.4"
   val kafkaClient = "3.1.0"
   val logback     = "1.2.11"
@@ -14,7 +15,7 @@ object Versions {
   val scalatest   = "3.2.11"
   val slf4j       = "1.7.33"
   val sttp        = "3.5.1"
-  val zio         = "2.0.0-RC3"  // RC2 depends on zio-config next release
+  val zio         = "2.0.0-RC2"  // RC2 depends on zio-config next release
   val zioConfig   = "3.0.0-RC3"
   val zioLogging  = "2.0.0-RC5"
   val zioJson     = "0.3.0-RC3"

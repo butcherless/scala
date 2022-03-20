@@ -17,7 +17,7 @@ class ZioHttpManagerITSpec
 
   val applicationLayer =
     ZLayer.make[HttpManager](
-      ZLayer.succeed(HttpClientZioBackend().toManaged),
+      ZLayer.succeed(HttpClientZioBackend()),
       ZioHttpManager.layer
     )
 
