@@ -7,6 +7,7 @@ import com.cmartin.utils.http.HttpManager
 import com.cmartin.utils.logic.Common._
 import com.cmartin.utils.logic.LogicManager
 import zio._
+import zio.config._
 
 /** Helper application for keeping a project's dependencies up to date. Using
   * ZIO effect ZIO[R, E, A]
@@ -33,7 +34,7 @@ object DependencyLookoutApp
     def logicProgram(filename: String) = (
       for {
         _              <- printBanner("Dep Lookout")
-        config         <- ConfigHelper.readFromFile(filename)
+        config         <- getConfig[ConfigHelper.AppConfig]
         startTime      <- getMillis()
         lines          <- FileManager(_.getLinesFromFile(config.filename))
         (_, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
@@ -46,8 +47,10 @@ object DependencyLookoutApp
         _              <- FileManager(_.logWrongDependencies(results._1))
         _              <- calcElapsedMillis(startTime) @@ genericLog("processing time")
       } yield ()
-    ).provide(applicationLayer)
-
+    ).provide(
+      buildLayerFromFile(filename),
+      applicationLayer
+    )
     // main program
     for {
       args <- getArgs

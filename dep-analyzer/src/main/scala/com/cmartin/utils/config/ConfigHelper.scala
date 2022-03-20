@@ -14,7 +14,7 @@ import zio.config._
 import zio.config.typesafe._
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
-import zio.{Clock, IO, Layer, LogLevel, RuntimeConfigAspect, Task, TaskManaged, UIO, ULayer, ZIOAspect, ZLayer}
+import zio.{Clock, IO, Layer, LogLevel, RuntimeConfigAspect, Task, UIO, ULayer, ZIOAspect, ZLayer}
 
 object ConfigHelper {
 
@@ -65,28 +65,25 @@ object ConfigHelper {
     )
 
   // loggers
-  def genericLog[T](message: String) = ZIOAspect.loggedWith[T](a => s"$message: $a")
+  def genericLog[T](message: String) =
+    ZIOAspect.loggedWith[T](a => s"$message: $a")
 
-  def iterableLog(message: String) = ZIOAspect.loggedWith[Iterable[_]](i => s"$message:${i.mkString("\n", "\n", "")}")
+  def iterableLog(message: String) =
+    ZIOAspect.loggedWith[Iterable[_]](i => s"$message:${i.mkString("\n", "\n", "")}")
 
-  def iterablePairLog(message: String) = ZIOAspect.loggedWith[(Iterable[String], _)] { case (it, _) =>
-    it match {
-      case Nil => s"$message: empty sequence of elements"
-      case _   => s"$message:${it.mkString("\n", "\n", "")}"
+  def iterablePairLog(message: String) =
+    ZIOAspect.loggedWith[(Iterable[String], _)] { case (it, _) =>
+      it match {
+        case Nil => s"$message: empty sequence of elements"
+        case _   => s"$message:${it.mkString("\n", "\n", "")}"
+      }
     }
-  }
 
   /*
      H T T P   C L I E N T
    */
 
   type ClientBackend = SttpBackend[Task, ZioStreams with capabilities.WebSockets]
-
-  val sttpBackendLayer: ULayer[TaskManaged[ClientBackend]] =
-    ZLayer.succeed(HttpClientZioBackend().toManaged)
-
-  val l1: ZLayer[Any, Throwable, SttpBackend[Task, ZioStreams with capabilities.WebSockets]] =
-    ZLayer.fromManaged(HttpClientZioBackend().toManaged)
 
   val clientBackendLayer: ULayer[Task[ClientBackend]] =
     ZLayer.succeed(HttpClientZioBackend())
@@ -107,5 +104,4 @@ object ConfigHelper {
       ZioHttpManager.layer,
       ZLayer.Debug.mermaid
     )
-
 }

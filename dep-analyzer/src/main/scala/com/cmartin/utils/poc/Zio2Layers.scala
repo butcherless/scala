@@ -2,7 +2,12 @@ package com.cmartin.utils.poc
 
 import com.cmartin.utils.poc.Zio2Layers.Infrastructure.{Config, ConfigLive, Database, DatabaseLive}
 import com.cmartin.utils.poc.Zio2Layers.Model.{Aircraft, AuditCounters}
-import com.cmartin.utils.poc.Zio2Layers.Repositories.{AircraftRepository, AircraftRepositoryLive, AirlineRepository, AirlineRepositoryLive}
+import com.cmartin.utils.poc.Zio2Layers.Repositories.{
+  AircraftRepository,
+  AircraftRepositoryLive,
+  AirlineRepository,
+  AirlineRepositoryLive
+}
 import com.cmartin.utils.poc.Zio2Layers.Services.{AuditService, AuditServiceLive}
 import zio.{IO, ZIO, ZIOAppDefault, _}
 
