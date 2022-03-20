@@ -7,6 +7,7 @@ import com.cmartin.utils.http.HttpManager
 import com.cmartin.utils.logic.Common._
 import com.cmartin.utils.logic.LogicManager
 import zio._
+import zio.config._
 
 /** Helper application for keeping a project's dependencies up to date. Using
   * ZIO effect ZIO[R, E, A]
@@ -30,23 +31,27 @@ object DependencyLookoutApp
   override def run = {
 
     // TODO resolve error channel type, actual Object
-    def logicProgram(filename: String) = (
-      for {
-        _              <- printBanner("Dep Lookout")
-        config         <- ConfigHelper.readFromFile(filename)
-        startTime      <- getMillis()
-        lines          <- FileManager(_.getLinesFromFile(config.filename))
-        (_, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
-        _              <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
-                            genericLog("valid rate of dependencies")
-        finalDeps      <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
-        results        <- HttpManager(_.checkDependencies(finalDeps))
-        // TODO process errors
-        _              <- FileManager(_.logPairCollection(results._2)) @@ iterableLog("updated dependencies")
-        _              <- FileManager(_.logWrongDependencies(results._1))
-        _              <- calcElapsedMillis(startTime) @@ genericLog("processing time")
-      } yield ()
-    ).provide(applicationLayer)
+    def logicProgram(filename: String) =
+      (
+        for {
+          _              <- printBanner("Dep Lookout")
+          config         <- getConfig[ConfigHelper.AppConfig]
+          startTime      <- getMillis()
+          lines          <- IOManager(_.getLinesFromFile(config.filename))
+          (_, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
+          _              <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
+                              genericLog("valid rate of dependencies")
+          finalDeps      <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
+          results        <- HttpManager(_.checkDependencies(finalDeps))
+          // TODO process errors
+          _              <- IOManager(_.logPairCollection(results.gavList)) @@ iterableLog("updated dependencies")
+          _              <- IOManager(_.logWrongDependencies(results.errors))
+          _              <- calcElapsedMillis(startTime) @@ genericLog("processing time")
+        } yield ()
+      ).provide(
+        buildLayerFromFile(filename),
+        applicationLayer
+      )
 
     // main program
     for {

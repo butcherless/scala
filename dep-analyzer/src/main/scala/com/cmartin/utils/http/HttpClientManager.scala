@@ -1,6 +1,6 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.http.HttpManager.retrieveFirstMajor
+import com.cmartin.utils.http.HttpManager.{GavResults, retrieveFirstMajor}
 import com.cmartin.utils.model.Domain._
 import sttp.model.StatusCode
 import zio._
@@ -15,9 +15,10 @@ case class HttpClientManager()
 
   import HttpClientManager._
 
-  override def checkDependencies(deps: Iterable[Gav]): UIO[(Iterable[DomainError], Iterable[GavPair])] =
+  override def checkDependencies(deps: Iterable[Gav]): IO[DomainError, GavResults] =
     buildManagedClient() { implicit client =>
       ZIO.partitionPar(deps)(getDependency(_)).withParallelism(3)
+        .map { case (errors, gavList) => GavResults(errors, gavList) }
     }
 
   def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
