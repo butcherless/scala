@@ -36,15 +36,15 @@ object DependencyLookoutApp
         _              <- printBanner("Dep Lookout")
         config         <- getConfig[ConfigHelper.AppConfig]
         startTime      <- getMillis()
-        lines          <- FileManager(_.getLinesFromFile(config.filename))
+        lines          <- IOManager(_.getLinesFromFile(config.filename))
         (_, validDeps) <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
         _              <- LogicManager(_.calculateValidRate(lines.size, validDeps.size)) @@
                             genericLog("valid rate of dependencies")
         finalDeps      <- LogicManager(_.excludeFromList(validDeps, config.exclusions))
         results        <- HttpManager(_.checkDependencies(finalDeps))
         // TODO process errors
-        _              <- FileManager(_.logPairCollection(results._2)) @@ iterableLog("updated dependencies")
-        _              <- FileManager(_.logWrongDependencies(results._1))
+        _              <- IOManager(_.logPairCollection(results._2)) @@ iterableLog("updated dependencies")
+        _              <- IOManager(_.logWrongDependencies(results._1))
         _              <- calcElapsedMillis(startTime) @@ genericLog("processing time")
       } yield ()
     ).provide(

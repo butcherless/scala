@@ -1,6 +1,6 @@
 package com.cmartin.zio
 
-import com.cmartin.utils.file.{FileManager, FileManagerLive}
+import com.cmartin.utils.file.{IOManager, FileManager}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
@@ -15,11 +15,11 @@ class FileManagerSpec
 
   it should "provide the env" in {
     // GIVEN
-    val program: ZIO[FileManager, Throwable, Unit] = for {
+    val program: ZIO[IOManager, Throwable, Unit] = for {
       _ <- ZIO.logInfo(">>> message <<<")
     } yield ()
 
-    val io = program.provide(FileManagerLive.layer)
+    val io = program.provide(FileManager.layer)
 
     // WHEN
     val r = runtime.unsafeRun(io)

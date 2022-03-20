@@ -1,6 +1,6 @@
 package com.cmartin.utils.config
 
-import com.cmartin.utils.file.{FileManager, FileManagerLive}
+import com.cmartin.utils.file.{IOManager, FileManager}
 import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import com.colofabrix.scala.figlet4s.options.HorizontalLayout
@@ -93,12 +93,12 @@ object ConfigHelper {
    */
 
   type ApplicationDependencies =
-    Clock with FileManager with LogicManager with Task[ClientBackend] with HttpManager
+    Clock with IOManager with LogicManager with Task[ClientBackend] with HttpManager
 
   val applicationLayer =
     ZLayer.make[ApplicationDependencies](
       Clock.live,
-      FileManagerLive.layer,
+      FileManager.layer,
       LogicManagerLive.layer,
       clientBackendLayer,
       ZioHttpManager.layer,
