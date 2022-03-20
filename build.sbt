@@ -55,9 +55,11 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
   .configs(IntegrationTest)
   .settings(
     Defaults.itSettings,
+    parallelExecution          := false,
     commonSettings,
     name                       := "depAnalyzer",
     libraryDependencies ++= Seq(
+      figlet4s,
       akkaStream,
       json4s,
       logback,

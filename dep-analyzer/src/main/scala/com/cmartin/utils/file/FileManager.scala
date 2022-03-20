@@ -12,5 +12,4 @@ trait FileManager {
 
 }
 
-object FileManager
-    extends Accessible[FileManager]
+object FileManager extends Accessible[FileManager]

@@ -14,5 +14,4 @@ trait LogicManager {
 
 }
 
-object LogicManager
-    extends Accessible[LogicManager] {}
+object LogicManager extends Accessible[LogicManager] {}

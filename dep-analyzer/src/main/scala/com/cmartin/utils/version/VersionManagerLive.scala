@@ -5,7 +5,7 @@ import zio._
 
 /** Service implementation and collaborators
   */
-case class VersionManagerLive(versionManager: VersionManager)
+case class VersionManagerLive()
     extends VersionManager {
 
   override def compare(local: Domain.Gav, remote: Domain.Gav): UIO[Domain.ComparatorResult] = {
@@ -19,7 +19,7 @@ case class VersionManagerLive(versionManager: VersionManager)
 
 }
 
-object VersionManagerLive {
-  val layer =
-    (VersionManagerLive(_)).toLayer
+object VersionManagerLive extends (() => VersionManager) {
+  val layer: ULayer[VersionManager] =
+    VersionManagerLive.toLayer
 }
