@@ -3,7 +3,7 @@
 ## Run the standalone application
 
 ```bash
-sbt "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
+sbt "depAnalyzer/assembly" "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
 cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
 java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
 ```
