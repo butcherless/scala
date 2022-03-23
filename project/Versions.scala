@@ -16,7 +16,7 @@ object Versions {
   val slf4j       = "1.7.33"
   val sttp        = "3.5.1"
   val zio         = "2.0.0-RC2"  // RC2 depends on zio-config next release
-  val zioConfig   = "3.0.0-RC3"
+  val zioConfig   = "3.0.0-RC6"
   val zioLogging  = "2.0.0-RC5"
   val zioJson     = "0.3.0-RC3"
   val zioKafka    = "0.12.0"
