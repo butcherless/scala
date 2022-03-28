@@ -195,7 +195,6 @@ object Library {
 echo 'package '${SOURCE_PKG}'
 
 import com.cmartin.learn.Library._
-import zio.Console.printLine
 import zio._
 
 object SimpleApp
