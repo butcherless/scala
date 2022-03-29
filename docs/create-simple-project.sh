@@ -4,7 +4,7 @@ PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's/\./\//g'`
 SCALA_VER="2.13.8"
-SBT_VER="1.6.2"
+SBT_VER="1.7.0-M1"
 SBT_ASSEMBLY_VER="1.2.0"
 SBT_BLOOP_VER="1.4.13"
 SBT_SCALAFMT_VER="3.1.2"
@@ -195,7 +195,6 @@ object Library {
 echo 'package '${SOURCE_PKG}'
 
 import com.cmartin.learn.Library._
-import zio.Console.printLine
 import zio._
 
 object SimpleApp
