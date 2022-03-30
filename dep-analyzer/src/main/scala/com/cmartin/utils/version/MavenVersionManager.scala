@@ -1,14 +1,14 @@
 package com.cmartin.utils.version
 
-import com.cmartin.utils.Domain
+import com.cmartin.utils.model.Domain
 import zio._
 
 /** Service implementation and collaborators
   */
-case class VersionManagerLive(versionManager: VersionManager)
+case class MavenVersionManager()
     extends VersionManager {
 
-  override def compare(local: Domain.Gav, remote: Domain.Gav): UIO[Domain.ComparationResult] = {
+  override def compare(local: Domain.Gav, remote: Domain.Gav): UIO[Domain.ComparatorResult] = {
     // TODO naive implementation
     local.version.compareTo(remote.version) match {
       case 0  => UIO.succeed(Domain.Same)
@@ -19,7 +19,7 @@ case class VersionManagerLive(versionManager: VersionManager)
 
 }
 
-object VersionManagerLive {
-  val layer =
-    (VersionManagerLive(_)).toLayer
+object MavenVersionManager extends (() => VersionManager) {
+  val layer: ULayer[VersionManager] =
+    MavenVersionManager.toLayer
 }

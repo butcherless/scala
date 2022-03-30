@@ -1,16 +1,45 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain.{DomainError, GavPair}
-import zio.{Accessible, IO, Task}
+import com.cmartin.learn.common.Utils._
+import com.cmartin.utils.model.Domain
+import com.cmartin.utils.model.Domain._
+import zio._
 
-trait FileManager {
-  def getLinesFromFile(filename: String): IO[DomainError, List[String]]
+import scala.io.{BufferedSource, Source}
 
-  def logWrongDependencies(dependencies: Iterable[DomainError]): Task[Unit]
+case class FileManager()
+    extends IOManager {
 
-  def logPairCollection(collection: Iterable[GavPair]): Task[Unit]
+  override def getLinesFromFile(filename: String): IO[DomainError, List[String]] =
+    managedFile(filename).use { file =>
+      ZIO.logInfo(s"reading from file: $filename") *>
+        ZIO.attempt(file.getLines().toList)
+    }.orElseFail(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
+
+  override def logWrongDependencies(errors: Iterable[DomainError]): Task[Unit] =
+    ZIO.foreachDiscard(errors)(e => ZIO.logInfo(s"invalid dependency: $e"))
+
+  override def logPairCollection(collection: Iterable[GavPair]): UIO[Iterable[String]] = {
+    Task.succeed(
+      collection
+        .filter(_.hasNewVersion)
+        .map(formatChanges)
+    )
+  }
+
+  /*
+    H E L P E R S
+   */
+
+  def managedFile(filename: String): TaskManaged[BufferedSource] =
+    ZManaged.fromAutoCloseable(Task.attempt(Source.fromFile(filename)))
+
+  def formatChanges(pair: Domain.GavPair): String =
+    s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"
 
 }
 
-object FileManager
-    extends Accessible[FileManager]
+object FileManager extends (() => IOManager) {
+  val layer: ULayer[IOManager] =
+    FileManager.toLayer
+}
