@@ -1,7 +1,8 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.Domain.FileIOError
-import com.cmartin.utils.{DependencyLookoutApp, Domain}
+import com.cmartin.utils.config.ConfigHelper
+import com.cmartin.utils.model.Domain
+import com.cmartin.utils.model.Domain.FileIOError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.{Runtime, ZEnv}
@@ -15,12 +16,12 @@ class FileManagerITSpec
 
   val runtime: Runtime[ZEnv] =
     Runtime.default
-      .mapRuntimeConfig(DependencyLookoutApp.logAspect)
+      .mapRuntimeConfig(ConfigHelper.logAspect)
 
   it should "retrieve a sequence of text lines from a file" in {
     val filename = "dep-analyzer/src/it/resources/dependency-list.txt"
-    val program  = FileManager(_.getLinesFromFile(filename))
-      .provide(FileManagerLive.layer)
+    val program  = IOManager(_.getLinesFromFile(filename))
+      .provide(FileManager.layer)
 
     val lines = runtime.unsafeRun(program)
 
@@ -30,8 +31,8 @@ class FileManagerITSpec
 
   it should "fail for missing file" in {
     val filename = "missing-file.txt"
-    val program  = FileManager(_.getLinesFromFile(filename))
-      .provide(FileManagerLive.layer)
+    val program  = IOManager(_.getLinesFromFile(filename))
+      .provide(FileManager.layer)
 
     val lines = runtime.unsafeRun(program.either)
 

@@ -1,4 +1,4 @@
-package com.cmartin.utils
+package com.cmartin.utils.model
 
 import zio.json.{DeriveJsonDecoder, JsonDecoder}
 
@@ -16,22 +16,23 @@ object Domain {
 
   case class FileIOError(message: String) extends DomainError
 
-  case class NetworkError(message: String)  extends DomainError
-  case class ResponseError(message: String) extends DomainError
-  case class DecodeError(message: String)   extends DomainError
+  case class NetworkError(message: String)   extends DomainError
+  case class WebClientError(message: String) extends DomainError
+  case class ResponseError(message: String)  extends DomainError
+  case class DecodeError(message: String)    extends DomainError
 
   case class UnknownError(m: String) extends DomainError
 
   /*
    Version comparator
    */
-  sealed trait ComparationResult
+  sealed trait ComparatorResult
 
-  case object Older extends ComparationResult
+  case object Older extends ComparatorResult
 
-  case object Same extends ComparationResult
+  case object Same extends ComparatorResult
 
-  case object Newer extends ComparationResult
+  case object Newer extends ComparatorResult
 
   case class GavPair(local: Gav, remote: Gav) {
     def hasNewVersion: Boolean =
@@ -58,20 +59,8 @@ object Domain {
   object Gav {
     implicit val decoder: JsonDecoder[Gav] = DeriveJsonDecoder.gen[Gav]
 
-    implicit val ord: Ordering[Gav] = new Ordering[Gav] {
-
-      /** Comparator for dependencies classes
-        *
-        * @param d1
-        *   one dependency
-        * @param d2
-        *   another one dependency
-        * @return
-        *   0 if equals, -1 if less than, +1 if greater than
-        */
-      def compare(d1: Gav, d2: Gav): Int = {
-        d1.version.compareTo(d2.version)
-      }
+    implicit val ord: Ordering[Gav] = (d1: Gav, d2: Gav) => {
+      d1.version.compareTo(d2.version)
     }
 
     def fromRegexMatch(regexMatch: Regex.Match): Gav = {
@@ -85,7 +74,7 @@ object Domain {
 
   case class MavenSearchResult(
       responseHeader: ResponseHeader,
-      response: Response
+      response: MavenResponse
   )
 
   object MavenSearchResult {
@@ -100,7 +89,6 @@ object Domain {
 
   object ResponseHeader {
     implicit val decoder: JsonDecoder[ResponseHeader] = DeriveJsonDecoder.gen[ResponseHeader]
-
   }
 
   case class Params(
@@ -115,18 +103,16 @@ object Domain {
 
   object Params {
     implicit val decoder: JsonDecoder[Params] = DeriveJsonDecoder.gen[Params]
-
   }
 
-  case class Response(
+  case class MavenResponse(
       numFound: Int,
       start: Int,
       docs: Seq[Artifact]
   )
 
-  object Response {
-    implicit val decoder: JsonDecoder[Response] = DeriveJsonDecoder.gen[Response]
-
+  object MavenResponse {
+    implicit val decoder: JsonDecoder[MavenResponse] = DeriveJsonDecoder.gen[MavenResponse]
   }
 
   case class Artifact(

@@ -1,12 +1,26 @@
 # Dependency Analyzer
 
+## Run the standalone application
+
+```bash
+sbt "depAnalyzer/assembly" "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
+cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
+java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
+```
+
+## Example Maven query
+
+http get: http
+-v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
+
 ## TODOes
 
+- version
+  comparator: https://github.com/apache/maven/blob/master/maven-artifact/src/main/java/org/apache/maven/artifact/versioning/ComparableVersion.java
 - manage `java.io.FileNotFoundException`
 - manage `429 Too Many Requests` HTTP status code
-- close resources with _ZIO_ utility to avoid resource leaks, `bufferedSource.close`
 
-## Estudio
+## Modules
 
 The App has the following modules:
 
@@ -15,13 +29,7 @@ The App has the following modules:
 - HttpManager: HTTP client
 - LoggingManager: logging app operations
 
-ZManaged example:
-
-```scala
- val depsManaged: ZManaged[HttpManager, Nothing, Unit] = ZManaged.make(getEnvironment())(_ => shutdown())
-```
-
-Obtener dependencias mediante comandos bash
+Get dependencies using bash commands
 
 ```bash
  gw dep | \
@@ -35,12 +43,6 @@ Regex
 
 ([0-9a-z.]+):([0-9a-z-]+):([0-9.]+)?.*
 
-```bash
-sbt "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
-cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
-java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
-```
- 
 http://queirozf.com/entries/scala-regular-expressions-examples-reference
 
 https://logback.qos.ch/manual/configuration.html
@@ -78,19 +80,10 @@ Lista de tareas previas al caso de uso:
 - Se consultan las versiones de la colección de dependencias final.
 - Se obtiene una colección de resultados que contiene la dependencia _local_ y la dependencia _remota_.
 
-## Create a ZIO Module (Deprecated use Pattern 2 with ZIO-2 Layers)
-
-https://zio.dev/docs/howto/howto_use_module_pattern
-
-- create `VersionManager` object.
-- create `VersionManager.Service[R]` trait.
-- create `VersionManager` trait.
-- create `VersionManagerLive` trait which extends `VersionManager`. Add collaborators if needed.
-- create `VersionManagerLive` object which extends `VersionManagerLive` trait
-- create an instance of `VersionManager.Service[Any]` trait and implement its definition.
-- create `VersionManagerHelper` object which extends `VersionManager.Service[VersionManager]`.
-
 ## Links
 
 - ZIO Error Management: https://www.youtube.com/watch?v=mGxcaQs3JWI
 - Functional Concurrency in Scala with ZIO: https://www.youtube.com/watch?v=m5nas4Hndqo&t=
+- Application Modules / ZLayer / Dependency injection
+    - https://twitter.com/jdegoes/status/1462758239418867714
+    - https://twitter.com/jdegoes/status/1463261876150849547

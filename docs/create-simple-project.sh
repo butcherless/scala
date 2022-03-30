@@ -1,10 +1,10 @@
 #!/bin/bash
 
 PROJECT_NAME="project-template"
-PKG_DIR=com/cmartin/learn
 SOURCE_PKG=com.cmartin.learn
+PKG_DIR=`echo ${SOURCE_PKG} | sed 's/\./\//g'`
 SCALA_VER="2.13.8"
-SBT_VER="1.6.2"
+SBT_VER="1.7.0-M1"
 SBT_ASSEMBLY_VER="1.2.0"
 SBT_BLOOP_VER="1.4.13"
 SBT_SCALAFMT_VER="3.1.2"
@@ -13,7 +13,7 @@ DEP_UP_VER="0.6.2"
 SCALAFMT_VER="3.4.3"
 SCALATEST_VER="3.2.11"
 SCOVERAGE_VER="2.0.0-M4"
-ZIO_VER="2.0.0-RC2"
+ZIO_VER="2.0.0-RC3"
 
 #
 # create filesystem
@@ -194,18 +194,18 @@ object Library {
 #
 echo 'package '${SOURCE_PKG}'
 
-import '${SOURCE_PKG}'.Library._
-import zio.Console.printLine
-import zio.ZIOAppDefault
+import com.cmartin.learn.Library._
+import zio._
 
 object SimpleApp
-  extends ZIOAppDefault {
+    extends ZIOAppDefault {
+
+  val logAspect = ZIOAspect.loggedWith[Int](r => s"sum result: $r")
 
   def run = {
     for {
-      _      <- printLine(echo(TEXT))
-      result <- sum(2, 3)
-      _      <- printLine(s"sum result: $result")
+      _      <- ZIO.log(echo(TEXT))
+      result <- sum(2, 3) @@ logAspect
     } yield ()
   }
 }' > src/main/scala/${PKG_DIR}/SimpleApp.scala

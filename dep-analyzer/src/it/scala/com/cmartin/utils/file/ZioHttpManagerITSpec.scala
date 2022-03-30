@@ -1,26 +1,34 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.http.{HttpClientManager, HttpManager}
-import com.cmartin.utils.model.Domain.{Gav, ResponseError}
+import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
+import com.cmartin.utils.model.Domain.ResponseError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import sttp.client3.httpclient.zio.HttpClientZioBackend
 import zio.Runtime.{default => runtime}
+import zio.ZLayer
 
-class HttpManagerITSpec
+class ZioHttpManagerITSpec
     extends AnyFlatSpec with Matchers {
 
   import HttpManagerITSpec._
 
-  behavior of "HttpManager"
+  behavior of "ZioHttpManager"
+
+  val applicationLayer =
+    ZLayer.make[HttpManager](
+      ZLayer.succeed(HttpClientZioBackend()),
+      ZioHttpManager.layer
+    )
 
   it should "retrieve a single dependency change" in {
     // given
-    val deps    = Seq(zioDep)
+    val deps = Seq(zioDep)
+
     // when
     val program = HttpManager(_.checkDependencies(deps))
-
     val results = runtime.unsafeRun(
-      program.provide(HttpClientManager.layer)
+      program.provide(applicationLayer)
     )
 
     info(s"errors: ${results.errors}")
@@ -32,6 +40,7 @@ class HttpManagerITSpec
     val pair = results.gavList.head
     pair.local.group shouldBe pair.remote.group
     pair.local.artifact shouldBe pair.remote.artifact
+    // TODO assert: remote > local
     takeMajorNumber(pair.local.version) shouldBe takeMajorNumber(pair.remote.version)
   }
 
@@ -42,7 +51,7 @@ class HttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val results = runtime.unsafeRun(
-      program.provide(HttpClientManager.layer)
+      program.provide(applicationLayer)
     )
 
     info(s"errors: ${results.errors}")
@@ -61,7 +70,7 @@ class HttpManagerITSpec
     val program = HttpManager(_.checkDependencies(deps))
 
     val results = runtime.unsafeRun(
-      program.provide(HttpClientManager.layer)
+      program.provide(applicationLayer)
     )
 
     info(s"errors: ${results.errors}")
@@ -74,18 +83,4 @@ class HttpManagerITSpec
     failure shouldBe ResponseError(s"no remote dependency found for: $dep")
   }
 
-}
-
-object HttpManagerITSpec {
-  val zioGroup    = "dev.zio"
-  val zioArtifact = "zio_2.13"
-  val zioVersion  = "1.0.0"
-  val zioDep      = Gav(zioGroup, zioArtifact, zioVersion)
-
-  val lbGroup    = "ch.qos.logback"
-  val lbArtifact = "logback-classic"
-  val lbVersion  = "1.2.5"
-  val logbackDep = Gav(lbGroup, lbArtifact, lbVersion)
-
-  def takeMajorNumber(version: String) = version.split('.').head
 }
