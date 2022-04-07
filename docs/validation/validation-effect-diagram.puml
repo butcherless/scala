@@ -1,0 +1,20 @@
+@startuml
+
+title Validation Effect Diagram
+footer Validation effect with error accumulation
+group
+start
+:InputData;
+:validate(InputData);
+if ( isValid ) then (failure  )
+  #tomato:** NonEmptyList[ValidationError] **;
+  note #lightyellow
+    error list
+  end note
+  stop
+else ( succeed)
+  #lightgreen:** OutputData **;
+  stop
+endif
+
+@enduml
