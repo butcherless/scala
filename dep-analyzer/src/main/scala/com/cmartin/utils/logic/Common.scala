@@ -1,6 +1,7 @@
 package com.cmartin.utils.logic
 
-import zio.{Clock, URIO}
+import zio.Clock
+import zio.URIO
 
 import java.util.concurrent.TimeUnit
 

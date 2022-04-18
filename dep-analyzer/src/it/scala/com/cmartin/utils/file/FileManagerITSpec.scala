@@ -5,7 +5,7 @@ import com.cmartin.utils.model.Domain
 import com.cmartin.utils.model.Domain.FileIOError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import zio.{Runtime, ZEnv}
+import zio.Runtime
 
 class FileManagerITSpec
     extends AnyFlatSpec
@@ -14,7 +14,7 @@ class FileManagerITSpec
   behavior of "FileManager"
   // val loggers = ZLogger.Set.default.map(println(_)).filterLogLevel(_ >= LogLevel.Debug)
 
-  val runtime: Runtime[ZEnv] =
+  val runtime =
     Runtime.default
       .mapRuntimeConfig(ConfigHelper.logAspect)
 

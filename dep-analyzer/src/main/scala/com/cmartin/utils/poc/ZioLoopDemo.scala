@@ -49,7 +49,7 @@ class ZioLoopDemo
    * business function
    */
   def body(info: MyInfo): UIO[MyResult]  =
-    UIO(MyResult(info.a.toDouble, intTypeText(info.a)))
+    UIO.succeed(MyResult(info.a.toDouble, intTypeText(info.a)))
   /*
    * helper functions
    */

@@ -6,6 +6,8 @@ import zio._
 
 import scala.util.matching.Regex
 
+import LogicManager.ParsedLines
+
 case class LogicManagerLive()
     extends LogicManager {
 
@@ -14,8 +16,10 @@ case class LogicManagerLive()
   val pattern: Regex =
     raw"(^[a-z][a-z0-9-_.]+):([a-zA-Z0-9-_.]+):([0-9A-Za-z-.]+)".r
 
-  override def parseLines(lines: List[String]): UIO[(Iterable[ParseError], Iterable[Gav])] =
-    ZIO.partitionPar(lines)(parseDepLine).withParallelism(4)
+  override def parseLines(lines: List[String]): UIO[ParsedLines] =
+    ZIO.partitionPar(lines)(parseDepLine)
+      .withParallelism(4)
+      .map(ParsedLines.tupled) // result tuple => constructor function
 
   override def filterValid(dependencies: List[Either[String, Domain.Gav]]): UIO[List[Domain.Gav]] =
     UIO.succeed(dependencies.collect { case Right(dep) => dep })
@@ -48,7 +52,7 @@ case class LogicManagerLive()
 
 }
 
-object LogicManagerLive extends (() => LogicManager) {
+object LogicManagerLive {
   val layer: ULayer[LogicManager] =
-    LogicManagerLive.toLayer
+    ZLayer.succeed(LogicManagerLive())
 }

@@ -36,9 +36,9 @@ object Zio2Layers
         IO.succeed(ApplicationConfig("INFO"))
     }
 
-    object ConfigLive extends (() => Config) {
+    object ConfigLive {
       val layer: ULayer[Config] =
-        ConfigLive.toLayer
+        ZLayer.succeed(ConfigLive())
     }
 
     trait Database {
@@ -50,9 +50,9 @@ object Zio2Layers
         IO.succeed(QueryResults()) // use Slick or Quill
     }
 
-    object DatabaseLive extends (() => Database) {
+    object DatabaseLive {
       val layer: ULayer[Database] =
-        DatabaseLive.toLayer
+        ZLayer.succeed(DatabaseLive())
     }
   }
 
@@ -71,7 +71,8 @@ object Zio2Layers
     }
 
     object AirlineRepositoryLive {
-      val layer: URLayer[Database, AirlineRepository] = (AirlineRepositoryLive(_)).toLayer
+      val layer: URLayer[Database, AirlineRepository] =
+        ZLayer.fromFunction(db => AirlineRepositoryLive(db))
     }
 
     trait AircraftRepository {
@@ -96,7 +97,8 @@ object Zio2Layers
     }
 
     object AircraftRepositoryLive {
-      val layer: URLayer[Database, AircraftRepository] = (AircraftRepositoryLive(_)).toLayer
+      val layer: URLayer[Database, AircraftRepository] =
+        ZLayer.fromFunction(db => AircraftRepositoryLive(db))
     }
 
   }
@@ -128,7 +130,13 @@ object Zio2Layers
       case class AuditServiceDeps(airlineRepository: AirlineRepository, aircraftRepository: AircraftRepository)
 
       val layer: URLayer[AirlineRepository with AircraftRepository, AuditService] =
-        (AuditServiceLive(_, _)).toLayer
+        ZLayer {
+          for {
+            airlineRepo  <- ZIO.service[AirlineRepository]
+            aircraftRepo <- ZIO.service[AircraftRepository]
+          } yield AuditServiceLive(airlineRepo, aircraftRepo)
+        }
+
     }
 
   }

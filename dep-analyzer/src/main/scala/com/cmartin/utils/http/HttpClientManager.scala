@@ -162,7 +162,7 @@ case class HttpClientManager()
 
 }
 
-object HttpClientManager extends (() => HttpManager) {
+object HttpClientManager {
 
   val scheme = "https"
   val path   = "search.maven.org/solrsearch/select"
@@ -177,6 +177,6 @@ object HttpClientManager extends (() => HttpManager) {
   )
 
   val layer: ULayer[HttpManager] =
-    HttpClientManager.toLayer
+    ZLayer.succeed(HttpClientManager())
 
 }

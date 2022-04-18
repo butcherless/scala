@@ -1,23 +1,25 @@
 package com.cmartin.utils.http
 
 import com.cmartin.utils.config.ConfigHelper.ClientBackend
-import com.cmartin.utils.http.HttpManager.{GavResults, retrieveFirstMajor}
+import com.cmartin.utils.http.HttpManager.GavResults
+import com.cmartin.utils.http.HttpManager.retrieveFirstMajor
 import com.cmartin.utils.model.Domain._
 import sttp.client3._
 import sttp.client3.ziojson._
 import zio._
 
-case class ZioHttpManager(client: Task[ClientBackend])
+case class ZioHttpManager(client: RIO[Scope, ClientBackend])
     extends HttpManager {
 
   import ZioHttpManager._
 
-  override def checkDependencies(gavList: Iterable[Gav]): IO[DomainError, GavResults] = {
-    client.toManaged.use { client =>
-      ZIO.partitionPar(gavList)(getDependency(_)(client)).withParallelism(4)
-        .map { case (errors, gavList) => GavResults(errors, gavList) }
-    }.mapError(e => WebClientError(e.getMessage))
-  }
+  override def checkDependencies(gavList: Iterable[Gav]): IO[DomainError, GavResults] =
+    ZIO.scoped {
+      client.flatMap { client =>
+        ZIO.partitionPar(gavList)(getDependency(_)(client)).withParallelism(4)
+          .map { case (errors, gavList) => GavResults(errors, gavList) }
+      }.mapError(e => WebClientError(e.getMessage))
+    }
 
   private def getDependency(gav: Gav)(client: ClientBackend): IO[DomainError, GavPair] = {
     for {
@@ -52,6 +54,6 @@ object ZioHttpManager {
   val searchPath = "search.maven.org/solrsearch/select"
   val resultSize = 10
 
-  val layer: URLayer[Task[ClientBackend], HttpManager] =
-    (ZioHttpManager(_)).toLayer
+  val layer =
+    ZLayer.fromFunction(client => ZioHttpManager(client))
 }

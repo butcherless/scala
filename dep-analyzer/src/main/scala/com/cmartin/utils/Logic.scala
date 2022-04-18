@@ -1,6 +1,7 @@
 package com.cmartin.utils
 
-import scala.collection.{SortedSet, mutable}
+import scala.collection.SortedSet
+import scala.collection.mutable
 import scala.util.matching.Regex
 
 object Logic {

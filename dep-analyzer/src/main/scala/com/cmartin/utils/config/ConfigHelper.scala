@@ -1,20 +1,36 @@
 package com.cmartin.utils.config
 
-import com.cmartin.utils.file.{IOManager, FileManager}
-import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
-import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
+import com.cmartin.utils.file.FileManager
+import com.cmartin.utils.file.IOManager
+import com.cmartin.utils.http.HttpManager
+import com.cmartin.utils.http.ZioHttpManager
+import com.cmartin.utils.logic.LogicManager
+import com.cmartin.utils.logic.LogicManagerLive
 import com.colofabrix.scala.figlet4s.options.HorizontalLayout
-import com.colofabrix.scala.figlet4s.unsafe.{FIGureOps, Figlet4s, OptionsBuilderOps}
+import com.colofabrix.scala.figlet4s.unsafe.FIGureOps
+import com.colofabrix.scala.figlet4s.unsafe.Figlet4s
+import com.colofabrix.scala.figlet4s.unsafe.OptionsBuilderOps
 import sttp.capabilities
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.SttpBackend
 import sttp.client3.httpclient.zio.HttpClientZioBackend
+import zio.Clock
+import zio.IO
+import zio.Layer
+import zio.LogLevel
+import zio.RIO
+import zio.RuntimeConfigAspect
+import zio.Scope
+import zio.Task
+import zio.UIO
+import zio.ULayer
+import zio.ZIOAspect
+import zio.ZLayer
 import zio.config.ConfigDescriptor._
 import zio.config._
 import zio.config.typesafe._
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
-import zio.{Clock, IO, Layer, LogLevel, RuntimeConfigAspect, Task, UIO, ULayer, ZIOAspect, ZLayer}
 
 object ConfigHelper {
 
@@ -72,10 +88,10 @@ object ConfigHelper {
     ZIOAspect.loggedWith[Iterable[_]](i => s"$message:${i.mkString("\n", "\n", "")}")
 
   def iterablePairLog(message: String) =
-    ZIOAspect.loggedWith[(Iterable[String], _)] { case (it, _) =>
-      it match {
+    ZIOAspect.loggedWith[LogicManager.ParsedLines] { parsedLines =>
+      parsedLines.failedList match {
         case Nil => s"$message: empty sequence of elements"
-        case _   => s"$message:${it.mkString("\n", "\n", "")}"
+        case it  => s"$message:${it.mkString("\n", "\n", "")}"
       }
     }
 
@@ -84,16 +100,14 @@ object ConfigHelper {
    */
 
   type ClientBackend = SttpBackend[Task, ZioStreams with capabilities.WebSockets]
-
-  val clientBackendLayer: ULayer[Task[ClientBackend]] =
-    ZLayer.succeed(HttpClientZioBackend())
+  val clientBackendLayer: ULayer[RIO[Scope, ClientBackend]] = ZLayer.succeed(HttpClientZioBackend.scoped())
 
   /*
      A P P L I C A T I O N   L A Y E R S
    */
 
   type ApplicationDependencies =
-    Clock with IOManager with LogicManager with Task[ClientBackend] with HttpManager
+    Clock with IOManager with LogicManager with RIO[Scope, ClientBackend] with HttpManager
 
   val applicationLayer =
     ZLayer.make[ApplicationDependencies](

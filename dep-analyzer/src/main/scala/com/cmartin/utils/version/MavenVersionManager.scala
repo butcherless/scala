@@ -19,7 +19,7 @@ case class MavenVersionManager()
 
 }
 
-object MavenVersionManager extends (() => VersionManager) {
+object MavenVersionManager {
   val layer: ULayer[VersionManager] =
-    MavenVersionManager.toLayer
+    ZLayer.succeed(MavenVersionManager())
 }

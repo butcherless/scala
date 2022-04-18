@@ -14,9 +14,9 @@ class LogicManagerITSpec
   it should "successfully retrieve the dependencies from a file" in {
     val filename = "dep-analyzer/src/it/resources/deps-1.txt"
     val program  = for {
-      lines                  <- IOManager(_.getLinesFromFile(filename))
-      (errors, dependencies) <- LogicManager(_.parseLines(lines))
-    } yield (errors, dependencies, lines.size)
+      lines       <- IOManager(_.getLinesFromFile(filename))
+      parsedLines <- LogicManager(_.parseLines(lines))
+    } yield (parsedLines.failedList, parsedLines.successList, lines.size)
 
     val (errors, dependencies, lineCount) = runtime.unsafeRun(
       program.provide(FileManager.layer ++ LogicManagerLive.layer)
@@ -29,9 +29,9 @@ class LogicManagerITSpec
   it should "retrieve two collections of dependencies with successes and failures" in {
     val filename = "dep-analyzer/src/it/resources/deps-2.txt"
     val program  = for {
-      lines                  <- IOManager(_.getLinesFromFile(filename))
-      (errors, dependencies) <- LogicManager(_.parseLines(lines))
-    } yield (errors.size, dependencies, lines.size)
+      lines       <- IOManager(_.getLinesFromFile(filename))
+      parsedLines <- LogicManager(_.parseLines(lines))
+    } yield (parsedLines.failedList.size, parsedLines.successList, lines.size)
 
     val (errors, dependencies, lineCount) = runtime.unsafeRun(
       program.provide(FileManager.layer ++ LogicManagerLive.layer)

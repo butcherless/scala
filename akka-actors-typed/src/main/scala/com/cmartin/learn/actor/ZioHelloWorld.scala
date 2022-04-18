@@ -4,14 +4,18 @@ import akka.actor.typed.ActorSystem
 import zio._
 
 object ZioHelloWorld extends ZIOAppDefault {
+
+  def acquire()                       = Task.attempt(ActorSystem(HelloWorldMain(), "hello"))
+  def release(system: ActorSystem[_]) = Task.attempt(system.terminate()).ignore
+
   def run =
-    Managed
-      .acquireReleaseWith(Task(ActorSystem(HelloWorldMain(), "hello")))(system => Task(system.terminate()).ignore)
-      .use(system =>
+    ZIO.acquireRelease(acquire())(release)
+      .flatMap(system =>
         for {
-          _ <- Task(system ! HelloWorldMain.Start("World"))
-          _ <- Task(system ! HelloWorldMain.Start("Akka"))
+          _ <- Task.attempt(system ! HelloWorldMain.Start("World"))
+          _ <- Task.attempt(system ! HelloWorldMain.Start("Akka"))
         } yield ExitCode.success
       )
-      .catchAll(e => UIO(ExitCode.failure))
+      .catchAll(e => UIO.succeed(ExitCode.failure))
+
 }
