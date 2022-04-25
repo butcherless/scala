@@ -12,7 +12,7 @@ object Versions {
   val pegdown     = "1.6.0"
   val refined     = "0.9.28"
   val scalaz      = "7.3.6"
-  val scalatest   = "3.2.11"
+  val scalatest   = "3.2.12"
   val slf4j       = "1.7.33"
   val sttp        = "3.5.2"      // sttp depends on zio 2.0.0-RC2"
   val zio         = "2.0.0-RC5"  // RC2 depends on zio-config next release
