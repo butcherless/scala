@@ -12,7 +12,7 @@ DEP_UP_VER="0.6.2"
 SCALAFMT_VER="3.5.2"
 SCALATEST_VER="3.2.12"
 SCOVERAGE_VER="2.0.0-M4"
-ZIO_VER="2.0.0-RC5"
+ZIO_VER="2.0.0-RC6"
 
 #
 # create filesystem
@@ -171,7 +171,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 #
 echo 'package '${SOURCE_PKG}'
 
-import zio.Task
+import zio._
 
 object Library {
 
@@ -181,8 +181,8 @@ object Library {
     message
   }
 
-  def sum(a: Int, b: Int): Task[Int] = {
-    Task.succeed(a + b)
+  def sum(a: Int, b: Int): UIO[Int] = {
+    ZIO.succeed(a + b)
   }
 
 }' > src/main/scala/${PKG_DIR}/Library.scala
