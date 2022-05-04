@@ -20,5 +20,5 @@ object Versions {
   val zioLogging  = "2.0.0-RC8"
   val zioJson     = "0.3.0-RC7"
   val zioKafka    = "0.12.0"
-  val zioPrelude  = "1.0.0-RC13" // RC10 depends on zio-rc2 next release
+  val zioPrelude  = "1.0.0-RC14" // RC10 depends on zio-rc2 next release
 }
