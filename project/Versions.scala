@@ -17,7 +17,7 @@ object Versions {
   val sttp        = "3.5.2"      // sttp depends on zio 2.0.0-RC2"
   val zio         = "2.0.0-RC5"  // RC2 depends on zio-config next release
   val zioConfig   = "3.0.0-RC8"
-  val zioLogging  = "2.0.0-RC8"
+  val zioLogging  = "2.0.0-RC9"
   val zioJson     = "0.3.0-RC7"
   val zioKafka    = "0.12.0"
   val zioPrelude  = "1.0.0-RC13" // RC10 depends on zio-rc2 next release
