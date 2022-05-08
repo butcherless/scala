@@ -31,7 +31,7 @@ object DependencyLookoutApp
      override def hook: RuntimeConfigAspect = rta
    */
 
-  override val bootstrap = ConfigHelper.logAspect
+  override val bootstrap = ConfigHelper.logLayer
 
   override def run = {
 

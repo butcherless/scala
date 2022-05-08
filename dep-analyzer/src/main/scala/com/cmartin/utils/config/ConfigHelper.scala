@@ -58,7 +58,7 @@ object ConfigHelper {
      L O G G I N G
    */
 
-  val logAspect =
+  val logLayer =
     SLF4J.slf4j(
       logLevel = LogLevel.Debug,
       format = LogFormat.line

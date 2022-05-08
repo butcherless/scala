@@ -17,7 +17,7 @@ class HttpManagerITSpec
     // given
     val deps    = Seq(zioDep)
     // when
-    val program = HttpManager(_.checkDependencies(deps))
+    val program = HttpManager.checkDependencies(deps)
 
     val results = runtime.unsafeRun(
       program.provide(HttpClientManager.layer)
@@ -39,7 +39,7 @@ class HttpManagerITSpec
     // given
     val deps    = Seq(zioDep, logbackDep)
     // when
-    val program = HttpManager(_.checkDependencies(deps))
+    val program = HttpManager.checkDependencies(deps)
 
     val results = runtime.unsafeRun(
       program.provide(HttpClientManager.layer)
@@ -58,7 +58,7 @@ class HttpManagerITSpec
     val dep     = zioDep.copy(artifact = "missing-zio")
     val deps    = Seq(dep)
     // when
-    val program = HttpManager(_.checkDependencies(deps))
+    val program = HttpManager.checkDependencies(deps)
 
     val results = runtime.unsafeRun(
       program.provide(HttpClientManager.layer)
