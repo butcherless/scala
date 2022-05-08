@@ -4,7 +4,7 @@ import com.cmartin.utils.config.ConfigHelper
 import com.cmartin.utils.config.ConfigHelper._
 import com.cmartin.utils.file._
 import com.cmartin.utils.http.HttpManager
-import com.cmartin.utils.logic.Common._
+import com.cmartin.utils.logic.Common.{calcElapsedMillis, getMillis}
 import com.cmartin.utils.logic.LogicManager
 import zio._
 
@@ -31,7 +31,7 @@ object DependencyLookoutApp
      override def hook: RuntimeConfigAspect = rta
    */
 
-  override def hook: RuntimeConfigAspect = ConfigHelper.logAspect
+  override val bootstrap = ConfigHelper.logAspect
 
   override def run = {
 
@@ -42,15 +42,15 @@ object DependencyLookoutApp
           _           <- printBanner("Dep Lookout")
           config      <- ConfigHelper.readFromFile(filename)
           startTime   <- getMillis()
-          lines       <- IOManager(_.getLinesFromFile(config.filename))
-          parsedLines <- LogicManager(_.parseLines(lines)) @@ iterablePairLog("parsingErrors")
-          _           <- LogicManager(_.calculateValidRate(lines.size, parsedLines.successList.size)) @@
+          lines       <- IOManager.getLinesFromFile(config.filename)
+          parsedLines <- LogicManager.parseLines(lines) @@ iterablePairLog("parsingErrors")
+          _           <- LogicManager.calculateValidRate(lines.size, parsedLines.successList.size) @@
                            genericLog("valid rate of dependencies")
-          finalDeps   <- LogicManager(_.excludeFromList(parsedLines.successList, config.exclusions))
-          results     <- HttpManager(_.checkDependencies(finalDeps))
+          finalDeps   <- LogicManager.excludeFromList(parsedLines.successList, config.exclusions)
+          results     <- HttpManager.checkDependencies(finalDeps)
           // TODO process errors
-          _           <- IOManager(_.logPairCollection(results.gavList)) @@ iterableLog("updated dependencies")
-          _           <- IOManager(_.logWrongDependencies(results.errors))
+          _           <- IOManager.logPairCollection(results.gavList) @@ iterableLog("updated dependencies")
+          _           <- IOManager.logWrongDependencies(results.errors)
           _           <- calcElapsedMillis(startTime) @@ genericLog("processing time")
         } yield ()
       ).provide(applicationLayer)
@@ -60,7 +60,7 @@ object DependencyLookoutApp
       args <- getArgs
       _    <- ZIO.when(args.isEmpty) {
                 Console.printLine(s"Please, supply hocon config file, for example: /tmp/application-config.hocon") *>
-                  IO.fail("empty command line arguments")
+                  ZIO.fail("empty command line arguments")
               }
       _    <- logicProgram(args.head)
     } yield ()

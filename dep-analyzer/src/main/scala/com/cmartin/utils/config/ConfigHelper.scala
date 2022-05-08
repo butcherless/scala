@@ -1,31 +1,15 @@
 package com.cmartin.utils.config
 
-import com.cmartin.utils.file.FileManager
-import com.cmartin.utils.file.IOManager
-import com.cmartin.utils.http.HttpManager
-import com.cmartin.utils.http.ZioHttpManager
-import com.cmartin.utils.logic.LogicManager
-import com.cmartin.utils.logic.LogicManagerLive
+import com.cmartin.utils.file.{FileManager, IOManager}
+import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
+import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import com.colofabrix.scala.figlet4s.options.HorizontalLayout
-import com.colofabrix.scala.figlet4s.unsafe.FIGureOps
-import com.colofabrix.scala.figlet4s.unsafe.Figlet4s
-import com.colofabrix.scala.figlet4s.unsafe.OptionsBuilderOps
+import com.colofabrix.scala.figlet4s.unsafe.{FIGureOps, Figlet4s, OptionsBuilderOps}
 import sttp.capabilities
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.SttpBackend
 import sttp.client3.httpclient.zio.HttpClientZioBackend
-import zio.Clock
-import zio.IO
-import zio.Layer
-import zio.LogLevel
-import zio.RIO
-import zio.RuntimeConfigAspect
-import zio.Scope
-import zio.Task
-import zio.UIO
-import zio.ULayer
-import zio.ZIOAspect
-import zio.ZLayer
+import zio.{Clock, IO, Layer, LogLevel, RIO, Scope, Task, UIO, ULayer, ZIO, ZIOAspect, ZLayer}
 import zio.config.ConfigDescriptor._
 import zio.config._
 import zio.config.typesafe._
@@ -37,7 +21,7 @@ object ConfigHelper {
   final case class AppConfig(filename: String, exclusions: List[String])
 
   def printBanner(message: String): UIO[Unit] =
-    UIO.succeed(
+    ZIO.succeed(
       Figlet4s.builder()
         .withInternalFont("doom")
         .withMaxWidth(120)
@@ -74,7 +58,7 @@ object ConfigHelper {
      L O G G I N G
    */
 
-  val logAspect: RuntimeConfigAspect =
+  val logAspect =
     SLF4J.slf4j(
       logLevel = LogLevel.Debug,
       format = LogFormat.line

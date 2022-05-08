@@ -1,6 +1,6 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.http.HttpManager.{GavResults, retrieveFirstMajor}
+import com.cmartin.utils.http.HttpManager.{retrieveFirstMajor, GavResults}
 import com.cmartin.utils.model.Domain._
 import sttp.model.StatusCode
 import zio._
@@ -42,22 +42,22 @@ case class HttpClientManager()
       )
     ).build()
 
-  def acquireClient(): UIO[HttpClient]            = UIO.succeed(HttpClient.newHttpClient())
+  def acquireClient(): UIO[HttpClient]            = ZIO.succeed(HttpClient.newHttpClient())
   lazy val releaseClient: HttpClient => UIO[Unit] = (_: HttpClient) => ZIO.unit
 
   def buildManagedClient(): ZIO.Release[Any, Nothing, HttpClient] =
     ZIO.acquireReleaseWith(acquireClient())(releaseClient)
 
   def checkStatusCode(code: Int): IO[DomainError, Option[Nothing]] =
-    ZIO.when(!StatusCode(code).isSuccess)(IO.fail(ResponseError(s"status code: $code")))
+    ZIO.when(!StatusCode(code).isSuccess)(ZIO.fail(ResponseError(s"status code: $code")))
 
   def extractResults(body: String): IO[DomainError, Seq[Gav]] = {
     body
       .fromJson[MavenSearchResult] // response body to model
       .fold[IO[DomainError, Seq[Gav]]](
-        e => IO.fail(DecodeError(s"Unable to decode response: $e")),
+        e => ZIO.fail(DecodeError(s"Unable to decode response: $e")),
         results =>
-          IO.succeed(
+          ZIO.succeed(
             results.response.docs.map { artifact =>
               Gav(group = artifact.g, artifact = artifact.a, version = artifact.v)
             }
@@ -86,7 +86,7 @@ case class HttpClientManager()
   override def shutdown(): UIO[Unit] = {
     for {
       _ <- ZIO.logInfo("shutting down http resources")
-      _ <- UIO.succeed(
+      _ <- ZIO.succeed(
         backend
           .close()
           .catchAll(_ => UIO.unit)

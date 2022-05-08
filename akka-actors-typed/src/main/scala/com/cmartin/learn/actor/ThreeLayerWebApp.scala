@@ -5,7 +5,7 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.scaladsl.adapter._
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
-import akka.{Done, actor}
+import akka.{actor, Done}
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}

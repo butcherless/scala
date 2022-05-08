@@ -41,7 +41,7 @@ case class ZioHttpManager(client: RIO[Scope, ClientBackend])
   }
 
   def extractDependencies(results: MavenSearchResult): UIO[Seq[Gav]] =
-    UIO.succeed(results.response.docs.map(viewToModel))
+    ZIO.succeed(results.response.docs.map(viewToModel))
 
 }
 

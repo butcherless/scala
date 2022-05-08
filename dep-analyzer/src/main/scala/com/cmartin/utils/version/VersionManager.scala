@@ -2,11 +2,15 @@ package com.cmartin.utils.version
 
 import com.cmartin.utils.model.Domain.ComparatorResult
 import com.cmartin.utils.model.Domain.Gav
-import zio.Accessible
-import zio.UIO
+import zio.{UIO, URIO, ZIO}
 
 trait VersionManager {
   def compare(local: Gav, remote: Gav): UIO[ComparatorResult]
 }
 
-object VersionManager extends Accessible[VersionManager]
+object VersionManager {
+
+  def compare(local: Gav, remote: Gav): URIO[VersionManager, ComparatorResult] =
+    ZIO.serviceWithZIO[VersionManager](_.compare(local, remote))
+
+}

@@ -2,7 +2,7 @@ package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
-import cats.{Id, ~>}
+import cats.{~>, Id}
 import com.cmartin.learn.freemonad.algebra.{create, delete, read, update}
 import com.cmartin.learn.freemonad.interpreter.idCompiler
 

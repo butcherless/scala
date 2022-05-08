@@ -1,6 +1,6 @@
 package com.cmartin.learn.freemonad
 
-import cats.{Id, ~>}
+import cats.{~>, Id}
 import com.cmartin.learn.freemonad.algebra.{Create, CrudOperationA, Delete, Read, Update}
 import com.cmartin.learn.freemonad.functions.buildCryptoCurrency
 

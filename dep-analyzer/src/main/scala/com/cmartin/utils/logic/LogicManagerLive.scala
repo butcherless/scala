@@ -22,18 +22,18 @@ case class LogicManagerLive()
       .map(ParsedLines.tupled) // result tuple => constructor function
 
   override def filterValid(dependencies: List[Either[String, Domain.Gav]]): UIO[List[Domain.Gav]] =
-    UIO.succeed(dependencies.collect { case Right(dep) => dep })
+    ZIO.succeed(dependencies.collect { case Right(dep) => dep })
 
   override def excludeFromList(
       dependencies: Iterable[Domain.Gav],
       exclusions: List[String]
   ): UIO[Iterable[Domain.Gav]] =
-    UIO.succeed(
+    ZIO.succeed(
       dependencies.filterNot(dep => exclusions.contains(dep.group))
     )
 
   override def calculateValidRate(dependencyCount: Int, validCount: Int): UIO[Double] =
-    UIO.succeed(100.toDouble * validCount / dependencyCount)
+    ZIO.succeed(100.toDouble * validCount / dependencyCount)
 
   /*
     H E L P E R S
@@ -42,10 +42,10 @@ case class LogicManagerLive()
   private def parseDepLine(line: String): IO[String, Gav] = {
     for {
       _        <- ZIO.logInfo(s"parsing line: $line")
-      iterator <- UIO.succeed(pattern.findAllMatchIn(line))
-      result   <- ZIO.ifZIO(UIO.succeed(iterator.hasNext))(
-                    IO.succeed(Gav.fromRegexMatch(iterator.next())),
-                    IO.fail(line)
+      iterator <- ZIO.succeed(pattern.findAllMatchIn(line))
+      result   <- ZIO.ifZIO(ZIO.succeed(iterator.hasNext))(
+                    ZIO.succeed(Gav.fromRegexMatch(iterator.next())),
+                    ZIO.fail(line)
                   )
     } yield result
   }

@@ -21,7 +21,7 @@ case class FileManager()
     ZIO.foreachDiscard(errors)(e => ZIO.logInfo(s"invalid dependency: $e"))
 
   override def logPairCollection(collection: Iterable[GavPair]): UIO[Iterable[String]] = {
-    Task.succeed(
+    ZIO.succeed(
       collection
         .filter(_.hasNewVersion)
         .map(formatChanges)
@@ -33,7 +33,7 @@ case class FileManager()
    */
 
   def scopedFile(filename: String): RIO[Scope, BufferedSource] =
-    ZIO.fromAutoCloseable(Task.attempt(Source.fromFile(filename)))
+    ZIO.fromAutoCloseable(ZIO.attempt(Source.fromFile(filename)))
 
   def formatChanges(pair: Domain.GavPair): String =
     s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"

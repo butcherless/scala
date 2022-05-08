@@ -5,17 +5,17 @@ import zio._
 
 object ZioHelloWorld extends ZIOAppDefault {
 
-  def acquire()                       = Task.attempt(ActorSystem(HelloWorldMain(), "hello"))
-  def release(system: ActorSystem[_]) = Task.attempt(system.terminate()).ignore
+  def acquire()                       = ZIO.attempt(ActorSystem(HelloWorldMain(), "hello"))
+  def release(system: ActorSystem[_]) = ZIO.attempt(system.terminate()).ignore
 
   def run =
     ZIO.acquireRelease(acquire())(release)
       .flatMap(system =>
         for {
-          _ <- Task.attempt(system ! HelloWorldMain.Start("World"))
-          _ <- Task.attempt(system ! HelloWorldMain.Start("Akka"))
+          _ <- ZIO.attempt(system ! HelloWorldMain.Start("World"))
+          _ <- ZIO.attempt(system ! HelloWorldMain.Start("Akka"))
         } yield ExitCode.success
       )
-      .catchAll(e => UIO.succeed(ExitCode.failure))
+      .catchAll(e => ZIO.succeed(ExitCode.failure))
 
 }

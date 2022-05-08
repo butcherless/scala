@@ -33,7 +33,7 @@ object Zio2Layers
 
     case class ConfigLive() extends Config {
       override def read(filepath: String): IO[String, ApplicationConfig] =
-        IO.succeed(ApplicationConfig("INFO"))
+        ZIO.succeed(ApplicationConfig("INFO"))
     }
 
     object ConfigLive {
@@ -47,7 +47,7 @@ object Zio2Layers
 
     case class DatabaseLive() extends Database {
       override def doQuery(query: String): IO[String, QueryResults] =
-        IO.succeed(QueryResults()) // use Slick or Quill
+        ZIO.succeed(QueryResults()) // use Slick or Quill
     }
 
     object DatabaseLive {
@@ -86,10 +86,10 @@ object Zio2Layers
     case class AircraftRepositoryLive(database: Database) extends AircraftRepository {
 
       def findByRegistration(registration: String): IO[String, Aircraft] =
-        IO.succeed(Aircraft(registration))
+        ZIO.succeed(Aircraft(registration))
 
       override def countByAirline(code: String): IO[String, Int] =
-        IO.succeed(20)
+        ZIO.succeed(20)
 
       override def count(): IO[String, Int] = for {
         _ <- database.doQuery("dummy query")

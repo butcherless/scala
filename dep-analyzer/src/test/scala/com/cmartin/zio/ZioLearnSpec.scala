@@ -49,8 +49,8 @@ class ZioLearnSpec
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task.attempt(1 / 1).orElseFail(ErrorOne("error-one"))
-        result <- Task.attempt(1 / 0).orElseFail(ErrorTwo("error-two"))
+        _      <- ZIO.attempt(1 / 1).orElseFail(ErrorOne("error-one"))
+        result <- ZIO.attempt(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
     val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
@@ -65,8 +65,8 @@ class ZioLearnSpec
 
     val program: ZIO[Any, DomainError, Int] =
       for {
-        _      <- Task.attempt(1 / 0).orElseFail(ErrorOne("error-one"))
-        result <- Task.attempt(1 / 0).orElseFail(ErrorTwo("error-two"))
+        _      <- ZIO.attempt(1 / 0).orElseFail(ErrorOne("error-one"))
+        result <- ZIO.attempt(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
     val result = runtime.unsafeRun(program.either)

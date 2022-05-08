@@ -1,7 +1,6 @@
 package com.cmartin.utils.model
 
-import zio.json.DeriveJsonDecoder
-import zio.json.JsonDecoder
+import zio.json.{DeriveJsonDecoder,JsonDecoder}
 
 import scala.util.matching.Regex
 

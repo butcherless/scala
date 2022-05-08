@@ -6,7 +6,7 @@ import cats.free.Free
 import cats.free.Free.liftF
 import cats.implicits.catsStdInstancesForFuture
 import cats.instances.all._
-import cats.{Id, ~>}
+import cats.{~>, Id}
 import com.cmartin.learn.freemonad.functions.buildUuid
 
 import scala.concurrent.ExecutionContext.Implicits.global
