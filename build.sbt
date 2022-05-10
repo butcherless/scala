@@ -78,7 +78,8 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
         oldStrategy(x)
     },
     assembly / mainClass       := Some("com.cmartin.utils.DependencyLookoutApp"),
-    assembly / assemblyJarName := "depLookoutApp.jar"
+    assembly / assemblyJarName := "depLookoutApp.jar",
+    Compile / run / fork       := true
   )
   .dependsOn(common)
 
