@@ -142,10 +142,11 @@ object Zio2Layers
   }
 
   object Program {
-    val auditProgram = for {
-      auditService <- ZIO.service[AuditService]
-      counters     <- auditService.countAll()
-    } yield counters
+    val auditProgram: ZIO[AuditService, String, AuditCounters] =
+      for {
+        auditService <- ZIO.service[AuditService]
+        counters     <- auditService.countAll()
+      } yield counters
   }
 
   type ApplicationDependencies =

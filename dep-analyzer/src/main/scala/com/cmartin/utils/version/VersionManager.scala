@@ -1,7 +1,6 @@
 package com.cmartin.utils.version
 
-import com.cmartin.utils.model.Domain.ComparatorResult
-import com.cmartin.utils.model.Domain.Gav
+import com.cmartin.utils.model.Domain.{ComparatorResult, Gav}
 import zio.{UIO, URIO, ZIO}
 
 trait VersionManager {

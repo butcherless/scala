@@ -1,7 +1,6 @@
 package com.cmartin.zio
 
-import com.cmartin.utils.file.FileManager
-import com.cmartin.utils.file.IOManager
+import com.cmartin.utils.file.{FileManager, IOManager}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._

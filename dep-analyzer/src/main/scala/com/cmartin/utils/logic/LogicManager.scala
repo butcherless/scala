@@ -1,9 +1,8 @@
 package com.cmartin.utils.logic
 
+import com.cmartin.utils.logic.LogicManager.ParsedLines
 import com.cmartin.utils.model.Domain.Gav
 import zio.{UIO, URIO, ZIO}
-
-import LogicManager.ParsedLines
 
 trait LogicManager {
   def parseLines(lines: List[String]): UIO[ParsedLines]

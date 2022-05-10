@@ -9,12 +9,12 @@ import sttp.capabilities
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.SttpBackend
 import sttp.client3.httpclient.zio.HttpClientZioBackend
-import zio.{Clock, IO, Layer, LogLevel, RIO, Scope, Task, UIO, ULayer, ZIO, ZIOAspect, ZLayer}
 import zio.config.ConfigDescriptor._
 import zio.config._
 import zio.config.typesafe._
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
+import zio.{Clock, IO, Layer, LogLevel, RIO, Scope, Task, UIO, ULayer, ZIO, ZIOAspect, ZLayer}
 
 object ConfigHelper {
 
@@ -58,7 +58,7 @@ object ConfigHelper {
      L O G G I N G
    */
 
-  val logLayer =
+  val logLayer=
     SLF4J.slf4j(
       logLevel = LogLevel.Debug,
       format = LogFormat.line

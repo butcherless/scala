@@ -1,12 +1,11 @@
 package com.cmartin.utils.logic
 
+import com.cmartin.utils.logic.LogicManager.ParsedLines
 import com.cmartin.utils.model.Domain
 import com.cmartin.utils.model.Domain.Gav
 import zio._
 
 import scala.util.matching.Regex
-
-import LogicManager.ParsedLines
 
 case class LogicManagerLive()
     extends LogicManager {

@@ -1,8 +1,7 @@
 package com.cmartin.utils.http
 
 import com.cmartin.utils.config.ConfigHelper.ClientBackend
-import com.cmartin.utils.http.HttpManager.GavResults
-import com.cmartin.utils.http.HttpManager.retrieveFirstMajor
+import com.cmartin.utils.http.HttpManager.{GavResults, retrieveFirstMajor}
 import com.cmartin.utils.model.Domain._
 import sttp.client3._
 import sttp.client3.ziojson._
