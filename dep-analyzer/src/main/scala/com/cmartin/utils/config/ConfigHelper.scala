@@ -3,6 +3,7 @@ package com.cmartin.utils.config
 import com.cmartin.utils.file.{FileManager, IOManager}
 import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
+import com.cmartin.utils.model.Domain.{ConfigError, WebClientError}
 import com.colofabrix.scala.figlet4s.options.HorizontalLayout
 import com.colofabrix.scala.figlet4s.unsafe.{FIGureOps, Figlet4s, OptionsBuilderOps}
 import sttp.client3.httpclient.zio.{HttpClientZioBackend, SttpClient}
@@ -36,12 +37,12 @@ object ConfigHelper {
       .to[AppConfig]
 
   // read config description from hocon file source
-  def readFromFile(filename: String): IO[ReadError[String], AppConfig] =
+  def readFromFile(filename: String): IO[ConfigError, AppConfig] =
     read(
       configDescriptor.from(
         TypesafeConfigSource.fromHoconFilePath(filename)
       )
-    )
+    ).mapError(e => ConfigError(e.toString()))
 
   def buildLayerFromFile(filename: String): Layer[ReadError[String], AppConfig] =
     ZConfig.fromHoconFilePath(filename, configDescriptor)
@@ -80,8 +81,9 @@ object ConfigHelper {
      H T T P   C L I E N T   L A Y E R
    */
 
-  val clientBackendLayer =
+  val clientBackendLayer: ZLayer[Any, WebClientError, SttpClient] =
     ZLayer.scoped(HttpClientZioBackend.scoped())
+      .mapError(th => WebClientError(th.getMessage))
 
   /*
      A P P L I C A T I O N   L A Y E R S

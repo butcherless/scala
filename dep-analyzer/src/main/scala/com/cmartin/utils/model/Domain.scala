@@ -16,6 +16,7 @@ object Domain {
 
   case class FileIOError(message: String) extends DomainError
 
+  case class ConfigError(message: String)    extends DomainError
   case class NetworkError(message: String)   extends DomainError
   case class WebClientError(message: String) extends DomainError
   case class ResponseError(message: String)  extends DomainError

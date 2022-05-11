@@ -6,6 +6,7 @@ import com.cmartin.utils.file._
 import com.cmartin.utils.http.HttpManager
 import com.cmartin.utils.logic.Common.{calcElapsedMillis, getMillis}
 import com.cmartin.utils.logic.LogicManager
+import com.cmartin.utils.model.Domain.DomainError
 import zio._
 
 /** Helper application for keeping a project's dependencies up to date. Using
@@ -36,11 +37,11 @@ object DependencyLookoutApp
   override def run = {
 
     // TODO resolve error channel type, actual Object
-    def logicProgram(filename: String) =
+    def logicProgram(filename: String): IO[DomainError, Unit] =
       (
         for {
           _           <- printBanner("Dep Lookout")
-          config      <- ConfigHelper.readFromFile(filename) // TODO map error to domain
+          config      <- ConfigHelper.readFromFile(filename)
           startTime   <- getMillis()
           lines       <- IOManager.getLinesFromFile(config.filename)
           parsedLines <- LogicManager.parseLines(lines) @@ iterablePairLog("parsingErrors")
