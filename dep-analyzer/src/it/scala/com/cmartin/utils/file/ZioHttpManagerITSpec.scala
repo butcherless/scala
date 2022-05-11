@@ -1,6 +1,7 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
+import com.cmartin.utils.http.HttpManager
+import com.cmartin.utils.http.ZioHttpManager
 import com.cmartin.utils.model.Domain.ResponseError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -17,7 +18,7 @@ class ZioHttpManagerITSpec
 
   val applicationLayer =
     ZLayer.make[HttpManager](
-      ZLayer.succeed(HttpClientZioBackend()),
+      ZLayer.scoped(HttpClientZioBackend.scoped()),
       ZioHttpManager.layer
     )
 
