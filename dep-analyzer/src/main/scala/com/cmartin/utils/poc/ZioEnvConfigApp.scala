@@ -25,6 +25,7 @@ object ZioEnvConfigApp extends ZIOAppDefault {
   override def run =
     (
       for {
+        _         <- ZIO.succeed(System.setProperty("FILENAME", "don-pimpón-y-su-paquetón"))
         _         <- ZIO.logInfo("loading environment variables")
         envConfig <- AppConfiguration.readFromEnv()
         _         <- ZIO.logInfo(s"env config: $envConfig")
