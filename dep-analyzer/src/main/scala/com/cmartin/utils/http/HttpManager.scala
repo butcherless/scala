@@ -8,7 +8,7 @@ import scala.util.matching.Regex
 
 trait HttpManager {
 
-  def checkDependencies(gavList: Iterable[Gav]): IO[DomainError, GavResults]
+  def checkDependencies(gavList: Iterable[Gav]): UIO[GavResults]
 
 }
 

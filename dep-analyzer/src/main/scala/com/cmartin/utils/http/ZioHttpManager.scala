@@ -1,26 +1,23 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.config.ConfigHelper.ClientBackend
 import com.cmartin.utils.http.HttpManager.{retrieveFirstMajor, GavResults}
 import com.cmartin.utils.model.Domain._
 import sttp.client3._
+import sttp.client3.httpclient.zio.SttpClient
 import sttp.client3.ziojson._
 import zio._
 
-case class ZioHttpManager(client: RIO[Scope, ClientBackend])
+case class ZioHttpManager(client: SttpClient)
     extends HttpManager {
 
   import ZioHttpManager._
 
-  override def checkDependencies(gavList: Iterable[Gav]): IO[DomainError, GavResults] =
-    ZIO.scoped {
-      client.flatMap { client =>
-        ZIO.partitionPar(gavList)(getDependency(_)(client)).withParallelism(4)
-          .map { case (errors, gavList) => GavResults(errors, gavList) }
-      }.mapError(e => WebClientError(e.getMessage))
-    }
+  override def checkDependencies(gavList: Iterable[Gav]): UIO[GavResults] = {
+    ZIO.partitionPar(gavList)(getDependency).withParallelism(4)
+      .map(GavResults.tupled)
+  }
 
-  private def getDependency(gav: Gav)(client: ClientBackend): IO[DomainError, GavPair] = {
+  private def getDependency(gav: Gav): IO[DomainError, GavPair] =
     for {
       response   <- makeRequest(gav).send(client)
                       .mapError(e => NetworkError(e.getMessage)) // TODO refactor
@@ -30,12 +27,9 @@ case class ZioHttpManager(client: RIO[Scope, ClientBackend])
       remoteGav  <- retrieveFirstMajor(remoteGavs, gav)
     } yield GavPair(gav, remoteGav)
 
-  }
-
-  private def makeRequest(dep: Gav) = {
-    val uri = s"$scheme://$searchPath?q=g:${dep.group}+AND+a:${dep.artifact}+AND+p:jar&core=gav&rows=$resultSize"
+  private def makeRequest(gav: Gav) = {
     basicRequest
-      .get(uri"$uri")
+      .get(uri"${buildUriFromGav(gav)}")
       .response(asJson[MavenSearchResult].getRight)
   }
 
@@ -52,6 +46,9 @@ object ZioHttpManager {
   val scheme     = "https"
   val searchPath = "search.maven.org/solrsearch/select"
   val resultSize = 10
+
+  def buildUriFromGav(gav: Gav): String =
+    s"$scheme://$searchPath?q=g:${gav.group}+AND+a:${gav.artifact}+AND+p:jar&core=gav&rows=$resultSize"
 
   val layer =
     ZLayer.fromFunction(client => ZioHttpManager(client))

@@ -5,16 +5,13 @@ import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
 import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
 import com.colofabrix.scala.figlet4s.options.HorizontalLayout
 import com.colofabrix.scala.figlet4s.unsafe.{FIGureOps, Figlet4s, OptionsBuilderOps}
-import sttp.capabilities
-import sttp.capabilities.zio.ZioStreams
-import sttp.client3.SttpBackend
-import sttp.client3.httpclient.zio.HttpClientZioBackend
+import sttp.client3.httpclient.zio.{HttpClientZioBackend, SttpClient}
 import zio.config.ConfigDescriptor._
 import zio.config._
 import zio.config.typesafe._
 import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
-import zio.{Clock, IO, Layer, LogLevel, RIO, Scope, Task, UIO, ULayer, ZIO, ZIOAspect, ZLayer}
+import zio.{Clock, IO, Layer, LogLevel, UIO, ZIO, ZIOAspect, ZLayer}
 
 object ConfigHelper {
 
@@ -80,26 +77,26 @@ object ConfigHelper {
     }
 
   /*
-     H T T P   C L I E N T
+     H T T P   C L I E N T   L A Y E R
    */
 
-  type ClientBackend = SttpBackend[Task, ZioStreams with capabilities.WebSockets]
-  val clientBackendLayer: ULayer[RIO[Scope, ClientBackend]] = ZLayer.succeed(HttpClientZioBackend.scoped())
+  val clientBackendLayer =
+    ZLayer.scoped(HttpClientZioBackend.scoped())
 
   /*
      A P P L I C A T I O N   L A Y E R S
    */
 
   type ApplicationDependencies =
-    Clock with IOManager with LogicManager with RIO[Scope, ClientBackend] with HttpManager
+    Clock with IOManager with LogicManager with HttpManager with SttpClient
 
   val applicationLayer =
     ZLayer.make[ApplicationDependencies](
       Clock.live,
       FileManager.layer,
       LogicManagerLive.layer,
-      clientBackendLayer,
       ZioHttpManager.layer,
+      clientBackendLayer,
       ZLayer.Debug.mermaid
     )
 }

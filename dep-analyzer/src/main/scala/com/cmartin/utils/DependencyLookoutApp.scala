@@ -40,7 +40,7 @@ object DependencyLookoutApp
       (
         for {
           _           <- printBanner("Dep Lookout")
-          config      <- ConfigHelper.readFromFile(filename)
+          config      <- ConfigHelper.readFromFile(filename) // TODO map error to domain
           startTime   <- getMillis()
           lines       <- IOManager.getLinesFromFile(config.filename)
           parsedLines <- LogicManager.parseLines(lines) @@ iterablePairLog("parsingErrors")

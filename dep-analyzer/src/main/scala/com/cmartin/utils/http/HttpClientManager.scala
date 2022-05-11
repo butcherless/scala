@@ -15,10 +15,10 @@ case class HttpClientManager()
 
   import HttpClientManager._
 
-  override def checkDependencies(deps: Iterable[Gav]): IO[DomainError, GavResults] =
+  override def checkDependencies(deps: Iterable[Gav]): UIO[GavResults] =
     buildManagedClient() { implicit client =>
-      ZIO.partitionPar(deps)(getDependency(_)).withParallelism(3)
-        .map { case (errors, gavList) => GavResults(errors, gavList) }
+      ZIO.partitionPar(deps)(getDependency).withParallelism(3)
+        .map(GavResults.tupled)
     }
 
   def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
