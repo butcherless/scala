@@ -19,7 +19,7 @@ object HttpManager {
   // extract major version number
   val majorVersionRegex: Regex = raw"(^[0-9]+)..*".r
 
-  def retrieveFirstMajor(gavs: Seq[Gav], gav: Gav): IO[DomainError, Gav] = {
+  def retrieveFirstMajor(gavs: Seq[Gav], gav: Gav): IO[DomainError, Gav] =
     majorVersionRegex.findFirstMatchIn(gav.version)
       .fold[IO[DomainError, Gav]](
         ZIO.fail(ResponseError(s"no major version number found for: $gav"))
@@ -29,7 +29,6 @@ object HttpManager {
             ZIO.fail(ResponseError(s"no remote dependency found for: $gav"))
           )(ZIO.succeed(_))
       )
-  }
 
   // ZIO Accessors
   def checkDependencies(gavList: Iterable[Gav]): ZIO[HttpManager, DomainError, GavResults] =

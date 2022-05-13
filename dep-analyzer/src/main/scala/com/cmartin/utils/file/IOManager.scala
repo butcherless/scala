@@ -1,7 +1,7 @@
 package com.cmartin.utils.file
 
 import com.cmartin.utils.model.Domain.{DomainError, GavPair}
-import zio.{IO, RIO, Task, UIO, URIO, ZIO}
+import zio.{IO, UIO, URIO, ZIO}
 
 trait IOManager {
   def getLinesFromFile(filename: String): IO[DomainError, List[String]]

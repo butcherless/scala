@@ -12,10 +12,9 @@ case class ZioHttpManager(client: SttpClient)
 
   import ZioHttpManager._
 
-  override def checkDependencies(gavList: Iterable[Gav]): UIO[GavResults] = {
+  override def checkDependencies(gavList: Iterable[Gav]): UIO[GavResults] =
     ZIO.partitionPar(gavList)(getDependency).withParallelism(4)
       .map(GavResults.tupled)
-  }
 
   private def getDependency(gav: Gav): IO[DomainError, GavPair] =
     for {

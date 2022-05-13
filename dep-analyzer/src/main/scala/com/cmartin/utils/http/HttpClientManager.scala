@@ -21,7 +21,7 @@ case class HttpClientManager()
         .map(GavResults.tupled)
     }
 
-  def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] = {
+  def getDependency(dep: Gav)(implicit client: HttpClient): IO[DomainError, GavPair] =
     for {
       // TODO refactor line below to a function, see ZioHttpManager.getMavenRequest
       response   <- ZIO.fromCompletableFuture(client.sendAsync(makeRequest(dep), BodyHandlers.ofString()))
@@ -33,7 +33,6 @@ case class HttpClientManager()
       _          <- ZIO.log(s"remoteGavs(only the first three are shown): ${remoteGavs.take(3)}")
       remoteGav  <- retrieveFirstMajor(remoteGavs, dep)
     } yield GavPair(dep, remoteGav)
-  }
 
   def makeRequest(dep: Gav): HttpRequest =
     HttpRequest.newBuilder().uri(
@@ -51,7 +50,7 @@ case class HttpClientManager()
   def checkStatusCode(code: Int): IO[DomainError, Option[Nothing]] =
     ZIO.when(!StatusCode(code).isSuccess)(ZIO.fail(ResponseError(s"status code: $code")))
 
-  def extractResults(body: String): IO[DomainError, Seq[Gav]] = {
+  def extractResults(body: String): IO[DomainError, Seq[Gav]] =
     body
       .fromJson[MavenSearchResult] // response body to model
       .fold[IO[DomainError, Seq[Gav]]](
@@ -63,7 +62,6 @@ case class HttpClientManager()
             }
           )
       )
-  }
 
   /*
    TODO Wait until the integration between Tapir and ZIO-2-.x

@@ -20,13 +20,12 @@ case class FileManager()
   override def logWrongDependencies(errors: Iterable[DomainError])               =
     ZIO.foreachDiscard(errors)(e => ZIO.logInfo(s"invalid dependency: $e"))
 
-  override def logPairCollection(collection: Iterable[GavPair]): UIO[Iterable[String]] = {
+  override def logPairCollection(collection: Iterable[GavPair]): UIO[Iterable[String]] =
     ZIO.succeed(
       collection
         .filter(_.hasNewVersion)
         .map(formatChanges)
     )
-  }
 
   /*
     H E L P E R S
