@@ -14,7 +14,7 @@ object Versions {
   val scalaz      = "7.3.6"
   val scalatest   = "3.2.12"
   val slf4j       = "1.7.33"
-  val sttp        = "3.6.1"      // sttp depends on zio 2.0.0-RC2"
+  val sttp        = "3.6.2"      // sttp depends on zio 2.0.0-RC2"
   val zio         = "2.0.0-RC6"  // RC2 depends on zio-config next release
   val zioConfig   = "3.0.0-RC9"
   val zioLogging  = "2.0.0-RC10"
