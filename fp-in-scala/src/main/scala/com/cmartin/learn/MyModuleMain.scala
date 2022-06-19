@@ -1,3 +1,5 @@
+package com.cmartin.learn
+
 import MyLibrary._
 
 /** Created by cmartin on 27/05/16.

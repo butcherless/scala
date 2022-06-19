@@ -1,6 +1,12 @@
+package com.cmartin.learn
+
 /** Created by cmartin on 14/05/16.
   */
 object MyLibrary {
+
+  case class Kitten(id: Long, attributes: Seq[String])
+
+  case class BuyerPreferences(attributes: Seq[String])
 
   def digitToString(d: Int): String =
     d match {
