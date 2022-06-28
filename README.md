@@ -43,3 +43,6 @@ bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/c
 ## Plugins
 - https://github.com/jrudolph/sbt-dependency-graph
 - https://github.com/sbt/sbt-assembly/releases
+
+## Domain model
+- https://scalac.io/blog/introduction-to-programming-with-zio-functional-effects/ [Creating the domain model, using a functional style] smart constructor rich model business rules
