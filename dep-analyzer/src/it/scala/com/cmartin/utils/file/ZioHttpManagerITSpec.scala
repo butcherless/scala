@@ -8,6 +8,7 @@ import org.scalatest.matchers.should.Matchers
 import sttp.client3.httpclient.zio.HttpClientZioBackend
 import zio.Runtime.{default => runtime}
 import zio.ZLayer
+import zio.Unsafe
 
 class ZioHttpManagerITSpec
     extends AnyFlatSpec with Matchers {
@@ -28,9 +29,9 @@ class ZioHttpManagerITSpec
 
     // when
     val program = HttpManager.checkDependencies(deps)
-    val results = runtime.unsafeRun(
-      program.provide(applicationLayer)
-    )
+    val results = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.provide(applicationLayer)).getOrThrowFiberFailure()
+    }
 
     info(s"errors: ${results.errors}")
     info(s"(local,remote): ${results.gavList}")
@@ -51,9 +52,9 @@ class ZioHttpManagerITSpec
     // when
     val program = HttpManager.checkDependencies(deps)
 
-    val results = runtime.unsafeRun(
-      program.provide(applicationLayer)
-    )
+    val results = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.provide(applicationLayer)).getOrThrowFiberFailure()
+    }
 
     info(s"errors: ${results.errors}")
     info(s"(local,remote): ${results.gavList}")
@@ -70,9 +71,9 @@ class ZioHttpManagerITSpec
     // when
     val program = HttpManager.checkDependencies(deps)
 
-    val results = runtime.unsafeRun(
-      program.provide(applicationLayer)
-    )
+    val results = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.provide(applicationLayer)).getOrThrowFiberFailure()
+    }
 
     info(s"errors: ${results.errors}")
     info(s"(local,remote): ${results.gavList}")

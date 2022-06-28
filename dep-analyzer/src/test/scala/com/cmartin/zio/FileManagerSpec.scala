@@ -22,7 +22,10 @@ class FileManagerSpec
     val io = program.provide(FileManager.layer)
 
     // WHEN
-    val r = runtime.unsafeRun(io)
+
+    val r = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(io).getOrThrowFiberFailure()
+    }
 
     // THEN
     r shouldBe ()

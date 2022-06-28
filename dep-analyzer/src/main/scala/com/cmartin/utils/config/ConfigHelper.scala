@@ -94,7 +94,7 @@ object ConfigHelper {
 
   val applicationLayer =
     ZLayer.make[ApplicationDependencies](
-      Clock.live,
+      ZLayer.succeed(Clock.ClockLive),
       FileManager.layer,
       LogicManagerLive.layer,
       ZioHttpManager.layer,

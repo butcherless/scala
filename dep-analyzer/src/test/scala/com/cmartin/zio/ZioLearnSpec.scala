@@ -20,7 +20,10 @@ class ZioLearnSpec
     val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
     val program: IO[String, Int]          = noneZio.orElseFail("mapped error")
 
-    a[FiberFailure] should be thrownBy runtime.unsafeRun(program)
+    a[FiberFailure] should be thrownBy Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program).getOrThrowFiberFailure()
+    }
+
   }
 
   it should "return a Left with an string error" in {
@@ -28,7 +31,9 @@ class ZioLearnSpec
     val noneZio: IO[Option[Nothing], Int] = ZIO.fromOption(none)
     val program: IO[String, Int]          = noneZio.mapError(_ => "mapped error")
 
-    val result: Either[String, Int] = runtime.unsafeRun(program.either)
+    val result: Either[String, Int] = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.either).getOrThrowFiberFailure()
+    }
 
     result shouldBe Left("mapped error")
   }
@@ -53,7 +58,9 @@ class ZioLearnSpec
         result <- ZIO.attempt(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
-    val failure = the[FiberFailure] thrownBy runtime.unsafeRun(program)
+    val failure = the[FiberFailure] thrownBy Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program).getOrThrowFiberFailure()
+    }
 
     failure.cause.failureOption.map { ex => ex shouldBe ErrorTwo("error-two") }
   }
@@ -69,7 +76,9 @@ class ZioLearnSpec
         result <- ZIO.attempt(1 / 0).orElseFail(ErrorTwo("error-two"))
       } yield result
 
-    val result = runtime.unsafeRun(program.either)
+    val result = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.either).getOrThrowFiberFailure()
+    }
 
     result shouldBe Left(ErrorOne("error-one"))
   }
@@ -87,7 +96,9 @@ class ZioLearnSpec
     val descriptor: ConfigDescriptor[AppConfig] = ConfigHelper.configDescriptor
     val source: ConfigSource                    = ConfigSource.fromHoconString(hoconConfig)
     val program                                 = read(descriptor.from(source))
-    val result                                  = runtime.unsafeRun(program)
+    val result                                  = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program).getOrThrowFiberFailure()
+    }
 
     result shouldBe expectedConfig
 
@@ -96,14 +107,18 @@ class ZioLearnSpec
     val descriptor2 = ConfigHelper.configDescriptor
     val source2     = TypesafeConfigSource.fromHoconFile(file)
     val program2    = read(descriptor2.from(source2))
-    val result2     = runtime.unsafeRun(program2)
+    val result2     = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program2).getOrThrowFiberFailure()
+    }
 
     result2 shouldBe expectedConfig
 
     // TODO move to integration test dir
     val x1       = ZConfig.fromHoconFile(file, descriptor)
     val program3 = getConfig[AppConfig].provideLayer(x1)
-    val result3  = runtime.unsafeRun(program3)
+    val result3  = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program3).getOrThrowFiberFailure()
+    }
     result3 shouldBe expectedConfig
   }
 
@@ -114,9 +129,9 @@ class ZioLearnSpec
 
     val program = getConfig[AppConfig]
 
-    val resultEither = runtime.unsafeRun(
-      program.provideLayer(configLayer).either
-    )
+    val resultEither = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.provideLayer(configLayer).either).getOrThrowFiberFailure()
+    }
 
     info(s"$resultEither")
 

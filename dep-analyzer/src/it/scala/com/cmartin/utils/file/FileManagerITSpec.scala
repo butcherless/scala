@@ -5,6 +5,7 @@ import com.cmartin.utils.model.Domain.FileIOError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
+import zio.Unsafe
 
 class FileManagerITSpec
     extends AnyFlatSpec
@@ -17,7 +18,9 @@ class FileManagerITSpec
     val program  = IOManager.getLinesFromFile(filename)
       .provide(FileManager.layer)
 
-    val lines = runtime.unsafeRun(program)
+    val lines = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program).getOrThrowFiberFailure()
+    }
 
     lines.nonEmpty shouldBe true
     lines shouldBe List("line-1", "line-2")
@@ -28,7 +31,9 @@ class FileManagerITSpec
     val program  = IOManager.getLinesFromFile(filename)
       .provide(FileManager.layer)
 
-    val lines = runtime.unsafeRun(program.either)
+    val lines = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.either).getOrThrowFiberFailure()
+    }
 
     lines shouldBe Left(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
   }

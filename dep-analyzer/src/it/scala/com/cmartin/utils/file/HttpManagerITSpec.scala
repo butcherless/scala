@@ -5,6 +5,7 @@ import com.cmartin.utils.model.Domain.{Gav, ResponseError}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
+import zio.Unsafe
 
 class HttpManagerITSpec
     extends AnyFlatSpec with Matchers {
@@ -19,9 +20,9 @@ class HttpManagerITSpec
     // when
     val program = HttpManager.checkDependencies(deps)
 
-    val results = runtime.unsafeRun(
-      program.provide(HttpClientManager.layer)
-    )
+    val results = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.provide(HttpClientManager.layer)).getOrThrowFiberFailure()
+    }
 
     info(s"errors: ${results.errors}")
     info(s"(local,remote): ${results.gavList}")
@@ -41,9 +42,9 @@ class HttpManagerITSpec
     // when
     val program = HttpManager.checkDependencies(deps)
 
-    val results = runtime.unsafeRun(
-      program.provide(HttpClientManager.layer)
-    )
+    val results = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.provide(HttpClientManager.layer)).getOrThrowFiberFailure()
+    }
 
     info(s"errors: ${results.errors}")
     info(s"(local,remote): ${results.gavList}")
@@ -60,9 +61,9 @@ class HttpManagerITSpec
     // when
     val program = HttpManager.checkDependencies(deps)
 
-    val results = runtime.unsafeRun(
-      program.provide(HttpClientManager.layer)
-    )
+    val results = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program.provide(HttpClientManager.layer)).getOrThrowFiberFailure()
+    }
 
     info(s"errors: ${results.errors}")
     info(s"(local,remote): ${results.gavList}")
