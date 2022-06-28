@@ -219,9 +219,10 @@ import '${SOURCE_PKG}'.Library._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
+import zio.Unsafe
 
 class LibrarySpec
-  extends AnyFlatSpec
+    extends AnyFlatSpec
     with Matchers {
 
   behavior of "Library"
@@ -233,18 +234,20 @@ class LibrarySpec
   }
 
   it should "sum two numbers" in {
-    //given
+    // given
     val a = 1
     val b = 2
 
-    //when
-    val program = sum(a,b)
-    val result = runtime.unsafeRun(program)
+    // when
+    val program = sum(a, b)
+    val result  = Unsafe.unsafe { implicit u =>
+      runtime.unsafe.run(program).getOrThrowFiberFailure()
+    }
 
-    //then
-    result shouldBe a+b
+    // then
+    result shouldBe a + b
   }
-
+  
 }' > src/test/scala/${PKG_DIR}/LibrarySpec.scala
 
 
