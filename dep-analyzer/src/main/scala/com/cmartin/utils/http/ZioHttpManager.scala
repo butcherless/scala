@@ -1,13 +1,14 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.http.HttpManager.{retrieveFirstMajor, GavResults}
+import com.cmartin.utils.http.HttpManager.{GavResults, retrieveFirstMajor}
 import com.cmartin.utils.model.Domain._
+import sttp.capabilities.WebSockets
+import sttp.capabilities.zio.ZioStreams
 import sttp.client3._
-import sttp.client3.httpclient.zio.SttpClient
 import sttp.client3.ziojson._
 import zio._
 
-case class ZioHttpManager(client: SttpClient)
+case class ZioHttpManager(client: SttpBackend[Task, ZioStreams with WebSockets])
     extends HttpManager {
 
   import ZioHttpManager._
