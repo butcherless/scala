@@ -60,7 +60,7 @@ object ConfigHelper {
    */
 
   val logLayer =
-    SLF4J.slf4j(
+    zio.Runtime.removeDefaultLoggers >>> SLF4J.slf4j(
       logLevel = LogLevel.Debug,
       format = LogFormat.line
     )
