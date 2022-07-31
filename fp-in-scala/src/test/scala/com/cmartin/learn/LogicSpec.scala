@@ -3,7 +3,6 @@ package com.cmartin.learn
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import MyLibrary._
-import cats.instances.tailRec
 
 class LogicSpec extends AnyFlatSpec with Matchers {
 
