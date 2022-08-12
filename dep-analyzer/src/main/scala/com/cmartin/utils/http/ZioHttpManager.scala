@@ -1,6 +1,6 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.http.HttpManager.{GavResults, retrieveFirstMajor}
+import com.cmartin.utils.http.HttpManager.{retrieveFirstMajor, GavResults}
 import com.cmartin.utils.model.Domain._
 import sttp.capabilities.WebSockets
 import sttp.capabilities.zio.ZioStreams
