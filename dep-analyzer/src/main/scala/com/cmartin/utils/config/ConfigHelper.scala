@@ -13,9 +13,8 @@ import sttp.client3.httpclient.zio.HttpClientZioBackend
 import zio.config.ConfigDescriptor._
 import zio.config._
 import zio.config.typesafe._
-import zio.logging.LogFormat
 import zio.logging.backend.SLF4J
-import zio.{Clock, IO, Layer, LogLevel, Task, UIO, ZIO, ZIOAspect, ZLayer}
+import zio.{Clock, IO, Layer, Runtime, Task, UIO, ZIO, ZIOAspect, ZLayer}
 
 object ConfigHelper {
 
@@ -59,11 +58,11 @@ object ConfigHelper {
      L O G G I N G
    */
 
-  val logLayer =
-    zio.Runtime.removeDefaultLoggers >>> SLF4J.slf4j(
-      logLevel = LogLevel.Debug,
-      format = LogFormat.line
-    )
+  val logger = Runtime.addLogger(
+    SLF4J.slf4jLogger(SLF4J.logFormatDefault, SLF4J.getLoggerName())
+  )
+
+  val loggerLayer = Runtime.removeDefaultLoggers >>> logger
 
   // loggers
   def genericLog[T](message: String) =
