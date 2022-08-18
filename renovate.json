@@ -8,7 +8,5 @@
   "extends": [
     "config:base"
   ],
-  "schedule": [
-    "after 7pm"
-  ]
+  "ignoreDeps": ["sbt-scoverage", "sbt-dependency-updates"]
 }
