@@ -8,5 +8,5 @@
   "extends": [
     "config:base"
   ],
-  "ignoreDeps": ["sbt-scoverage", "sbt-dependency-updates"]
+  "ignoreDeps": ["org.scoverage.sbt-scoverage", "org.jmotor.sbt.sbt-dependency-updates"]
 }
