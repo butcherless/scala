@@ -21,7 +21,7 @@ case class ZioHttpManager(client: SttpBackend[Task, ZioStreams with WebSockets])
     for {
       response   <- makeRequest(gav).send(client)
                       .mapError(e => NetworkError(e.getMessage)) // TODO refactor
-      _          <- ZIO.log(s"status code: ${response.code}")
+      _          <- ZIO.logDebug(s"status code: ${response.code}")
       remoteGavs <- extractDependencies(response.body)
       _          <- ZIO.logDebug(s"remoteGavs(only the first three are shown): ${remoteGavs.take(3)}")
       remoteGav  <- retrieveFirstMajor(remoteGavs, gav)

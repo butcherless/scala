@@ -4,7 +4,9 @@ import zio.config.ConfigDescriptor._
 import zio.config._
 import zio.{IO, ZIO, ZIOAppDefault}
 
-object ZioEnvConfigApp extends ZIOAppDefault {
+object ZioEnvConfigApp
+    extends ZIOAppDefault {
+
   object AppConfiguration {
 
     final case class EnvConfig(filename: String, exclusions: List[String])
@@ -26,7 +28,8 @@ object ZioEnvConfigApp extends ZIOAppDefault {
     (
       for {
         _         <- ZIO.succeed(System.setProperty("FILENAME", "don-pimpón-y-su-paquetón"))
-        _         <- ZIO.logInfo("loading environment variables")
+        _         <- ZIO.logDebug("debug: loading environment variables")
+        _         <- ZIO.logInfo("info: loading environment variables")
         envConfig <- AppConfiguration.readFromEnv()
         _         <- ZIO.logInfo(s"env config: $envConfig")
       } yield ()

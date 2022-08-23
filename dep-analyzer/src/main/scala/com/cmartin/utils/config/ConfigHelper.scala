@@ -57,12 +57,7 @@ object ConfigHelper {
   /*
      L O G G I N G
    */
-
-  val logger = Runtime.addLogger(
-    SLF4J.slf4jLogger(SLF4J.logFormatDefault, SLF4J.getLoggerName())
-  )
-
-  val loggerLayer = Runtime.removeDefaultLoggers >>> logger
+  val loggerLayer = Runtime.removeDefaultLoggers >>> SLF4J.slf4j
 
   // loggers
   def genericLog[T](message: String) =

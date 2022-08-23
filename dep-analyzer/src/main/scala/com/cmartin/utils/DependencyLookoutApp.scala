@@ -26,12 +26,6 @@ import zio._
 object DependencyLookoutApp
     extends ZIOAppDefault {
 
-  /* for ZIO 2 RC3 version
-     Disable default runtime logger and then apply custom runtime config aspect
-     val rta = RuntimeConfigAspect(_ => runtime.runtimeConfig.copy(logger = ZLogger.none)) >>> aspectOne
-     override def hook: RuntimeConfigAspect = rta
-   */
-
   override val bootstrap = ConfigHelper.loggerLayer
 
   override def run = {

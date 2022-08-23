@@ -40,7 +40,7 @@ case class LogicManagerLive()
 
   private def parseDepLine(line: String): IO[String, Gav] = {
     for {
-      _        <- ZIO.logInfo(s"parsing line: $line")
+      _        <- ZIO.logDebug(s"parsing line: $line")
       iterator <- ZIO.succeed(pattern.findAllMatchIn(line))
       result   <- ZIO.ifZIO(ZIO.succeed(iterator.hasNext))(
                     ZIO.succeed(Gav.fromRegexMatch(iterator.next())),
