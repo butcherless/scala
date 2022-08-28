@@ -10,6 +10,18 @@ cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
 java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
 ```
 
+## Run the application with Docker
+
+Build de image
+
+    sbt depAnalyzer/Docker/publishLocal 
+
+Run the app
+
+    sbt "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
+    docker run --rm --name depanalyzer -v "/tmp:/tmp" dependency-lookout-app:1.0.0 /tmp/application-config.hocon
+    
+
 ## Example Maven query
 
 http get: http
