@@ -4,11 +4,9 @@
 
 Execute next 3 commands:
 
-```bash
-sbt "depAnalyzer/assembly" "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
-cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
-java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
-```
+    sbt "depAnalyzer/assembly" "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
+    cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
+    java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
 
 ## Run the application with Docker
 
@@ -19,13 +17,13 @@ Build de image
 Run the app
 
     sbt "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
+    cp dep-analyzer/src/main/resources/application-config.hocon /tmp/
     docker run --rm --name depanalyzer -v "/tmp:/tmp" dependency-lookout-app:1.0.0 /tmp/application-config.hocon
     
 
 ## Example Maven query
 
-http get: http
--v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
+    http get: http -v https://search.maven.org/solrsearch/select\?q\=g:"com.typesafe.akka"%20AND%20a:"akka-actor_2.13"%20AND%20v:"2.5.25"%20AND%20p:"jar"\&rows\=1\&wt\=json
 
 ## TODOes
 
@@ -68,21 +66,13 @@ gw dep --configuration default > /tmp/gradle-deps-default
 Lista de tareas previas al caso de uso:
 
 - sbt dependencyList > sbt-dependencies.log
-
-- regex para filtrar líneas con deps: ^[a-z]([a-z0-9-_\.]+:){2}([0-9A-Z-\.]+)
-
+- regex para filtrar líneas con deps: `^[a-z]([a-z0-9-_\.]+:){2}([0-9A-Z-\.]+)`
 - log con los positivos y negativos para verificar si la regex filtra correctamente
-
 - split del GAV por el caracter ":" (dos puntos)
-
 - añadir las deps a un Set para eliminar duplicados
-
 - obtener del repository todas las dependencias para el par (G,A)
-
 - obtener la última versión
-
 - consultar con maven central para verificar si ha cambiado
-
 - elaborar el report con las dependencias que tienen nueva versión
 
 ## Secuencia
