@@ -8,7 +8,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>target/dependency-lookout-application.log</file>
+        <file>/tmp/dependency-lookout-application.log</file>
         <append>false</append>
         <encoder>
             <pattern>%d{ISO8601} %-5level [%thread] %logger{50} - %msg%n</pattern>

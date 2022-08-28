@@ -39,6 +39,7 @@ lazy val fpInScala = (project in file("fp-in-scala"))
   .settings(
     commonSettings,
     name := "fp-in-scala",
+    version := "0.1.0",
     libraryDependencies ++= Seq(scalaz, cats)
   )
 
@@ -57,7 +58,8 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
     Defaults.itSettings,
     parallelExecution          := false,
     commonSettings,
-    name                       := "depAnalyzer",
+    name                       := "dependency-lookout-app",
+    version := "1.0.0",
     libraryDependencies ++= Seq(
       figlet4s,
       akkaStream,
@@ -79,9 +81,12 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
     },
     assembly / mainClass       := Some("com.cmartin.utils.DependencyLookoutApp"),
     assembly / assemblyJarName := "depLookoutApp.jar",
-    Compile / run / fork       := true
+    dockerBaseImage := "eclipse-temurin:17-jdk"
   )
   .dependsOn(common)
+  .enablePlugins(JavaAppPackaging)
+  .enablePlugins(DockerPlugin)
+
 
 lazy val hkTypes = (project in file("hk-types"))
   .configs(IntegrationTest)
@@ -217,3 +222,4 @@ addCommandAlias("xstart", "clean;reStart")
 addCommandAlias("xstop", "reStop;clean")
 addCommandAlias("xupdate", "clean;update")
 addCommandAlias("xdup", "dependencyUpdates")
+
