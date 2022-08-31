@@ -74,6 +74,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
     ),
     assemblyMergeStrategy      := {
       case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
+      case "module-info.class"                     => MergeStrategy.discard
       case x                                       =>
         val oldStrategy = assemblyMergeStrategy.value
         oldStrategy(x)
