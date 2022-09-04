@@ -21,22 +21,27 @@ case class ZioHttpManager(client: SttpBackend[Task, ZioStreams with WebSockets])
 
   private def getDependency(gav: Gav): IO[DomainError, GavPair] =
     for {
-      response   <- makeRequest(gav).send(client)
-                      .mapError(e => NetworkError(e.getMessage)) // TODO refactor
-      _          <- ZIO.logDebug(s"status code: ${response.code}")
-      remoteGavs <- extractDependencies(response.body)
-      _          <- ZIO.logDebug(s"remoteGavs(only the first three are shown): ${remoteGavs.take(3)}")
-      remoteGav  <- retrieveFirstMajor(remoteGavs, gav)
+      response      <- makeRequest(gav).send(client)
+                         .mapError(e => NetworkError(e.getMessage)) // TODO refactor
+      _             <- ZIO.logDebug(s"status code: ${response.code}")
+      remoteGavList <- extractDependencies(response.body)
+      //_             <- ZIO.logDebug(s"remoteGavs(only the first three are shown): ${remoteGavList.take(3)}")
+      _             <- logRemoteGavList(gav, remoteGavList)
+      remoteGav     <- retrieveFirstMajor(remoteGavList, gav)
     } yield GavPair(gav, remoteGav)
 
-  private def makeRequest(gav: Gav) = {
+  private def makeRequest(gav: Gav) =
     basicRequest
       .get(uri"${buildUriFromGav(gav)}")
       .response(asJson[MavenSearchResult].getRight)
-  }
 
-  def extractDependencies(results: MavenSearchResult): UIO[Seq[Gav]] =
+  private def extractDependencies(results: MavenSearchResult): UIO[Seq[Gav]] =
     ZIO.succeed(results.response.docs.map(viewToModel).sorted)
+
+  private def logRemoteGavList(gav: Gav, gavs: Seq[Gav]): UIO[Unit] =
+    if (gavs.nonEmpty) {
+      ZIO.logDebug(s"remote versions for (g,a)=(${gav.group},${gav.artifact}) -> ${gavs.map(_.version)}")
+    } else ZIO.logWarning(s"no remote artifacts for: $gav")
 
 }
 
