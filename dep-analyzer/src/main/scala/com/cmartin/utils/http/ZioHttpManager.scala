@@ -25,7 +25,6 @@ case class ZioHttpManager(client: SttpBackend[Task, ZioStreams with WebSockets])
                          .mapError(e => NetworkError(e.getMessage)) // TODO refactor
       _             <- ZIO.logDebug(s"status code: ${response.code}")
       remoteGavList <- extractDependencies(response.body)
-      //_             <- ZIO.logDebug(s"remoteGavs(only the first three are shown): ${remoteGavList.take(3)}")
       _             <- logRemoteGavList(gav, remoteGavList)
       remoteGav     <- retrieveFirstMajor(remoteGavList, gav)
     } yield GavPair(gav, remoteGav)
@@ -35,6 +34,8 @@ case class ZioHttpManager(client: SttpBackend[Task, ZioStreams with WebSockets])
       .get(uri"${buildUriFromGav(gav)}")
       .response(asJson[MavenSearchResult].getRight)
 
+  // TODO: manage parse errors, just semver parsing
+  // validate artifact properties, fail with domain error
   private def extractDependencies(results: MavenSearchResult): UIO[Seq[Gav]] =
     ZIO.succeed(results.response.docs.map(viewToModel).sorted)
 
