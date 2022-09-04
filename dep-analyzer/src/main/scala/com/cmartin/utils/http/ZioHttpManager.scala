@@ -2,6 +2,8 @@ package com.cmartin.utils.http
 
 import com.cmartin.utils.http.HttpManager.{retrieveFirstMajor, GavResults}
 import com.cmartin.utils.model.Domain._
+import just.semver.SemVer
+import just.semver.SemVer.render
 import sttp.capabilities.WebSockets
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3._
@@ -34,18 +36,20 @@ case class ZioHttpManager(client: SttpBackend[Task, ZioStreams with WebSockets])
   }
 
   def extractDependencies(results: MavenSearchResult): UIO[Seq[Gav]] =
-    ZIO.succeed(results.response.docs.map(viewToModel))
+    ZIO.succeed(results.response.docs.map(viewToModel).sorted)
 
 }
 
 object ZioHttpManager {
 
-  def viewToModel(a: Artifact): Gav =
-    Gav(group = a.g, artifact = a.a, version = a.v)
+  def viewToModel(a: Artifact): Gav = {
+    val parsedVersion = SemVer.parse(a.v).fold(_ => "", render)
 
-  val scheme     = "https"
-  val searchPath = "search.maven.org/solrsearch/select"
-  val resultSize = 10
+    Gav(group = a.g, artifact = a.a, parsedVersion)
+  }
+  val scheme                        = "https"
+  val searchPath                    = "search.maven.org/solrsearch/select"
+  val resultSize                    = 10
 
   def buildUriFromGav(gav: Gav): String =
     s"$scheme://$searchPath?q=g:${gav.group}+AND+a:${gav.artifact}+AND+p:jar&core=gav&rows=$resultSize"

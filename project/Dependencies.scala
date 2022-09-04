@@ -20,6 +20,7 @@ object Dependencies {
 
   lazy val typesafeConfig = "com.typesafe"     % "config"          % Versions.config
   lazy val json4s         = "org.json4s"      %% "json4s-native"   % Versions.json4s
+  lazy val justSemver     = "io.kevinlee"     %% "just-semver"     % Versions.justSemver
   lazy val kafkaClient    = "org.apache.kafka" % "kafka-clients"   % Versions.kafkaClient
   lazy val logback        = "ch.qos.logback"   % "logback-classic" % Versions.logback // exclude("org.slf4j", "slf4j-api")
   // lazy val slf4j = "org.slf4j" % "slf4j-api" % slf4jVersion

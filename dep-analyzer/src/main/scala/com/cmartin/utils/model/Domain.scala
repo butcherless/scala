@@ -1,5 +1,6 @@
 package com.cmartin.utils.model
 
+import just.semver.SemVer
 import zio.json.{DeriveJsonDecoder, JsonDecoder}
 
 import scala.util.matching.Regex
@@ -60,8 +61,23 @@ object Domain {
   object Gav {
     implicit val decoder: JsonDecoder[Gav] = DeriveJsonDecoder.gen[Gav]
 
-    implicit val ord: Ordering[Gav] = (d1: Gav, d2: Gav) => {
+    /*implicit*/
+    val ordOld: Ordering[Gav] = (d1: Gav, d2: Gav) => {
       d1.version.compareTo(d2.version)
+    }
+
+    /* validated versions, safe run
+       reverse order, descending order, greatest first
+       inverse compare result: -1 => 1, 1 => -1
+     */
+    implicit val ord: Ordering[Gav] = (d1: Gav, d2: Gav) => {
+      val comparisonEither = for {
+        v1 <- SemVer.parse(d1.version)
+        v2 <- SemVer.parse(d2.version)
+      } yield (-1) * v1.compare(v2)
+
+      // d1.version.compareTo(d2.version)
+      comparisonEither.getOrElse(0)
     }
 
     def fromRegexMatch(regexMatch: Regex.Match): Gav = {

@@ -64,6 +64,7 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       figlet4s,
       akkaStream,
       json4s,
+      justSemver,
       sttpCore,
       sttpZio,
       sttpZioJson,
