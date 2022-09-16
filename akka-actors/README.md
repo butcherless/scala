@@ -1,5 +1,8 @@
 # Akka Actors Subproject Notes
 
+Migration to ZIO
+- Akka Actor execution <-> ZIO Fiber 
+
 Actors:
 
 - Dispatcher actor
