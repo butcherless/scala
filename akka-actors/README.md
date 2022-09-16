@@ -1,7 +1,16 @@
 # Akka Actors Subproject Notes
 
 Migration to ZIO
-- Akka Actor execution <-> ZIO Fiber 
+
+- Akka Actor Future <-> ZIO Fiber
+- graceful shutdown => zio.ensuring{...} or zio.acquireRelease{...}
+
+| Akka   | ZIO.      |
+|--------|-----------|
+| Source | ZStream   |
+| Flow   | ZPipeline |
+| Sink   | ZSink     |
+
 
 Actors:
 
