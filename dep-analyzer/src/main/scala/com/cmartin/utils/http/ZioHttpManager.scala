@@ -58,7 +58,7 @@ object ZioHttpManager {
   val resultSize                    = 10
 
   def buildUriFromGav(gav: Gav): String =
-    s"$scheme://$searchPath?q=g:${gav.group}+AND+a:${gav.artifact}+AND+p:jar&core=gav&rows=$resultSize"
+    s"$scheme://$searchPath?q=g:${gav.group}+AND+a:${gav.artifact}&core=gav&rows=$resultSize"
 
   val layer =
     ZLayer.fromFunction(client => ZioHttpManager(client))
