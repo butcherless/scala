@@ -4,6 +4,7 @@ title Validation Effect Diagram
 footer Validation effect with error accumulation
 group
 
+start
 :InputData;
 :validate(InputData);
 if ( isValid ) then (failure  )
