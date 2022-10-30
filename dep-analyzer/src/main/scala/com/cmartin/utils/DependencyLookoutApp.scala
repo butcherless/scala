@@ -26,7 +26,7 @@ import zio._
 object DependencyLookoutApp
     extends ZIOAppDefault {
 
-  override val bootstrap = ConfigHelper.loggerLayer
+  override val bootstrap = ConfigHelper.loggingLayer
 
   override def run = {
 
