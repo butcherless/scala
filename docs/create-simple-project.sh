@@ -159,8 +159,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
         <appender-ref ref="STDOUT"/>
     </appender>
 
+    <!-- application loggers -->
+    <logger name="'${SOURCE_PKG}'" level="DEBUG"/>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="ASYNC"/>
     </root>
 </configuration>' > src/main/resources/logback.xml
