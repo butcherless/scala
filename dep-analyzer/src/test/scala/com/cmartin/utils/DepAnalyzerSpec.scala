@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers
 import scala.collection.SortedSet
 
 class DepAnalyzerSpec
-  extends AnyFlatSpec
+    extends AnyFlatSpec
     with Matchers {
 
   val dep1: Dep = Dep("dep.group", "dep-artifact", "dep-version-1")
