@@ -73,13 +73,6 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       zioConfigTypesafe,
       zioLogging
     ),
-    assemblyMergeStrategy      := {
-      case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
-      case "module-info.class"                     => MergeStrategy.discard
-      case x                                       =>
-        val oldStrategy = assemblyMergeStrategy.value
-        oldStrategy(x)
-    },
     assembly / mainClass       := Some("com.cmartin.utils.DependencyLookoutApp"),
     assembly / assemblyJarName := "depLookoutApp.jar",
     dockerBaseImage            := "eclipse-temurin:17-jdk"
@@ -222,3 +215,11 @@ addCommandAlias("xstart", "clean;reStart")
 addCommandAlias("xstop", "reStop;clean")
 addCommandAlias("xupdate", "clean;update")
 addCommandAlias("xdup", "dependencyUpdates")
+
+ThisBuild / assemblyMergeStrategy := {
+  case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
+  case "module-info.class"                     => MergeStrategy.discard
+  case x                                       =>
+    val oldStrategy = assemblyMergeStrategy.value
+    oldStrategy(x)
+}

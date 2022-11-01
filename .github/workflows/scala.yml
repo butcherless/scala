@@ -31,7 +31,7 @@ jobs:
       run: sbt -v --client test
       working-directory: ${{env.WORK_DIR}}
     - name: assembly
-      run: sbt -v --client depAnalyzer/assembly
+      run: sbt -v --client assembly
       working-directory: ${{env.WORK_DIR}}
 
   project-template:
