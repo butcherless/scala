@@ -1,12 +1,10 @@
-/**
-  * Created by cmartin on 24/04/16.
+/** Created by cmartin on 24/04/16.
   */
 
 //val filename = "resolverOperacionesNoEjecutadasBandejaCliente"
 val filename = "ea-posicion-global-crearVista"
 
 val xmlFilePath = "resources/" + filename + ".xml"
-
 
 def isModel(node: Node): Boolean = {
   val name: String = (node \ "@name").text
@@ -39,9 +37,9 @@ def getTypeNode(node: Node): Node = {
 def convertType(t: String): String =
   t match {
     case "Cadena de Caracteres" => "string"
-    case "Importe Monetario" => "double"
-    case _ => t
-}
+    case "Importe Monetario"    => "double"
+    case _                      => t
+  }
 
 def repeatChar(c: Char, n: Int): String = c.toString * n
 
@@ -69,7 +67,7 @@ for (cn <- classNodes) {
   val attributeNodes = getAttributeNodes(cn)
   for (an <- attributeNodes) {
     val attributeName = getNodeName(an)
-    val typeName = convertType(getNodeValue(getTypeNode(an)))
+    val typeName      = convertType(getNodeValue(getTypeNode(an)))
 
     println(makeLine(6, attributeName + ':'))
     println(makeLine(8, "type: " + typeName))

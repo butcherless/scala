@@ -1,5 +1,4 @@
-/**
-  * Created by cmartin on 24/04/16.
+/** Created by cmartin on 24/04/16.
   */
 
 val xmlFilePath = "resources/ea-classes.xml"
@@ -11,13 +10,13 @@ def processNode(node: Node): String =
     case <xs:element{attributes}/> => "it's an element with attributes: " + attributes
     case _ => "Not recognized"
 }
-*/
+ */
 
 // read xml file from disk
 val xmlFile = loadFile(xmlFilePath)
 //println(xmlFile)
 
-val elements = xmlFile \ "complexType"
+val elements      = xmlFile \ "complexType"
 val elementsCount = elements.size
 println(f"elements has $elementsCount elements")
 
