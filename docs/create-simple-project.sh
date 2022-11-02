@@ -4,7 +4,7 @@ PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's/\./\//g'`
 SCALA_VER="2.13.10"
-SBT_VER="1.7.2"
+SBT_VER="1.7.3"
 SBT_ASSEMBLY_VER="2.0.0"
 SBT_BLOOP_VER="1.5.4"
 SBT_SCALAFMT_VER="2.4.6"
@@ -12,7 +12,7 @@ DEP_UP_VER="1.2.7"
 SCALAFMT_VER="3.6.0"
 SCALATEST_VER="3.2.14"
 SCOVERAGE_VER="2.0.6"
-ZIO_VER="2.0.2"
+ZIO_VER="2.0.3"
 
 #
 # create filesystem
