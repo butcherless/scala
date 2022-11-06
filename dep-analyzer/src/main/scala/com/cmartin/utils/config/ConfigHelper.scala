@@ -79,7 +79,7 @@ object ConfigHelper {
    */
 
   val clientBackendLayer: ZLayer[Any, WebClientError, SttpBackend[Task, ZioStreams with WebSockets]] =
-    ZLayer.scoped(HttpClientZioBackend.scoped())
+    ZLayer.scoped(HttpClientZioBackend())
       .mapError(th => WebClientError(th.getMessage))
 
   /*

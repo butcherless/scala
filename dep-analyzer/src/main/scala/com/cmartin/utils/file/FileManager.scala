@@ -35,7 +35,7 @@ case class FileManager()
     ZIO.fromAutoCloseable(ZIO.attempt(Source.fromFile(filename)))
 
   def formatChanges(pair: Domain.GavPair): String =
-    s"${pair.local.formatShort} ${colourGreen("=>")} ${colourBlue(pair.remote.version)}"
+    s"${pair.local.formatShort} ${colourGreen("=>")} ${colourYellow(pair.remote.version)}"
 
 }
 

@@ -136,7 +136,7 @@ object Domain {
       id: String,
       g: String,
       a: String,
-      v: String,
+      latestVersion: String,
       p: String,
       timestamp: Long,
       ec: Seq[String]

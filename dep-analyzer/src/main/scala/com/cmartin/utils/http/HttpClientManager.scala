@@ -58,7 +58,7 @@ case class HttpClientManager()
         results =>
           ZIO.succeed(
             results.response.docs.map { artifact =>
-              Gav(group = artifact.g, artifact = artifact.a, version = artifact.v)
+              Gav(group = artifact.g, artifact = artifact.a, version = artifact.latestVersion)
             }
           )
       )

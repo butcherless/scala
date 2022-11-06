@@ -51,6 +51,10 @@ Get dependencies using bash commands
  sort -u
 ```
 
+**curl**
+
+    curl -s "https://search.maven.org/solrsearch/select?q=g:dev.zio+AND+a:zio_2.13&wt=json" | jq
+
 Regex
 
 ([0-9a-z.]+):([0-9a-z-]+):([0-9.]+)?.*
