@@ -43,11 +43,13 @@ project.git = true' > .scalafmt.conf
 # create sbt plugins file
 #
 echo '// sbt tool plugins
-addSbtPlugin("com.eed3si9n"   % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
-addSbtPlugin("org.scoverage"  % "sbt-scoverage"          % "'${SCOVERAGE_VER}'")
-addSbtPlugin("org.scalameta"  % "sbt-scalafmt"           % "'${SBT_SCALAFMT_VER}'")
-addSbtPlugin("ch.epfl.scala"  % "sbt-bloop"              % "'${SBT_BLOOP_VER}'")
-addSbtPlugin("org.jmotor.sbt" % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
+addSbtPlugin("com.eed3si9n"     % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
+addSbtPlugin("org.scoverage"    % "sbt-scoverage"          % "'${SCOVERAGE_VER}'")
+addSbtPlugin("org.scalameta"    % "sbt-scalafmt"           % "'${SBT_SCALAFMT_VER}'")
+addSbtPlugin("ch.epfl.scala"    % "sbt-bloop"              % "'${SBT_BLOOP_VER}'")
+addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph"   % "0.10.0-RC1")
+addDependencyTreePlugin
 ' > project/plugins.sbt
 
 
