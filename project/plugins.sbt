@@ -6,4 +6,4 @@ addSbtPlugin("ch.epfl.scala"    % "sbt-bloop"              % "1.5.4-14-7cb43276"
 addSbtPlugin("com.github.sbt"   % "sbt-native-packager"    % "1.9.11")
 addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "1.2.7")
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph"   % "0.10.0-RC1")
-addDependencyTreePlugin
+//addDependencyTreePlugin
