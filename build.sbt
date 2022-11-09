@@ -73,6 +73,8 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       zioConfigTypesafe,
       zioLogging
     ),
+    Test / fork := true,
+    Test / envVars  := Map("DL_FILENAME" -> "/tmp/dep-list.log", "DL_EXCLUSIONS" -> "com.cmartin.learn, com.cmartin.poc"),
     assembly / mainClass       := Some("com.cmartin.utils.DependencyLookoutApp"),
     assembly / assemblyJarName := "depLookoutApp.jar",
     dockerBaseImage            := "eclipse-temurin:17-jdk"

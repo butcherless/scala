@@ -26,39 +26,38 @@ import zio._
 object DependencyLookoutApp
     extends ZIOAppDefault {
 
+  val toExitCode: Int => ExitCode =
+    ExitCode.apply
+
   override val bootstrap = ConfigHelper.loggingLayer
 
-  override def run = {
+  override def run: IO[DomainError, Unit] = {
 
     // TODO resolve error channel type, actual Object
-    def logicProgram(filename: String): IO[DomainError, Unit] =
-      (
-        for {
-          _           <- printBanner("Dep Lookout")
-          config      <- ConfigHelper.readFromFile(filename)
-          startTime   <- getMillis()
-          lines       <- IOManager.getLinesFromFile(config.filename)
-          parsedLines <- LogicManager.parseLines(lines) @@ iterablePairLog("parsingErrors")
-          _           <- LogicManager.calculateValidRate(lines.size, parsedLines.successList.size) @@
-                           genericLog("valid rate of dependencies")
-          finalDeps   <- LogicManager.excludeFromList(parsedLines.successList, config.exclusions)
-          results     <- HttpManager.checkDependencies(finalDeps)
-          // TODO process errors
-          _           <- IOManager.logPairCollection(results.gavList) @@ iterableLog("updated dependencies")
-          _           <- IOManager.logWrongDependencies(results.errors)
-          _           <- calcElapsedMillis(startTime) @@ genericLog("processing time")
-        } yield ()
-      ).provide(applicationLayer)
+    val logicProgram =
+      for {
+        _           <- printBanner("Dep Lookout")
+        config      <- ConfigHelper.readFromEnv()
+        startTime   <- getMillis()
+        lines       <- IOManager.getLinesFromFile(config.filename)
+        parsedLines <- LogicManager.parseLines(lines) @@ iterablePairLog("parsingErrors")
+        _           <- LogicManager.calculateValidRate(lines.size, parsedLines.successList.size) @@
+                         genericLog("valid rate of dependencies")
+        finalDeps   <- LogicManager.excludeFromList(parsedLines.successList, config.exclusions)
+        results     <- HttpManager.checkDependencies(finalDeps)
+        // TODO process errors
+        _           <- IOManager.logPairCollection(results.gavList) @@ iterableLog("updated dependencies")
+        _           <- IOManager.logWrongDependencies(results.errors)
+        _           <- calcElapsedMillis(startTime) @@ genericLog("processing time")
+      } yield 0
 
     // main program
-    for {
-      args <- getArgs
-      _    <- ZIO.when(args.isEmpty) {
-                Console.printLine(s"Please, supply hocon config file, for example: /tmp/application-config.hocon") *>
-                  ZIO.fail("empty command line arguments")
-              }
-      _    <- logicProgram(args.head)
-    } yield ()
+    logicProgram
+      .tapError(e => ZIO.logError(s"application error: $e"))
+      .mapError(_ => 1)
+      .fold(toExitCode, toExitCode)
+      .flatMap(exit)
+      .provide(applicationLayer)
   }
 
 }

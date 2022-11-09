@@ -1,13 +1,9 @@
 package com.cmartin.zio
 
-import com.cmartin.utils.config.ConfigHelper
-import com.cmartin.utils.config.ConfigHelper._
 import com.cmartin.utils.model.Domain.Gav
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._
-import zio.config._
-import zio.config.typesafe._
 
 class ZioLearnSpec
     extends AnyFlatSpec
@@ -81,65 +77,6 @@ class ZioLearnSpec
     }
 
     result shouldBe Left(ErrorOne("error-one"))
-  }
-
-  "Zio Config" should "read a HOCON configuration string" in {
-    val filename       = "/tmp/deps-log.txt"
-    val exclusions     = List("exclusion-one", "exclusion-two")
-    val expectedConfig = AppConfig(filename, exclusions)
-    val hoconConfig    =
-      """
-        | filename: /tmp/deps-log.txt
-        | exclusions: [exclusion-one, exclusion-two]
-        |""".stripMargin
-
-    val descriptor: ConfigDescriptor[AppConfig] = ConfigHelper.configDescriptor
-    val source: ConfigSource                    = ConfigSource.fromHoconString(hoconConfig)
-    val program                                 = read(descriptor.from(source))
-    val result                                  = Unsafe.unsafe { implicit u =>
-      runtime.unsafe.run(program).getOrThrowFiberFailure()
-    }
-
-    result shouldBe expectedConfig
-
-    // TODO move to integration test dir
-    val file        = new java.io.File("dep-analyzer/src/test/resources/application-config.hocon")
-    val descriptor2 = ConfigHelper.configDescriptor
-    val source2     = TypesafeConfigSource.fromHoconFile(file)
-    val program2    = read(descriptor2.from(source2))
-    val result2     = Unsafe.unsafe { implicit u =>
-      runtime.unsafe.run(program2).getOrThrowFiberFailure()
-    }
-
-    result2 shouldBe expectedConfig
-
-    // TODO move to integration test dir
-    val x1       = ZConfig.fromHoconFile(file, descriptor)
-    val program3 = getConfig[AppConfig].provideLayer(x1)
-    val result3  = Unsafe.unsafe { implicit u =>
-      runtime.unsafe.run(program3).getOrThrowFiberFailure()
-    }
-    result3 shouldBe expectedConfig
-  }
-
-  it should "fail when trying to retrieve a missing property" in {
-    val configMap: Map[String, String]                   = Map.empty
-    val configLayer: Layer[ReadError[String], AppConfig] =
-      ZConfig.fromMap(configMap, ConfigHelper.configDescriptor)
-
-    val program = getConfig[AppConfig]
-
-    val resultEither = Unsafe.unsafe { implicit u =>
-      runtime.unsafe.run(program.provideLayer(configLayer).either).getOrThrowFiberFailure()
-    }
-
-    info(s"$resultEither")
-
-    resultEither.isLeft shouldBe true
-    resultEither.left.map { error =>
-      error shouldBe a[ReadError.ZipErrors[_]]
-      error.size shouldBe 2
-    }
   }
 
 }

@@ -12,9 +12,8 @@ import sttp.client3.SttpBackend
 import sttp.client3.httpclient.zio.HttpClientZioBackend
 import zio.config.ConfigDescriptor._
 import zio.config._
-import zio.config.typesafe._
 import zio.logging.backend.SLF4J
-import zio.{Clock, IO, Layer, Runtime, Task, UIO, ZIO, ZIOAspect, ZLayer}
+import zio.{Clock, IO, Runtime, Task, UIO, ZIO, ZIOAspect, ZLayer}
 
 object ConfigHelper {
 
@@ -33,21 +32,19 @@ object ConfigHelper {
   /*
        A P P L I C A T I O N   P R O P E R T I E S
    */
-  val configDescriptor: ConfigDescriptor[AppConfig] =
-    string("filename")
-      .zip(list("exclusions")(string))
+
+  // TODO refactor variable names to Enumeration
+  private val configDescriptor: ConfigDescriptor[AppConfig] =
+    string("DL_FILENAME")
+      .zip(list("DL_EXCLUSIONS")(string))
       .to[AppConfig]
 
-  // read config description from hocon file source
-  def readFromFile(filename: String): IO[ConfigError, AppConfig] =
+  def readFromEnv(): IO[ConfigError, AppConfig] =
     read(
-      configDescriptor.from(
-        TypesafeConfigSource.fromHoconFilePath(filename)
-      )
+      configDescriptor from
+        ConfigSource.fromSystemEnv(valueDelimiter = Some(','))
     ).mapError(e => ConfigError(e.toString()))
 
-  def buildLayerFromFile(filename: String): Layer[ReadError[String], AppConfig] =
-    ZConfig.fromHoconFilePath(filename, configDescriptor)
 
   def printConfig(): String =
     generateDocs(configDescriptor)
