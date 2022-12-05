@@ -2,12 +2,12 @@
 
 ## Run the standalone application
 
-Execute next 3 commands:
+Execute the following commands:
 
     sbt "depAnalyzer/assembly" "depAnalyzer/dependencyList::toFile /tmp/dep-list.log -f"
     export DL_FILENAME=/tmp/dep-list.log
-    export DL_EXCLUSIONS=com.cmartin.learn
-    java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar /tmp/application-config.hocon
+    export DL_EXCLUSIONS=com.cmartin.learn #comma separated
+    java -jar dep-analyzer/target/scala-2.13/depLookoutApp.jar
 
 ## Run the application with Docker
 
