@@ -2,9 +2,8 @@ package com.cmartin.utils
 
 import com.cmartin.utils.config.ConfigHelper
 import com.cmartin.utils.config.ConfigHelper._
-import com.cmartin.utils.domain.{HttpManager, IOManager, LogicManager}
-import com.cmartin.utils.file._
 import com.cmartin.utils.domain.Model.DomainError
+import com.cmartin.utils.domain.{HttpManager, IOManager, LogicManager}
 import zio._
 
 /** Helper application for keeping a project's dependencies up to date. Using
