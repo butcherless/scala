@@ -1,7 +1,7 @@
 package com.cmartin.utils.file
 
+import com.cmartin.utils.domain.Model.DomainError.FileIOError
 import com.cmartin.utils.domain.{IOManager, Model}
-import Model.FileIOError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}

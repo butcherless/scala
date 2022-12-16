@@ -1,8 +1,9 @@
 package com.cmartin.utils.file
 
 import com.cmartin.utils.domain.HttpManager
+import com.cmartin.utils.domain.Model.DomainError.ResponseError
+import com.cmartin.utils.domain.Model.Gav
 import com.cmartin.utils.http.HttpClientManager
-import com.cmartin.utils.domain.Model.{Gav, ResponseError}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
