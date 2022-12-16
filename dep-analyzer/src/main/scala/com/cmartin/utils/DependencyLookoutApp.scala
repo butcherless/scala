@@ -26,8 +26,6 @@ import zio._
 object DependencyLookoutApp
     extends ZIOAppDefault {
 
-  val toExitCode: Int => ExitCode =
-    ExitCode.apply
 
   override val bootstrap = ConfigHelper.loggingLayer
 
