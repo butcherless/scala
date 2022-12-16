@@ -4,7 +4,6 @@ import com.cmartin.utils.config.ConfigHelper
 import com.cmartin.utils.config.ConfigHelper._
 import com.cmartin.utils.file._
 import com.cmartin.utils.http.HttpManager
-import com.cmartin.utils.logic.Common.{calcElapsedMillis, getMillis}
 import com.cmartin.utils.logic.LogicManager
 import com.cmartin.utils.model.Domain.DomainError
 import zio._
@@ -35,7 +34,7 @@ object DependencyLookoutApp
     val logicProgram =
       for {
         _           <- printBanner("Dep Lookout")
-        config      <- ConfigHelper.readFromEnv()
+        config      <- readFromEnv()
         startTime   <- getMillis()
         lines       <- IOManager.getLinesFromFile(config.filename)
         parsedLines <- LogicManager.parseLines(lines) @@ iterablePairLog("parsingErrors")

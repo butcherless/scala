@@ -4,10 +4,19 @@ import com.cmartin.utils.logic.LogicManager
 import com.colofabrix.scala.figlet4s.options.HorizontalLayout
 import com.colofabrix.scala.figlet4s.unsafe.{FIGureOps, Figlet4s, OptionsBuilderOps}
 import zio.{ExitCode, UIO, ZIO, ZIOAspect}
+import zio.{Clock, URIO}
+
+import java.util.concurrent.TimeUnit
 
 package object utils {
   val toExitCode: Int => ExitCode =
     ExitCode.apply
+
+  def getMillis(): URIO[Clock, Long] =
+    Clock.currentTime(TimeUnit.MILLISECONDS)
+
+  def calcElapsedMillis(start: Long): URIO[Clock, Long] =
+    Clock.currentTime(TimeUnit.MILLISECONDS).map(_ - start)
 
   def printBanner(message: String): UIO[Unit] =
     ZIO.succeed(
@@ -18,7 +27,6 @@ package object utils {
         .render(message)
         .print()
     )
-
 
   // loggers
   def genericLog[T](message: String) =
@@ -31,9 +39,8 @@ package object utils {
     ZIOAspect.loggedWith[LogicManager.ParsedLines] { parsedLines =>
       parsedLines.failedList match {
         case Nil => s"$message: empty sequence of elements"
-        case it => s"$message:${it.mkString("\n", "\n", "")}"
+        case it  => s"$message:${it.mkString("\n", "\n", "")}"
       }
     }
-
 
 }
