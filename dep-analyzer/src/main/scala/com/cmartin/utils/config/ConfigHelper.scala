@@ -1,9 +1,10 @@
 package com.cmartin.utils.config
 
-import com.cmartin.utils.file.{FileManager, IOManager}
-import com.cmartin.utils.http.{HttpManager, ZioHttpManager}
-import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
-import com.cmartin.utils.model.Domain.{ConfigError, WebClientError}
+import com.cmartin.utils.domain.Model.DomainError.{ConfigError, WebClientError}
+import com.cmartin.utils.domain.{HttpManager, IOManager, LogicManager}
+import com.cmartin.utils.file.FileManager
+import com.cmartin.utils.http.ZioHttpManager
+import com.cmartin.utils.logic.DependencyLogicManager
 import sttp.capabilities.WebSockets
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.SttpBackend
@@ -63,7 +64,7 @@ object ConfigHelper {
     ZLayer.make[ApplicationDependencies](
       ZLayer.succeed(Clock.ClockLive),
       FileManager.layer,
-      LogicManagerLive.layer,
+      DependencyLogicManager.layer,
       ZioHttpManager.layer,
       clientBackendLayer,
       ZLayer.Debug.mermaid

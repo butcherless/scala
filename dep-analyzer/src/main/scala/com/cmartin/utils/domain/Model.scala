@@ -1,11 +1,11 @@
-package com.cmartin.utils.model
+package com.cmartin.utils.domain
 
 import just.semver.SemVer
 import zio.json.{DeriveJsonDecoder, JsonDecoder}
 
 import scala.util.matching.Regex
 
-object Domain {
+object Model {
   /*
     CONSTANT MESSAGES
    */
@@ -15,26 +15,32 @@ object Domain {
 
   sealed trait DomainError
 
-  case class FileIOError(message: String) extends DomainError
+  object DomainError {
 
-  case class ConfigError(message: String)    extends DomainError
-  case class NetworkError(message: String)   extends DomainError
-  case class WebClientError(message: String) extends DomainError
-  case class ResponseError(message: String)  extends DomainError
-  case class DecodeError(message: String)    extends DomainError
+    case class FileIOError(message: String) extends DomainError
 
-  case class UnknownError(m: String) extends DomainError
+    case class ConfigError(message: String)    extends DomainError
+    case class NetworkError(message: String)   extends DomainError
+    case class WebClientError(message: String) extends DomainError
+    case class ResponseError(message: String)  extends DomainError
+    case class DecodeError(message: String)    extends DomainError
+
+    case class UnknownError(m: String) extends DomainError
+  }
 
   /*
    Version comparator
    */
   sealed trait ComparatorResult
 
-  case object Older extends ComparatorResult
+  object ComparatorResult {
 
-  case object Same extends ComparatorResult
+    case object Older extends ComparatorResult
 
-  case object Newer extends ComparatorResult
+    case object Same extends ComparatorResult
+
+    case object Newer extends ComparatorResult
+  }
 
   case class GavPair(local: Gav, remote: Gav) {
     def hasNewVersion: Boolean =

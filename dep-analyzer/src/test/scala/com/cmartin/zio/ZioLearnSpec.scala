@@ -1,6 +1,6 @@
 package com.cmartin.zio
 
-import com.cmartin.utils.model.Domain.Gav
+import com.cmartin.utils.domain.Model.Gav
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio._

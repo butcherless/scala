@@ -1,8 +1,8 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.http.HttpManager
+import com.cmartin.utils.domain.HttpManager
 import com.cmartin.utils.http.ZioHttpManager
-import com.cmartin.utils.model.Domain.ResponseError
+import com.cmartin.utils.domain.Model.ResponseError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import sttp.client3.httpclient.zio.HttpClientZioBackend

@@ -1,7 +1,7 @@
-package com.cmartin.utils.logic
+package com.cmartin.utils.domain
 
-import com.cmartin.utils.logic.LogicManager.ParsedLines
-import com.cmartin.utils.model.Domain.Gav
+import com.cmartin.utils.domain.LogicManager.ParsedLines
+import Model.Gav
 import zio.{UIO, URIO, ZIO}
 
 trait LogicManager {

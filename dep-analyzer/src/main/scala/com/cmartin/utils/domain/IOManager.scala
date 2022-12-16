@@ -1,6 +1,6 @@
-package com.cmartin.utils.file
+package com.cmartin.utils.domain
 
-import com.cmartin.utils.model.Domain.{DomainError, GavPair}
+import Model.{DomainError, GavPair}
 import zio.{IO, UIO, URIO, ZIO}
 
 trait IOManager {

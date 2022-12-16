@@ -1,6 +1,6 @@
 package com.cmartin
 
-import com.cmartin.utils.logic.LogicManager
+import com.cmartin.utils.domain.LogicManager
 import com.colofabrix.scala.figlet4s.options.HorizontalLayout
 import com.colofabrix.scala.figlet4s.unsafe.{FIGureOps, Figlet4s, OptionsBuilderOps}
 import zio.{ExitCode, UIO, ZIO, ZIOAspect}

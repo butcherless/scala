@@ -2,10 +2,9 @@ package com.cmartin.utils
 
 import com.cmartin.utils.config.ConfigHelper
 import com.cmartin.utils.config.ConfigHelper._
+import com.cmartin.utils.domain.{HttpManager, IOManager, LogicManager}
 import com.cmartin.utils.file._
-import com.cmartin.utils.http.HttpManager
-import com.cmartin.utils.logic.LogicManager
-import com.cmartin.utils.model.Domain.DomainError
+import com.cmartin.utils.domain.Model.DomainError
 import zio._
 
 /** Helper application for keeping a project's dependencies up to date. Using
@@ -24,7 +23,6 @@ import zio._
   */
 object DependencyLookoutApp
     extends ZIOAppDefault {
-
 
   override val bootstrap = ConfigHelper.loggingLayer
 

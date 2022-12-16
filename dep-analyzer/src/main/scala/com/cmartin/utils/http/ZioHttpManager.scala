@@ -1,8 +1,10 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.http.HttpManager.{retrieveFirstMajor, GavResults}
+import com.cmartin.utils.domain.HttpManager
+import com.cmartin.utils.domain.HttpManager.{retrieveFirstMajor, GavResults}
+import com.cmartin.utils.domain.Model.DomainError.NetworkError
 import com.cmartin.utils.http.ZioHttpManager._
-import com.cmartin.utils.model.Domain._
+import com.cmartin.utils.domain.Model._
 import just.semver.SemVer
 import just.semver.SemVer.render
 import sttp.capabilities.WebSockets

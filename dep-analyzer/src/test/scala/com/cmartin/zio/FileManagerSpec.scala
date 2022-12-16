@@ -2,7 +2,8 @@ package com.cmartin.zio
 
 import com.cmartin.utils.config.ConfigHelper
 import com.cmartin.utils.config.ConfigHelper.AppConfig
-import com.cmartin.utils.file.{FileManager, IOManager}
+import com.cmartin.utils.domain.IOManager
+import com.cmartin.utils.file.FileManager
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}

@@ -1,7 +1,8 @@
-package com.cmartin.utils.http
+package com.cmartin.utils.domain
 
-import com.cmartin.utils.http.HttpManager.GavResults
-import com.cmartin.utils.model.Domain.{DomainError, Gav, GavPair, ResponseError}
+import com.cmartin.utils.domain.HttpManager.GavResults
+import com.cmartin.utils.domain.Model.DomainError.ResponseError
+import com.cmartin.utils.domain.Model.{DomainError, Gav, GavPair}
 import zio._
 
 trait HttpManager {

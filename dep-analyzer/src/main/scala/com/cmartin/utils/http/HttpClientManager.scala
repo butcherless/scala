@@ -1,7 +1,9 @@
 package com.cmartin.utils.http
 
-import com.cmartin.utils.http.HttpManager.{retrieveFirstMajor, GavResults}
-import com.cmartin.utils.model.Domain._
+import com.cmartin.utils.domain.HttpManager
+import com.cmartin.utils.domain.HttpManager.{retrieveFirstMajor, GavResults}
+import com.cmartin.utils.domain.Model.DomainError.{DecodeError, NetworkError, ResponseError}
+import com.cmartin.utils.domain.Model._
 import sttp.model.StatusCode
 import zio._
 import zio.json.DecoderOps

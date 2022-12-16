@@ -1,16 +1,14 @@
 package com.cmartin.utils.logic
 
-import com.cmartin.utils.logic.LogicManager.ParsedLines
-import com.cmartin.utils.model.Domain
-import com.cmartin.utils.model.Domain.Gav
+import com.cmartin.utils.domain.{LogicManager, Model}
+import com.cmartin.utils.domain.LogicManager.ParsedLines
+import Model.Gav
 import zio._
 
 import scala.util.matching.Regex
 
-case class LogicManagerLive()
+case class DependencyLogicManager()
     extends LogicManager {
-
-  type ParseError = String
 
   val pattern: Regex =
     raw"(^[a-z][a-z0-9-_.]+):([a-zA-Z0-9-_.]+):([0-9A-Za-z-.]+)".r
@@ -20,13 +18,13 @@ case class LogicManagerLive()
       .withParallelism(4)
       .map(ParsedLines.tupled) // result tuple => constructor function
 
-  override def filterValid(dependencies: List[Either[String, Domain.Gav]]): UIO[List[Domain.Gav]] =
+  override def filterValid(dependencies: List[Either[String, Model.Gav]]): UIO[List[Model.Gav]] =
     ZIO.succeed(dependencies.collect { case Right(dep) => dep })
 
   override def excludeFromList(
-      dependencies: Iterable[Domain.Gav],
+      dependencies: Iterable[Model.Gav],
       exclusions: List[String]
-  ): UIO[Iterable[Domain.Gav]] =
+  ): UIO[Iterable[Model.Gav]] =
     ZIO.succeed(
       dependencies.filterNot(dep => exclusions.contains(dep.group))
     )
@@ -51,7 +49,7 @@ case class LogicManagerLive()
 
 }
 
-object LogicManagerLive {
+object DependencyLogicManager {
   val layer: ULayer[LogicManager] =
-    ZLayer.succeed(LogicManagerLive())
+    ZLayer.succeed(DependencyLogicManager())
 }

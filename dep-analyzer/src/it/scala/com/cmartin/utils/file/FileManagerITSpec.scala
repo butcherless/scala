@@ -1,7 +1,7 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.model.Domain
-import com.cmartin.utils.model.Domain.FileIOError
+import com.cmartin.utils.domain.{IOManager, Model}
+import Model.FileIOError
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
@@ -35,7 +35,7 @@ class FileManagerITSpec
       runtime.unsafe.run(program.either).getOrThrowFiberFailure()
     }
 
-    lines shouldBe Left(FileIOError(s"${Domain.OPEN_FILE_ERROR}: $filename"))
+    lines shouldBe Left(FileIOError(s"${Model.OPEN_FILE_ERROR}: $filename"))
   }
 
 }

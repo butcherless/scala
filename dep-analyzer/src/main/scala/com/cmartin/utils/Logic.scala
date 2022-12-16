@@ -132,42 +132,4 @@ object Logic {
   }
 }
 
-object DependencyRepository {
-  import com.cmartin.utils.Logic.Dep
-
-  var depList: mutable.SortedSet[Dep] =
-    scala.collection.mutable.SortedSet[Dep]()
-
-  /** Adds a dependency to the repository
-    *
-    * @param dep
-    *   dependency to add
-    * @return
-    *   true if Some(dep)
-    */
-  def addDependency(dep: Option[Dep]): Boolean = {
-    dep.fold(false)(d => {
-      depList += d
-      true
-    })
-  }
-
-  def getSetByVersionCountGreaterThan(
-      counter: Int
-  ): Map[String, SortedSet[Dep]] = {
-    depList
-      .groupBy(_.key)
-      .filter(_._2.size > counter)
-  }
-
-  /** Repository number of elements
-    *
-    * @return
-    *   dependency count
-    */
-  def size: Int = {
-    depList.size
-  }
-}
-
 // TODO imprimir el artefacto que usa la dependencia, entrantes

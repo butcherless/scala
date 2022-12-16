@@ -1,6 +1,7 @@
 package com.cmartin.utils.file
 
-import com.cmartin.utils.logic.{LogicManager, LogicManagerLive}
+import com.cmartin.utils.domain.{IOManager, LogicManager}
+import com.cmartin.utils.logic.DependencyLogicManager
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.Runtime.{default => runtime}
@@ -21,7 +22,7 @@ class LogicManagerITSpec
 
     val (errors, dependencies, lineCount) =
       Unsafe.unsafe { implicit u =>
-        runtime.unsafe.run(program.provide(FileManager.layer ++ LogicManagerLive.layer)).getOrThrowFiberFailure()
+        runtime.unsafe.run(program.provide(FileManager.layer ++ DependencyLogicManager.layer)).getOrThrowFiberFailure()
       }
 
     errors shouldBe empty
@@ -36,7 +37,7 @@ class LogicManagerITSpec
     } yield (parsedLines.failedList.size, parsedLines.successList, lines.size)
 
     val (errors, dependencies, lineCount) = Unsafe.unsafe { implicit u =>
-      runtime.unsafe.run(program.provide(FileManager.layer ++ LogicManagerLive.layer)).getOrThrowFiberFailure()
+      runtime.unsafe.run(program.provide(FileManager.layer ++ DependencyLogicManager.layer)).getOrThrowFiberFailure()
     }
 
     errors shouldBe 2
