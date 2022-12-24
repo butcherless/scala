@@ -14,6 +14,7 @@ object Model {
   val FILE_BUFFER_ERROR = "Error while creating the file buffer"
 
   sealed trait DomainError
+      extends Product with Serializable
 
   object DomainError {
 
@@ -32,6 +33,7 @@ object Model {
    Version comparator
    */
   sealed trait ComparatorResult
+      extends Product with Serializable
 
   object ComparatorResult {
 
