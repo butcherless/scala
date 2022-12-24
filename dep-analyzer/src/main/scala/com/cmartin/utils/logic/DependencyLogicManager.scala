@@ -7,7 +7,7 @@ import zio._
 
 import scala.util.matching.Regex
 
-case class DependencyLogicManager()
+final case class DependencyLogicManager()
     extends LogicManager {
 
   val pattern: Regex =

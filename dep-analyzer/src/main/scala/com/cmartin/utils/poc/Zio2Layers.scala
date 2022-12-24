@@ -15,23 +15,23 @@ object Zio2Layers
     extends ZIOAppDefault {
 
   object Model {
-    case class Airline(name: String, code: String)
+    final case class Airline(name: String, code: String)
 
-    case class Aircraft(registration: String)
+    final case class Aircraft(registration: String)
 
-    case class AuditCounters(airline: Int, aircraft: Int)
+    final case class AuditCounters(airline: Int, aircraft: Int)
   }
 
   object Infrastructure {
-    case class ApplicationConfig(logLevel: String)
+    final case class ApplicationConfig(logLevel: String)
 
-    case class QueryResults()
+    final case class QueryResults()
 
     trait Config {
       def read(filepath: String): IO[String, ApplicationConfig]
     }
 
-    case class ConfigLive() extends Config {
+    final case class ConfigLive() extends Config {
       override def read(filepath: String): IO[String, ApplicationConfig] =
         ZIO.succeed(ApplicationConfig("INFO"))
     }
@@ -45,7 +45,7 @@ object Zio2Layers
       def doQuery(query: String): IO[String, QueryResults]
     }
 
-    case class DatabaseLive() extends Database {
+    final case class DatabaseLive() extends Database {
       override def doQuery(query: String): IO[String, QueryResults] =
         ZIO.succeed(QueryResults()) // use Slick or Quill
     }
@@ -64,7 +64,7 @@ object Zio2Layers
       def count(): IO[String, Int]
     }
 
-    case class AirlineRepositoryLive(database: Database) extends AirlineRepository {
+    final case class AirlineRepositoryLive(database: Database) extends AirlineRepository {
       override def count(): IO[String, Int] = for {
         _ <- database.doQuery("dummy query")
       } yield 10
@@ -83,7 +83,7 @@ object Zio2Layers
       def findByRegistration(registration: String): IO[String, Aircraft]
     }
 
-    case class AircraftRepositoryLive(database: Database) extends AircraftRepository {
+    final case class AircraftRepositoryLive(database: Database) extends AircraftRepository {
 
       def findByRegistration(registration: String): IO[String, Aircraft] =
         ZIO.succeed(Aircraft(registration))
@@ -111,7 +111,7 @@ object Zio2Layers
       def countAll(): IO[String, AuditCounters]
     }
 
-    case class AuditServiceLive(
+    final case class AuditServiceLive(
         airlineRepository: AirlineRepository,
         aircraftRepository: AircraftRepository
     ) extends AuditService {
@@ -127,7 +127,7 @@ object Zio2Layers
     }
 
     object AuditServiceLive {
-      case class AuditServiceDeps(airlineRepository: AirlineRepository, aircraftRepository: AircraftRepository)
+      final case class AuditServiceDeps(airlineRepository: AirlineRepository, aircraftRepository: AircraftRepository)
 
       val layer: URLayer[AirlineRepository with AircraftRepository, AuditService] =
         ZLayer {

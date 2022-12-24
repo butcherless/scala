@@ -37,17 +37,17 @@ object AircraftValidator {
   }
 
   def validateModel(model: String): Validation[ValidationError, String] = {
-    validateEmptyText(model, EmptyModelError)
+    validateEmptyText(model, ValidationError.EmptyModelError)
   }
 
   def validateRegistration(
       registration: String
   ): Validation[ValidationError, String] = {
-    validateEmptyText(registration, EmptyRegistrationError)
+    validateEmptyText(registration, ValidationError.EmptyRegistrationError)
   }
 
   def validateCountry(country: String): Validation[ValidationError, String] = {
-    validateEmptyText(country, EmptyCountryError)
+    validateEmptyText(country, ValidationError.EmptyCountryError)
   }
 
   /* 1. validate empty text first (AND) (1 error), stop validation if fails
@@ -56,7 +56,7 @@ object AircraftValidator {
   def validateDelivery(
       delivery: String
   ): Validation[ValidationError, String] = {
-    validateEmptyText(delivery, EmptyDeliveryError)
+    validateEmptyText(delivery, ValidationError.EmptyDeliveryError)
       .flatMap(_ =>
         Validation
           .validate(
@@ -72,7 +72,7 @@ object AircraftValidator {
   ): Validation[ValidationError, String] = {
     val validChars = "0123456789-"
     Validation
-      .fromPredicateWith(InvalidCharactersError)(delivery)(
+      .fromPredicateWith(ValidationError.InvalidCharactersError)(delivery)(
         _.forall(validChars.contains(_))
       )
   }
@@ -81,12 +81,12 @@ object AircraftValidator {
       text: String
   ): Validation[ValidationError, String] = {
     Validation
-      .fromPredicateWith(LowerCaseLetterError)(text)(_.forall(_.isUpper))
+      .fromPredicateWith(ValidationError.LowerCaseLetterError)(text)(_.forall(_.isUpper))
   }
 
   def validateLetterChars(text: String): Validation[ValidationError, String] = {
     if (text.forall(_.isUpper)) Validation.succeed(text)
-    Validation.fail(InvalidCharactersError)
+    Validation.fail(ValidationError.InvalidCharactersError)
   }
 
   def validateDeliveryLength(
@@ -99,7 +99,7 @@ object AircraftValidator {
     }
 
     Validation
-      .fromPredicateWith(InvalidLengthError)(delivery)(validateDate)
+      .fromPredicateWith(ValidationError.InvalidLengthError)(delivery)(validateDate)
   }
 
   def validateLength(
@@ -107,7 +107,7 @@ object AircraftValidator {
       length: Int
   ): Validation[ValidationError, String] = {
     Validation
-      .fromPredicateWith(InvalidLengthError)(text)(_.length == length)
+      .fromPredicateWith(ValidationError.InvalidLengthError)(text)(_.length == length)
   }
 
   private def validateEmptyText(

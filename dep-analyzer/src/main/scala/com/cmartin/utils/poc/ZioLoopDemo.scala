@@ -31,8 +31,8 @@ class ZioLoopDemo
   /*
    * result container
    */
-  case class MyResult(a: Double, text: String)
-  case class MyInfo(a: Int)
+  final case class MyResult(a: Double, text: String)
+  final case class MyInfo(a: Int)
   /*
    * initial state of the business information
    */

@@ -12,7 +12,7 @@ import java.net.URI
 import java.net.http.HttpResponse.BodyHandlers
 import java.net.http.{HttpClient, HttpRequest}
 
-case class HttpClientManager()
+final case class HttpClientManager()
     extends HttpManager {
 
   import HttpClientManager._

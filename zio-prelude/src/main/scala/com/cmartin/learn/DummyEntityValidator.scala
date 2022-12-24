@@ -24,7 +24,7 @@ object DummyEntityValidator {
 
   private def validateInRange(number: Int): Validation[ValidationError, Int] = {
     Validation
-      .fromPredicateWith[ValidationError, Int](OutOfRangeError)(number)(
+      .fromPredicateWith[ValidationError, Int](ValidationError.OutOfRangeError)(number)(
         validRange.contains(_)
       )
   }
@@ -33,7 +33,7 @@ object DummyEntityValidator {
       number: Int
   ): Validation[ValidationError, Int] = {
     Validation
-      .fromPredicateWith[ValidationError, Int](EvenNumberError)(number)(
+      .fromPredicateWith[ValidationError, Int](ValidationError.EvenNumberError)(number)(
         _ % 2 == 1
       )
   }
@@ -52,7 +52,7 @@ object DummyEntityValidator {
       text: String
   ): Validation[ValidationError, String] = {
     Validation
-      .fromPredicateWith[ValidationError, String](EmptyTextError)(text)(
+      .fromPredicateWith[ValidationError, String](ValidationError.EmptyTextError)(text)(
         _.nonEmpty
       )
   }
@@ -61,7 +61,7 @@ object DummyEntityValidator {
       text: String
   ): Validation[ValidationError, String] = {
     Validation
-      .fromPredicateWith[ValidationError, String](InvalidCharactersError)(text)(
+      .fromPredicateWith[ValidationError, String](ValidationError.InvalidCharactersError)(text)(
         _.forall(isConsonantLetter)
       )
   }
@@ -73,7 +73,7 @@ object DummyEntityValidator {
       text: String
   ): Validation[ValidationError, String] = {
     Validation
-      .fromPredicateWith[ValidationError, String](UpperCaseLetterError)(text)(
+      .fromPredicateWith[ValidationError, String](ValidationError.UpperCaseLetterError)(text)(
         _.forall(_.isLower)
       )
   }

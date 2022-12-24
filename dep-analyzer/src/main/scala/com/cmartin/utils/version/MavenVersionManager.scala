@@ -6,7 +6,7 @@ import zio._
 
 /** Service implementation and collaborators
   */
-case class MavenVersionManager()
+final case class MavenVersionManager()
     extends VersionManager {
 
   override def compare(local: Model.Gav, remote: Model.Gav): UIO[ComparatorResult] = {

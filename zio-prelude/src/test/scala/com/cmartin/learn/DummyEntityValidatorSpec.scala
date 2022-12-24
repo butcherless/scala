@@ -1,6 +1,7 @@
 package com.cmartin.learn
 
 import com.cmartin.learn.DummyEntityValidator.validate
+import com.cmartin.learn.Model.ValidationError._
 import com.cmartin.learn.Model._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

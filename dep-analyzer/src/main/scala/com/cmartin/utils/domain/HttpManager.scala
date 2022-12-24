@@ -13,7 +13,7 @@ trait HttpManager {
 
 object HttpManager {
 
-  case class GavResults(errors: Iterable[DomainError], gavList: Iterable[GavPair])
+  final case class GavResults(errors: Iterable[DomainError], gavList: Iterable[GavPair])
 
   // extract major version number
   // val majorVersionRegex: Regex = raw"(^[0-9]+)..*".r

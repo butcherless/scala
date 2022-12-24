@@ -8,7 +8,7 @@ import zio._
 
 import scala.io.{BufferedSource, Source}
 
-case class FileManager()
+final case class FileManager()
     extends IOManager {
 
   override def getLinesFromFile(filename: String): IO[DomainError, List[String]] =

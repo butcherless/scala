@@ -45,8 +45,8 @@ class ZioLearnSpec
 
   it should "return a domain error inside fiber failure" in {
     trait DomainError
-    case class ErrorOne(m: String) extends DomainError
-    case class ErrorTwo(m: String) extends DomainError
+    final case class ErrorOne(m: String) extends DomainError
+    final case class ErrorTwo(m: String) extends DomainError
 
     val program: ZIO[Any, DomainError, Int] =
       for {
@@ -63,8 +63,8 @@ class ZioLearnSpec
 
   it should "return a domain error inside Left (either)" in {
     trait DomainError
-    case class ErrorOne(m: String) extends DomainError
-    case class ErrorTwo(m: String) extends DomainError
+    final case class ErrorOne(m: String) extends DomainError
+    final case class ErrorTwo(m: String) extends DomainError
 
     val program: ZIO[Any, DomainError, Int] =
       for {

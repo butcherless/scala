@@ -18,15 +18,15 @@ object Model {
 
   object DomainError {
 
-    case class FileIOError(message: String) extends DomainError
+    final case class FileIOError(message: String) extends DomainError
 
-    case class ConfigError(message: String)    extends DomainError
-    case class NetworkError(message: String)   extends DomainError
-    case class WebClientError(message: String) extends DomainError
-    case class ResponseError(message: String)  extends DomainError
-    case class DecodeError(message: String)    extends DomainError
+    final case class ConfigError(message: String)    extends DomainError
+    final case class NetworkError(message: String)   extends DomainError
+    final case class WebClientError(message: String) extends DomainError
+    final case class ResponseError(message: String)  extends DomainError
+    final case class DecodeError(message: String)    extends DomainError
 
-    case class UnknownError(m: String) extends DomainError
+    final case class UnknownError(m: String) extends DomainError
   }
 
   /*
@@ -44,7 +44,7 @@ object Model {
     case object Newer extends ComparatorResult
   }
 
-  case class GavPair(local: Gav, remote: Gav) {
+  final case class GavPair(local: Gav, remote: Gav) {
     def hasNewVersion: Boolean =
       local.version != remote.version
   }
@@ -58,7 +58,7 @@ object Model {
     * @param version
     *   dependency version
     */
-  case class Gav(group: String, artifact: String, version: String) {
+  final case class Gav(group: String, artifact: String, version: String) {
     def key: String = s"$group:$artifact"
 
     def formatShort: String = s"$group:$artifact:$version"
@@ -97,7 +97,7 @@ object Model {
     }
   }
 
-  case class MavenSearchResult(
+  final case class MavenSearchResult(
       responseHeader: ResponseHeader,
       response: MavenResponse
   )
@@ -107,7 +107,7 @@ object Model {
 
   }
 
-  case class ResponseHeader(
+  final case class ResponseHeader(
       status: Int,
       params: Params
   )
@@ -116,7 +116,7 @@ object Model {
     implicit val decoder: JsonDecoder[ResponseHeader] = DeriveJsonDecoder.gen[ResponseHeader]
   }
 
-  case class Params(
+  final case class Params(
       q: String,
       core: String,
       fl: String,
@@ -130,7 +130,7 @@ object Model {
     implicit val decoder: JsonDecoder[Params] = DeriveJsonDecoder.gen[Params]
   }
 
-  case class MavenResponse(
+  final case class MavenResponse(
       numFound: Int,
       start: Int,
       docs: Seq[Artifact]
@@ -140,7 +140,7 @@ object Model {
     implicit val decoder: JsonDecoder[MavenResponse] = DeriveJsonDecoder.gen[MavenResponse]
   }
 
-  case class Artifact(
+  final case class Artifact(
       id: String,
       g: String,
       a: String,

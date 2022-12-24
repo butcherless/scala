@@ -16,7 +16,7 @@ trait LogicManager {
 }
 
 object LogicManager {
-  case class ParsedLines(
+  final case class ParsedLines(
       failedList: Iterable[String],
       successList: Iterable[Gav]
   )

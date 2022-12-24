@@ -13,7 +13,7 @@ import sttp.client3._
 import sttp.client3.ziojson._
 import zio._
 
-case class ZioHttpManager(client: HttpClient)
+final case class ZioHttpManager(client: HttpClient)
     extends HttpManager {
 
   override def checkDependencies(gavList: Iterable[Gav]): UIO[GavResults] =
