@@ -73,8 +73,11 @@ lazy val depAnalyzer = (project in file("dep-analyzer"))
       zioConfigTypesafe,
       zioLogging
     ),
-    Test / fork := true,
-    Test / envVars  := Map("DL_FILENAME" -> "/tmp/dep-list.log", "DL_EXCLUSIONS" -> "com.cmartin.learn, com.cmartin.poc"),
+    Test / fork                := true,
+    Test / envVars             := Map(
+      "DL_FILENAME"   -> "/tmp/dep-list.log",
+      "DL_EXCLUSIONS" -> "com.cmartin.learn, com.cmartin.poc"
+    ),
     assembly / mainClass       := Some("com.cmartin.utils.DependencyLookoutApp"),
     assembly / assemblyJarName := "depLookoutApp.jar",
     dockerBaseImage            := "eclipse-temurin:17-jdk"
@@ -217,6 +220,8 @@ addCommandAlias("xstart", "clean;reStart")
 addCommandAlias("xstop", "reStop;clean")
 addCommandAlias("xupdate", "clean;update")
 addCommandAlias("xdup", "dependencyUpdates")
+
+addCommandAlias("dl-dep-analyzer", "depAnalyzer/dependencyList/toFile /tmp/dep-analyzer.log -f")
 
 ThisBuild / assemblyMergeStrategy := {
   case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
