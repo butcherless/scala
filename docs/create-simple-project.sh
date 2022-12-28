@@ -133,7 +133,11 @@ lazy val templateProject = (project in file("."))
    println(s"$brs$chars")
    println("* B U I L D   B E G I N S   H E R E *")
    println(s"$chars$brs ")
- } ' > build.sbt
+ }
+
+// command alias
+addCommandAlias("dep-list", "dependencyList/toFile /tmp/dep-list.log -f")
+' > build.sbt
 
 
 #
