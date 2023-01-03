@@ -52,40 +52,6 @@ lazy val `zio-prelude` = (project in file("zio-prelude"))
     libraryDependencies ++= Seq(zioPrelude, scalaTest)
   )
 
-lazy val depAnalyzer = (project in file("dep-analyzer"))
-  .configs(IntegrationTest)
-  .settings(
-    Defaults.itSettings,
-    parallelExecution          := false,
-    commonSettings,
-    name                       := "dependency-lookout-app",
-    version                    := "1.0.0",
-    libraryDependencies ++= Seq(
-      figlet4s,
-      akkaStream,
-      json4s,
-      justSemver,
-      sttpCore,
-      sttpZio,
-      sttpZioJson,
-      zio,
-      zioConfig,
-      zioConfigTypesafe,
-      zioLogging
-    ),
-    Test / fork                := true,
-    Test / envVars             := Map(
-      "DL_FILENAME"   -> "/tmp/dep-list.log",
-      "DL_EXCLUSIONS" -> "com.cmartin.learn, com.cmartin.poc"
-    ),
-    assembly / mainClass       := Some("com.cmartin.utils.DependencyLookoutApp"),
-    assembly / assemblyJarName := "depLookoutApp.jar",
-    dockerBaseImage            := "eclipse-temurin:17-jdk"
-  )
-  .dependsOn(common)
-  .enablePlugins(JavaAppPackaging)
-  .enablePlugins(DockerPlugin)
-
 lazy val hkTypes = (project in file("hk-types"))
   .configs(IntegrationTest)
   .settings(
