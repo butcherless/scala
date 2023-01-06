@@ -187,8 +187,6 @@ addCommandAlias("xstop", "reStop;clean")
 addCommandAlias("xupdate", "clean;update")
 addCommandAlias("xdup", "dependencyUpdates")
 
-addCommandAlias("dl-dep-analyzer", "depAnalyzer/dependencyList/toFile /tmp/dep-analyzer.log -f")
-
 ThisBuild / assemblyMergeStrategy := {
   case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
   case "module-info.class"                     => MergeStrategy.discard
