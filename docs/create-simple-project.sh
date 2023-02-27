@@ -135,8 +135,10 @@ lazy val templateProject = (project in file("."))
    println(s"$chars$brs ")
  }
 
-// command alias
-addCommandAlias("dep-list", "dependencyList/toFile /tmp/dep-list.log -f")
+// command aliases
+addCommandAlias("xdep-list", "dependencyList/toFile /tmp/dep-list.log -f")
+addCommandAlias("xcoverage", "clean;coverage;test;coverageReport")
+addCommandAlias("xdep-up", "dependencyUpdates")
 ' > build.sbt
 
 
