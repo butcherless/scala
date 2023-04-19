@@ -41,7 +41,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup Scala and Java
-      uses: coursier/setup-action@v1.3.1
+      uses: coursier/setup-action@v1.3.2
       with:
         jvm: zulu@17 
     - name: create project template
