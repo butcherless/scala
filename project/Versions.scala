@@ -12,7 +12,7 @@ object Versions {
   val logback     = "1.4.7"
   val refined     = "0.10.3"
   val scalaz      = "7.3.7"
-  val scalatest   = "3.2.15"
+  val scalatest   = "3.2.16"
   val sttp        = "3.8.5"
   val zio         = "2.0.13"
   val zioConfig   = "3.0.6"
