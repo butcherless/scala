@@ -8,7 +8,7 @@ object Versions {
   val figlet4s    = "0.3.2"
   val json4s      = "4.0.6"
   val justSemver  = "0.6.0"
-  val kafkaClient = "3.4.0"
+  val kafkaClient = "3.4.1"
   val logback     = "1.4.7"
   val refined     = "0.10.3"
   val scalaz      = "7.3.7"
