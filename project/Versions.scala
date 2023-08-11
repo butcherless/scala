@@ -9,7 +9,7 @@ object Versions {
   val json4s      = "4.0.6"
   val justSemver  = "0.6.0"
   val kafkaClient = "3.5.1"
-  val logback     = "1.4.9"
+  val logback     = "1.4.11"
   val refined     = "0.11.0"
   val scalaz      = "7.3.7"
   val scalatest   = "3.2.16"
@@ -18,5 +18,5 @@ object Versions {
   val zioConfig   = "3.0.6"
   val zioLogging  = "2.1.13"
   val zioKafka    = "0.12.0"
-  val zioPrelude  = "1.0.0-RC19"
+  val zioPrelude  = "1.0.0-RC20"
 }
