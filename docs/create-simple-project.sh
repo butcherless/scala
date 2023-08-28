@@ -4,7 +4,7 @@ PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's/\./\//g'`
 SCALA_VER="2.13.11"
-SBT_VER="1.9.3"
+SBT_VER="1.9.4"
 SBT_ASSEMBLY_VER="2.1.1"
 SBT_BLOOP_VER="1.5.10"
 SBT_SCALAFMT_VER="2.4.6"
@@ -48,7 +48,6 @@ addSbtPlugin("org.scoverage"    % "sbt-scoverage"          % "'${SCOVERAGE_VER}'
 addSbtPlugin("org.scalameta"    % "sbt-scalafmt"           % "'${SBT_SCALAFMT_VER}'")
 addSbtPlugin("ch.epfl.scala"    % "sbt-bloop"              % "'${SBT_BLOOP_VER}'")
 addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
-//addSbtPlugin("net.virtual-void" % "sbt-dependency-graph"   % "0.10.0-RC1")
 addDependencyTreePlugin
 ' > project/plugins.sbt
 
