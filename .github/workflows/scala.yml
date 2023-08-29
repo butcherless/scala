@@ -43,7 +43,7 @@ jobs:
     - name: Setup Scala and Java
       uses: coursier/setup-action@v1
       with:
-        jvm: zulu@17 
+        jvm: zulu@20
     - name: create project template
       run: chmod u+x create-simple-project.sh && ./create-simple-project.sh
       working-directory: docs
