@@ -2,15 +2,15 @@
 
 PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
-PKG_DIR=`echo ${SOURCE_PKG} | sed 's/\./\//g'`
-SCALA_VER="2.13.12"
+PKG_DIR=`echo ${SOURCE_PKG} | sed 's|\.|/|g'`
+SCALA_VER="2.13.11"
 SBT_VER="1.9.4"
 SBT_ASSEMBLY_VER="2.1.1"
 SBT_BLOOP_VER="1.5.10"
 SBT_SCALAFMT_VER="2.5.2"
 DEP_UP_VER="1.2.7"
 SCALAFMT_VER="3.7.14"
-SCALATEST_VER="3.2.16"
+SCALATEST_VER="3.2.17"
 SCOVERAGE_VER="2.0.8"
 ZIO_VER="2.0.16"
 
