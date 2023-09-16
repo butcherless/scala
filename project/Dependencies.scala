@@ -22,7 +22,7 @@ object Dependencies {
   lazy val json4s         = "org.json4s"      %% "json4s-native"   % Versions.json4s
   lazy val justSemver     = "io.kevinlee"     %% "just-semver"     % Versions.justSemver
   lazy val kafkaClient    = "org.apache.kafka" % "kafka-clients"   % Versions.kafkaClient
-  lazy val logback        = "ch.qos.logback"   % "logback-classic" % Versions.logback // exclude("org.slf4j", "slf4j-api")
+  lazy val logback        = "ch.qos.logback"   % "logback-classic" % Versions.logback
 
   lazy val figlet4s = "com.colofabrix.scala" %% "figlet4s-core" % Versions.figlet4s
   lazy val refined  = "eu.timepit"           %% "refined"       % Versions.refined
@@ -44,5 +44,5 @@ object Dependencies {
   // testing code
   lazy val akkaHttpTest = "com.typesafe.akka" %% "akka-http-testkit"        % Versions.akkaHttp  % Test
   lazy val akkaTest     = "com.typesafe.akka" %% "akka-actor-testkit-typed" % Versions.akka      % Test
-  lazy val scalaTest    = "org.scalatest"     %% "scalatest"                % Versions.scalatest % "it,test"
+  lazy val scalaTest    = "org.scalatest"     %% "scalatest"                % Versions.scalatest % Test
 }

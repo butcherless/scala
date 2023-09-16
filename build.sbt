@@ -2,10 +2,10 @@ import Dependencies._
 import sbtassembly.AssemblyKeys.{assembly, assemblyMergeStrategy}
 import sbtassembly.MergeStrategy
 
-Global / onChangedBuildSource := ReloadOnSourceChanges
-
 ThisBuild / scalaVersion := "2.13.12"
 ThisBuild / organization := "com.cmartin.learn"
+
+Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val basicScalacOptions = Seq(
   "-deprecation",
@@ -26,16 +26,13 @@ lazy val commonSettings = Seq(
 )
 
 lazy val common = (project in file("common"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
-    Defaults.itSettings,
     name := "common",
     libraryDependencies ++= Seq(logback, zio, scalaTest)
   )
 
 lazy val fpInScala = (project in file("fp-in-scala"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name    := "fp-in-scala",
@@ -44,8 +41,6 @@ lazy val fpInScala = (project in file("fp-in-scala"))
   )
 
 lazy val `zio-prelude` = (project in file("zio-prelude"))
-  .configs(IntegrationTest)
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "zio-prelude",
@@ -53,7 +48,6 @@ lazy val `zio-prelude` = (project in file("zio-prelude"))
   )
 
 lazy val hkTypes = (project in file("hk-types"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "hkTypes",
@@ -61,31 +55,13 @@ lazy val hkTypes = (project in file("hk-types"))
   )
 
 lazy val typeclasses = (project in file("typeclasses"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "typeclasses",
     libraryDependencies ++= Seq(logback)
   )
 
-lazy val dtogen = (project in file("dtogen"))
-  .configs(IntegrationTest)
-  .settings(
-    commonSettings,
-    name := "dtogen",
-    libraryDependencies ++= Seq(logback)
-  )
-
-lazy val scalazlearn = (project in file("scalaz"))
-  .configs(IntegrationTest)
-  .settings(
-    commonSettings,
-    name := "scalazlearn",
-    libraryDependencies ++= Seq(scalaz)
-  )
-
 lazy val akkaActors = (project in file("akka-actors"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-actors-proof-of-concept",
@@ -93,7 +69,6 @@ lazy val akkaActors = (project in file("akka-actors"))
   )
 
 lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-actors-typed-poc",
@@ -108,7 +83,6 @@ lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
   )
 
 lazy val akkahttphw = (project in file("akka-http-hw"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-http-webserver",
@@ -123,7 +97,6 @@ lazy val akkahttphw = (project in file("akka-http-hw"))
   )
 
 lazy val akkahttpcl = (project in file("akka-http-cl"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "akka-http-webclient",
@@ -131,7 +104,6 @@ lazy val akkahttpcl = (project in file("akka-http-cl"))
   )
 
 lazy val calendar = (project in file("calendar"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "personal-calendar",
@@ -139,7 +111,6 @@ lazy val calendar = (project in file("calendar"))
   )
 
 lazy val refinedPoc = (project in file("refined-poc"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "refined-proof-of-concept",
@@ -147,7 +118,6 @@ lazy val refinedPoc = (project in file("refined-poc"))
   )
 
 lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "kafka-producer-consumer",
@@ -162,7 +132,6 @@ lazy val kafkaprodcons = (project in file("kafka-prod-cons"))
   .dependsOn(common)
 
 lazy val json4sUtils = (project in file("json4s-utils"))
-  .configs(IntegrationTest)
   .settings(
     commonSettings,
     name := "json4s-utils",
@@ -172,11 +141,12 @@ lazy val json4sUtils = (project in file("json4s-utils"))
 // clear screen and banner
 lazy val cls = taskKey[Unit]("Prints a separator")
 cls := {
-  val brs     = "\n".repeat(2)
-  val message = "* B U I L D   B E G I N S   H E R E *"
-  val chars   = "*".repeat(message.length())
+  val brs           = "\n".repeat(2)
+  val message       = "BUILD BEGINS HERE"
+  val spacedMessage = message.mkString("* ", " ", " *")
+  val chars         = "*".repeat(spacedMessage.length())
   println(s"$brs$chars")
-  println("* B U I L D   B E G I N S   H E R E *")
+  println(spacedMessage)
   println(s"$chars$brs ")
 }
 

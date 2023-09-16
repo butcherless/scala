@@ -24,9 +24,6 @@ jobs:
     - name: compile unit tests
       run: sbt -v --client Test/compile
       working-directory: ${{env.WORK_DIR}}
-    - name: compile integration tests
-      run: sbt -v --client IntegrationTest/compile
-      working-directory: ${{env.WORK_DIR}}
     - name: tests
       run: sbt -v --client test
       working-directory: ${{env.WORK_DIR}}
