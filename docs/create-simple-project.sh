@@ -4,7 +4,7 @@ PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's|\.|/|g'`
 SCALA_VER="2.13.12"
-SBT_VER="1.9.5"
+SBT_VER="1.9.6"
 SBT_ASSEMBLY_VER="2.1.1"
 SBT_BLOOP_VER="1.5.10"
 SBT_SCALAFMT_VER="2.5.2"
@@ -39,6 +39,7 @@ docstrings = JavaDoc
 docstrings.wrapMaxColumn = 80
 project.git = true' > .scalafmt.conf
 
+
 #
 # create sbt plugins file
 #
@@ -50,7 +51,6 @@ addSbtPlugin("ch.epfl.scala"    % "sbt-bloop"              % "'${SBT_BLOOP_VER}'
 addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
 addDependencyTreePlugin
 ' > project/plugins.sbt
-
 
 
 #
