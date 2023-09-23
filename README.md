@@ -1,5 +1,3 @@
-[![CircleCI](https://circleci.com/gh/butcherless/scala.svg?style=svg)](https://circleci.com/gh/butcherless/scala)
-
 ![Scala CI](https://github.com/butcherless/scala/workflows/Scala%20CI/badge.svg)
 
 [![Build Status](https://semaphoreci.com/api/v1/butcherless/scala/branches/master/badge.svg)](https://semaphoreci.com/butcherless/scala)
