@@ -7,5 +7,9 @@
   ],
   "extends": [
     "config:base"
-  ]
+  ],
+    "sbt": {
+    "enabled": true
+  },
+  "schedule": ["after 5pm every weekday"]
 }
