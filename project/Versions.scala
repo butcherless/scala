@@ -11,7 +11,7 @@ object Versions {
   val kafkaClient = "3.6.0"
   val logback     = "1.4.11"
   val refined     = "0.11.0"
-  val scalaz      = "7.3.7"
+  val scalaz      = "7.3.8"
   val scalatest   = "3.2.17"
   val sttp        = "3.8.5"
   val zio         = "2.0.19"
