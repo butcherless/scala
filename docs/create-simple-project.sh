@@ -17,7 +17,7 @@ ZIO_VER="2.1-RC1"
 #
 # create filesystem
 #
-mkdir -p project src/{main,test}/{resources,scala/${PKG_DIR}}
+mkdir -p project src/{main,test}/{resources,scala/"${PKG_DIR}"}
 
 
 #
