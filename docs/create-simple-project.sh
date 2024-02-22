@@ -3,7 +3,7 @@
 PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's|\.|/|g'`
-SCALA_VER="2.13.12"
+SCALA_VER="2.13.13"
 SBT_VER="1.10.0-M1"
 SBT_ASSEMBLY_VER="2.1.5"
 SBT_BLOOP_VER="1.5.15"
