@@ -15,7 +15,7 @@ object Versions {
   val scalatest   = "3.2.18"
   val sttp        = "3.9.5"
   val zio         = "2.0.22"
-  val zioConfig   = "4.0.1"
+  val zioConfig   = "4.0.2"
   val zioLogging  = "2.2.3"
   val zioKafka    = "0.12.0"
   val zioPrelude  = "1.0.0-RC24"
