@@ -2,7 +2,7 @@ import Dependencies._
 import sbtassembly.AssemblyKeys.{assembly, assemblyMergeStrategy}
 import sbtassembly.MergeStrategy
 
-ThisBuild / scalaVersion := "2.13.13"
+ThisBuild / scalaVersion := "2.13.14"
 ThisBuild / organization := "com.cmartin.learn"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
