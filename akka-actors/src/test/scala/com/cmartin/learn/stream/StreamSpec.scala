@@ -5,11 +5,11 @@ import akka.actor.ActorSystem
 import akka.stream.scaladsl.{Flow, Merge, Sink, Source}
 import org.scalatest.flatspec.AsyncFlatSpec
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 class StreamSpec extends AsyncFlatSpec {
-  implicit val system = ActorSystem("QuickStart")
-  implicit val ec     = system.dispatcher
+  implicit val system: ActorSystem          = ActorSystem("QuickStart")
+  implicit val ec: ExecutionContextExecutor = system.dispatcher
 
   "Stream spec" should "sum a list of integer via fold sink" in {
     val intSource: Source[Int, NotUsed]  = Source[Int](1 to 5)

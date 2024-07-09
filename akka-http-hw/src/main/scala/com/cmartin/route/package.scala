@@ -40,7 +40,7 @@ package object route {
 
   // JSON Format, Marshaller & Unmarshaller
   trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-    implicit val transferFormat = jsonFormat5(Transfer)
+    implicit val transferFormat: RootJsonFormat[Transfer] = jsonFormat5(Transfer)
 
     implicit object MessageJsonFormat extends RootJsonFormat[Message] {
       override def read(json: JsValue): Message = ???

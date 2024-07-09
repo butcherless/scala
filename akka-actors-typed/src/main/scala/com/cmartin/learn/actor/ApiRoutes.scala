@@ -1,6 +1,7 @@
 package com.cmartin.learn.actor
 
 import akka.Done
+import akka.actor.typed.Scheduler
 import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AskPattern._
 import akka.http.scaladsl.server.Directives._
@@ -12,8 +13,8 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 class ApiRoutes(context: ActorContext[Done]) extends ComponentLogging {
-  implicit val timeout: Timeout = 3.seconds
-  implicit val scheduler        = context.system.scheduler
+  implicit val timeout: Timeout     = 3.seconds
+  implicit val scheduler: Scheduler = context.system.scheduler
 
   val serviceActor = context.spawn(ServiceActor("service-1"), "service-1")
 

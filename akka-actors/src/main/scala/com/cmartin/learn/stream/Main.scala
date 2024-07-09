@@ -5,13 +5,14 @@ import akka.actor.ActorSystem
 import akka.stream.scaladsl.{Flow, Sink, Source}
 
 import scala.collection.immutable
+import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration._
 
 object Main { // extends App {
   println("Main streams")
 
-  implicit val system = ActorSystem("QuickStart")
-  implicit val ec     = system.dispatcher
+  implicit val system: ActorSystem          = ActorSystem("QuickStart")
+  implicit val ec: ExecutionContextExecutor = system.dispatcher
 
   val sources = immutable.Seq(Source(List(1, 2, 3)), Source(List(10, 20, 30)))
 

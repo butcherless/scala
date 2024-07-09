@@ -66,7 +66,7 @@ case class CryptoCurrency(
 )
 
 object CryptoCurrency {
-  implicit val ord = new Ordering[CryptoCurrency] {
+  implicit val ord: Ordering[CryptoCurrency] = new Ordering[CryptoCurrency] {
 
     /** Comparator for dependencies classes
       *

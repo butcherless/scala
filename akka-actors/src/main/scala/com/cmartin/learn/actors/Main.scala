@@ -12,10 +12,10 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 object Main extends App {
-  implicit val system = ActorSystem("IntegerCalc")
+  implicit val system: ActorSystem = ActorSystem("IntegerCalc")
 
   // ask timeout
-  implicit val askTimeout = Timeout(2.seconds)
+  implicit val askTimeout: Timeout = Timeout(2.seconds)
 
   val numbers: Source[Int, NotUsed] = Source[Int](1 to 20)
 
