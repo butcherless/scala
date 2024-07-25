@@ -102,7 +102,7 @@ object Json4sFlatBlup extends FlatBlup[String, Option[String]] {
             .fold(JNothing)(_ merge _)
 
         // TODO case JArray
-        case _               => JNothing
+        case _ => JNothing
       }
     }
 
