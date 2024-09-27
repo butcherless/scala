@@ -6,7 +6,7 @@ jobs:
 
   scala2:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
 
     steps:
@@ -35,7 +35,7 @@ jobs:
       working-directory: ${{env.WORK_DIR}}
 
   project-template:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
 
     steps:
