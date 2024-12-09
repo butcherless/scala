@@ -6,10 +6,12 @@
     "type: dependencies"
   ],
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
-    "sbt": {
+  "sbt": {
     "enabled": true
   },
-  "schedule": ["after 5pm every weekday"]
+  "schedule": [
+    "after 5pm every weekday"
+  ]
 }
