@@ -3,16 +3,19 @@
 PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's|\.|/|g'`
-SCALA_VER="2.13.16"
-SBT_VER="1.10.10"
-SBT_ASSEMBLY_VER="2.3.1"
+
+SBT_VER="1.10.11"
 SBT_BLOOP_VER="2.0.8"
+SBT_ASSEMBLY_VER="2.3.1"
 SBT_SCALAFMT_VER="2.5.4"
-DEP_UP_VER="1.2.9"
+SBT_DEP_UP_VER="1.2.9"
+SBT_SCOVERAGE_VER="2.3.1"
+
 SCALAFMT_VER="3.9.4"
-SCALATEST_VER="3.2.19"
-SCOVERAGE_VER="2.3.1"
+
+SCALA_VER="2.13.16"
 ZIO_VER="2.1.16"
+SCALATEST_VER="3.2.19"
 
 #
 # create filesystem
@@ -44,11 +47,11 @@ project.git = true' > .scalafmt.conf
 # create sbt plugins file
 #
 echo '
-addSbtPlugin("com.eed3si9n"     % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
-addSbtPlugin("org.scoverage"    % "sbt-scoverage"          % "'${SCOVERAGE_VER}'")
-addSbtPlugin("org.scalameta"    % "sbt-scalafmt"           % "'${SBT_SCALAFMT_VER}'")
 addSbtPlugin("ch.epfl.scala"    % "sbt-bloop"              % "'${SBT_BLOOP_VER}'")
-addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "'${DEP_UP_VER}'")
+addSbtPlugin("com.eed3si9n"     % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
+addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "'${SBT_DEP_UP_VER}'")
+addSbtPlugin("org.scalameta"    % "sbt-scalafmt"           % "'${SBT_SCALAFMT_VER}'")
+addSbtPlugin("org.scoverage"    % "sbt-scoverage"          % "'${SBT_SCOVERAGE_VER}'")
 addDependencyTreePlugin
 ' > project/plugins.sbt
 
