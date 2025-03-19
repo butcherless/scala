@@ -5,7 +5,7 @@ SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's|\.|/|g'`
 
 SBT_VER="1.10.11"
-SBT_BLOOP_VER="2.0.8"
+SBT_BLOOP_VER="2.0.9"
 SBT_ASSEMBLY_VER="2.3.1"
 SBT_SCALAFMT_VER="2.5.4"
 SBT_DEP_UP_VER="1.2.9"
