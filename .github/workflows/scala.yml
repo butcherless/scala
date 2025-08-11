@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Setup JDK
       uses: actions/setup-java@v4
       with:
@@ -39,7 +39,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Setup JDK
       uses: actions/setup-java@v4
       with:
