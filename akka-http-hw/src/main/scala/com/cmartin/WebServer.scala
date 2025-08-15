@@ -31,6 +31,6 @@ object WebServer extends App {
   println(s"Server online at http://${HOST}:${PORT}/\nPress RETURN to stop...")
   StdIn.readLine()                       // let it run until user presses return
   bindingFuture
-    .flatMap(_.unbind())                 // trigger unbinding from the port
+    .flatMap(_.unbind()) // trigger unbinding from the port
     .onComplete(_ => system.terminate()) // and shutdown when done
 }
