@@ -18,11 +18,11 @@ object Dependencies {
   lazy val circeParser  = "io.circe" %% "circe-parser"  % Versions.circe
   lazy val circeGeneric = "io.circe" %% "circe-generic" % Versions.circe
 
-  lazy val typesafeConfig = "com.typesafe"     % "config"          % Versions.config
-  lazy val json4s         = "org.json4s"      %% "json4s-native"   % Versions.json4s
-  lazy val justSemver     = "io.kevinlee"     %% "just-semver"     % Versions.justSemver
-  lazy val kafkaClient    = "org.apache.kafka" % "kafka-clients"   % Versions.kafkaClient
-  lazy val logback        = "ch.qos.logback"   % "logback-classic" % Versions.logback
+  lazy val typesafeConfig = "com.typesafe"      % "config"          % Versions.config
+  lazy val json4s         = "io.github.json4s" %% "json4s-native"   % Versions.json4s
+  lazy val justSemver     = "io.kevinlee"      %% "just-semver"     % Versions.justSemver
+  lazy val kafkaClient    = "org.apache.kafka"  % "kafka-clients"   % Versions.kafkaClient
+  lazy val logback        = "ch.qos.logback"    % "logback-classic" % Versions.logback
 
   lazy val figlet4s = "com.colofabrix.scala" %% "figlet4s-core" % Versions.figlet4s
   lazy val refined  = "eu.timepit"           %% "refined"       % Versions.refined
