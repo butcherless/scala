@@ -4,17 +4,17 @@ PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's|\.|/|g'`
 
-SBT_VER="1.11.3"
-SBT_BLOOP_VER="2.0.10"
+SBT_VER="1.11.7"
 SBT_ASSEMBLY_VER="2.3.1"
-SBT_SCALAFMT_VER="2.5.4"
+SBT_BLOOP_VER="2.0.17"
+SBT_SCALAFMT_VER="2.5.6"
 SBT_DEP_UP_VER="1.2.9"
-SBT_SCOVERAGE_VER="2.3.1"
+SBT_SCOVERAGE_VER="2.4.2"
 
-SCALAFMT_VER="3.9.7"
+SCALAFMT_VER="3.10.2"
 
-SCALA_VER="2.13.16"
-ZIO_VER="2.1.19"
+SCALA_VER="2.13.18"
+ZIO_VER="2.1.23"
 SCALATEST_VER="3.2.19"
 
 #
@@ -264,4 +264,4 @@ class LibrarySpec
 #
 # run this script
 #
-sbt clean update scalaVersion sbtVersion coverage test coverageReport dependencyUpdates assembly run
+sbt clean update scalaVersion sbtVersion scalafmtAll coverage test coverageReport dependencyUpdates assembly run
