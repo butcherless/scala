@@ -32,9 +32,10 @@ class MapFlatBlupSpec extends AnyFlatSpec with Matchers {
   ignore should "flatten json keys in a Json Array" in {
     val resultMap: Map[String, Any] = MapFlatBlup.flatten(nestedArrayJson).value
 
-    resultMap shouldBe JsonMethods
-      .parse(flattenedArrayJson)
-      .extract[Map[String, Any]]
+    resultMap shouldBe
+      JsonMethods
+        .parse(flattenedArrayJson)
+        .extract[Map[String, Any]]
   }
 
   /*
