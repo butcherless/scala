@@ -14,9 +14,10 @@ package object refined {
   type NetworkPort   = WellKnownPort Or UserPort
   type ZipCode       = Interval.Closed[W.`1000`.T, W.`52999`.T]
   type LeapYear      =
-    Positive And Divisible[W.`4`.T] And Not[Divisible[W.`100`.T]] Or Divisible[
-      W.`400`.T
-    ]
+    Positive And Divisible[W.`4`.T] And Not[Divisible[W.`100`.T]] Or
+      Divisible[
+        W.`400`.T
+      ]
   type PersonName    = MatchesRegex[W.`"[a-zA-Z][a-zA-Z -]*"`.T]
 
   def validatePositiveInt(a: Int): Either[String, Refined[Int, Positive]] =
