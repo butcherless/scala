@@ -10,7 +10,7 @@ object Versions {
   val json4s      = "4.1.0"
   val justSemver  = "1.1.1"
   val kafkaClient = "4.2.0"
-  val logback     = "1.5.32"
+  val logback     = "1.5.34"
   val refined     = "0.11.3"
   val scalaz      = "7.3.8"
   val scalatest   = "3.2.20"
