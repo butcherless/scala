@@ -7,7 +7,7 @@ object Versions {
   val circe       = "0.14.15"
   val config      = "1.4.9"
   val figlet4s    = "0.3.2"
-  val json4s      = "4.1.0"
+  val json4s      = "4.1.1"
   val justSemver  = "1.1.1"
   val kafkaClient = "4.3.0"
   val logback     = "1.5.34"
