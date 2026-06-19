@@ -575,7 +575,7 @@ setTraceLevel() {
 }
 
 # set scalacOptions if we were given any -S opts
-[[ ${#scalac_args[@]} -eq 0 ]] || addSbt "set scalacOptions in ThisBuild += \"${scalac_args[*]}\""
+[[ ${#scalac_args[@]} -eq 0 ]] || addSbt "set ThisBuild / scalacOptions += \"${scalac_args[*]}\""
 
 [[ -n "$sbt_explicit_version" && -z "$sbt_new" ]] && addJava "-Dsbt.version=$sbt_explicit_version"
 vlog "Detected sbt version $sbt_version"

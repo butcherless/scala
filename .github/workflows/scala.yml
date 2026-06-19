@@ -19,19 +19,19 @@ jobs:
         cache: sbt
     - uses: sbt/setup-sbt@v1
     - name: init
-      run: sbt -v --client update 
+      run: sbt -v --server update
       working-directory: ${{env.WORK_DIR}}
     - name: compile main
-      run: sbt -v --client compile 
+      run: sbt -v --server compile
       working-directory: ${{env.WORK_DIR}}
     - name: compile unit tests
-      run: sbt -v --client Test/compile
+      run: sbt -v --server 'Test / compile'
       working-directory: ${{env.WORK_DIR}}
     - name: tests
-      run: sbt -v --client test
+      run: sbt -v --server testFull
       working-directory: ${{env.WORK_DIR}}
     - name: assembly
-      run: sbt -v --client assembly
+      run: sbt -v --server assembly
       working-directory: ${{env.WORK_DIR}}
 
   project-template:

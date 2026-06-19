@@ -1,4 +1,4 @@
-import Dependencies._
+import Dependencies.*
 import sbtassembly.AssemblyKeys.{assembly, assemblyMergeStrategy}
 import sbtassembly.MergeStrategy
 
@@ -20,7 +20,12 @@ lazy val basicScalacOptions = Seq(
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(scalaTest),
-  scalacOptions ++= basicScalacOptions
+  scalacOptions ++= basicScalacOptions,
+  Compile / scalacOptions ++= {
+    if (coverageEnabled.value)
+      Seq(s"-Xmacro-settings:scoverage-cache-buster=${System.nanoTime()}")
+    else Seq.empty
+  }
   // resolvers += // temporal for ZIO snapshots
   //  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
 )
@@ -140,7 +145,7 @@ lazy val json4sUtils = (project in file("json4s-utils"))
 
 // clear screen and banner
 lazy val cls = taskKey[Unit]("Prints a separator")
-cls := {
+LocalRootProject / cls := Def.uncached {
   val brs           = "\n".repeat(2)
   val message       = "BUILD BEGINS HERE"
   val spacedMessage = message.mkString("* ", " ", " *")
@@ -150,7 +155,12 @@ cls := {
   println(s"$chars$brs ")
 }
 
-addCommandAlias("xcoverage", "clean;coverage;test;coverageReport")
+lazy val prepareCoverageDirectories = taskKey[Unit]("Creates scoverage data directories")
+prepareCoverageDirectories := Def.uncached {
+  IO.createDirectory(coverageDataDir.value / "scoverage-data")
+}
+
+addCommandAlias("xcoverage", "coverage;prepareCoverageDirectories;testFull;coverageReport;coverageOff")
 addCommandAlias("xreload", "clean;reload")
 addCommandAlias("xstart", "clean;reStart")
 addCommandAlias("xstop", "reStop;clean")

@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 
 object Dependencies {
 
@@ -20,7 +20,7 @@ object Dependencies {
 
   lazy val typesafeConfig = "com.typesafe"      % "config"          % Versions.config
   lazy val json4s         = "io.github.json4s" %% "json4s-native"   % Versions.json4s
-  lazy val justSemver     = "io.kevinlee"      %% "just-semver"     % Versions.justSemver
+  lazy val justSemver     = "io.kevinlee"      %% "just-semver-core" % Versions.justSemver
   lazy val kafkaClient    = "org.apache.kafka"  % "kafka-clients"   % Versions.kafkaClient
   lazy val logback        = "ch.qos.logback"    % "logback-classic" % Versions.logback
 

@@ -4,12 +4,12 @@ PROJECT_NAME="project-template"
 SOURCE_PKG=com.cmartin.learn
 PKG_DIR=`echo ${SOURCE_PKG} | sed 's|\.|/|g'`
 
-SBT_VER="1.12.11"
+SBT_VER="2.0.0"
 SBT_ASSEMBLY_VER="2.3.1"
-SBT_BLOOP_VER="2.0.17"
-SBT_SCALAFMT_VER="2.5.6"
-SBT_DEP_UP_VER="1.2.9"
-SBT_SCOVERAGE_VER="2.4.2"
+SBT_BLOOP_VER="2.1.0"
+SBT_SCALAFMT_VER="2.6.1"
+SBT_DEP_UP_VER="0.7.0"
+SBT_SCOVERAGE_VER="2.4.4"
 
 SCALAFMT_VER="3.11.1"
 
@@ -49,10 +49,9 @@ project.git = true' > .scalafmt.conf
 echo '
 addSbtPlugin("ch.epfl.scala"    % "sbt-bloop"              % "'${SBT_BLOOP_VER}'")
 addSbtPlugin("com.eed3si9n"     % "sbt-assembly"           % "'${SBT_ASSEMBLY_VER}'")
-addSbtPlugin("org.jmotor.sbt"   % "sbt-dependency-updates" % "'${SBT_DEP_UP_VER}'")
-addSbtPlugin("org.scalameta"    % "sbt-scalafmt"           % "'${SBT_SCALAFMT_VER}'")
-addSbtPlugin("org.scoverage"    % "sbt-scoverage"          % "'${SBT_SCOVERAGE_VER}'")
-addDependencyTreePlugin
+addSbtPlugin("com.timushev.sbt" % "sbt-updates"           % "'${SBT_DEP_UP_VER}'")
+addSbtPlugin("org.scalameta"    % "sbt-scalafmt"          % "'${SBT_SCALAFMT_VER}'")
+addSbtPlugin("org.scoverage"    % "sbt-scoverage"         % "'${SBT_SCOVERAGE_VER}'")
 ' > project/plugins.sbt
 
 
@@ -79,7 +78,7 @@ echo 'object Versions {
 #
 # create dependencies file
 #
-echo 'import sbt._
+echo 'import sbt.*
 
 object Dependencies {
 
@@ -96,7 +95,7 @@ object Dependencies {
 #
 # create sbt build file
 #
-echo 'import Dependencies._
+echo 'import Dependencies.*
 
 ThisBuild / scalaVersion := "'${SCALA_VER}'"
 ThisBuild / organization := "'${SOURCE_PKG}'"
@@ -117,7 +116,12 @@ lazy val basicScalacOptions = Seq(       // some of the Rob Norris tpolecat opti
 
 lazy val commonSettings = Seq(
     libraryDependencies ++= mainAndTest,
-    scalacOptions ++= basicScalacOptions
+    scalacOptions ++= basicScalacOptions,
+    Compile / scalacOptions ++= {
+      if (coverageEnabled.value)
+        Seq(s"-Xmacro-settings:scoverage-cache-buster=${System.nanoTime()}")
+      else Seq.empty
+    }
 )
 
 lazy val templateProject = (project in file("."))
@@ -128,7 +132,7 @@ lazy val templateProject = (project in file("."))
 
  // clear screen and banner
  lazy val cls = taskKey[Unit]("Prints a separator")
- cls := {
+ LocalRootProject / cls := Def.uncached {
    val brs = "\n".repeat(2)
    val message = "* B U I L D   B E G I N S   H E R E *"
    val chars = "*".repeat(message.length())
@@ -137,9 +141,13 @@ lazy val templateProject = (project in file("."))
    println(s"$chars$brs ")
  }
 
+lazy val prepareCoverageDirectories = taskKey[Unit]("Creates scoverage data directories")
+prepareCoverageDirectories := Def.uncached {
+  IO.createDirectory(coverageDataDir.value / "scoverage-data")
+}
+
 // command aliases
-addCommandAlias("xdep-list", "dependencyList/toFile /tmp/dep-list.log -f")
-addCommandAlias("xcoverage", "clean;coverage;test;coverageReport")
+addCommandAlias("xcoverage", "coverage;prepareCoverageDirectories;testFull;coverageReport;coverageOff")
 addCommandAlias("xdep-up", "dependencyUpdates")
 ' > build.sbt
 
@@ -264,4 +272,4 @@ class LibrarySpec
 #
 # run this script
 #
-sbt clean update scalaVersion sbtVersion scalafmtAll coverage test coverageReport dependencyUpdates assembly run
+sbt --server 'clean; update; scalaVersion; sbtVersion; scalafmtAll; xcoverage; dependencyUpdates; assembly; run'
