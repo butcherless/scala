@@ -2,8 +2,8 @@ import Dependencies.*
 import sbtassembly.AssemblyKeys.{assembly, assemblyMergeStrategy}
 import sbtassembly.MergeStrategy
 
-ThisBuild / scalaVersion := Versions.scala
-ThisBuild / organization := "com.cmartin.learn"
+scalaVersion := Versions.scala
+organization := "com.cmartin.learn"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -156,18 +156,19 @@ LocalRootProject / cls := Def.uncached {
 }
 
 lazy val prepareCoverageDirectories = taskKey[Unit]("Creates scoverage data directories")
-prepareCoverageDirectories := Def.uncached {
+LocalRootProject / prepareCoverageDirectories := Def.uncached {
   IO.createDirectory(coverageDataDir.value / "scoverage-data")
 }
 
-addCommandAlias("xcoverage", "coverage;prepareCoverageDirectories;testFull;coverageReport;coverageOff")
+addCommandAlias(
+  "xcoverage",
+  "coverage;prepareCoverageDirectories;testFull;coverageReport;coverageOff"
+)
 addCommandAlias("xreload", "clean;reload")
-addCommandAlias("xstart", "clean;reStart")
-addCommandAlias("xstop", "reStop;clean")
 addCommandAlias("xupdate", "clean;update")
 addCommandAlias("xdup", "dependencyUpdates")
 
-ThisBuild / assemblyMergeStrategy := {
+assemblyMergeStrategy := {
   case "META-INF/io.netty.versions.properties" => MergeStrategy.discard
   case "module-info.class"                     => MergeStrategy.discard
   case x                                       =>

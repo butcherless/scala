@@ -58,7 +58,7 @@ addSbtPlugin("org.scoverage"    % "sbt-scoverage"         % "'${SBT_SCOVERAGE_VE
 #
 # create project version file
 #
-echo 'ThisBuild / version := "1.0.0-SNAPSHOT"
+echo 'version := "1.0.0-SNAPSHOT"
 ' > version.sbt
 
 
@@ -97,8 +97,8 @@ object Dependencies {
 #
 echo 'import Dependencies.*
 
-ThisBuild / scalaVersion := "'${SCALA_VER}'"
-ThisBuild / organization := "'${SOURCE_PKG}'"
+scalaVersion := "'${SCALA_VER}'"
+organization := "'${SOURCE_PKG}'"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -142,12 +142,15 @@ lazy val templateProject = (project in file("."))
  }
 
 lazy val prepareCoverageDirectories = taskKey[Unit]("Creates scoverage data directories")
-prepareCoverageDirectories := Def.uncached {
+LocalRootProject / prepareCoverageDirectories := Def.uncached {
   IO.createDirectory(coverageDataDir.value / "scoverage-data")
 }
 
 // command aliases
-addCommandAlias("xcoverage", "coverage;prepareCoverageDirectories;testFull;coverageReport;coverageOff")
+addCommandAlias(
+  "xcoverage",
+  "coverage;prepareCoverageDirectories;testFull;coverageReport;coverageOff"
+)
 addCommandAlias("xdep-up", "dependencyUpdates")
 ' > build.sbt
 

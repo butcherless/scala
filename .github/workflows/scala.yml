@@ -27,8 +27,17 @@ jobs:
     - name: compile unit tests
       run: sbt -v --server 'Test / compile'
       working-directory: ${{env.WORK_DIR}}
+    - name: formatting
+      run: sbt -v --server scalafmtCheckAll
+      working-directory: ${{env.WORK_DIR}}
     - name: tests
       run: sbt -v --server testFull
+      working-directory: ${{env.WORK_DIR}}
+    - name: coverage
+      run: sbt -v --server xcoverage
+      working-directory: ${{env.WORK_DIR}}
+    - name: dependencies
+      run: sbt -v --server dependencyTree dependencyUpdates
       working-directory: ${{env.WORK_DIR}}
     - name: assembly
       run: sbt -v --server assembly

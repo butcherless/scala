@@ -31,10 +31,12 @@ bash <(curl -s https://raw.githubusercontent.com/butcherless/scala/master/docs/c
 ```
  
 ## Test & Coverage report
-- testOnly TestSuite -- -z CURRENT
+- full test suite: `sbt testFull`
+- filtered test: `sbt 'testOnly TestSuite -- -z CURRENT'`
 - command: sbt xcoverage
 - report: target/out/jvm/scala-&lt;version&gt;/&lt;project&gt;/scoverage-report/index.html
 - check dependencies: sbt dependencyTree
+- check dependency updates: sbt dependencyUpdates
 
 ## Plugins
 - https://github.com/sbt/sbt-assembly/releases
