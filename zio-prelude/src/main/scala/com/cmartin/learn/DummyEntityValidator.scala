@@ -2,6 +2,7 @@ package com.cmartin.learn
 
 import com.cmartin.learn.Model._
 import zio.prelude.Validation
+import zio.prelude.AssociativeBothCovariantOps
 
 object DummyEntityValidator {
 

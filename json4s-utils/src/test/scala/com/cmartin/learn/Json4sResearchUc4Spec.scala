@@ -2,6 +2,7 @@ package com.cmartin.learn
 
 import com.cmartin.learn.ShadowService.CreateDto
 import org.json4s.JsonAST.JValue
+import org.json4s.MonadicJValue.jvalueToMonadic
 
 class Json4sResearchUc4Spec extends Json4sResearchBaseSpec {
   import Json4sResearch._

@@ -2,6 +2,7 @@ package com.cmartin.learn
 
 import org.json4s.JValue
 import org.json4s.JsonAST.{JArray, JObject}
+import org.json4s.jvalue2extractable
 import org.json4s.native.JsonMethods
 
 object MapFlatBlup extends FlatBlup[String, Option[Map[String, Any]]] {

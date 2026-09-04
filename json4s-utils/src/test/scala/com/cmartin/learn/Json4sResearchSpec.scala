@@ -8,6 +8,7 @@ import org.json4s.JsonAST.JDouble
 import org.json4s.JsonAST.JNothing
 import org.json4s.JsonAST.JObject
 import org.json4s.JsonAST.JValue
+import org.json4s.MonadicJValue.jvalueToMonadic
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

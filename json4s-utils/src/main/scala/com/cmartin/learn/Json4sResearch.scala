@@ -4,6 +4,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 import org.json4s.JsonAST.{JArray, JField, JNothing, JObject, JString}
+import org.json4s.MonadicJValue.jvalueToMonadic
 import org.json4s.native.JsonMethods
 import org.json4s.{DefaultFormats, JValue}
 
@@ -212,14 +213,12 @@ object Json4sResearch {
       )
     )
 
-  private def getStringValue(key: String, json: JValue): Option[String] = {
-    val fields = for {
-      JObject(fields)            <- json
-      JField(`key`, JString(ts)) <- fields
-    } yield ts
-
-    fields.headOption
-  }
+  private def getStringValue(key: String, json: JValue): Option[String] =
+    json match {
+      case JObject(fields) =>
+        fields.collectFirst { case JField(`key`, JString(ts)) => ts }
+      case _               => None
+    }
 
   private def formatNowDateText(): String =
     ZonedDateTime

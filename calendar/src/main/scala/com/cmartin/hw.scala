@@ -70,5 +70,5 @@ object HelloWorld extends App {
 
   println(year.buildCountryHolidayDate)
 
-  year.getYearDays.map(x => println(x, x.localDate.getDayOfYear))
+  year.getYearDays.map(x => println((x, x.localDate.getDayOfYear)))
 }

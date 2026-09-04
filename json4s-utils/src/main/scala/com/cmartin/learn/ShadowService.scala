@@ -2,6 +2,7 @@ package com.cmartin.learn
 
 import com.cmartin.learn.Json4sResearch._
 import org.json4s.JsonAST.JValue
+import org.json4s.MonadicJValue.jvalueToMonadic
 
 class ShadowService(shadowRepository: ShadowRepository) {
 

@@ -13,7 +13,7 @@ class DtoSpec extends AnyFlatSpec with Matchers {
   val EMPTY_STRING = ""
 
   def plane2Tuple(p: Plane): (Long, String, String, String) =
-    Plane.unapply(p).get
+    (p.id, p.registration, p.brand, p.model)
 
   it should "mandatory constructor arguments" in {
     val tuple    = plane2Tuple(Plane(ID, REGISTRATION))
