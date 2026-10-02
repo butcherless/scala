@@ -19,7 +19,7 @@ object HealthAgent {
       replayTo: ActorRef[RespondStatus]
   ) extends HealthMessage
 
-  final case object Stop extends HealthMessage
+  case object Stop extends HealthMessage
 
   /*
     R E S P O N S E S

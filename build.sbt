@@ -15,7 +15,7 @@ lazy val basicScalacOptions = Seq(
   "-unchecked",
   "-language:postfixOps",
   "-language:higherKinds",
-  "-Xlint:unused"
+  "-Wunused:imports,privates"
 )
 
 lazy val commonSettings = Seq(
@@ -140,7 +140,9 @@ lazy val json4sUtils = (project in file("json4s-utils"))
   .settings(
     commonSettings,
     name := "json4s-utils",
-    libraryDependencies ++= Seq(json4s, logback)
+    libraryDependencies ++= Seq(json4s, logback),
+    // json4s extract[T] requires Manifest synthesis, no Scala 3 alternative
+    scalacOptions += "-Wconf:msg=Compiler synthesis of Manifest:s"
   )
 
 // clear screen and banner

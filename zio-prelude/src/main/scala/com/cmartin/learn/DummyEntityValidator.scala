@@ -15,7 +15,7 @@ object DummyEntityValidator {
     Validation.validateWith(
       validateNumber(number),
       validateText(text)
-    )(DummyEntity)
+    )(DummyEntity.apply)
   }
 
   private def validateNumber(number: Int): Validation[ValidationError, Int] = {

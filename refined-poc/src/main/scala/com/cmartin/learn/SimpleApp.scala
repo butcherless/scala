@@ -1,3 +1,3 @@
 package com.cmartin.learn
 
-object SimpleApp extends App {}
+object SimpleApp

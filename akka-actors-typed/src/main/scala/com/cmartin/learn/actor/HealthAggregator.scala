@@ -68,8 +68,6 @@ class HealthAggregator(context: ActorContext[AggregatorMessage])
             } else {
               Behaviors.same
             }
-          case _                                   =>
-            Behaviors.same
         }
     }
   }

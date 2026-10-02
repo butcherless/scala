@@ -155,29 +155,31 @@ object freecats {
     )
 }
 
-object MainCats extends App {
-  import freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
+object MainCats {
+  def main(args: Array[String]): Unit = {
+    import freecats.{compiler, eitherCompiler, futureCompiler, myAwesomeProgram, optionCompiler}
 
-  // 6. Run the program, fold the sentence list
-  println("\nRunning Id[A] program interpreter")
-  val idResult =
-    myAwesomeProgram("BitCoin", BigDecimal(0.077123)).foldMap(compiler)
-  println(s"Id Interpreter result: $idResult")
+    // 6. Run the program, fold the sentence list
+    println("\nRunning Id[A] program interpreter")
+    val idResult =
+      myAwesomeProgram("BitCoin", BigDecimal(0.077123)).foldMap(compiler)
+    println(s"Id Interpreter result: $idResult")
 
-  println("\nRunning Option[A] program interpreter")
-  val optionResult =
-    myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(optionCompiler)
-  println(s"Option Interpreter result: $optionResult")
+    println("\nRunning Option[A] program interpreter")
+    val optionResult =
+      myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(optionCompiler)
+    println(s"Option Interpreter result: $optionResult")
 
-  println("\nRunning Either[String, A] program interpreter")
-  val eitherResult =
-    myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(eitherCompiler)
-  println(s"Either Interpreter result: $eitherResult")
+    println("\nRunning Either[String, A] program interpreter")
+    val eitherResult =
+      myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(eitherCompiler)
+    println(s"Either Interpreter result: $eitherResult")
 
-  // TODO println("\nRunning Future[A] program interpreter")
-  val futureResult =
-    myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(futureCompiler)
+    // TODO println("\nRunning Future[A] program interpreter")
+    val futureResult =
+      myAwesomeProgram("LineCoin", BigDecimal(0.077123)).foldMap(futureCompiler)
 
-  Await.result(futureResult, 250 millis)
-  println(s"Future Interpreter result: $futureResult")
+    Await.result(futureResult, 250 millis)
+    println(s"Future Interpreter result: $futureResult")
+  }
 }

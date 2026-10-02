@@ -17,8 +17,8 @@ class JsonableTypeClassSpec extends AnyFlatSpec with Matchers {
     val result: String = serialize(person)
 
     result.nonEmpty shouldBe true
-    result contains name shouldBe true
-    result contains firstName shouldBe true
+    result.contains(name) shouldBe true
+    result.contains(firstName) shouldBe true
   }
 
   it should "serialize an Int" in {

@@ -6,7 +6,7 @@ import zio._
 object ZioHelloWorld extends ZIOAppDefault {
 
   def acquire()                       = ZIO.attempt(ActorSystem(HelloWorldMain(), "hello"))
-  def release(system: ActorSystem[_]) = ZIO.attempt(system.terminate()).ignore
+  def release(system: ActorSystem[?]) = ZIO.attempt(system.terminate()).ignore
 
   def run =
     ZIO.acquireRelease(acquire())(release)

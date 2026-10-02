@@ -33,7 +33,7 @@ object AircraftValidator {
       validateRegistration(registration),
       validateCountry(country),
       validateDelivery(delivery)
-    )(Aircraft)
+    )(Aircraft.apply)
   }
 
   def validateModel(model: String): Validation[ValidationError, String] = {
