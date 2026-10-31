@@ -4,74 +4,64 @@
 
 https://kafka.apache.org/documentation/
 
-Imagen alternativa
-
-* https://github.com/bitnami/bitnami-docker-kafka
-
 ## Commands
+
+Run these from this directory, `compose.yml` is picked up automatically.
 
 start the services
 
-```.bash
-- docker-compose -f ./single-broker.yml up -d
+```shell
+docker compose up -d
 ```
 
 stop the services
 
-```.bash
-- docker-compose -f ./single-broker.yml stop
+```shell
+docker compose stop
 ```
 
 show the logs
 
 ```shell
-- docker-compose -f ./single-broker.yml logs -f
+docker compose logs -f
 ```
 
-list a topic
+list the topics
 
 ```shell
-docker exec -it kafka-prod-cons_kafka_1 /bin/bash 
-/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+docker compose exec kafka kafka-topics --bootstrap-server localhost:9092 --list
 ```
 
 create a topic
 
 ```shell
-/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 8 --topic json
+docker compose exec kafka kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 8 --topic json
 ```
 
 delete a topic
 
 ```shell
-/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh  --bootstrap-server localhost:9092 --delete --topic test1
+docker compose exec kafka kafka-topics --bootstrap-server localhost:9092 --delete --topic test1
 ```
 
 describe a topic
+
 ```shell
-/opt/kafka_2.12-2.3.0/bin/kafka-topics.sh --describe --bootstrap-server localhost:9092 --topic json
+docker compose exec kafka kafka-topics --describe --bootstrap-server localhost:9092 --topic json
 ```
 
 consume messages from the beginning
+
 ```shell
-/opt/kafka_2.12-2.3.0/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic json
+docker compose exec kafka kafka-console-consumer --bootstrap-server localhost:9092 --from-beginning --topic json
 ```
 
 consume messages of a partition from the beginning
+
 ```shell
-/opt/kafka_2.12-2.3.0/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092  --topic json --offset earliest --partition 1 
+docker compose exec kafka kafka-console-consumer --bootstrap-server localhost:9092 --topic json --offset earliest --partition 1
 ```
 
 ## Docker Images
 
-- https://github.com/simplesteph/kafka-stack-docker-compose/blob/master/zk-single-kafka-multiple.yml
-
-- https://hub.docker.com/r/wurstmeister/kafka/
-
-- https://github.com/wurstmeister/kafka-docker
-
-- https://hub.docker.com/r/sheepkiller/kafka-manager
-
-- https://github.com/yahoo/kafka-manager
-
-- https://hub.docker.com/r/wurstmeister/kafka/
+- https://hub.docker.com/r/confluentinc/cp-kafka
