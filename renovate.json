@@ -8,6 +8,13 @@
   "extends": [
     "config:recommended"
   ],
+  "packageRules": [
+    {
+      "description": "No CI job starts this image, so a green PR says nothing about it",
+      "matchPackageNames": ["confluentinc/cp-kafka"],
+      "automerge": false
+    }
+  ],
   "sbt": {
     "enabled": true
   },
