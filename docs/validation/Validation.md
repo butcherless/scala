@@ -57,7 +57,6 @@ En resumen, después de validar nuestro tipo de entrada, `InputData`, se obtiene
   - https://wiki.haskell.org/Smart_constructors
   - https://speakerdeck.com/philipschwarz/scala-3-by-example-algebraic-data-types-for-domain-driven-design-part-2?slide=48
 - Dependencies. Las reglas de validación pueden tener dependencias unas de otras. Fail fast, parallel
-- https://www.bankcook.com/calcular-digitos-de-control-de-cuenta-corriente-bancaria/
 - https://www.slideshare.net/jv2301/be-smart-constrain-your-types-to-free-your-brain
 
 
