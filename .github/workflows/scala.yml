@@ -1,6 +1,12 @@
 name: Scala CI
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '**.adoc'
+      - '**.puml'
+      - '**.graphml'
 
 jobs:
 
@@ -18,29 +24,28 @@ jobs:
         java-version: '21'
         cache: sbt
     - uses: sbt/setup-sbt@v1
-    - name: init
-      run: sbt -v --server update
-      working-directory: ${{env.WORK_DIR}}
+    # Each step reuses one sbt server through sbt 2's thin client, instead of starting a new JVM.
+    # That also means build settings carry over between steps, so assembly runs before coverage.
     - name: compile main
-      run: sbt -v --server compile
+      run: sbt compile
       working-directory: ${{env.WORK_DIR}}
     - name: compile unit tests
-      run: sbt -v --server 'Test / compile'
+      run: sbt Test/compile
       working-directory: ${{env.WORK_DIR}}
     - name: formatting
-      run: sbt -v --server scalafmtCheckAll
+      run: sbt scalafmtCheckAll
       working-directory: ${{env.WORK_DIR}}
     - name: tests
-      run: sbt -v --server testFull
-      working-directory: ${{env.WORK_DIR}}
-    - name: coverage
-      run: sbt -v --server xcoverage
-      working-directory: ${{env.WORK_DIR}}
-    - name: dependencies
-      run: sbt -v --server dependencyTree dependencyUpdates
+      run: sbt testFull
       working-directory: ${{env.WORK_DIR}}
     - name: assembly
-      run: sbt -v --server assembly
+      run: sbt assembly
+      working-directory: ${{env.WORK_DIR}}
+    - name: coverage
+      run: sbt xcoverage
+      working-directory: ${{env.WORK_DIR}}
+    - name: dependencies
+      run: sbt "dependencyTree;dependencyUpdates"
       working-directory: ${{env.WORK_DIR}}
 
   project-template:
