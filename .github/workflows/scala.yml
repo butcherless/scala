@@ -33,22 +33,47 @@ jobs:
         java-version: '21'
         cache: sbt
     - uses: sbt/setup-sbt@v1
+    - name: Cache incremental compilation state
+      # setup-java's `cache: sbt` stores downloaded dependencies only, never compiled output.
+      # Keyed on the commit; restore-keys falls back to the most recent state, so only what
+      # changed is recompiled. Coverage runs in its own job, so nothing instrumented lands here.
+      uses: actions/cache@v6
+      with:
+        path: |
+          **/target
+        key: ${{ runner.os }}-sbt-target-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-sbt-target-
     # Each `sbt` call is sbt 2's thin client, so every step reuses one sbt server instead of
-    # starting a new JVM. Build settings carry over between steps, so assembly runs before coverage.
-    - name: compile main
-      run: sbt compile
-    - name: compile unit tests
-      run: sbt Test/compile
+    # starting a new JVM. `testFull` compiles main and test sources itself.
     - name: formatting
       run: sbt scalafmtCheckAll
     - name: tests
       run: sbt testFull
     - name: assembly
       run: sbt assembly
-    - name: coverage
-      run: sbt xcoverage
     - name: dependencies
       run: sbt "dependencyTree;dependencyUpdates"
+
+  coverage:
+    # Parallel with `build`: xcoverage recompiles everything with coverage instrumentation, so it
+    # gains nothing from running after build's non-instrumented compile.
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+    - name: Setup JDK
+      uses: actions/setup-java@v6
+      with:
+        distribution: 'zulu'
+        java-version: '21'
+        cache: sbt
+    - uses: sbt/setup-sbt@v1
+    - name: coverage
+      run: sbt xcoverage
 
   project-template:
     runs-on: ubuntu-26.04
