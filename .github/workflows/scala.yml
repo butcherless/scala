@@ -8,15 +8,24 @@ on:
       - '**.puml'
       - '**.graphml'
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
-  scala2:
+  build:
 
     runs-on: ubuntu-26.04
     timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - name: Setup JDK
       uses: actions/setup-java@v6
       with:
@@ -24,29 +33,22 @@ jobs:
         java-version: '21'
         cache: sbt
     - uses: sbt/setup-sbt@v1
-    # Each step reuses one sbt server through sbt 2's thin client, instead of starting a new JVM.
-    # That also means build settings carry over between steps, so assembly runs before coverage.
+    # Each `sbt` call is sbt 2's thin client, so every step reuses one sbt server instead of
+    # starting a new JVM. Build settings carry over between steps, so assembly runs before coverage.
     - name: compile main
       run: sbt compile
-      working-directory: ${{env.WORK_DIR}}
     - name: compile unit tests
       run: sbt Test/compile
-      working-directory: ${{env.WORK_DIR}}
     - name: formatting
       run: sbt scalafmtCheckAll
-      working-directory: ${{env.WORK_DIR}}
     - name: tests
       run: sbt testFull
-      working-directory: ${{env.WORK_DIR}}
     - name: assembly
       run: sbt assembly
-      working-directory: ${{env.WORK_DIR}}
     - name: coverage
       run: sbt xcoverage
-      working-directory: ${{env.WORK_DIR}}
     - name: dependencies
       run: sbt "dependencyTree;dependencyUpdates"
-      working-directory: ${{env.WORK_DIR}}
 
   project-template:
     runs-on: ubuntu-26.04
@@ -54,6 +56,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - name: Setup JDK
       uses: actions/setup-java@v6
       with:
