@@ -1,6 +1,6 @@
 package com.cmartin.learn.future
 
-import cats.data._
+import cats.data.*
 import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.concurrent.Future
@@ -8,7 +8,7 @@ import scala.util.Random
 
 // https://gist.github.com/rtitle/f73d35e79a2f95871bca27d24be3a805
 class FutureSpec extends AsyncFlatSpec {
-  import FutureSpec._
+  import FutureSpec.*
 
   "Future fold" should "sum the results" in {
     val f1 = Future(1)

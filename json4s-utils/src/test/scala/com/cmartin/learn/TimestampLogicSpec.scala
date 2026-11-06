@@ -1,6 +1,6 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.Json4sResearch._
+import com.cmartin.learn.Json4sResearch.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -8,8 +8,8 @@ import scala.util.matching.Regex
 
 class TimestampLogicSpec extends AnyFlatSpec with Matchers {
 
-  import Json4sResearchTestUtils._
-  import TimestampLogicSpec._
+  import Json4sResearchTestUtils.*
+  import TimestampLogicSpec.*
 
   behavior of "Timestamp logic"
 

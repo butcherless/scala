@@ -5,10 +5,10 @@ import akka.stream.scaladsl.{Sink, Source}
 import akka.util.Timeout
 import akka.{Done, NotUsed}
 import com.cmartin.learn.actors.Definition.DispatcherActor.Stats
-import com.cmartin.learn.actors.Definition._
+import com.cmartin.learn.actors.Definition.*
 import com.cmartin.learn.stream.buildRandomPositiveIntSource
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
 
 object Main {

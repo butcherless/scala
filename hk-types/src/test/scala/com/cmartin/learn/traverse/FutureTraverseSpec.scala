@@ -4,7 +4,7 @@ import org.scalatest.concurrent.TimeLimits
 import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.concurrent.Future
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 class FutureTraverseSpec extends AsyncFlatSpec with TimeLimits {
   behavior of "Future Traverse function"

@@ -4,12 +4,12 @@ import java.util.UUID
 
 import cats.free.Free
 import cats.free.Free.liftF
-import cats.instances.all._
+import cats.instances.all.*
 import cats.{~>, Id}
 import com.cmartin.learn.freemonad.functions.buildUuid
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
 // https://typelevel.org/cats/datatypes/freemonad.html
 // https://blog.scalac.io/2016/06/02/overview-of-free-monad-in-cats.html

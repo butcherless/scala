@@ -1,6 +1,6 @@
 package com.cmartin.learn
 
-import MyLibrary._
+import MyLibrary.*
 import scala.util.{Failure, Success, Try}
 
 object Logic {

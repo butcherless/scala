@@ -1,9 +1,9 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.TestSamples._
+import com.cmartin.learn.TestSamples.*
 import org.json4s.jvalue2extractable
 import org.json4s.native.JsonMethods
-import org.scalatest.OptionValues._
+import org.scalatest.OptionValues.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

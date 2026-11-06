@@ -5,8 +5,8 @@ import org.json4s.JsonAST.JValue
 import org.json4s.MonadicJValue.jvalueToMonadic
 
 class Json4sResearchUc4Spec extends Json4sResearchBaseSpec {
-  import Json4sResearch._
-  import Json4sResearchTestUtils._
+  import Json4sResearch.*
+  import Json4sResearchTestUtils.*
 
   behavior of "Json4sResearch Use Case 4"
 

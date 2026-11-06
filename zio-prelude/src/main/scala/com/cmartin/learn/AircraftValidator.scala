@@ -1,6 +1,6 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.Model._
+import com.cmartin.learn.Model.*
 import zio.prelude.Validation
 
 /*

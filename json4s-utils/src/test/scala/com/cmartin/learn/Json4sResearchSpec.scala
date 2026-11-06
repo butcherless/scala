@@ -3,7 +3,7 @@ package com.cmartin.learn
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-import com.cmartin.learn.Json4sResearch._
+import com.cmartin.learn.Json4sResearch.*
 import org.json4s.JsonAST.JDouble
 import org.json4s.JsonAST.JNothing
 import org.json4s.JsonAST.JObject
@@ -13,8 +13,8 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class Json4sResearchSpec extends AnyFlatSpec with Matchers {
-  import Json4sResearchSpec._
-  import Json4sResearchTestUtils._
+  import Json4sResearchSpec.*
+  import Json4sResearchTestUtils.*
 
   behavior of "Json4sResearch"
 

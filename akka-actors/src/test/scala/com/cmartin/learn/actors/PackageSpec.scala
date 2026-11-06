@@ -1,6 +1,6 @@
 package com.cmartin.learn.actors
 
-import com.cmartin.learn.actors.PackageSpec._
+import com.cmartin.learn.actors.PackageSpec.*
 import org.scalatest.flatspec.AnyFlatSpec
 
 import scala.collection.mutable.Queue

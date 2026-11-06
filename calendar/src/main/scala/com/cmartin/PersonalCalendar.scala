@@ -2,7 +2,7 @@ package com.cmartin
 
 import java.time.{DayOfWeek, LocalDate, Year}
 
-import com.cmartin.model._
+import com.cmartin.model.*
 
 /** Created by cmartin on 21/01/2017. read file:
   * http://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples

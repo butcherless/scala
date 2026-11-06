@@ -2,7 +2,7 @@ package com.cmartin.learn.actor
 
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
-import akka.actor.typed.scaladsl.adapter._
+import akka.actor.typed.scaladsl.adapter.*
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.{actor, Done}

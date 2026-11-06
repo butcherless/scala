@@ -1,12 +1,12 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.Json4sResearch._
+import com.cmartin.learn.Json4sResearch.*
 import org.json4s.JsonAST.JValue
 import org.json4s.MonadicJValue.jvalueToMonadic
 
 class ShadowService(shadowRepository: ShadowRepository) {
 
-  import ShadowService._
+  import ShadowService.*
 
   def create(dto: CreateDto): Either[Throwable, JValue] = {
     val currentShadow: JValue = shadowRepository.findShadow(dto.id)

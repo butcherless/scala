@@ -31,7 +31,7 @@ class ServiceActor(
     context: ActorContext[ServiceActor.ServiceActorCommand],
     serviceId: String
 ) extends AbstractBehavior[ServiceActor.ServiceActorCommand](context) {
-  import ServiceActor._
+  import ServiceActor.*
 
   context.log.info("Service Actor {} created", serviceId)
 

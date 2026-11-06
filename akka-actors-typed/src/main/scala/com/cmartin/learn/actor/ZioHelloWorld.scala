@@ -1,7 +1,7 @@
 package com.cmartin.learn.actor
 
 import akka.actor.typed.ActorSystem
-import zio._
+import zio.*
 
 object ZioHelloWorld extends ZIOAppDefault {
 

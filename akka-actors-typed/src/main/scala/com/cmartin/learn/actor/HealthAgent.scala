@@ -37,8 +37,8 @@ class HealthAgent(
     context: ActorContext[HealthAgent.HealthMessage],
     agentId: String
 ) extends AbstractBehavior[HealthAgent.HealthMessage](context) {
-  import DummyInfrastructureManager._
-  import HealthAgent._
+  import DummyInfrastructureManager.*
+  import HealthAgent.*
 
   var lastStatus: String = ""
 

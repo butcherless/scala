@@ -1,8 +1,8 @@
 package com.cmartin.learn.freemonad
 
-import cats.instances.all._
-import com.cmartin.learn.freemonad.algebra._
-import com.cmartin.learn.freemonad.interpreter._
+import cats.instances.all.*
+import com.cmartin.learn.freemonad.algebra.*
+import com.cmartin.learn.freemonad.interpreter.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -26,7 +26,7 @@ object program {
     def main(args: Array[String]): Unit = {
 
       import scala.concurrent.Await
-      import scala.concurrent.duration._
+      import scala.concurrent.duration.*
 
       // 6. Run the program, fold the sentence list
       println("\nRunning Id[A] program interpreter")

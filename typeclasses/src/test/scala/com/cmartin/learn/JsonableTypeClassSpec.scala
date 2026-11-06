@@ -1,8 +1,8 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.MyTypeClasses.Jsonable.Syntax._
-import com.cmartin.learn.MyTypeClasses.Jsonable._
-import com.cmartin.learn.model.Constants._
+import com.cmartin.learn.MyTypeClasses.Jsonable.Syntax.*
+import com.cmartin.learn.MyTypeClasses.Jsonable.*
+import com.cmartin.learn.model.Constants.*
 import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

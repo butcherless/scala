@@ -2,7 +2,7 @@ package com.cmartin
 
 import java.time.LocalDate
 
-import scalaz.Scalaz._
+import scalaz.Scalaz.*
 //import std.option._, std.list._ // functions and type class instances for Option and List
 
 object HelloWorld {

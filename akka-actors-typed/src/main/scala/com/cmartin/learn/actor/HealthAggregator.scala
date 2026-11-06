@@ -26,7 +26,7 @@ object HealthAggregator {
 
 class HealthAggregator(context: ActorContext[AggregatorMessage])
     extends AbstractBehavior[AggregatorMessage](context) {
-  import DummyInfrastructureManager._
+  import DummyInfrastructureManager.*
 
   var agentCount = 3
   context.log.info("HealthAggregator actor created")

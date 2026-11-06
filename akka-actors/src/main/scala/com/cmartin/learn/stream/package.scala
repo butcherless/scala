@@ -3,7 +3,7 @@ package com.cmartin.learn
 import akka.NotUsed
 import akka.stream.scaladsl.Source
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.util.Random
 
 package object stream {

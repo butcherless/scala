@@ -2,7 +2,7 @@ package com.cmartin.learn
 
 import java.util.{Date, UUID}
 
-import com.cmartin.learn.AppHelper._
+import com.cmartin.learn.AppHelper.*
 import com.cmartin.learn.Configuration.UuidProducer
 import com.cmartin.learn.Domain.DummyMessage
 import com.cmartin.learn.common.ComponentLogging

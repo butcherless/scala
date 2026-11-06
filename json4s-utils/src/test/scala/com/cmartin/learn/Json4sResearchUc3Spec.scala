@@ -4,7 +4,7 @@ import com.cmartin.learn.ShadowService.CreateDto
 import org.json4s.JValue
 
 class Json4sResearchUc3Spec extends Json4sResearchBaseSpec {
-  import Json4sResearchTestUtils._
+  import Json4sResearchTestUtils.*
 
   behavior of "Json4sResearch Use Case 3"
 

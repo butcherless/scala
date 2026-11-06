@@ -2,9 +2,9 @@ package com.cmartin.learn.freemonad
 
 import java.util.UUID
 
-import com.cmartin.learn.freemonad.functions._
-import scalaz.syntax.apply._
-import scalaz.syntax.validation._
+import com.cmartin.learn.freemonad.functions.*
+import scalaz.syntax.apply.*
+import scalaz.syntax.validation.*
 import scalaz.{NonEmptyList, ValidationNel}
 
 import scala.util.{Failure, Try}

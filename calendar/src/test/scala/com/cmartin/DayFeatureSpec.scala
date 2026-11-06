@@ -2,8 +2,8 @@ package com.cmartin
 
 import java.time.LocalDate
 
-import com.cmartin.PersonalCalendar._
-import com.cmartin.model._
+import com.cmartin.PersonalCalendar.*
+import com.cmartin.model.*
 import org.scalatest.GivenWhenThen
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers

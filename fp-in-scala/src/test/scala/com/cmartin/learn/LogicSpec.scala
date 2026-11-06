@@ -2,7 +2,7 @@ package com.cmartin.learn
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import MyLibrary._
+import MyLibrary.*
 
 class LogicSpec extends AnyFlatSpec with Matchers {
 

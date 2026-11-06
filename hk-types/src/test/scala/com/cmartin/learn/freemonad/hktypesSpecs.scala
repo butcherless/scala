@@ -1,8 +1,8 @@
 package com.cmartin.learn.freemonad
 
-import com.cmartin.learn.freemonad.functions._
+import com.cmartin.learn.freemonad.functions.*
 import org.scalatest.GivenWhenThen
-import org.scalatest.OptionValues._
+import org.scalatest.OptionValues.*
 import org.scalatest.featurespec.AnyFeatureSpec
 
 class hktypesSpecs extends AnyFeatureSpec with GivenWhenThen {

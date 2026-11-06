@@ -9,7 +9,7 @@ object Definition {
       extends Actor
       with ActorLogging {
 
-    import DispatcherActor._
+    import DispatcherActor.*
 
     var map            = Map.empty[String, RequestInfo]
     var received: Int  = 0

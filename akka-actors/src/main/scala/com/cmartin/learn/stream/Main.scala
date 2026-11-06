@@ -6,7 +6,7 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 
 import scala.collection.immutable
 import scala.concurrent.ExecutionContextExecutor
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 object Main { // extends App {
   println("Main streams")

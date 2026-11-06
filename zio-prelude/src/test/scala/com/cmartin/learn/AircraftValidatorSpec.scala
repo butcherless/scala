@@ -1,7 +1,7 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.Model._
-import com.cmartin.learn.Model.ValidationError._
+import com.cmartin.learn.Model.*
+import com.cmartin.learn.Model.ValidationError.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import zio.NonEmptyChunk
@@ -9,8 +9,8 @@ import zio.prelude.Validation
 
 class AircraftValidatorSpec extends AnyFlatSpec with Matchers {
 
-  import AircraftValidator._
-  import AircraftValidatorSpec._
+  import AircraftValidator.*
+  import AircraftValidatorSpec.*
 
   behavior of "Aircraft Validator"
 

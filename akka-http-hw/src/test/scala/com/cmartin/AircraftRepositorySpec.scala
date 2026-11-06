@@ -4,8 +4,8 @@ import java.time.LocalDate
 
 import com.cmartin.data.{Aircraft, AircraftRepository}
 import org.scalatest.BeforeAndAfter
-import org.scalatest.OptionValues._
-import org.scalatest.TryValues._
+import org.scalatest.OptionValues.*
+import org.scalatest.TryValues.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

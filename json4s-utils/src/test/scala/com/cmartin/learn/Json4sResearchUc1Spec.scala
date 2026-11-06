@@ -1,12 +1,12 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.Json4sResearch._
+import com.cmartin.learn.Json4sResearch.*
 import com.cmartin.learn.ShadowService.CreateDto
 import org.json4s.JsonAST.JValue
 import org.json4s.MonadicJValue.jvalueToMonadic
 
 class Json4sResearchUc1Spec extends Json4sResearchBaseSpec {
-  import Json4sResearchTestUtils._
+  import Json4sResearchTestUtils.*
 
   behavior of "Json4sResearch Use Case 1"
 

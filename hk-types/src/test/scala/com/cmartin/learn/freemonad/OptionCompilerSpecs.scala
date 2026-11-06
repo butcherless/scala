@@ -5,7 +5,7 @@ import java.util.UUID
 import cats.~>
 import com.cmartin.learn.freemonad.algebra.{create, delete, read, update}
 import com.cmartin.learn.freemonad.interpreter.optionCompiler
-import org.scalatest.OptionValues._
+import org.scalatest.OptionValues.*
 
 class OptionCompilerSpecs extends AbstractCompilerSpecs {
 

@@ -6,7 +6,7 @@ import org.json4s.JsonAST.JValue
 import org.json4s.native.JsonMethods
 
 object Json4sResearchTestUtils {
-  import JsonMethods._ // pretty, render, etc.
+  import JsonMethods.* // pretty, render, etc.
 
   val inputMessage_UC_1_1: JValue =
     parse("""

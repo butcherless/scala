@@ -3,14 +3,14 @@ package com.cmartin.learn.actor
 import akka.Done
 import akka.actor.typed.Scheduler
 import akka.actor.typed.scaladsl.ActorContext
-import akka.actor.typed.scaladsl.AskPattern._
-import akka.http.scaladsl.server.Directives._
+import akka.actor.typed.scaladsl.AskPattern.*
+import akka.http.scaladsl.server.Directives.*
 import akka.http.scaladsl.server.Route
 import akka.util.Timeout
 import com.cmartin.learn.actor.ServiceActor.{ServiceActorResponse, ServiceAskCommand, ServiceTellCommand}
 
 import scala.concurrent.Future
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 class ApiRoutes(context: ActorContext[Done]) extends ComponentLogging {
   implicit val timeout: Timeout     = 3.seconds

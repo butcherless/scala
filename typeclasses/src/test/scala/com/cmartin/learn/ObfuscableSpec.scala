@@ -1,6 +1,6 @@
 package com.cmartin.learn
 
-import com.cmartin.learn.model.Constants._
+import com.cmartin.learn.model.Constants.*
 import com.cmartin.learn.model.{ObfuscatedInt, ObfuscatedString, Person}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

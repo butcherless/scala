@@ -1,6 +1,6 @@
 package com.cmartin
 
-import com.cmartin.PersonalCalendar._
+import com.cmartin.PersonalCalendar.*
 import org.scalatest.GivenWhenThen
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers

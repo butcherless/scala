@@ -6,7 +6,7 @@ import java.util
 import com.cmartin.learn.Configuration.UuidConsumer
 import com.cmartin.learn.common.ComponentLogging
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object ConsumerApp extends ComponentLogging {
   def main(args: Array[String]): Unit = {
