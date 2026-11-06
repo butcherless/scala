@@ -6,7 +6,7 @@ object Versions {
   val akkaTyped   = "2.8.8"
   val cats        = "2.13.0"
   val circe       = "0.14.17"
-  val config      = "1.4.9"
+  val config      = "1.4.10"
   val figlet4s    = "0.3.2"
   val json4s      = "4.1.1"
   val justSemver  = "1.1.1"
