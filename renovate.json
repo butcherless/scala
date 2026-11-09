@@ -11,8 +11,17 @@
   "packageRules": [
     {
       "description": "No CI job starts this image, so a green PR says nothing about it",
-      "matchPackageNames": ["confluentinc/cp-kafka"],
+      "matchPackageNames": [
+        "confluentinc/cp-kafka"
+      ],
       "automerge": false
+    },
+    {
+      "description": "sbt-bloop also publishes hash-named builds (e.g. 217-c2115241) that Renovate reads as a major; only plain x.y.z releases are real",
+      "matchPackageNames": [
+        "ch.epfl.scala:sbt-bloop"
+      ],
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+$/"
     }
   ],
   "sbt": {
