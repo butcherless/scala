@@ -32,18 +32,12 @@ jobs:
         distribution: 'zulu'
         java-version: '21'
         cache: sbt
+    # On sbt 2.x, setup-sbt enables and caches sbt's disk cache by default (its README, "Opting
+    # out of disk cache") — that's what lets unchanged code skip recompiling. Don't also cache
+    # **/target: under sbt 2 target/ refers into the disk cache, and the two caches are saved
+    # under different keys, so a restored target/ can point at entries the restored disk cache
+    # lacks (ClassNotFoundException / "Not found" while loading the build).
     - uses: sbt/setup-sbt@v1
-    - name: Cache incremental compilation state
-      # setup-java's `cache: sbt` stores downloaded dependencies only, never compiled output.
-      # Keyed on the commit; restore-keys falls back to the most recent state, so only what
-      # changed is recompiled. Coverage runs in its own job, so nothing instrumented lands here.
-      uses: actions/cache@v6
-      with:
-        path: |
-          **/target
-        key: ${{ runner.os }}-sbt-target-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-sbt-target-
     # Each `sbt` call is sbt 2's thin client, so every step reuses one sbt server instead of
     # starting a new JVM. `testFull` compiles main and test sources itself.
     - name: formatting
