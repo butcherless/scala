@@ -1,6 +1,6 @@
 object Versions {
   // LTS exception: deliberately on non-LTS Scala 3.10.x to try new language features in PoCs.
-  val scala       = "3.10.0"
+  val scala       = "3.10.1"
   val akkaHttp    = "10.5.3"
   val akka        = "2.8.8"
   val akkaTyped   = "2.8.8"
