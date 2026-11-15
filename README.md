@@ -18,7 +18,7 @@
 - https://blog.hablapps.com/2017/06/26/functional-apis-an-oop-approach-to-fp/
 - flatMap hell: https://www.reddit.com/r/scala/comments/75de27/concrete_examples_of_mapflatmap_solve_callback/
 - free monad: https://underscore.io/blog/posts/2015/04/14/free-monads-are-simple.html
-- Json support: https://doc.akka.io/docs/akka-http/current/common/json-support.html
+- Json support: https://pekko.apache.org/docs/pekko-http/current/common/json-support.html
 
 ## Create basic project script
 ```.env

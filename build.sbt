@@ -66,17 +66,17 @@ lazy val typeclasses = (project in file("typeclasses"))
     libraryDependencies ++= Seq(logback)
   )
 
-lazy val akkaActors = (project in file("akka-actors"))
+lazy val pekkoActors = (project in file("pekko-actors"))
   .settings(
     commonSettings,
-    name := "akka-actors-proof-of-concept",
+    name := "pekko-actors-proof-of-concept",
     libraryDependencies ++= Seq(pekkoActor, pekkoStream, logback)
   )
 
-lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
+lazy val pekkoActorsTyped = (project in file("pekko-actors-typed"))
   .settings(
     commonSettings,
-    name := "akka-actors-typed-poc",
+    name := "pekko-actors-typed-poc",
     libraryDependencies ++= Seq(
       pekkoHttp,
       pekkoActorTyped,
@@ -87,10 +87,10 @@ lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
     )
   )
 
-lazy val akkahttphw = (project in file("akka-http-hw"))
+lazy val pekkohttphw = (project in file("pekko-http-hw"))
   .settings(
     commonSettings,
-    name := "akka-http-webserver",
+    name := "pekko-http-webserver",
     libraryDependencies ++= Seq(
       pekkoHttp,
       pekkoJson,
@@ -101,10 +101,10 @@ lazy val akkahttphw = (project in file("akka-http-hw"))
     )
   )
 
-lazy val akkahttpcl = (project in file("akka-http-cl"))
+lazy val pekkohttpcl = (project in file("pekko-http-cl"))
   .settings(
     commonSettings,
-    name := "akka-http-webclient",
+    name := "pekko-http-webclient",
     libraryDependencies ++= Seq(pekkoHttp, pekkoJson, pekkoStream)
   )
 
