@@ -1,9 +1,9 @@
 package com.cmartin.learn.actors
 
-import akka.actor.ActorSystem
-import akka.stream.scaladsl.{Sink, Source}
-import akka.util.Timeout
-import akka.{Done, NotUsed}
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.scaladsl.{Sink, Source}
+import org.apache.pekko.util.Timeout
+import org.apache.pekko.{Done, NotUsed}
 import com.cmartin.learn.actors.Definition.DispatcherActor.Stats
 import com.cmartin.learn.actors.Definition.*
 import com.cmartin.learn.stream.buildRandomPositiveIntSource
@@ -33,7 +33,7 @@ object Main {
       .ask[Int](5)(dispatcherActor)
       .runWith(Sink.ignore) // discard response, only for back-pressure
 
-    import akka.pattern.ask
+    import org.apache.pekko.pattern.ask
 
     Await.ready(intSourceResult, Duration.Inf)
     val stats = Await.result(dispatcherActor ? Stats, 1 second)

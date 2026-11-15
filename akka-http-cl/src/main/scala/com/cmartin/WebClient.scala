@@ -2,11 +2,11 @@ package com.cmartin
 
 import java.io.File
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
-import akka.stream.scaladsl.{FileIO, Framing}
-import akka.util.ByteString
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.model.{HttpRequest, HttpResponse}
+import org.apache.pekko.stream.scaladsl.{FileIO, Framing}
+import org.apache.pekko.util.ByteString
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}

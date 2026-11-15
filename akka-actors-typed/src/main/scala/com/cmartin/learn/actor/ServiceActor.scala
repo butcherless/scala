@@ -2,8 +2,8 @@ package com.cmartin.learn.actor
 
 import java.util.UUID
 
-import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
-import akka.actor.typed.{ActorRef, Behavior, PostStop, Signal}
+import org.apache.pekko.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
+import org.apache.pekko.actor.typed.{ActorRef, Behavior, PostStop, Signal}
 
 object ServiceActor {
   def apply(serviceId: String): Behavior[ServiceActorCommand] =

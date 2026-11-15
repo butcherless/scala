@@ -1,7 +1,7 @@
 package com.cmartin.learn.actor
 
-import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
-import akka.actor.typed.{ActorRef, Behavior, PostStop, Signal}
+import org.apache.pekko.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
+import org.apache.pekko.actor.typed.{ActorRef, Behavior, PostStop, Signal}
 import com.cmartin.learn.actor.HealthAgent.{RequestStatus, RespondStatus}
 import com.cmartin.learn.actor.HealthAggregator.{AggregatorMessage, WrappedAgentResponse}
 

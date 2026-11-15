@@ -1,12 +1,12 @@
 package com.cmartin.learn.actor
 
-import akka.Done
-import akka.actor.typed.Scheduler
-import akka.actor.typed.scaladsl.ActorContext
-import akka.actor.typed.scaladsl.AskPattern.*
-import akka.http.scaladsl.server.Directives.*
-import akka.http.scaladsl.server.Route
-import akka.util.Timeout
+import org.apache.pekko.Done
+import org.apache.pekko.actor.typed.Scheduler
+import org.apache.pekko.actor.typed.scaladsl.ActorContext
+import org.apache.pekko.actor.typed.scaladsl.AskPattern.*
+import org.apache.pekko.http.scaladsl.server.Directives.*
+import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.util.Timeout
 import com.cmartin.learn.actor.ServiceActor.{ServiceActorResponse, ServiceAskCommand, ServiceTellCommand}
 
 import scala.concurrent.Future

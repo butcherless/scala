@@ -1,7 +1,7 @@
 package com.cmartin.learn.actor
 
-import akka.actor.typed.Behavior
-import akka.actor.typed.scaladsl.Behaviors
+import org.apache.pekko.actor.typed.Behavior
+import org.apache.pekko.actor.typed.scaladsl.Behaviors
 
 object HelloWorldBot {
   def apply(max: Int): Behavior[HelloWorld.Greeted] = {

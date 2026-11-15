@@ -1,7 +1,7 @@
 package com.cmartin
 
-import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
-import akka.http.scaladsl.testkit.ScalatestRouteTest
+import org.apache.pekko.http.scaladsl.model.{ContentTypes, StatusCodes}
+import org.apache.pekko.http.scaladsl.testkit.ScalatestRouteTest
 import com.cmartin.route.{ApiController, ControllerPath, JsonSupport}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

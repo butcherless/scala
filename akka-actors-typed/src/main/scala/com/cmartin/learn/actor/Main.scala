@@ -1,7 +1,7 @@
 package com.cmartin.learn.actor
 
-import akka.actor.typed.scaladsl.Behaviors
-import akka.actor.typed.{ActorSystem, Behavior}
+import org.apache.pekko.actor.typed.scaladsl.Behaviors
+import org.apache.pekko.actor.typed.{ActorSystem, Behavior}
 
 object Main {
   def main(args: Array[String]): Unit = {

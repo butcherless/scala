@@ -70,7 +70,7 @@ lazy val akkaActors = (project in file("akka-actors"))
   .settings(
     commonSettings,
     name := "akka-actors-proof-of-concept",
-    libraryDependencies ++= Seq(akkaActor, akkaStream, logback)
+    libraryDependencies ++= Seq(pekkoActor, pekkoStream, logback)
   )
 
 lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
@@ -78,12 +78,12 @@ lazy val akkaActorsTyped = (project in file("akka-actors-typed"))
     commonSettings,
     name := "akka-actors-typed-poc",
     libraryDependencies ++= Seq(
-      akkaHttp,
-      akkaActorTyped,
-      akkaStreamTyped,
+      pekkoHttp,
+      pekkoActorTyped,
+      pekkoStreamTyped,
       logback,
       zio,
-      akkaTest
+      pekkoTest
     )
   )
 
@@ -92,12 +92,12 @@ lazy val akkahttphw = (project in file("akka-http-hw"))
     commonSettings,
     name := "akka-http-webserver",
     libraryDependencies ++= Seq(
-      akkaHttp,
-      akkaJson,
-      akkaStream,
+      pekkoHttp,
+      pekkoJson,
+      pekkoStream,
       logback,
-      akkaHttpTest,
-      akkaTest
+      pekkoHttpTest,
+      pekkoTest
     )
   )
 
@@ -105,7 +105,7 @@ lazy val akkahttpcl = (project in file("akka-http-cl"))
   .settings(
     commonSettings,
     name := "akka-http-webclient",
-    libraryDependencies ++= Seq(akkaHttp, akkaJson, akkaStream)
+    libraryDependencies ++= Seq(pekkoHttp, pekkoJson, pekkoStream)
   )
 
 lazy val calendar = (project in file("calendar"))

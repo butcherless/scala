@@ -1,6 +1,6 @@
 package com.cmartin.learn.actor
 
-import akka.actor.typed.ActorSystem
+import org.apache.pekko.actor.typed.ActorSystem
 
 object HelloWorldApp {
   def main(args: Array[String]): Unit = {

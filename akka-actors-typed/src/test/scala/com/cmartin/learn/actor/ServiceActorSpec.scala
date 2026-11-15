@@ -2,7 +2,7 @@
 //
 //import java.util.UUID
 //
-//import akka.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
+//import org.apache.pekko.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
 //import com.cmartin.learn.actor.ServiceActor.ServiceTellCommand
 //import org.scalatest.flatspec.AnyFlatSpecLike
 //

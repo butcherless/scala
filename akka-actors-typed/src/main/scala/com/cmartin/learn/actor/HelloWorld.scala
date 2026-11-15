@@ -1,7 +1,7 @@
 package com.cmartin.learn.actor
 
-import akka.actor.typed.scaladsl.Behaviors
-import akka.actor.typed.{ActorRef, Behavior}
+import org.apache.pekko.actor.typed.scaladsl.Behaviors
+import org.apache.pekko.actor.typed.{ActorRef, Behavior}
 
 object HelloWorld {
   final case class Greet(whom: String, replyTo: ActorRef[Greeted])

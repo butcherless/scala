@@ -1,6 +1,6 @@
 package com.cmartin.learn.actors
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import org.apache.pekko.actor.{Actor, ActorLogging, ActorRef, Props}
 import com.cmartin.learn.actors.Definition.DispatcherActor.{Accepted, Rejected, Request, Unknown}
 
 object Definition {
