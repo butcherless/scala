@@ -1,7 +1,7 @@
 object Versions {
   // LTS exception: deliberately on non-LTS Scala 3.10.x to try new language features in PoCs.
   val scala       = "3.10.1"
-  val pekkoHttp   = "2.0.0"
+  val pekkoHttp   = "2.0.1"
   val pekko       = "2.0.0"
   val cats        = "2.13.0"
   val circe       = "0.14.17"
